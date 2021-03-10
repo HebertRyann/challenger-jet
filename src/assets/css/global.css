@@ -1,0 +1,185 @@
+.page-container-bg-solid{
+  min-height: 100vh;
+  background-color: #EFEFEF;
+  padding-bottom: 52px;
+  position: relative;
+}
+
+.page-footer {
+  background: #333;
+  color: #fff;
+  position: absolute;
+  width: 100vw;
+  bottom: 0;
+}
+
+.logo-light {
+	display: inline-block;
+  margin: 7.5px 0 0 0 !important;
+}
+
+a {
+	color: #666;
+	text-decoration:none;
+}
+
+a:hover {
+	color: #000;
+}
+
+.control-label{
+  font-weight: 600;
+}
+
+input.error, select.error, textarea.error{
+  background-color:#ffcccc;
+  border:1px solid #ff3366;
+}
+
+label.error {
+  display: inline !important;
+  color: red;
+}
+.checkbox_remove {
+  position: relative;
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.portlet > .portlet-title > .tools > a {
+	height: auto;
+}
+.page-header .page-header-menu {
+	background: #333333;
+}
+.page-header .page-header-menu .hor-menu .navbar-nav > li.open > a, .page-header .page-header-menu .hor-menu .navbar-nav > li:hover > a, .page-header .page-header-menu .hor-menu .navbar-nav > li > a:active, .page-header .page-header-menu .hor-menu .navbar-nav > li > a:focus, .page-header .page-header-menu .hor-menu .navbar-nav > li > a:hover {
+	background: #333333 !important;
+}
+.page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-menu li > a {
+	color: #fff;
+}
+.page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-menu {
+	background: #333333;
+}
+.page-header .page-header-menu .hor-menu .navbar-nav > li > a, .page-header .page-header-menu .hor-menu .navbar-nav > li > a > i {
+	color: #FFF;
+}
+.page-header .page-header-menu .hor-menu .navbar-nav > li .dropdown-menu li:hover > a {
+	color: #fff;
+	background: #4c4c4c;
+}
+.page-wrapper .page-wrapper-middle {
+	background: #EFEFEF;
+}
+.btn.dark:not(.btn-outline) {
+	background-color: #666;
+	border-color: #666;
+}
+.btn.dark:not(.btn-outline).active, .btn.dark:not(.btn-outline):active, .btn.dark:not(.btn-outline):hover, .open > .btn.dark:not(.btn-outline).dropdown-toggle {
+	background-color: #000;
+	border-color: #000;
+}
+.table thead tr th.actions,
+.table thead tr td.actions,
+.table tbody tr td:last-child{
+	text-align: center;
+}
+.table tbody tr td:last-child a{
+	margin: 0 4px;
+}
+
+/*table.dataTable thead .sorting_asc {
+	background: url(../img/sort_asc.png) center right no-repeat;
+}
+table.dataTable thead .sorting_desc {
+	background: url(../img/sort_desc.png) center right no-repeat;
+}*/
+.pagination > li > a, .pagination > li > span {
+	color: #666;
+}
+.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+	background-color: #666;
+	border-color: #666;
+}
+.page-footer {
+	background: #333;
+	color: #fff;
+}
+
+/*painel de aprovaÃ§Ã£o*/
+.item-selecionado{
+	position: relative;
+}
+.item-selecionado::after {
+	content: "";
+	border: 1px dotted #000;
+	width: 100%;
+	height: 100%;
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.aprovacao-valor,
+.aprovacao-situacao,
+.aprovacao-acoes{
+	display: inline-block;
+	vertical-align: top;
+	width:calc( 33% - 2px );
+}
+.aprovacao-acoes{
+	cursor:pointer;
+}
+
+.cotacao-menor-valor-item {
+	color: green;
+	font-weight: bold;
+}
+.cotacao-menor-valor-total {
+	background-color: #D7DFD1;
+	color: green;
+	font-weight: bold;
+}
+
+/**
+ multiselect
+*/
+.multiselect-container > li > a > label.radio,
+.multiselect-container > li > a > label.checkbox {
+	text-transform: capitalize;
+}
+
+input, textarea, select, select > option {
+	text-transform: uppercase;
+}
+
+.notransform{
+	text-transform: none;
+}
+
+.btn-primary.active, .btn-primary:active, .btn-primary:hover, .open > .btn-primary.dropdown-toggle {
+	color: #fff;
+	background-color: #000 !important;
+	border-color: #000 !important;
+}
+
+.btn-primary {
+	color: #fff;
+	background-color: #666 !important;
+	border-color: #666 !important;
+}
+
+.datepicker .active {
+    background-color: #666 !important;
+}
+
+.datepicker table tr td.active.active.focus, .datepicker table tr td.active.active:focus, .datepicker table tr td.active.active:hover, .datepicker table tr td.active.highlighted.active.focus, .datepicker table tr td.active.highlighted.active:focus, .datepicker table tr td.active.highlighted.active:hover, .datepicker table tr td.active.highlighted:active.focus, .datepicker table tr td.active.highlighted:active:focus, .datepicker table tr td.active.highlighted:active:hover, .datepicker table tr td.active:active.focus, .datepicker table tr td.active:active:focus, .datepicker table tr td.active:active:hover, .open > .dropdown-toggle.datepicker table tr td.active.focus, .open > .dropdown-toggle.datepicker table tr td.active.highlighted.focus, .open > .dropdown-toggle.datepicker table tr td.active.highlighted:focus, .open > .dropdown-toggle.datepicker table tr td.active.highlighted:hover, .open > .dropdown-toggle.datepicker table tr td.active:focus, .open > .dropdown-toggle.datepicker table tr td.active:hover {
+	color: #fff;
+	background-color: #333 !important;
+	border-color: #333 !important;
+}
+
+.bootbox-checkbox-list .checkbox input[type="checkbox"] {
+	position: relative;
+	margin-left: 0;
+}
