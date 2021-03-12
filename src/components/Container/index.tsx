@@ -79,13 +79,12 @@ const Container: React.FC<ContainerProps> = ({
                                   <i className={tool.icon} /> {tool.name}
                                 </Link>
                               )) || (
-                                <>
+                                <div key={Math.random()}>
                                   {tool.modal ? (
                                     <div
                                       style={{
                                         cursor: 'pointer',
                                       }}
-                                      key={Math.random()}
                                       onClick={() =>
                                         handlerOnClickTolls(tool.onClick)
                                       }
@@ -106,7 +105,7 @@ const Container: React.FC<ContainerProps> = ({
                                       <i className={tool.icon} /> {tool.name}
                                     </Link>
                                   )}
-                                </>
+                                </div>
                               ),
                           )}
                         </div>
