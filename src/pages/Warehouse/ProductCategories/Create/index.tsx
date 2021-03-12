@@ -1,18 +1,16 @@
 import React, { useCallback, useRef } from 'react';
 
 import { FormHandles } from '@unform/core';
-import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
-
+import Form from '../../../../components/Form/';
 import Container from '../../../../components/Container';
-import Input from '../../../../components/Input';
 import Button from '../../../../components/Button';
 import api from '../../../../services/api';
 import { useToast } from '../../../../hooks/toast';
 import getValidationErrors from '../../../../utlis/getValidationErros';
 
-interface ProductCategoryFormData {
+export interface ProductCategoryFormData {
   parent_id?: number;
   name: string;
 }
@@ -92,13 +90,10 @@ const ProductCategoriesCreate: React.FC = () => {
       tools={tools}
     >
       <div className="form-body">
-        <Form ref={formRef} onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-md-3">
-              <Input name="name" className="form-control" label="Nome" />
-            </div>
-          </div>
-
+        <Form<ProductCategoryFormData>
+          formRef={formRef}
+          onSubmitForm={handleSubmit}
+        >
           <div className="form-actions right">
             <Button type="submit" className="btn dark btn-sm sbold uppercase">
               Salvar

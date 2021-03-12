@@ -1,37 +1,49 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
+import { Container, CloseIcon } from './styles';
 
-interface ContainerProps {
+type TypeModalProps = {
+  isOpenModal: boolean;
   pageTitle: string;
   portletTitle: string;
-  handleSave(): void;
-}
+  onClickButtonSave: () => void;
+  onClickButtonCancel: () => void;
+  Children: () => JSX.Element;
+  refModal: React.LegacyRef<HTMLElement>;
+};
 
-const Modal: React.FC<ContainerProps> = ({
+const Modal = ({
   pageTitle,
+  isOpenModal,
+  Children,
+  refModal,
+  onClickButtonCancel,
+  onClickButtonSave,
   portletTitle,
-  handleSave,
-  children,
-}) => {
+}: TypeModalProps): JSX.Element => {
+  const handleClickCloseModal = () => {
+    onClickButtonCancel();
+  };
+
+  const handleClickSaveButtonModal = () => {
+    onClickButtonSave();
+  };
+
   return (
-    <div className="modal fade" id="exampleModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div className="modal-dialog" role="document">
-        <div className="modal-content">
-            <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">{pageTitle}</h5>
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div className="modal-body">
-              {children}
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-default btn-sm sbold uppercase" data-dismiss="modal">Fechar</button>
-                <button type="button" className="btn dark btn-sm sbold uppercase" data-dismiss="modal" onClick={() => { handleSave() }}>Salvar</button>
-            </div>
-        </div>
-      </div>
-    </div>
+    <Container openModal={isOpenModal}>
+      <section ref={refModal}>
+        <header>
+          <div>{pageTitle}</div>
+          <div>
+            <CloseIcon onClick={handleClickCloseModal} />
+          </div>
+        </header>
+        <hr />
+        <span>{portletTitle}</span>
+        <main>
+          <Children />
+        </main>
+      </section>
+    </Container>
   );
 };
 
