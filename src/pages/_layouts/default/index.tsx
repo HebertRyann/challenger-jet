@@ -31,7 +31,10 @@ const DefaultLayout: React.FC = ({ children }) => {
         <div className="page-wrapper-row">
           <div className="page-wrapper-bottom">
             <div className="page-footer">
-              <div className="container-fluid"> {new Date().getFullYear()} &copy; Multfluxo</div>
+              <div className="container-fluid">
+                {' '}
+                {new Date().getFullYear()} &copy; Multfluxo
+              </div>
             </div>
             <div className="scroll-to-top">
               <i className="icon-arrow-up" />
