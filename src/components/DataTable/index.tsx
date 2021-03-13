@@ -29,6 +29,7 @@ interface DataTableProps {
   headers?: Header[];
   actions?: Action[];
   searchParameters?: SearchParameters[];
+  isUpdateTable?: boolean;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -40,6 +41,7 @@ const DataTable: React.FC<DataTableProps> = ({
   ],
   actions,
   searchParameters,
+  isUpdateTable,
 }) => {
   const [items, setItems] = useState<any[]>([]);
   // const [loader, showLoader, hideLoader] = useFullPageLoader();
@@ -69,7 +71,16 @@ const DataTable: React.FC<DataTableProps> = ({
       setCurrentPage(response.data.page);
     };
     getData();
-  }, [entity, source, searchParameters, currentPage, search, sorting, ItemsPerPage]);
+  }, [
+    entity,
+    source,
+    searchParameters,
+    currentPage,
+    search,
+    sorting,
+    ItemsPerPage,
+    isUpdateTable,
+  ]);
 
   const firstItem =
     totalItems === 0 ? totalItems : ItemsPerPage * (currentPage - 1) + 1;
@@ -117,49 +128,59 @@ const DataTable: React.FC<DataTableProps> = ({
             onSorting={(field, order) => setSorting({ field, order })}
           />
           <tbody>
-
-            {(items.length > 0 && items.map(item => (
-              <tr key={item.id}>
-                {headers.map(
-                  header =>
-                    (header.field !== 'actions' && (
-                      <td key={`${header.field}-${item.id}`}>
-                        {item[header.field]}
-                      </td>
-                    )) || (
-                      <td key={`actions-${item.id}`} className="actions">
-                        {(actions &&
-                          actions.map(action => (
-                            <Link
-                              key={`view-${item.id}`}
-                              title="Visualizar"
-                              to={`/${source}/${action.name}/${item.id}`}
-                            >
-                              <span className={action.icon} />
-                            </Link>
-                          ))) || (
-                          <>
-                            <Link
-                              key={`view-${item.id}`}
-                              title="Visualizar"
-                              to={`/${source}/view/${item.id}`}
-                            >
-                              <span className="fa fa-search" />
-                            </Link>
-                            <Link
-                              key={`update-${item.id}`}
-                              title="Editar"
-                              to={`/${source}/update/${item.id}`}
-                            >
-                              <span className="fa fa-edit" />
-                            </Link>
-                          </>
-                        )}
-                      </td>
-                    ),
-                )}
+            {(items.length > 0 &&
+              items.map(item => (
+                <tr key={item.id}>
+                  {headers.map(
+                    header =>
+                      (header.field !== 'actions' && (
+                        <td key={`${header.field}-${item.id}`}>
+                          <p
+                            style={{
+                              textAlign: 'left',
+                            }}
+                          >
+                            {item[header.field]}
+                          </p>
+                        </td>
+                      )) || (
+                        <td key={`actions-${item.id}`} className="actions">
+                          {(actions &&
+                            actions.map(action => (
+                              <Link
+                                key={`view-${item.id}`}
+                                title="Visualizar"
+                                to={`/${source}/${action.name}/${item.id}`}
+                              >
+                                <span className={action.icon} />
+                              </Link>
+                            ))) || (
+                            <>
+                              <Link
+                                key={`view-${item.id}`}
+                                title="Visualizar"
+                                to={`/${source}/view/${item.id}`}
+                              >
+                                <span className="fa fa-search" />
+                              </Link>
+                              <Link
+                                key={`update-${item.id}`}
+                                title="Editar"
+                                to={`/${source}/update/${item.id}`}
+                              >
+                                <span className="fa fa-edit" />
+                              </Link>
+                            </>
+                          )}
+                        </td>
+                      ),
+                  )}
+                </tr>
+              ))) || (
+              <tr>
+                <td colSpan={headers.length}>Nenhum registro encontrado</td>
               </tr>
-            )))|| (<tr><td colSpan={headers.length}>Nenhum registro encontrado</td></tr>)}
+            )}
           </tbody>
           <tfoot />
         </table>
