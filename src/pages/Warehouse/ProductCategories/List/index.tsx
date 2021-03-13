@@ -1,8 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
-import Form from '../../../../components/Form';
+import Form from '../components/Form';
 import Container from '../../../../components/Container';
 import DataTable from '../../../../components/DataTable';
-import Modal from '../../../../components/Modal';
 import { ProductCategoryFormData } from '../Create';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
@@ -11,23 +10,10 @@ import { useToast } from '../../../../hooks/toast';
 import getValidationErrors from '../../../../utlis/getValidationErros';
 import { useHistory } from 'react-router-dom';
 import Button from '../../../../components/Button';
-import { useForceUpdate } from '../../../../hooks/forceUpdate';
 
 const ProductCategoriesList: React.FC = () => {
   const history = useHistory();
   const { addToast } = useToast();
-  const forceUpdate = useForceUpdate();
-  const [isOpenModal, setIsOpenModal] = useState(false);
-
-  const handleClickOnClose = () => {
-    setIsOpenModal(false);
-  };
-
-  const handleClickOnOpen = () => {
-    console.log('Open');
-  };
-
-  const refModal = useRef(null);
 
   const breadcrumb: Array<any> = [
     {
@@ -49,8 +35,7 @@ const ProductCategoriesList: React.FC = () => {
       name: 'Adicionar',
       to: '/productCategories/create',
       icon: 'fa fa-plus',
-      modal: true,
-      onClick: () => setIsOpenModal(true),
+      modal: false,
     },
   ];
 
@@ -76,9 +61,6 @@ const ProductCategoriesList: React.FC = () => {
         });
 
         await api.post('/productCategories', data);
-
-        setIsOpenModal(false);
-        forceUpdate();
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
@@ -94,7 +76,7 @@ const ProductCategoriesList: React.FC = () => {
         });
       }
     },
-    [addToast, history, isOpenModal],
+    [addToast, history],
   );
 
   const renderContentModal = (): JSX.Element => {
@@ -104,18 +86,13 @@ const ProductCategoriesList: React.FC = () => {
         onSubmitForm={handleSubmit}
       >
         <div className="form-actions right">
-          <Button
-            onClick={handleClickOnOpen}
-            type="submit"
-            className="btn dark btn-sm sbold uppercase"
-          >
+          <Button type="submit" className="btn dark btn-sm sbold uppercase">
             Salvar
           </Button>
           <button
             type="reset"
             style={{ marginLeft: '15px' }}
             className="btn dark btn-sm sbold uppercase"
-            onClick={handleClickOnClose}
           >
             Cancelar
           </button>
@@ -138,15 +115,6 @@ const ProductCategoriesList: React.FC = () => {
           headers={headers}
         />
       </Container>
-      <Modal
-        refModal={refModal}
-        onClickButtonCancel={handleClickOnClose}
-        onClickButtonSave={handleClickOnOpen}
-        isOpenModal={isOpenModal}
-        pageTitle="Categorias de produtos"
-        portletTitle="Adicionar novo produto"
-        Children={renderContentModal}
-      />
     </>
   );
 };
