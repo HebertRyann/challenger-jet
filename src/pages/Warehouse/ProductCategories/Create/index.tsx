@@ -3,7 +3,7 @@ import React, { useCallback, useRef } from 'react';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
-import Form from '../../../../components/Form/';
+import Form from '../components/Form';
 import Container from '../../../../components/Container';
 import Button from '../../../../components/Button';
 import api from '../../../../services/api';
