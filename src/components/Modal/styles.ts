@@ -2,19 +2,37 @@ import styled, { css } from 'styled-components';
 import { MdClose } from 'react-icons/md';
 
 export const Container = styled.div<{ openModal: boolean }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
   height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.9);
   z-index: 100;
   top: 0;
   position: absolute;
-  padding: 10% 35%;
+  padding: 10% 25%;
+  .right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    > button + button {
+      margin-left: 7px;
+    }
+  }
   ${({ openModal }) =>
     !openModal &&
     css`
       display: none;
     `}
   > section {
+    max-width: 100%;
+    min-width: 55%;
     position: relative;
     background-color: #fff;
     padding: 2% 3%;
@@ -41,24 +59,8 @@ export const Container = styled.div<{ openModal: boolean }>`
       }
     }
     > main {
-      height: 100%;
-      width: 100%;
       .form-content {
         width: 100%;
-        margin: 20px 0;
-      }
-    }
-
-    > footer {
-      width: 100%;
-      justify-content: flex-end;
-      align-self: flex-end;
-      display: flex;
-      > button {
-        width: 90px;
-        margin-left: 10px;
-        padding: 5px 15px;
-        border: none;
       }
     }
   }

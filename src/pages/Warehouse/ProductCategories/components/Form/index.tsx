@@ -1,8 +1,7 @@
 import React from 'react';
 import { FormHandles } from '@unform/core';
 import { Form as FormUnForm } from '@unform/web';
-import Button from '../Button';
-import Input from '../Input';
+import Input from '../../../../../components/Input';
 
 type TypesFormProps<T> = {
   formRef: React.Ref<FormHandles>;
@@ -23,6 +22,7 @@ const Form = <T extends {}>({
             <Input name="name" className="form-control" label="Nome" />
           </div>
         </div>
+        <hr/>
         {children && children}
       </FormUnForm>
     </div>
