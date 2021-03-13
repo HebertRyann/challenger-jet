@@ -12,6 +12,7 @@ interface Tools {
   icon: string;
   modal: boolean;
   handleDelete(): void;
+  onClick?: () => void;
 }
 
 interface ContainerProps {
@@ -28,6 +29,12 @@ const Container: React.FC<ContainerProps> = ({
   tools,
   children,
 }) => {
+  const handlerOnClickTolls = (funtion: VoidFunction | undefined) => {
+    if (funtion !== undefined) {
+      funtion();
+    }
+  };
+
   return (
     <div className="page-content-wrapper">
       <div className="page-head">
@@ -61,15 +68,47 @@ const Container: React.FC<ContainerProps> = ({
                       <div className="caption">{portletTitle}</div>
                       {tools && (
                         <div className="tools">
-                          {tools.map(tool => (
-                            (tool.handleDelete &&
-                            <Link key={tool.name} to="#!" onClick={() => tool.handleDelete()}>
-                            <i className={tool.icon} /> {tool.name}
-                          </Link>)||(
-                            <Link key={tool.name} to={tool.to}>
-                              <i className={tool.icon} /> {tool.name}
-                            </Link>)
-                          ))}
+                          {tools.map(
+                            tool =>
+                              (tool.handleDelete && (
+                                <Link
+                                  key={tool.name}
+                                  to="#!"
+                                  onClick={() => tool.handleDelete()}
+                                >
+                                  <i className={tool.icon} /> {tool.name}
+                                </Link>
+                              )) || (
+                                <>
+                                  {tool.modal ? (
+                                    <div
+                                      style={{
+                                        cursor: 'pointer',
+                                      }}
+                                      key={Math.random()}
+                                      onClick={() =>
+                                        handlerOnClickTolls(tool.onClick)
+                                      }
+                                    >
+                                      <i className={tool.icon} /> {tool.name}
+                                    </div>
+                                  ) : (
+                                    <Link
+                                      style={{
+                                        cursor: 'pointer',
+                                      }}
+                                      onClick={() => {
+                                        console.log(tool.modal);
+                                      }}
+                                      key={tool.name}
+                                      to={tool.to}
+                                    >
+                                      <i className={tool.icon} /> {tool.name}
+                                    </Link>
+                                  )}
+                                </>
+                              ),
+                          )}
                         </div>
                       )}
                     </div>

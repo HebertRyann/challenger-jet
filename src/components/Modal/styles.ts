@@ -1,0 +1,69 @@
+import styled, { css } from 'styled-components';
+import { MdClose } from 'react-icons/md';
+
+export const Container = styled.div<{ openModal: boolean }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 100;
+  top: 0;
+  position: absolute;
+  padding: 10% 25%;
+  .right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    > button + button {
+      margin-left: 7px;
+    }
+  }
+  ${({ openModal }) =>
+    !openModal &&
+    css`
+      display: none;
+    `}
+  > section {
+    max-width: 100%;
+    min-width: 55%;
+    position: relative;
+    background-color: #fff;
+    padding: 2% 3%;
+    margin: auto;
+    border-radius: 3px;
+    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
+      rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+      rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    > header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      > div {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      > div + div {
+        > svg {
+          cursor: pointer;
+          :hover {
+            color: red;
+          }
+        }
+      }
+    }
+    > main {
+      .form-content {
+        width: 100%;
+      }
+    }
+  }
+`;
+
+export const CloseIcon = styled(MdClose)``;

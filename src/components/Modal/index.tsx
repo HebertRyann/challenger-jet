@@ -1,37 +1,40 @@
 import React from 'react';
+import { Container, CloseIcon } from './styles';
 
-interface ContainerProps {
+type TypeModalProps = {
+  isOpenModal: boolean;
   pageTitle: string;
-  portletTitle: string;
-  handleSave(): void;
-}
+  onClickButtonCancel: () => void;
+  Children: () => JSX.Element;
+  refModal: React.LegacyRef<HTMLElement>;
+};
 
-const Modal: React.FC<ContainerProps> = ({
+const Modal = ({
   pageTitle,
-  portletTitle,
-  handleSave,
-  children,
-}) => {
+  isOpenModal,
+  Children,
+  refModal,
+  onClickButtonCancel,
+}: TypeModalProps): JSX.Element => {
+  const handleClickCloseModal = () => {
+    onClickButtonCancel();
+  };
+
   return (
-    <div className="modal fade" id="exampleModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div className="modal-dialog" role="document">
-        <div className="modal-content">
-            <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">{pageTitle}</h5>
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div className="modal-body">
-              {children}
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-default btn-sm sbold uppercase" data-dismiss="modal">Fechar</button>
-                <button type="button" className="btn dark btn-sm sbold uppercase" data-dismiss="modal" onClick={() => { handleSave() }}>Salvar</button>
-            </div>
-        </div>
-      </div>
-    </div>
+    <Container openModal={isOpenModal}>
+      <section ref={refModal}>
+        <header>
+          <h4 className="modal-title">{pageTitle}</h4>
+          <div>
+            <CloseIcon onClick={handleClickCloseModal} />
+          </div>
+        </header>
+        <hr />
+        <main>
+          <Children />
+        </main>
+      </section>
+    </Container>
   );
 };
 
