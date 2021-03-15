@@ -1,17 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 interface Breadcrumb {
   name: string;
   to?: string;
 }
 
-interface Tools {
+type ParamsPush = {
+  id: string;
+  value: string;
+};
+export interface ToolsContainerProps {
   name: string;
   to: string;
   icon: string;
-  modal: boolean;
-  handleDelete(): void;
+  modal?: boolean;
+  hasParams: false | ParamsPush;
+  handleDelete?: () => void;
   onClick?: () => void;
 }
 
@@ -19,7 +24,7 @@ interface ContainerProps {
   pageTitle: string;
   portletTitle: string;
   breadcrumb?: Breadcrumb[];
-  tools?: Tools[];
+  tools?: ToolsContainerProps[];
 }
 
 const Container: React.FC<ContainerProps> = ({
@@ -29,11 +34,7 @@ const Container: React.FC<ContainerProps> = ({
   tools,
   children,
 }) => {
-  const handlerOnClickTolls = (funtion: VoidFunction | undefined) => {
-    if (funtion !== undefined) {
-      funtion();
-    }
-  };
+  const history = useHistory();
 
   return (
     <div className="page-content-wrapper">
@@ -71,41 +72,35 @@ const Container: React.FC<ContainerProps> = ({
                           {tools.map(
                             tool =>
                               (tool.handleDelete && (
-                                <Link
+                                <a
+                                  style={{
+                                    cursor: 'pointer',
+                                  }}
                                   key={tool.name}
-                                  to="#!"
-                                  onClick={() => tool.handleDelete()}
+                                  onClick={tool.handleDelete}
                                 >
                                   <i className={tool.icon} /> {tool.name}
-                                </Link>
+                                </a>
                               )) || (
                                 <>
-                                  {tool.modal ? (
-                                    <div
-                                      style={{
-                                        cursor: 'pointer',
-                                      }}
-                                      key={Math.random()}
-                                      onClick={() =>
-                                        handlerOnClickTolls(tool.onClick)
-                                      }
-                                    >
-                                      <i className={tool.icon} /> {tool.name}
-                                    </div>
-                                  ) : (
-                                    <Link
-                                      style={{
-                                        cursor: 'pointer',
-                                      }}
-                                      onClick={() => {
-                                        console.log(tool.modal);
-                                      }}
-                                      key={tool.name}
-                                      to={tool.to}
-                                    >
-                                      <i className={tool.icon} /> {tool.name}
-                                    </Link>
-                                  )}
+                                  <a
+                                    style={{
+                                      cursor: 'pointer',
+                                    }}
+                                    key={tool.name}
+                                    onClick={() => {
+                                      history.push(`${tool.to}`, {
+                                        id: tool.hasParams
+                                          ? tool.hasParams.id
+                                          : '',
+                                        value: tool.hasParams
+                                          ? tool.hasParams.value
+                                          : '',
+                                      });
+                                    }}
+                                  >
+                                    <i className={tool.icon} /> {tool.name}
+                                  </a>
                                 </>
                               ),
                           )}
