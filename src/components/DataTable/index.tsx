@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import api from '../../services/api';
 import TableHeader from './Header';
 import Pagination from './Pagination';
@@ -44,7 +44,6 @@ const DataTable: React.FC<DataTableProps> = ({
   isUpdateTable,
 }) => {
   const [items, setItems] = useState<any[]>([]);
-  // const [loader, showLoader, hideLoader] = useFullPageLoader();
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [ItemsPerPage, setItemsPerPage] = useState(50);
@@ -53,7 +52,6 @@ const DataTable: React.FC<DataTableProps> = ({
 
   useEffect(() => {
     const getData = async () => {
-      // showLoader();
       const response = await api.get('dataTable', {
         params: {
           entity,
@@ -88,6 +86,8 @@ const DataTable: React.FC<DataTableProps> = ({
     firstItem + ItemsPerPage - 1 >= totalItems
       ? totalItems
       : firstItem + ItemsPerPage - 1;
+
+  const history = useHistory();
 
   return (
     <div className="dataTables_wrapper no-footer">
@@ -148,7 +148,7 @@ const DataTable: React.FC<DataTableProps> = ({
                           {(actions &&
                             actions.map(action => (
                               <Link
-                                key={`view-${item.id}`}
+                                key={Math.random()}
                                 title="Visualizar"
                                 to={`/${source}/${action.name}/${item.id}`}
                               >
@@ -156,20 +156,30 @@ const DataTable: React.FC<DataTableProps> = ({
                               </Link>
                             ))) || (
                             <>
-                              <Link
-                                key={`view-${item.id}`}
+                              <a
+                                key={Math.random()}
                                 title="Visualizar"
-                                to={`/${source}/view/${item.id}`}
+                                onClick={() => {
+                                  history.push(`/${source}/view/${item.id}`, {
+                                    id: item.id,
+                                    value: item.name,
+                                  });
+                                }}
                               >
                                 <span className="fa fa-search" />
-                              </Link>
-                              <Link
-                                key={`update-${item.id}`}
+                              </a>
+                              <a
+                                key={Math.random()}
                                 title="Editar"
-                                to={`/${source}/update/${item.id}`}
+                                onClick={() => {
+                                  history.push(`/${source}/update/${item.id}`, {
+                                    id: item.id,
+                                    value: item.name,
+                                  });
+                                }}
                               >
                                 <span className="fa fa-edit" />
-                              </Link>
+                              </a>
                             </>
                           )}
                         </td>
