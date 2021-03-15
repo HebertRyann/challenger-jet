@@ -1,18 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-//import { FormHandles } from '@unform/core';
-import { useParams, useHistory } from 'react-router-dom';
-import { FormHandles } from '@unform/core';
-import Form from '../components/Form';
-import Container from '../../../../components/Container';
+import { useParams, useLocation, useHistory } from 'react-router-dom';
+import { FormCategory } from '../components/Form';
+import Container, {
+  ToolsContainerProps,
+} from '../../../../components/Container';
 import Tabs from '../../../../components/Tabs';
 import Tab from '../../../../components/Tabs/Tab';
 import DataTable from '../../../../components/DataTable';
-import * as Yup from 'yup';
 import api from '../../../../services/api';
 import { useToast } from '../../../../hooks/toast';
 import Modal from '../../../../components/Modal';
-import getValidationErrors from '../../../../utlis/getValidationErros';
-import Button from '../../../../components/Button';
 
 interface ProductCategorytData {
   id: number;
@@ -22,13 +19,10 @@ interface ProductCategorytData {
   updated_at: string;
 }
 
-export interface ProductCategoryFormData {
-  parent_id?: number;
-  name: string;
-}
-
 const ProductCategoriesView: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  let { id } = useParams<{ id: string }>();
+  const history = useHistory();
+  const location = useLocation<{ id: string; value: string }>();
 
   const breadcrumb: Array<any> = [
     {
@@ -49,44 +43,13 @@ const ProductCategoriesView: React.FC = () => {
       name: 'Visualizar',
     },
   ];
-  const tools: Array<any> = [
-    {
-      name: 'Editar',
-      to: `/productCategories/update/${id}`,
-      icon: 'fa fa-edit',
-      modal: false,
-    },
-    {
-      name: 'Remover',
-      to: '#!',
-      icon: 'fa fa-remove',
-      modal: false,
-      handleDelete: () => handleDelete(),
-    },
-    {
-      name: 'Adicionar',
-      to: `/productCategories/create`,
-      icon: 'fa fa-plus',
-      modal: false,
-    },
-    {
-      name: 'Listar',
-      to: '/productCategories',
-      icon: 'fa fa-list',
-      modal: false,
-    },
-  ];
 
-  //const formRef = useRef<FormHandles>(null);
-
-  //const [isLoading, setIsLoading] = useState(true);
   const [
     productCategory,
     setProductCategory,
   ] = useState<ProductCategorytData | null>(null);
 
   const { addToast } = useToast();
-  const history = useHistory();
 
   const headers = [
     { name: 'Cód.', field: 'id', sortable: true },
@@ -98,29 +61,28 @@ const ProductCategoriesView: React.FC = () => {
     { entity: 'ProductCategory', entity_id: id },
   ];
   const searchProductCategories = [{ parent_id: id }];
-  const urlCreateSubCategory = `/productCategories/create?parent_id=${id}`;
-  const formRef = useRef<FormHandles>(null);
 
   const [isUpdateTable, setIsUpdateTable] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  const handleClickOnClose = () => {
+  const handleClickOnClose = useCallback(() => {
     setIsOpenModal(false);
-  };
+    setIsUpdateTable(!isUpdateTable);
+  }, [isUpdateTable]);
 
   const handleClickOnOpen = useCallback(() => {
     setIsOpenModal(true);
   }, [isOpenModal]);
 
   const refModal = useRef(null);
+
   useEffect(() => {
     async function loadCategory(): Promise<void> {
       try {
         const response = await api.get<ProductCategorytData>(
-          `/productCategories/view/${id}`,
+          `/productCategories/view/${location.state.id}`,
         );
         const { data } = response;
-        console.log(data);
         setProductCategory(data);
       } catch (err) {
         addToast({
@@ -135,62 +97,33 @@ const ProductCategoriesView: React.FC = () => {
     loadCategory();
   }, [id, addToast]);
 
-  const handleSubmit = useCallback(
-    async (data: ProductCategoryFormData) => {
-      try {
-        formRef.current?.setErrors({});
-        const schema = Yup.object().shape({
-          name: Yup.string().required('Nome obrigatório'),
-        });
-
-        await schema.validate(data, {
-          abortEarly: false,
-        });
-
-        data.parent_id = Number(id);
-        await api.post('/productCategories', data);
-
-        setIsUpdateTable(!isUpdateTable);
-        setIsOpenModal(false);
-      } catch (err) {
-        if (err instanceof Yup.ValidationError) {
-          const errors = getValidationErrors(err);
-          formRef.current?.setErrors(errors);
-          return;
-        }
-
-        addToast({
-          type: 'error',
-          title: 'Erro no cadastro',
-          description:
-            'Ocorreu um erro ao fazer cadastro, por favor, tente novamente.',
-        });
-      }
+  const tools: Array<ToolsContainerProps> = [
+    {
+      name: 'Editar',
+      to: `/productCategories/update/${id}`,
+      hasParams: false,
+      icon: 'fa fa-edit',
     },
-    [addToast, history],
-  );
-
-  const renderContentModal = (): JSX.Element => {
-    return (
-      <Form<ProductCategoryFormData>
-        formRef={formRef}
-        onSubmitForm={handleSubmit}
-      >
-        <div className="form-actions right">
-          <button
-            onClick={handleClickOnClose}
-            type="reset"
-            className="btn btn-default btn-sm sbold uppercase"
-          >
-            Fechar
-          </button>
-          <Button type="submit" className="btn dark btn-sm sbold uppercase">
-            Salvar
-          </Button>
-        </div>
-      </Form>
-    );
-  };
+    {
+      name: 'Remover',
+      to: '#!',
+      icon: 'fa fa-remove',
+      handleDelete: () => handleDelete(),
+      hasParams: false,
+    },
+    {
+      name: 'Adicionar',
+      to: `/productCategories/create`,
+      icon: 'fa fa-plus',
+      hasParams: false,
+    },
+    {
+      name: 'Listar',
+      to: '/productCategories',
+      icon: 'fa fa-list',
+      hasParams: false,
+    },
+  ];
 
   async function handleDelete() {
     const confirm = window.confirm(
@@ -211,6 +144,7 @@ const ProductCategoriesView: React.FC = () => {
         type: 'success',
         title: 'Categoria removida com sucesso.',
       });
+      history.goBack();
     } catch (err) {
       addToast({
         type: 'error',
@@ -315,7 +249,15 @@ const ProductCategoriesView: React.FC = () => {
         onClickButtonCancel={handleClickOnClose}
         isOpenModal={isOpenModal}
         pageTitle="Adicionar"
-        Children={renderContentModal}
+        Children={
+          <FormCategory
+            typeForm="create"
+            isOpenInModal={{
+              handleOnClose: handleClickOnClose,
+              idParent: Number(id),
+            }}
+          />
+        }
       />
     </>
   );
