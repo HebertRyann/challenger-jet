@@ -31,6 +31,8 @@ export const Container = styled.div<{ openModal: boolean }>`
       display: none;
     `}
   > section {
+    position: fixed;
+    margin: auto;
     max-width: 100%;
     min-width: 55%;
     position: relative;
@@ -41,6 +43,10 @@ export const Container = styled.div<{ openModal: boolean }>`
     box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
       rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
       rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+
+    hr {
+      margin: 15px auto;
+    }
     > header {
       display: flex;
       justify-content: space-between;
@@ -49,7 +55,7 @@ export const Container = styled.div<{ openModal: boolean }>`
         font-size: 18px;
         font-weight: bold;
       }
-      > div + div {
+      > div {
         > svg {
           cursor: pointer;
           :hover {
@@ -61,6 +67,14 @@ export const Container = styled.div<{ openModal: boolean }>`
     > main {
       .form-content {
         width: 100%;
+      }
+      .form-body {
+        margin: 20px 0;
+
+        .row {
+          margin-top: 15px;
+          margin-bottom: 15px;
+        }
       }
     }
   }
