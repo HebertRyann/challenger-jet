@@ -5,7 +5,7 @@ type TypeModalProps = {
   isOpenModal: boolean;
   pageTitle: string;
   onClickButtonCancel: () => void;
-  Children: () => JSX.Element;
+  Children: JSX.Element;
   refModal: React.LegacyRef<HTMLElement>;
 };
 
@@ -31,7 +31,7 @@ const Modal = ({
         </header>
         <hr />
         <main>
-          <Children />
+          {Children}
         </main>
       </section>
     </Container>
