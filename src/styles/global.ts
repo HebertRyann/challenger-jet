@@ -14,4 +14,7 @@ export default createGlobalStyle`
   button {
     cursor: pointer;
   }
+  hr, p {
+    margin: 0;
+  }
 `;
