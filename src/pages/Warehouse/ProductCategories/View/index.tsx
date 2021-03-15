@@ -100,7 +100,7 @@ const ProductCategoriesView: React.FC = () => {
   const searchProductCategories = [{ parent_id: id }];
   const urlCreateSubCategory = `/productCategories/create?parent_id=${id}`;
   const formRef = useRef<FormHandles>(null);
-  // FORM
+
   const [isUpdateTable, setIsUpdateTable] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
 
