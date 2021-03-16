@@ -39,10 +39,11 @@ export const FormCategory = ({
   const history = useHistory();
 
   useEffect(() => {
+    console.log(formRef.current?.setFieldValue('name', inputValue));
     if (valueInput !== undefined) {
       setInputValue(valueInput);
     }
-  }, [valueInput]);
+  }, [valueInput, isOpenInModal]);
 
   const onSubmitForm = useCallback(
     async (data: ProductCategoryFormData) => {
@@ -68,8 +69,22 @@ export const FormCategory = ({
             history.push('/productCategories');
           }
         } else {
-          await api.put(`/productCategories/update/${typeForm.idUpdate}`, data);
-          history.goBack();
+          if (isOpenInModal) {
+            const { handleOnClose, idParent } = isOpenInModal;
+            data.parent_id = Number(idParent);
+            await api.put(
+              `/productCategories/update/${typeForm.idUpdate}`,
+              data,
+            );
+            handleOnClose();
+          } else {
+            await api.put(
+              `/productCategories/update/${typeForm.idUpdate}`,
+              data,
+            );
+            history.push('/productCategories');
+            history.goBack();
+          }
         }
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
@@ -122,7 +137,11 @@ export const FormCategory = ({
             />
           </div>
         </div>
-        {isOpenInModal && <hr className="divider" />}
+        {isOpenInModal && typeForm === 'create' ? (
+          <hr className="divider" />
+        ) : (
+          <div style={{ margin: '10px 0' }} />
+        )}
         <div className="form-actions right">
           {isOpenInModal && (
             <button
