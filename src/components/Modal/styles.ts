@@ -8,13 +8,10 @@ export const Container = styled.div<{ openModal: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   background-color: rgba(0, 0, 0, 0.9);
   z-index: 100;
-  top: 0;
-  position: absolute;
   padding: 10% 25%;
   .right {
     display: flex;
