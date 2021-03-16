@@ -63,16 +63,16 @@ const ProductCategoriesView: React.FC = () => {
   const searchProductCategories = [{ parent_id: id }];
 
   const [isUpdateTable, setIsUpdateTable] = useState(false);
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isOpenModaCreate, setIsOpenModaCreate] = useState(false);
 
   const handleClickOnClose = useCallback(() => {
-    setIsOpenModal(false);
+    if (isOpenModaCreate) setIsOpenModaCreate(false);
     setIsUpdateTable(!isUpdateTable);
-  }, [isUpdateTable]);
+  }, [isUpdateTable, isOpenModaCreate]);
 
-  const handleClickOnOpen = useCallback(() => {
-    setIsOpenModal(true);
-  }, [isOpenModal]);
+  const handleClickOnOpenModalCreate = useCallback(() => {
+    setIsOpenModaCreate(true);
+  }, [isOpenModaCreate]);
 
   const refModal = useRef(null);
 
@@ -206,7 +206,7 @@ const ProductCategoriesView: React.FC = () => {
                       <div className="caption">Listagem</div>
                       <div className="tools">
                         <div
-                          onClick={handleClickOnOpen}
+                          onClick={handleClickOnOpenModalCreate}
                           style={{ cursor: 'pointer' }}
                         >
                           <i className="fa fa-plus" /> Adicionar
@@ -220,6 +220,9 @@ const ProductCategoriesView: React.FC = () => {
                         entity="ProductCategory"
                         headers={headers}
                         searchParameters={searchProductCategories}
+                        actionsButtons={{
+                          onClickEdit: 'modal',
+                        }}
                       />
                     </div>
                   </div>
@@ -247,7 +250,7 @@ const ProductCategoriesView: React.FC = () => {
       <Modal
         refModal={refModal}
         onClickButtonCancel={handleClickOnClose}
-        isOpenModal={isOpenModal}
+        isOpenModal={isOpenModaCreate}
         pageTitle="Adicionar"
         Children={
           <FormCategory
