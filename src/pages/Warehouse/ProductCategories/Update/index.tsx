@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import Container, {
   ToolsContainerProps,
 } from '../../../../components/Container';
+import { useLoading } from '../../../../hooks/loading';
 import api from '../../../../services/api';
 import { FormCategory } from '../components/Form';
 
@@ -27,7 +28,9 @@ const ProductCategoriesUpdate: React.FC = () => {
     },
   ];
   const location = useLocation<{ id: string; value: string }>();
+  const history = useHistory();
   const { id } = useParams<{ id: string }>();
+  const { activeLoading, disableLoading } = useLoading();
   const tools: Array<ToolsContainerProps> = [
     {
       name: 'Listar',
@@ -47,9 +50,11 @@ const ProductCategoriesUpdate: React.FC = () => {
 
   useEffect(() => {
     async function loadData() {
+      activeLoading();
       const response = await api.get(`/productCategories/view/${id}`);
       const { data } = response;
       setCategoryItem({ id: data.id, name: data.name });
+      disableLoading();
     }
 
     loadData();

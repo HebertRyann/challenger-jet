@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import api from '../../../../../services/api';
 import { useToast } from '../../../../../hooks/toast';
 import getValidationErrors from '../../../../../utlis/getValidationErros';
+import { useLoading } from '../../../../../hooks/loading';
 interface ProductCategoryFormData {
   parent_id?: number;
   name: string;
@@ -39,15 +40,17 @@ export const FormCategory = ({
   const history = useHistory();
 
   useEffect(() => {
-    console.log(formRef.current?.setFieldValue('name', inputValue));
     if (valueInput !== undefined) {
       setInputValue(valueInput);
     }
   }, [valueInput, isOpenInModal]);
 
+  const { activeLoading, disableLoading } = useLoading();
+
   const onSubmitForm = useCallback(
     async (data: ProductCategoryFormData) => {
       try {
+        activeLoading();
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
@@ -77,15 +80,16 @@ export const FormCategory = ({
               data,
             );
             handleOnClose();
+            history.push('/productCategories');
           } else {
             await api.put(
               `/productCategories/update/${typeForm.idUpdate}`,
               data,
             );
             history.push('/productCategories');
-            history.goBack();
           }
         }
+        disableLoading();
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);

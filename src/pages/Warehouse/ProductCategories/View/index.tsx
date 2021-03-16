@@ -10,6 +10,7 @@ import DataTable from '../../../../components/DataTable';
 import api from '../../../../services/api';
 import { useToast } from '../../../../hooks/toast';
 import Modal from '../../../../components/Modal';
+import { useLoading } from '../../../../hooks/loading';
 
 interface ProductCategorytData {
   id: number;
@@ -66,7 +67,7 @@ const ProductCategoriesView: React.FC = () => {
   const [isOpenModaCreate, setIsOpenModaCreate] = useState(false);
 
   const handleClickOnClose = useCallback(() => {
-    if (isOpenModaCreate) setIsOpenModaCreate(false);
+    setIsOpenModaCreate(false);
     setIsUpdateTable(!isUpdateTable);
   }, [isUpdateTable, isOpenModaCreate]);
 
@@ -75,23 +76,26 @@ const ProductCategoriesView: React.FC = () => {
   }, [isOpenModaCreate]);
 
   const refModal = useRef(null);
+  const { disableLoading, activeLoading } = useLoading();
 
   useEffect(() => {
     async function loadCategory(): Promise<void> {
+      activeLoading();
       try {
         const response = await api.get<ProductCategorytData>(
           `/productCategories/view/${location.state.id}`,
         );
         const { data } = response;
         setProductCategory(data);
+        disableLoading();
       } catch (err) {
+        disableLoading();
         addToast({
           type: 'error',
           title: 'Error ao carregar a categoria',
           description:
             'Houve um error ao carregar a categoria, tente novamente mais tarde!',
         });
-      } finally {
       }
     }
     loadCategory();
