@@ -46,7 +46,9 @@ const ProductCategoriesCreate: React.FC = () => {
       breadcrumb={breadcrumb}
       tools={tools}
     >
-      <FormCategory typeForm="create" />
+      <div className="form-body">
+        <FormCategory typeForm="create" />
+      </div>
     </Container>
   );
 };
