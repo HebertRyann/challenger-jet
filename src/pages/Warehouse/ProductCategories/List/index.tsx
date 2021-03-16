@@ -45,6 +45,7 @@ const ProductCategoriesList: React.FC = () => {
       <DataTable
         source="productCategories"
         entity="ProductCategory"
+        notHasChildren
         headers={headers}
       />
     </Container>
