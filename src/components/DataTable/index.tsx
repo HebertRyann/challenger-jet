@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import api from '../../services/api';
 import TableHeader from './Header';
@@ -6,6 +6,8 @@ import Pagination from './Pagination';
 import Search from './Search';
 
 import '../../assets/global/plugins/datatables/datatables.min.css';
+import Modal from '../Modal';
+import { FormCategory } from '../../pages/Warehouse/ProductCategories/components/Form';
 
 interface Action {
   name: string;
@@ -28,13 +30,18 @@ interface DataTableProps {
   source: string;
   headers?: Header[];
   actions?: Action[];
+  notHasChildren?: boolean;
   searchParameters?: SearchParameters[];
   isUpdateTable?: boolean;
+  actionsButtons?: {
+    onClickEdit?: 'to' | 'modal';
+  };
 }
 
 const DataTable: React.FC<DataTableProps> = ({
   entity,
   source,
+  notHasChildren,
   headers = [
     { name: 'Data', field: 'created_at', sortable: true },
     { name: 'Descrição', field: 'descriptions', sortable: true },
@@ -42,6 +49,7 @@ const DataTable: React.FC<DataTableProps> = ({
   actions,
   searchParameters,
   isUpdateTable,
+  actionsButtons,
 }) => {
   const [items, setItems] = useState<any[]>([]);
   const [totalItems, setTotalItems] = useState(0);
@@ -49,6 +57,24 @@ const DataTable: React.FC<DataTableProps> = ({
   const [ItemsPerPage, setItemsPerPage] = useState(50);
   const [search, setSearch] = useState('');
   const [sorting, setSorting] = useState({ field: '', order: '' });
+  const [isOpenModaEdit, setIsOpenModaEdit] = useState(false);
+  const [idEditItem, setIdEditItem] = useState('');
+  const [valueEditItem, setValueEditItem] = useState('');
+  const [parentIdEditItem, setParentIdEditItem] = useState('');
+  const refModal = useRef(null);
+  const handleClickButtonEditOpenInModal = useCallback(
+    (item: any) => {
+      setIdEditItem(item.id);
+      setValueEditItem(item.name);
+      setParentIdEditItem(item.parent_id);
+      setIsOpenModaEdit(true);
+    },
+    [idEditItem, valueEditItem, parentIdEditItem],
+  );
+
+  const handleClickOnClose = useCallback(() => {
+    if (isOpenModaEdit) setIsOpenModaEdit(false);
+  }, [isUpdateTable, isOpenModaEdit]);
 
   useEffect(() => {
     const getData = async () => {
@@ -129,64 +155,147 @@ const DataTable: React.FC<DataTableProps> = ({
           />
           <tbody>
             {(items.length > 0 &&
-              items.map(item => (
-                <tr key={item.id}>
-                  {headers.map(
-                    header =>
-                      (header.field !== 'actions' && (
-                        <td key={`${header.field}-${item.id}`}>
-                          <p
-                            style={{
-                              textAlign: 'left',
-                            }}
-                          >
-                            {item[header.field]}
-                          </p>
-                        </td>
-                      )) || (
-                        <td key={`actions-${item.id}`} className="actions">
-                          {(actions &&
-                            actions.map(action => (
-                              <Link
-                                key={Math.random()}
-                                title="Visualizar"
-                                to={`/${source}/${action.name}/${item.id}`}
-                              >
-                                <span className={action.icon} />
-                              </Link>
-                            ))) || (
-                            <>
-                              <a
-                                key={Math.random()}
-                                title="Visualizar"
-                                onClick={() => {
-                                  history.push(`/${source}/view/${item.id}`, {
-                                    id: item.id,
-                                    value: item.name,
-                                  });
+              items.map(item => {
+                return !notHasChildren ? (
+                  <tr key={item.id}>
+                    {headers.map(
+                      header =>
+                        (header.field !== 'actions' && (
+                          <td key={`${header.field}-${item.id}`}>
+                            <p
+                              style={{
+                                textAlign: 'left',
+                              }}
+                            >
+                              {item[header.field]}
+                            </p>
+                          </td>
+                        )) || (
+                          <td key={`actions-${item.id}`} className="actions">
+                            {(actions &&
+                              actions.map(action => (
+                                <Link
+                                  key={Math.random()}
+                                  title="Visualizar"
+                                  to={`/${source}/${action.name}/${item.id}`}
+                                >
+                                  <span className={action.icon} />
+                                </Link>
+                              ))) || (
+                              <>
+                                {!item.parent_id && (
+                                  <a
+                                    key={Math.random()}
+                                    title="Visualizar"
+                                    onClick={() => {
+                                      history.push(
+                                        `/${source}/view/${item.id}`,
+                                        {
+                                          id: item.id,
+                                          value: item.name,
+                                        },
+                                      );
+                                    }}
+                                  >
+                                    <span className="fa fa-search" />
+                                  </a>
+                                )}
+                                <a
+                                  key={Math.random()}
+                                  title="Editar"
+                                  onClick={() => {
+                                    if (
+                                      actionsButtons?.onClickEdit === 'modal'
+                                    ) {
+                                      handleClickButtonEditOpenInModal(item);
+                                    } else {
+                                      history.push(
+                                        `/${source}/update/${item.id}`,
+                                        {
+                                          id: item.id,
+                                          value: item.name,
+                                        },
+                                      );
+                                    }
+                                  }}
+                                >
+                                  <span className="fa fa-edit" />
+                                </a>
+                              </>
+                            )}
+                          </td>
+                        ),
+                    )}
+                  </tr>
+                ) : (
+                  !item.parent_id && (
+                    <tr key={item.id}>
+                      {headers.map(
+                        header =>
+                          (header.field !== 'actions' && (
+                            <td key={`${header.field}-${item.id}`}>
+                              <p
+                                style={{
+                                  textAlign: 'left',
                                 }}
                               >
-                                <span className="fa fa-search" />
-                              </a>
-                              <a
-                                key={Math.random()}
-                                title="Editar"
-                                onClick={() => {
-                                  history.push(`/${source}/update/${item.id}`, {
-                                    id: item.id,
-                                    value: item.name,
-                                  });
-                                }}
-                              >
-                                <span className="fa fa-edit" />
-                              </a>
-                            </>
-                          )}
-                        </td>
-                      ),
-                  )}
-                </tr>
-              ))) || (
+                                {item[header.field]}
+                              </p>
+                            </td>
+                          )) || (
+                            <td key={`actions-${item.id}`} className="actions">
+                              {(actions &&
+                                actions.map(action => (
+                                  <Link
+                                    key={Math.random()}
+                                    title="Visualizar"
+                                    to={`/${source}/${action.name}/${item.id}`}
+                                  >
+                                    <span className={action.icon} />
+                                  </Link>
+                                ))) || (
+                                <>
+                                  {!item.parent_id && (
+                                    <a
+                                      key={Math.random()}
+                                      title="Visualizar"
+                                      onClick={() => {
+                                        history.push(
+                                          `/${source}/view/${item.id}`,
+                                          {
+                                            id: item.id,
+                                            value: item.name,
+                                          },
+                                        );
+                                      }}
+                                    >
+                                      <span className="fa fa-search" />
+                                    </a>
+                                  )}
+                                  <a
+                                    key={Math.random()}
+                                    title="Editar"
+                                    onClick={() => {
+                                      history.push(
+                                        `/${source}/update/${item.id}`,
+                                        {
+                                          id: item.id,
+                                          value: item.name,
+                                        },
+                                      );
+                                    }}
+                                  >
+                                    <span className="fa fa-edit" />
+                                  </a>
+                                </>
+                              )}
+                            </td>
+                          ),
+                      )}
+                    </tr>
+                  )
+                );
+              })) || (
               <tr>
                 <td colSpan={headers.length}>Nenhum registro encontrado</td>
               </tr>
@@ -212,6 +321,24 @@ const DataTable: React.FC<DataTableProps> = ({
           </div>
         </div>
       </div>
+      <Modal
+        refModal={refModal}
+        onClickButtonCancel={handleClickOnClose}
+        isOpenModal={isOpenModaEdit}
+        pageTitle="Editar"
+        Children={
+          <FormCategory
+            typeForm={{
+              idUpdate: Number(idEditItem),
+              inputValue: 'value',
+            }}
+            isOpenInModal={{
+              handleOnClose: handleClickOnClose,
+              idParent: Number(parentIdEditItem),
+            }}
+          />
+        }
+      />
     </div>
   );
 };
