@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { useLoading } from '../../hooks/loading';
+import { Loading } from '../Loading';
 
 interface Breadcrumb {
   name: string;
@@ -35,9 +37,11 @@ const Container: React.FC<ContainerProps> = ({
   children,
 }) => {
   const history = useHistory();
+  const { loading } = useLoading();
 
   return (
     <div className="page-content-wrapper">
+      <Loading isActive={loading} />
       <div className="page-head">
         <div className="container-fluid">
           <div className="page-title">
