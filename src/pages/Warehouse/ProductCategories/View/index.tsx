@@ -11,6 +11,7 @@ import api from '../../../../services/api';
 import { useToast } from '../../../../hooks/toast';
 import Modal from '../../../../components/Modal';
 import { useLoading } from '../../../../hooks/loading';
+import { Alert } from '../../../../components/Alert';
 
 interface ProductCategorytData {
   id: number;
@@ -112,7 +113,7 @@ const ProductCategoriesView: React.FC = () => {
       name: 'Remover',
       to: '#!',
       icon: 'fa fa-remove',
-      handleDelete: () => handleDelete(),
+      handleDelete: () => handlerOpenAlert(),
       hasParams: false,
     },
     {
@@ -129,33 +130,37 @@ const ProductCategoriesView: React.FC = () => {
     },
   ];
 
-  async function handleDelete() {
-    const confirm = window.confirm(
-      `Tem certeza que deseja excluir o registro ${productCategory?.name} ?`,
-    );
+  const [isActiveAlert, setIsActiveAlert] = useState(false);
 
-    if (!confirm) {
-      addToast({
-        type: 'info',
-        title: 'Operação cancelada.',
-      });
-      return;
-    }
+  const handlerOpenAlert = useCallback(() => {
+    setIsActiveAlert(true);
+  }, [isActiveAlert]);
 
+  const handlerClickButtonCancellAlert = useCallback(() => {
+    setIsActiveAlert(false);
+    addToast({
+      type: 'info',
+      title: 'Operação cancelada.',
+    });
+  }, [isActiveAlert]);
+
+  const handlerClickButtonConfirmAlert = useCallback(async () => {
     try {
       await api.delete(`/productCategories/${id}`);
+      setIsActiveAlert(false);
       addToast({
         type: 'success',
         title: 'Categoria removida com sucesso.',
       });
       history.goBack();
     } catch (err) {
+      setIsActiveAlert(false);
       addToast({
         type: 'error',
         title: 'Categoria não removida, pois ainda está sendo usada.',
       });
     }
-  }
+  }, [isActiveAlert]);
 
   return (
     <>
@@ -265,6 +270,12 @@ const ProductCategoriesView: React.FC = () => {
             }}
           />
         }
+      />
+      <Alert
+        message={`Tem certeza que deseja excluir o registro ${productCategory?.name} ?`}
+        onClickCancellButton={handlerClickButtonCancellAlert}
+        onClickConfirmButton={handlerClickButtonConfirmAlert}
+        isActive={isActiveAlert}
       />
     </>
   );
