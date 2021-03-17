@@ -73,7 +73,7 @@ const DataTable: React.FC<DataTableProps> = ({
   );
 
   const handleClickOnClose = useCallback(() => {
-    if (isOpenModaEdit) setIsOpenModaEdit(false);
+    setIsOpenModaEdit(false);
   }, [isUpdateTable, isOpenModaEdit]);
 
   useEffect(() => {
@@ -328,9 +328,10 @@ const DataTable: React.FC<DataTableProps> = ({
         pageTitle="Editar"
         Children={
           <FormCategory
+            valueInput={valueEditItem}
             typeForm={{
               idUpdate: Number(idEditItem),
-              inputValue: 'value',
+              inputValue: valueEditItem,
             }}
             isOpenInModal={{
               handleOnClose: handleClickOnClose,
