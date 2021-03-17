@@ -9,6 +9,7 @@ import '../../assets/global/plugins/datatables/datatables.min.css';
 import Modal from '../Modal';
 import { FormCategory } from '../../pages/Warehouse/ProductCategories/components/Form';
 import { useToast } from '../../hooks/toast';
+import { useUpdateDataTable } from '../../hooks/dataTable';
 import { Alert } from '../Alert';
 
 interface Action {
@@ -34,7 +35,6 @@ interface DataTableProps {
   actions?: Action[];
   notHasChildren?: boolean;
   searchParameters?: SearchParameters[];
-  isUpdateTable?: boolean;
   actionsButtons?: {
     onClickEdit?: 'to' | 'modal';
   };
@@ -50,7 +50,6 @@ const DataTable: React.FC<DataTableProps> = ({
   ],
   actions,
   searchParameters,
-  isUpdateTable,
   actionsButtons,
 }) => {
   const [items, setItems] = useState<any[]>([]);
@@ -64,6 +63,7 @@ const DataTable: React.FC<DataTableProps> = ({
   const [valueEditItem, setValueEditItem] = useState('');
   const [parentIdEditItem, setParentIdEditItem] = useState('');
   const refModal = useRef(null);
+  const { isUpdated } = useUpdateDataTable();
   const handleClickButtonEditOpenInModal = useCallback(
     (item: any) => {
       setIdEditItem(item.id);
@@ -76,7 +76,7 @@ const DataTable: React.FC<DataTableProps> = ({
 
   const handleClickOnClose = useCallback(() => {
     setIsOpenModaEdit(false);
-  }, [isUpdateTable, isOpenModaEdit]);
+  }, [isUpdated, isOpenModaEdit]);
 
   useEffect(() => {
     const getData = async () => {
@@ -105,7 +105,7 @@ const DataTable: React.FC<DataTableProps> = ({
     search,
     sorting,
     ItemsPerPage,
-    isUpdateTable,
+    isUpdated,
   ]);
 
   const firstItem =

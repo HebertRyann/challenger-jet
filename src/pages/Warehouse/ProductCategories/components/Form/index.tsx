@@ -9,6 +9,7 @@ import api from '../../../../../services/api';
 import { useToast } from '../../../../../hooks/toast';
 import getValidationErrors from '../../../../../utlis/getValidationErros';
 import { useLoading } from '../../../../../hooks/loading';
+import { useUpdateDataTable } from '../../../../../hooks/dataTable';
 interface ProductCategoryFormData {
   id?: number;
   parent_id?: number;
@@ -41,7 +42,7 @@ export const FormCategory = ({
   const { addToast } = useToast();
   const history = useHistory();
   const [id, setId] = useState<any>(0);
-
+  const { updateDataTable } = useUpdateDataTable();
   useEffect(() => {
     if (valueInput !== undefined) {
       setInputValue(valueInput);
@@ -81,9 +82,25 @@ export const FormCategory = ({
               parent_id: idParent,
             };
             activeLoading();
-            await api.post('/productCategories', dataCreate);
-            handleOnClose();
-            disableLoading();
+            try {
+              const { status } = await api.post(
+                '/productCategories',
+                dataCreate,
+              );
+              handleOnClose();
+              disableLoading();
+              updateDataTable();
+            } catch (error) {
+              addToast({
+                type: 'error',
+                title: 'Erro ao adicionar o registro',
+                description:
+                  'Ocorreu um erro ao fazer cadastro, por favor, tente novamente.',
+              });
+              handleOnClose();
+              disableLoading();
+              updateDataTable();
+            }
           } else {
             const dataCreate: { name: string } = {
               name: data.name,
@@ -92,7 +109,6 @@ export const FormCategory = ({
             activeLoading();
             await api.post('/productCategories', dataCreate);
             disableLoading();
-
             history.push('/productCategories');
           }
         } else {
@@ -103,12 +119,13 @@ export const FormCategory = ({
             let dataUpdate: { name: string } = {
               name: data.name,
             };
-
+            activeLoading();
             const { status } = await api.put(
               `/productCategories/update/${id}`,
               dataUpdate,
             );
-
+            updateDataTable();
+            disableLoading();
             if (status !== 200) {
               disableLoading();
               history.push('/productCategories');
@@ -116,7 +133,7 @@ export const FormCategory = ({
                 type: 'error',
                 title: 'Erro ao atualizar o registro',
                 description:
-                  'Ocorreu um erro ao fazer cadastro, por favor, tente novamente.',
+                  'Ocorreu um erro ao fazer a atualização, por favor, tente novamente.',
               });
             }
             handleOnClose();
@@ -125,11 +142,13 @@ export const FormCategory = ({
               name: data.name,
             };
             const id = data.id;
-
+            activeLoading();
             const { status } = await api.put(
               `/productCategories/update/${id}`,
               dataUpdate,
             );
+            updateDataTable();
+            disableLoading();
 
             if (status !== 200) {
               disableLoading();

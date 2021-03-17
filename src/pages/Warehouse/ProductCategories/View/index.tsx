@@ -12,6 +12,7 @@ import { useToast } from '../../../../hooks/toast';
 import Modal from '../../../../components/Modal';
 import { useLoading } from '../../../../hooks/loading';
 import { Alert } from '../../../../components/Alert';
+import { useUpdateDataTable } from '../../../../hooks/dataTable';
 
 interface ProductCategorytData {
   id: number;
@@ -64,13 +65,13 @@ const ProductCategoriesView: React.FC = () => {
   ];
   const searchProductCategories = [{ parent_id: id }];
 
-  const [isUpdateTable, setIsUpdateTable] = useState(false);
   const [isOpenModaCreate, setIsOpenModaCreate] = useState(false);
+  const { updateDataTable } = useUpdateDataTable();
 
   const handleClickOnClose = useCallback(() => {
     setIsOpenModaCreate(false);
-    setIsUpdateTable(!isUpdateTable);
-  }, [isUpdateTable, isOpenModaCreate]);
+    updateDataTable();
+  }, [isOpenModaCreate]);
 
   const handleClickOnOpenModalCreate = useCallback(() => {
     setIsOpenModaCreate(true);
@@ -224,7 +225,6 @@ const ProductCategoriesView: React.FC = () => {
                     </div>
                     <div className="portlet-body form">
                       <DataTable
-                        isUpdateTable={isUpdateTable}
                         source="productCategories"
                         entity="ProductCategory"
                         headers={headers}
