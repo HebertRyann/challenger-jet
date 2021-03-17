@@ -70,8 +70,8 @@ const ProductCategoriesUpdate: React.FC = () => {
         <FormCategory
           valueInput={categoryItem.name}
           typeForm={{
-            idUpdate: Number(location.state.id),
-            inputValue: location.state.value,
+            idUpdate: Number(categoryItem.id),
+            inputValue: categoryItem.name,
           }}
         />
       </div>
