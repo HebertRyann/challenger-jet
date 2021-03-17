@@ -22,13 +22,13 @@ export const Alert = ({
         <hr/>
         <footer>
           <button
-            className="btn btn-default btn-sm sbold uppercase"
+            className="btn dark btn-sm sbold uppercase"
             onClick={onClickConfirmButton}
           >
             Ok
           </button>
           <button
-            className="btn dark btn-sm sbold uppercase"
+            className="btn btn-default btn-sm sbold uppercase"
             onClick={onClickCancellButton}
           >
             Cancelar

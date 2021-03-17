@@ -34,9 +34,6 @@ export const Container = styled.div<{ isActive: boolean }>`
         width: 80px;
         margin-left: 10px;
       }
-      > button + button {
-        background-color: red;
-      }
     }
   }
 `;
