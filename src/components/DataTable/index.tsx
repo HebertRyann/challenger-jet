@@ -8,6 +8,8 @@ import Search from './Search';
 import '../../assets/global/plugins/datatables/datatables.min.css';
 import Modal from '../Modal';
 import { FormCategory } from '../../pages/Warehouse/ProductCategories/components/Form';
+import { useToast } from '../../hooks/toast';
+import { Alert } from '../Alert';
 
 interface Action {
   name: string;
@@ -115,6 +117,45 @@ const DataTable: React.FC<DataTableProps> = ({
 
   const history = useHistory();
 
+  const [isActiveAlert, setIsActiveAlert] = useState(false);
+
+  const { addToast } = useToast();
+
+  const [idDeleteItem, setIdDeleteItem] = useState('');
+
+  const handlerOpenAlert = useCallback(
+    (id: string) => {
+      setIdDeleteItem(id);
+      setIsActiveAlert(true);
+    },
+    [isActiveAlert, idDeleteItem],
+  );
+
+  const handlerClickButtonCancellAlert = useCallback(() => {
+    setIsActiveAlert(false);
+    addToast({
+      type: 'info',
+      title: 'Operação cancelada.',
+    });
+  }, [isActiveAlert]);
+
+  const handlerClickButtonConfirmAlert = useCallback(async () => {
+    try {
+      await api.delete(`/productCategories/${idDeleteItem}`);
+      setIsActiveAlert(false);
+      addToast({
+        type: 'success',
+        title: 'Categoria removida com sucesso.',
+      });
+    } catch (err) {
+      setIsActiveAlert(false);
+      addToast({
+        type: 'error',
+        title: 'Categoria não removida, pois ainda está sendo usada.',
+      });
+    }
+  }, [isActiveAlert, idDeleteItem]);
+
   return (
     <div className="dataTables_wrapper no-footer">
       <div className="row">
@@ -200,27 +241,38 @@ const DataTable: React.FC<DataTableProps> = ({
                                     <span className="fa fa-search" />
                                   </a>
                                 )}
-                                <a
-                                  key={Math.random()}
-                                  title="Editar"
-                                  onClick={() => {
-                                    if (
-                                      actionsButtons?.onClickEdit === 'modal'
-                                    ) {
-                                      handleClickButtonEditOpenInModal(item);
-                                    } else {
-                                      history.push(
-                                        `/${source}/update/${item.id}`,
-                                        {
-                                          id: item.id,
-                                          value: item.name,
-                                        },
-                                      );
-                                    }
-                                  }}
-                                >
-                                  <span className="fa fa-edit" />
-                                </a>
+                                <div>
+                                  <a
+                                    key={Math.random()}
+                                    title="Editar"
+                                    onClick={() => {
+                                      if (
+                                        actionsButtons?.onClickEdit === 'modal'
+                                      ) {
+                                        handleClickButtonEditOpenInModal(item);
+                                      } else {
+                                        history.push(
+                                          `/${source}/update/${item.id}`,
+                                          {
+                                            id: item.id,
+                                            value: item.name,
+                                          },
+                                        );
+                                      }
+                                    }}
+                                  >
+                                    <span className="fa fa-edit" />
+                                  </a>
+                                  <a
+                                    key={Math.random()}
+                                    title="Remover"
+                                    onClick={() => {
+                                      handlerOpenAlert(item.id);
+                                    }}
+                                  >
+                                    <span className="fa fa-remove" />
+                                  </a>
+                                </div>
                               </>
                             )}
                           </td>
@@ -339,6 +391,12 @@ const DataTable: React.FC<DataTableProps> = ({
             }}
           />
         }
+      />
+      <Alert
+        message={`Tem certeza que deseja excluir o registro ${2} ?`}
+        onClickCancellButton={handlerClickButtonCancellAlert}
+        onClickConfirmButton={handlerClickButtonConfirmAlert}
+        isActive={isActiveAlert}
       />
     </div>
   );
