@@ -10,7 +10,7 @@ import { apiList } from '../domain/api';
 import { nameActions, namePageTitle } from '../domain/info';
 import { breadcrumbUpdate } from '../domain/breadcrumb';
 
-const ProductAtributeUpdate: React.FC = () => {
+const ProductAtributeUpdate = (): JSX.Element => {
   const location = useLocation<{ id: string; value: string }>();
   const { id } = useParams<{ id: string }>();
   const { activeLoading, disableLoading } = useLoading();
