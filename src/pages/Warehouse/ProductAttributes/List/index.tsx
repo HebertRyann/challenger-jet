@@ -1,11 +1,8 @@
 import React from 'react';
-import Container, {
-  ToolsContainerProps,
-} from '../../../../components/Container';
+import Container from '../../../../components/Container';
 import DataTable from '../../../../components/DataTable';
 import {
   nameEntity,
-  nameActionPageMain,
   namePageTitle,
   nameActions,
   nameSource,
