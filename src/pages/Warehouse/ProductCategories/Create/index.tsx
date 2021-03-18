@@ -34,7 +34,6 @@ const ProductCategoriesCreate: React.FC = () => {
       name: 'Listar',
       to: '/productCategories',
       icon: 'fa fa-list',
-      modal: false,
       hasParams: false,
     },
   ];

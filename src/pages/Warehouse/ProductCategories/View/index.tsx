@@ -114,7 +114,6 @@ const ProductCategoriesView: React.FC = () => {
       name: 'Remover',
       to: '#!',
       icon: 'fa fa-remove',
-      handleDelete: () => handlerOpenAlert(),
       hasParams: false,
     },
     {
