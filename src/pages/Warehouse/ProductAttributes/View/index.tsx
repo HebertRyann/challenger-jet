@@ -22,6 +22,7 @@ import {
 import { apiDelete, apiList } from '../domain/api';
 import { headers } from '../domain/headers';
 import { breadcrumbView } from '../domain/breadcrumb';
+import { toolsView } from '../domain/tools';
 
 interface ProductCategorytData {
   id: number;
@@ -36,17 +37,13 @@ const ProductAtributesView: React.FC = () => {
   const history = useHistory();
   const location = useLocation<{ id: string; value: string }>();
   const { updateDataTable } = useUpdateDataTable();
-
   const [
     productCategory,
     setProductCategory,
   ] = useState<ProductCategorytData | null>(null);
-
   const { addToast } = useToast();
-
   const searchParametersAuditLog = [{ entity: nameEntity, entity_id: id }];
   const searchProductAtributes = [{ parent_id: id }];
-
   const [alert, setIsActiveAlert] = useState<{
     isActive: boolean;
     id: number;
@@ -94,7 +91,6 @@ const ProductAtributesView: React.FC = () => {
           apiList(location.state.id),
         );
         const { data } = response;
-        console.log(data);
         setProductCategory(data);
         disableLoading();
       } catch (err) {
@@ -109,33 +105,6 @@ const ProductAtributesView: React.FC = () => {
     }
     loadCategory();
   }, [id, addToast]);
-
-  const tools: Array<ToolsContainerProps> = [
-    {
-      name: nameActions.update.name,
-      to: `${nameActions.update.to}${id}`,
-      hasParams: false,
-      icon: nameActions.update.icon,
-    },
-    {
-      name: nameActions.delete.name,
-      to: nameActions.delete.to,
-      icon: nameActions.delete.icon,
-      hasParams: false,
-    },
-    {
-      name: nameActions.create.name,
-      to: nameActions.create.to,
-      icon: nameActions.create.icon,
-      hasParams: false,
-    },
-    {
-      name: nameActions.update.name,
-      to: nameActions.update.to,
-      icon: nameActions.read.icon,
-      hasParams: false,
-    },
-  ];
 
   const handlerOnClickButtonRemoveInCurrentRow = useCallback(
     ({ id, name }: ProductCategorytData) => {
@@ -188,7 +157,7 @@ const ProductAtributesView: React.FC = () => {
         pageTitle={namePageTitle}
         portletTitle={nameActions.read.name}
         breadcrumb={breadcrumbView}
-        tools={tools}
+        tools={toolsView(id)}
       >
         <div className="form-body">
           <div className="row">
