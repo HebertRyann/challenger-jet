@@ -16,7 +16,7 @@ const ProductAtributesList = (): JSX.Element => (
     pageTitle={namePageTitle}
     portletTitle={nameActions.read.name}
     breadcrumb={breadcrumbList}
-    tools={toolsList}
+    tools={[toolsList]}
   >
     <DataTable
       source={nameSource}

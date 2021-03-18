@@ -10,7 +10,7 @@ const ProductAtributesCreate = (): JSX.Element => (
     pageTitle={namePageTitle}
     portletTitle={nameActions.create.name}
     breadcrumb={breadcrumbCreate}
-    tools={toolsCreate}
+    tools={[toolsCreate]}
   >
     <div className="form-body">
       <FormCategory typeForm="create" />

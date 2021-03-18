@@ -39,10 +39,12 @@ const ProductAtributeUpdate = (): JSX.Element => {
       pageTitle={namePageTitle}
       portletTitle={nameActions.update.name}
       breadcrumb={breadcrumbUpdate}
-      tools={toolsUpdate({
-        id: location.state.id,
-        value: location.state.value,
-      })}
+      tools={[
+        toolsUpdate({
+          id: location.state.id,
+          value: location.state.value,
+        }),
+      ]}
     >
       <div className="form-body">
         <FormCategory
