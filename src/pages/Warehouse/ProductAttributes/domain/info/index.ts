@@ -7,7 +7,6 @@ type TypeActionNameWithTo = {
 type PortletTitleCrudType = {
   create: TypeActionNameWithTo;
   read: TypeActionNameWithTo;
-  listOne: TypeActionNameWithTo;
   update: TypeActionNameWithTo;
   delete: TypeActionNameWithTo;
 };
@@ -29,11 +28,6 @@ const nameActions: PortletTitleCrudType = {
     icon: 'fa fa-plus',
   },
   read: {
-    name: 'Visualizar',
-    to: '/productAttributes/',
-    icon: 'fa fa-list',
-  },
-  listOne: {
     name: 'Visualizar',
     to: '/productAttributes/',
     icon: 'fa fa-list',
