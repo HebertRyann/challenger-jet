@@ -16,10 +16,8 @@ export interface ToolsContainerProps {
   name: string;
   to: string;
   icon: string;
-  modal?: boolean;
-  hasParams: false | ParamsPush;
-  handleDelete?: () => void;
-  onClick?: () => void;
+  hasParams?: false | ParamsPush;
+  hancleOnClick?: <T>(currentValue: T | any) => void;
 }
 
 interface ContainerProps {
@@ -38,6 +36,24 @@ const Container: React.FC<ContainerProps> = ({
 }) => {
   const history = useHistory();
   const { loading } = useLoading();
+
+  const handleClickAction = ({
+    hasParams,
+    icon,
+    name,
+    to,
+    hancleOnClick,
+  }: ToolsContainerProps) => {
+    if (!hancleOnClick) {
+      history.push(`${to}`, {
+        id: hasParams ? hasParams.id : '',
+        value: hasParams ? hasParams.value : '',
+      });
+    }
+    if (hancleOnClick !== undefined) {
+      hancleOnClick({ hasParams, icon, name, to, hancleOnClick });
+    }
+  };
 
   return (
     <div className="page-content-wrapper">
@@ -73,41 +89,19 @@ const Container: React.FC<ContainerProps> = ({
                       <div className="caption">{portletTitle}</div>
                       {tools && (
                         <div className="tools">
-                          {tools.map(
-                            tool =>
-                              (tool.handleDelete && (
-                                <a
-                                  style={{
-                                    cursor: 'pointer',
-                                  }}
-                                  key={tool.name}
-                                  onClick={tool.handleDelete}
-                                >
-                                  <i className={tool.icon} /> {tool.name}
-                                </a>
-                              )) || (
-                                <>
-                                  <a
-                                    style={{
-                                      cursor: 'pointer',
-                                    }}
-                                    key={tool.name}
-                                    onClick={() => {
-                                      history.push(`${tool.to}`, {
-                                        id: tool.hasParams
-                                          ? tool.hasParams.id
-                                          : '',
-                                        value: tool.hasParams
-                                          ? tool.hasParams.value
-                                          : '',
-                                      });
-                                    }}
-                                  >
-                                    <i className={tool.icon} /> {tool.name}
-                                  </a>
-                                </>
-                              ),
-                          )}
+                          {tools.map(tool => (
+                            <a
+                              style={{
+                                cursor: 'pointer',
+                              }}
+                              key={Math.random()}
+                              onClick={() => {
+                                handleClickAction(tool);
+                              }}
+                            >
+                              <i className={tool.icon} /> {tool.name}
+                            </a>
+                          ))}
                         </div>
                       )}
                     </div>
