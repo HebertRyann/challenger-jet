@@ -8,7 +8,7 @@ export const toolsUpdate = ({
   id: string;
   value: string;
 }): ToolsContainerProps => ({
-  name: nameActions.read.name,
+  name: 'Listar',
   to: nameActions.read.to,
   icon: nameActions.read.icon,
   hasParams: {
