@@ -1,29 +1,29 @@
 import { ToolsContainerProps } from '../../../../../../components/Container';
 import { nameActions } from '../../info';
 
-export const toolsView = (id: string): ToolsContainerProps[] => [
-  {
-    name: 'Editar',
-    to: `${nameActions.update.to}${id}`,
-    hasParams: false,
-    icon: nameActions.update.icon,
-  },
-  {
-    name: 'Remover',
-    to: nameActions.delete.to,
-    icon: nameActions.delete.icon,
-    hasParams: false,
-  },
-  {
-    name:'Adicionar',
-    to: nameActions.create.to,
-    icon: nameActions.create.icon,
-    hasParams: false,
-  },
-  {
-    name: 'Listar',
-    to: nameActions.read.to,
-    icon: nameActions.read.icon,
-    hasParams: false,
-  },
-];
+export const toolsViewCreate = (): ToolsContainerProps => ({
+  name: 'Adicionar',
+  to: nameActions.create.to,
+  icon: nameActions.create.icon,
+});
+
+export const toolsViewList = (): ToolsContainerProps => ({
+  name: 'Listar',
+  to: nameActions.read.to,
+  icon: nameActions.read.icon,
+});
+
+export const toolsViewUpdate = (id: string): ToolsContainerProps => ({
+  name: 'Editar',
+  to: `${nameActions.update.to}${id}`,
+  icon: nameActions.update.icon,
+});
+
+export const toolsViewDelete = (
+  handleOnClick: (pamams: any) => void,
+): ToolsContainerProps => ({
+  name: 'Remover',
+  to: nameActions.delete.to,
+  icon: nameActions.delete.icon,
+  handleOnClick,
+});
