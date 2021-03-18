@@ -229,9 +229,6 @@ const ProductCategoriesView: React.FC = () => {
                         entity="ProductCategory"
                         headers={headers}
                         searchParameters={searchProductCategories}
-                        actionsButtons={{
-                          onClickEdit: 'modal',
-                        }}
                       />
                     </div>
                   </div>
