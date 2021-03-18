@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { FormCategory } from '../components/Form';
-import Container, {
-  ToolsContainerProps,
-} from '../../../../components/Container';
+import Container from '../../../../components/Container';
 import Tabs from '../../../../components/Tabs';
 import Tab from '../../../../components/Tabs/Tab';
 import DataTable from '../../../../components/DataTable';
@@ -130,33 +128,33 @@ const ProductAtributesView: React.FC = () => {
     });
   }, [alert]);
 
-  const handlerClickButtonConfirmAlert = useCallback(async () => {
-    try {
-      await api.delete(apiDelete(id));
-      setIsActiveAlert({
-        id: 0,
-        isActive: false,
-        name: '',
-      });
-      addToast({
-        type: 'success',
-        title: 'Atributo removido com sucesso.',
-      });
-      history.goBack();
-    } catch (err) {
-      setIsActiveAlert({
-        id: 0,
-        isActive: false,
-        name: '',
-      });
-      addToast({
-        type: 'error',
-        title: 'Atributo não removido, pois ainda está sendo usada.',
-      });
-    }
-  }, [alert]);
-
-  // REMOVE PARENT
+  const handlerClickButtonConfirmAlert = useCallback(
+    async (id: string) => {
+      try {
+        await api.delete(apiDelete(id));
+        setIsActiveAlert({
+          id: 0,
+          isActive: false,
+          name: '',
+        });
+        addToast({
+          type: 'success',
+          title: 'Atributo removido com sucesso.',
+        });
+      } catch (err) {
+        setIsActiveAlert({
+          id: 0,
+          isActive: false,
+          name: '',
+        });
+        addToast({
+          type: 'error',
+          title: 'Atributo não removido, pois ainda está sendo usada.',
+        });
+      }
+    },
+    [alert],
+  );
 
   const [alertRemoveParent, setAlertRemoveParent] = useState(false);
 
@@ -333,7 +331,9 @@ const ProductAtributesView: React.FC = () => {
       <Alert
         message={`Tem certeza que deseja excluir o registro ${alert.name} ?`}
         onClickCancellButton={handlerClickButtonCancellAlert}
-        onClickConfirmButton={handlerClickButtonConfirmAlert}
+        onClickConfirmButton={() => {
+          handlerClickButtonConfirmAlert(String(alert.id));
+        }}
         isActive={alert.isActive}
       />
       <Alert
