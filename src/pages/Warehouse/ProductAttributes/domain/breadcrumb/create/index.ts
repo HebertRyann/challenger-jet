@@ -1,9 +1,5 @@
-import { namePageTitle, nameActions, nameActionPageMain } from '../../info';
-
-type TypeBreadcrumb = {
-  name: string;
-  to?: string;
-};
+import { nameActions, nameActionPageMain } from '../../info';
+import { TypeBreadcrumb } from '../index';
 
 export const breadcrumbCreate: TypeBreadcrumb[] = [
   {
