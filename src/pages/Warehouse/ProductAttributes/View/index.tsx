@@ -14,7 +14,6 @@ import { useLoading } from '../../../../hooks/loading';
 import { Alert } from '../../../../components/Alert';
 import { useUpdateDataTable } from '../../../../hooks/dataTable';
 import {
-  nameActionPageMain,
   nameActions,
   nameEntity,
   namePageTitle,
@@ -22,6 +21,7 @@ import {
 } from '../domain/info';
 import { apiDelete, apiList } from '../domain/api';
 import { headers } from '../domain/headers';
+import { breadcrumbView } from '../domain/breadcrumb';
 
 interface ProductCategorytData {
   id: number;
@@ -36,25 +36,6 @@ const ProductAtributesView: React.FC = () => {
   const history = useHistory();
   const location = useLocation<{ id: string; value: string }>();
   const { updateDataTable } = useUpdateDataTable();
-  const breadcrumb: Array<any> = [
-    {
-      name: 'Início',
-      to: '/',
-    },
-    {
-      name: 'Almoxarifado',
-    },
-    {
-      name: 'Produtos',
-    },
-    {
-      name: nameActionPageMain.name,
-      to: nameActionPageMain.to,
-    },
-    {
-      name: nameActions.read.name,
-    },
-  ];
 
   const [
     productCategory,
@@ -206,7 +187,7 @@ const ProductAtributesView: React.FC = () => {
       <Container
         pageTitle={namePageTitle}
         portletTitle={nameActions.read.name}
-        breadcrumb={breadcrumb}
+        breadcrumb={breadcrumbView}
         tools={tools}
       >
         <div className="form-body">
