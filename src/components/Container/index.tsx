@@ -17,7 +17,7 @@ export interface ToolsContainerProps {
   to: string;
   icon: string;
   hasParams?: false | ParamsPush;
-  hancleOnClick?: <T>(currentValue: T | any) => void;
+  handleOnClick?: <T>(currentValue: T | any) => void;
 }
 
 interface ContainerProps {
@@ -42,16 +42,16 @@ const Container: React.FC<ContainerProps> = ({
     icon,
     name,
     to,
-    hancleOnClick,
+    handleOnClick,
   }: ToolsContainerProps) => {
-    if (!hancleOnClick) {
+    if (!handleOnClick) {
       history.push(`${to}`, {
         id: hasParams ? hasParams.id : '',
         value: hasParams ? hasParams.value : '',
       });
     }
-    if (hancleOnClick !== undefined) {
-      hancleOnClick({ hasParams, icon, name, to, hancleOnClick });
+    if (handleOnClick !== undefined) {
+      handleOnClick({ hasParams, icon, name, to, handleOnClick });
     }
   };
 
