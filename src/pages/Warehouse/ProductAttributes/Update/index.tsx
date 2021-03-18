@@ -7,28 +7,10 @@ import { useLoading } from '../../../../hooks/loading';
 import api from '../../../../services/api';
 import { FormCategory } from '../components/Form';
 import { apiList } from '../domain/api';
-import { nameActionPageMain, nameActions, namePageTitle } from '../domain/info';
+import { nameActions, namePageTitle } from '../domain/info';
+import { breadcrumbUpdate } from '../domain/breadcrumb';
 
 const ProductAtributeUpdate: React.FC = () => {
-  const breadcrumb: Array<any> = [
-    {
-      name: 'Início',
-      to: '/',
-    },
-    {
-      name: 'Almoxarifado',
-    },
-    {
-      name: 'Produtos',
-    },
-    {
-      name: nameActionPageMain.name,
-      to: nameActionPageMain.to,
-    },
-    {
-      name: nameActions.read.name,
-    },
-  ];
   const location = useLocation<{ id: string; value: string }>();
   const { id } = useParams<{ id: string }>();
   const { activeLoading, disableLoading } = useLoading();
@@ -64,7 +46,7 @@ const ProductAtributeUpdate: React.FC = () => {
     <Container
       pageTitle={namePageTitle}
       portletTitle={nameActions.update.name}
-      breadcrumb={breadcrumb}
+      breadcrumb={breadcrumbUpdate}
       tools={tools}
     >
       <div className="form-body">
