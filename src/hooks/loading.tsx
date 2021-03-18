@@ -13,11 +13,11 @@ const LoadingProvider: React.FC = ({ children }) => {
 
   const activeLoading = useCallback(() => {
     setLoading(true);
-  }, [loading]);
+  }, []);
 
   const disableLoading = useCallback(() => {
     setLoading(false);
-  }, [loading]);
+  }, []);
 
   return (
     <LoadingContext.Provider value={{ activeLoading, disableLoading, loading }}>
