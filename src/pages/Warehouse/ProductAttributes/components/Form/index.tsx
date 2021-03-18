@@ -73,9 +73,7 @@ export const FormCategory = ({
         });
 
         if (typeForm === 'create') {
-          // IN MODAL
           if (isOpenInModal) {
-            console.log('SIM É MODAL');
             const { handleOnClose, idParent } = isOpenInModal;
             const dataCreate: { name: string; parent_id: number } = {
               name: data.name,
@@ -99,7 +97,6 @@ export const FormCategory = ({
               updateDataTable();
             }
           } else {
-            // NO MODAL
             try {
               const dataCreate: { name: string } = {
                 name: data.name,
@@ -120,8 +117,6 @@ export const FormCategory = ({
             }
           }
         } else {
-          // FORM EDITAR
-          // IS MODAL ?
           if (isOpenInModal) {
             const { handleOnClose } = isOpenInModal;
             const id = data.id;
@@ -176,55 +171,7 @@ export const FormCategory = ({
                   'Ocorreu um erro ao fazer a atualização, por favor, tente novamente.',
               });
             }
-            // activeLoading();
-            // const { status } = await api.put(apiUpdate(String(id)), dataUpdate);
-            // updateDataTable();
-            // disableLoading();
           }
-          // if (isOpenInModal) {
-          //   const { handleOnClose } = isOpenInModal;
-          //   const id = data.id;
-
-          //   let dataUpdate: { name: string } = {
-          //     name: data.name,
-          //   };
-          //   activeLoading();
-          //   const { status } = await api.put(apiUpdate(String(id)), dataUpdate);
-          //   updateDataTable();
-          //   disableLoading();
-          //   if (status !== 200) {
-          //     disableLoading();
-          //     history.push(nameActions.read.to);
-          //     addToast({
-          //       type: 'error',
-          //       title: 'Erro ao atualizar o registro',
-          //       description:
-          //         'Ocorreu um erro ao fazer a atualização, por favor, tente novamente.',
-          //     });
-          //   }
-          //   handleOnClose();
-          // } else {
-          //   let dataUpdate: { name: string } = {
-          //     name: data.name,
-          //   };
-          //   const id = data.id;
-          //   activeLoading();
-          //   const { status } = await api.put(apiUpdate(String(id)), dataUpdate);
-          //   updateDataTable();
-          //   disableLoading();
-
-          //   if (status !== 200) {
-          //     disableLoading();
-          //     history.push(apiCreate());
-          //     addToast({
-          //       type: 'error',
-          //       title: 'Erro ao atualizar o registro',
-          //       description:
-          //         'Ocorreu um erro ao fazer cadastro, por favor, tente novamente.',
-          //     });
-          //   }
-          //   history.push(nameActions.read.to);
-          // }
         }
         disableLoading();
       } catch (err) {
