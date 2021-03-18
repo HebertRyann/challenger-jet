@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import api from '../../services/api';
 import TableHeader from './Header';
 import Pagination from './Pagination';
 import Search from './Search';
-
 import '../../assets/global/plugins/datatables/datatables.min.css';
 import Modal from '../Modal';
 import { FormCategory } from '../../pages/Warehouse/ProductCategories/components/Form';
@@ -29,18 +28,22 @@ interface SearchParameters {
 }
 
 interface DataTableProps {
+  onActions?: {
+    onClickButtonEdit?: <T>(currentValue: T | any) => void;
+    onClickButtonRemove?: <T>(currentValue: T | any) => void;
+    onClickButtonList?: <T>(currentValue: T | any) => void;
+  };
+
   entity: string;
   source: string;
   headers?: Header[];
   actions?: Action[];
   notHasChildren?: boolean;
   searchParameters?: SearchParameters[];
-  actionsButtons?: {
-    onClickEdit?: 'to' | 'modal';
-  };
 }
 
-const DataTable: React.FC<DataTableProps> = ({
+const DataTable = ({
+  onActions,
   entity,
   source,
   notHasChildren,
@@ -50,8 +53,7 @@ const DataTable: React.FC<DataTableProps> = ({
   ],
   actions,
   searchParameters,
-  actionsButtons,
-}) => {
+}: DataTableProps) => {
   const [items, setItems] = useState<any[]>([]);
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,24 +61,33 @@ const DataTable: React.FC<DataTableProps> = ({
   const [search, setSearch] = useState('');
   const [sorting, setSorting] = useState({ field: '', order: '' });
   const [isOpenModaEdit, setIsOpenModaEdit] = useState(false);
-  const [idEditItem, setIdEditItem] = useState('');
-  const [valueEditItem, setValueEditItem] = useState('');
-  const [parentIdEditItem, setParentIdEditItem] = useState('');
-  const refModal = useRef(null);
-  const { isUpdated } = useUpdateDataTable();
-  const handleClickButtonEditOpenInModal = useCallback(
-    (item: any) => {
-      setIdEditItem(item.id);
-      setValueEditItem(item.name);
-      setParentIdEditItem(item.parent_id);
-      setIsOpenModaEdit(true);
-    },
-    [idEditItem, valueEditItem, parentIdEditItem],
-  );
 
-  const handleClickOnClose = useCallback(() => {
-    setIsOpenModaEdit(false);
-  }, [isUpdated, isOpenModaEdit]);
+  const handlerOnClickButtonList = (currentValue: any) => {
+    if (typeof onActions?.onClickButtonList === 'function') {
+      onActions.onClickButtonList(currentValue);
+    } else {
+      history.push(`/${source}/view/${currentValue.id}`, {
+        id: currentValue.id,
+        value: currentValue.name,
+      });
+    }
+  };
+
+  const handlerOnClickButtonEdit = (currentValue: any) => {
+    if (onActions?.onClickButtonEdit) {
+      onActions.onClickButtonEdit(currentValue);
+    } else {
+      history.push(`/${source}/update/${currentValue.id}`, {
+        id: currentValue.id,
+        value: currentValue.name,
+      });
+    }
+  };
+
+  const handlerOnClickButtonRemove = (currentValue: any) => {
+    if (onActions?.onClickButtonRemove)
+      onActions.onClickButtonRemove(currentValue);
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -105,7 +116,6 @@ const DataTable: React.FC<DataTableProps> = ({
     search,
     sorting,
     ItemsPerPage,
-    isUpdated,
   ]);
 
   const firstItem =
@@ -116,45 +126,6 @@ const DataTable: React.FC<DataTableProps> = ({
       : firstItem + ItemsPerPage - 1;
 
   const history = useHistory();
-
-  const [isActiveAlert, setIsActiveAlert] = useState(false);
-
-  const { addToast } = useToast();
-
-  const [idDeleteItem, setIdDeleteItem] = useState('');
-
-  const handlerOpenAlert = useCallback(
-    (id: string) => {
-      setIdDeleteItem(id);
-      setIsActiveAlert(true);
-    },
-    [isActiveAlert, idDeleteItem],
-  );
-
-  const handlerClickButtonCancellAlert = useCallback(() => {
-    setIsActiveAlert(false);
-    addToast({
-      type: 'info',
-      title: 'Operação cancelada.',
-    });
-  }, [isActiveAlert]);
-
-  const handlerClickButtonConfirmAlert = useCallback(async () => {
-    try {
-      await api.delete(`/productCategories/${idDeleteItem}`);
-      setIsActiveAlert(false);
-      addToast({
-        type: 'success',
-        title: 'Categoria removida com sucesso.',
-      });
-    } catch (err) {
-      setIsActiveAlert(false);
-      addToast({
-        type: 'error',
-        title: 'Categoria não removida, pois ainda está sendo usada.',
-      });
-    }
-  }, [isActiveAlert, idDeleteItem]);
 
   return (
     <div className="dataTables_wrapper no-footer">
@@ -228,15 +199,9 @@ const DataTable: React.FC<DataTableProps> = ({
                                   <a
                                     key={Math.random()}
                                     title="Visualizar"
-                                    onClick={() => {
-                                      history.push(
-                                        `/${source}/view/${item.id}`,
-                                        {
-                                          id: item.id,
-                                          value: item.name,
-                                        },
-                                      );
-                                    }}
+                                    onClick={() =>
+                                      handlerOnClickButtonList(item)
+                                    }
                                   >
                                     <span className="fa fa-search" />
                                   </a>
@@ -246,19 +211,7 @@ const DataTable: React.FC<DataTableProps> = ({
                                     key={Math.random()}
                                     title="Editar"
                                     onClick={() => {
-                                      if (
-                                        actionsButtons?.onClickEdit === 'modal'
-                                      ) {
-                                        handleClickButtonEditOpenInModal(item);
-                                      } else {
-                                        history.push(
-                                          `/${source}/update/${item.id}`,
-                                          {
-                                            id: item.id,
-                                            value: item.name,
-                                          },
-                                        );
-                                      }
+                                      handlerOnClickButtonEdit(item);
                                     }}
                                   >
                                     <span className="fa fa-edit" />
@@ -267,7 +220,7 @@ const DataTable: React.FC<DataTableProps> = ({
                                     key={Math.random()}
                                     title="Remover"
                                     onClick={() => {
-                                      handlerOpenAlert(item.id);
+                                      handlerOnClickButtonRemove(item);
                                     }}
                                   >
                                     <span className="fa fa-remove" />
@@ -312,13 +265,7 @@ const DataTable: React.FC<DataTableProps> = ({
                                       key={Math.random()}
                                       title="Visualizar"
                                       onClick={() => {
-                                        history.push(
-                                          `/${source}/view/${item.id}`,
-                                          {
-                                            id: item.id,
-                                            value: item.name,
-                                          },
-                                        );
+                                        handlerOnClickButtonList(item);
                                       }}
                                     >
                                       <span className="fa fa-search" />
@@ -328,13 +275,7 @@ const DataTable: React.FC<DataTableProps> = ({
                                     key={Math.random()}
                                     title="Editar"
                                     onClick={() => {
-                                      history.push(
-                                        `/${source}/update/${item.id}`,
-                                        {
-                                          id: item.id,
-                                          value: item.name,
-                                        },
-                                      );
+                                      handlerOnClickButtonEdit(item);
                                     }}
                                   >
                                     <span className="fa fa-edit" />
@@ -373,31 +314,6 @@ const DataTable: React.FC<DataTableProps> = ({
           </div>
         </div>
       </div>
-      <Modal
-        refModal={refModal}
-        onClickButtonCancel={handleClickOnClose}
-        isOpenModal={isOpenModaEdit}
-        pageTitle="Editar"
-        Children={
-          <FormCategory
-            valueInput={valueEditItem}
-            typeForm={{
-              idUpdate: Number(idEditItem),
-              inputValue: valueEditItem,
-            }}
-            isOpenInModal={{
-              handleOnClose: handleClickOnClose,
-              idParent: Number(parentIdEditItem),
-            }}
-          />
-        }
-      />
-      <Alert
-        message={`Tem certeza que deseja excluir o registro ${2} ?`}
-        onClickCancellButton={handlerClickButtonCancellAlert}
-        onClickConfirmButton={handlerClickButtonConfirmAlert}
-        isActive={isActiveAlert}
-      />
     </div>
   );
 };
