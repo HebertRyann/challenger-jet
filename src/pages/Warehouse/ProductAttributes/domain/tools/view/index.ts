@@ -22,7 +22,7 @@ export const toolsView = (id: string): ToolsContainerProps[] => [
   },
   {
     name: 'Listar',
-    to: nameActions.update.to,
+    to: nameActions.read.to,
     icon: nameActions.read.icon,
     hasParams: false,
   },
