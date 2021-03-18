@@ -5,7 +5,7 @@ import { Container } from './style';
 type AlertProps = {
   message: string;
   isActive: boolean;
-  onClickConfirmButton: () => void;
+  onClickConfirmButton: (id: string) => void;
   onClickCancellButton: () => void;
 };
 
@@ -19,11 +19,13 @@ export const Alert = ({
     <Container isActive={isActive}>
       <main>
         <h4>{message}</h4>
-        <hr/>
+        <hr />
         <footer>
           <button
             className="btn dark btn-sm sbold uppercase"
-            onClick={onClickConfirmButton}
+            onClick={() => {
+              onClickConfirmButton('');
+            }}
           >
             Ok
           </button>
