@@ -11,22 +11,11 @@ import {
   nameSource,
 } from '../domain/info';
 import { headers } from '../domain/headers';
+import { breadcrumbList } from "../domain/breadcrumb";
+
 const ProductAtributesList: React.FC = () => {
-  const breadcrumb: Array<any> = [
-    {
-      name: 'Início',
-      to: '/',
-    },
-    {
-      name: 'Almoxarifado',
-    },
-    {
-      name: 'Produtos',
-    },
-    {
-      name: nameActionPageMain.name,
-    },
-  ];
+
+
   const tools: Array<ToolsContainerProps> = [
     {
       name: nameActions.create.name,
@@ -40,7 +29,7 @@ const ProductAtributesList: React.FC = () => {
     <Container
       pageTitle={namePageTitle}
       portletTitle={nameActions.read.name}
-      breadcrumb={breadcrumb}
+      breadcrumb={breadcrumbList}
       tools={tools}
     >
       <DataTable
