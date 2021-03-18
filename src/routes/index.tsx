@@ -5,7 +5,7 @@ import { SignIn, SignUp, Dashboard } from './users/users-router';
 import { ProductCategoriesRouter } from './products/categories/categories-router';
 import { ProductAttributesRouter } from './products/attributes/ProductAtributesRouter';
 
-const Routes: React.FC = () => (
+const Routes = (): JSX.Element => (
   <Switch>
     <Route path="/" exact component={SignIn} />
     <Route path="/signup" component={SignUp} />
