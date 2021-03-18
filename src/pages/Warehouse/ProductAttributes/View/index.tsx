@@ -22,7 +22,12 @@ import {
 import { apiDelete, apiList } from '../domain/api';
 import { headers } from '../domain/headers';
 import { breadcrumbView } from '../domain/breadcrumb';
-import { toolsView } from '../domain/tools';
+import {
+  toolsViewCreate,
+  toolsViewDelete,
+  toolsViewUpdate,
+  toolsViewList,
+} from '../domain/tools';
 
 interface ProductCategorytData {
   id: number;
@@ -151,13 +156,59 @@ const ProductAtributesView: React.FC = () => {
     }
   }, [alert]);
 
+  // REMOVE PARENT
+
+  const [alertRemoveParent, setAlertRemoveParent] = useState(false);
+
+  const handleOnClickRemoveParent = useCallback(
+    ({ id, name }: { id: string; name: string }) => {
+      setAlertRemoveParent(true);
+    },
+    [alertRemoveParent],
+  );
+
+  const handlerOnClickButtonConfirmRemoveParent = useCallback(
+    async (id: number) => {
+      try {
+        await api.delete(apiDelete(String(id)));
+        setAlertRemoveParent(false);
+        addToast({
+          type: 'success',
+          title: 'Atributo removido com sucesso.',
+        });
+        history.goBack();
+      } catch (err) {
+        setAlertRemoveParent(false);
+        addToast({
+          type: 'error',
+          title: 'Atributo não removido, pois ainda está sendo usada.',
+        });
+      }
+    },
+    [alertRemoveParent],
+  );
+
+  const handlerOnClickButtonCancelRemoveParent = useCallback(() => {
+    setAlertRemoveParent(false);
+  }, []);
+
   return (
     <>
       <Container
         pageTitle={namePageTitle}
         portletTitle={nameActions.read.name}
         breadcrumb={breadcrumbView}
-        tools={toolsView(id)}
+        tools={[
+          toolsViewUpdate(String(id)),
+          toolsViewDelete(() => {
+            handleOnClickRemoveParent({
+              id: String(productCategory?.id),
+              name: String(productCategory?.name),
+            });
+          }),
+          toolsViewCreate(),
+          toolsViewList(),
+        ]}
       >
         <div className="form-body">
           <div className="row">
@@ -284,6 +335,14 @@ const ProductAtributesView: React.FC = () => {
         onClickCancellButton={handlerClickButtonCancellAlert}
         onClickConfirmButton={handlerClickButtonConfirmAlert}
         isActive={alert.isActive}
+      />
+      <Alert
+        message={`Tem certeza que deseja excluir o registro ${productCategory?.name} ?`}
+        onClickCancellButton={handlerOnClickButtonCancelRemoveParent}
+        onClickConfirmButton={() =>
+          handlerOnClickButtonConfirmRemoveParent(Number(productCategory?.id))
+        }
+        isActive={alertRemoveParent}
       />
     </>
   );
