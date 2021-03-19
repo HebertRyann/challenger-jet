@@ -11,7 +11,7 @@ import { headers } from '../domain/headers';
 import { breadcrumbList } from '../domain/breadcrumb';
 import { toolsList } from '../domain/tools';
 
-const List = (): JSX.Element => (
+const ProductUnitMeasuredList = (): JSX.Element => (
   <Container
     pageTitle={namePageTitle}
     portletTitle={nameActions.read.name}
@@ -27,4 +27,4 @@ const List = (): JSX.Element => (
   </Container>
 );
 
-export default List;
+export default ProductUnitMeasuredList;

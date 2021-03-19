@@ -5,7 +5,7 @@ import { namePageTitle, nameActions } from '../domain/info';
 import { breadcrumbCreate } from '../domain/breadcrumb';
 import { toolsCreate } from '../domain/tools/create';
 
-const Create = (): JSX.Element => (
+const ProductUnitMeasuredCreate = (): JSX.Element => (
   <Container
     pageTitle={namePageTitle}
     portletTitle={nameActions.create.name}
@@ -18,4 +18,4 @@ const Create = (): JSX.Element => (
   </Container>
 );
 
-export default Create;
+export default ProductUnitMeasuredCreate;

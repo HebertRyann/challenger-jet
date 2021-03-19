@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
-import Container, {
-  ToolsContainerProps,
-} from '../../../../components/Container';
+import { useHistory, useParams } from 'react-router-dom';
+import Container from '../../../../components/Container';
 import { useLoading } from '../../../../hooks/loading';
 import api from '../../../../services/api';
 import { FormCategory } from '../components/Form';
@@ -11,7 +9,7 @@ import { nameActions, namePageTitle } from '../domain/info';
 import { breadcrumbUpdate } from '../domain/breadcrumb';
 import { toolsUpdate } from '../domain/tools';
 
-const Update = (): JSX.Element => {
+const ProductUnitMeasuredUpdate = (): JSX.Element => {
   const { location } = useHistory<{
     id: string;
     value: string;
@@ -59,4 +57,4 @@ const Update = (): JSX.Element => {
   );
 };
 
-export default Update;
+export default ProductUnitMeasuredUpdate;
