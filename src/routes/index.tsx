@@ -5,6 +5,7 @@ import { SignIn, SignUp, Dashboard } from './users/users-router';
 import { ProductCategoriesRouter } from './products/categories/categories-router';
 import { ProductAttributesRouter } from './products/attributes/ProductAtributesRouter';
 import { ProductUnitMeasuredRouter } from './products/unitMeasured/ProductUnitMeasured';
+import { FinancialCategoriesRouter } from './administrative/financialCategories/FinancialCategoryRouter';
 
 const Routes = (): JSX.Element => (
   <Switch>
@@ -15,6 +16,7 @@ const Routes = (): JSX.Element => (
       <ProductAttributesRouter />
       <ProductCategoriesRouter />
       <ProductUnitMeasuredRouter />
+      <FinancialCategoriesRouter />
     </React.Fragment>
   </Switch>
 );

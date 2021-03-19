@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { Children, useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useAuth } from '../../hooks/auth';
 import { useToast } from '../../hooks/toast';
@@ -30,9 +30,14 @@ const Header: React.FC = () => {
       .map(menu => {
         const className = menu.url ? '' : 'dropdown-submenu';
         let showMenu = true;
-        if (menu.method === null && menu.children) {
-          const subMenus = menu.children.filter(sub => sub.permission === true);
-          showMenu = subMenus.length > 0;
+        if (menu.method === null && (menu.children || menu.url)) {
+          if (menu.children) {
+            const subMenus = menu.children.filter(
+              sub => sub.permission === true,
+            );
+            showMenu = subMenus.length > 0;
+          }
+          showMenu = true;
         }
         if (showMenu) {
           return (
@@ -51,6 +56,7 @@ const Header: React.FC = () => {
             </li>
           );
         }
+        console.log(menu);
         return '';
       });
 
@@ -92,7 +98,11 @@ const Header: React.FC = () => {
                 </Link>
               </li>
               <li className="dropdown dropdown-extended">
-                <Link to="#!" className="dropdown-toggle" onClick={handleLogout}>
+                <Link
+                  to="#!"
+                  className="dropdown-toggle"
+                  onClick={handleLogout}
+                >
                   <span className="sr-only">Toggle Quick Sidebar</span>
                   <i className="icon-logout" />
                 </Link>
