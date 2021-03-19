@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { FormCategory } from '../components/Form';
-import Container, {
-  ToolsContainerProps,
-} from '../../../../components/Container';
+import Container from '../../../../components/Container';
 import Tabs from '../../../../components/Tabs';
 import Tab from '../../../../components/Tabs/Tab';
 import DataTable from '../../../../components/DataTable';
@@ -13,6 +11,21 @@ import Modal from '../../../../components/Modal';
 import { useLoading } from '../../../../hooks/loading';
 import { Alert } from '../../../../components/Alert';
 import { useUpdateDataTable } from '../../../../hooks/dataTable';
+import {
+  nameActions,
+  nameEntity,
+  namePageTitle,
+  nameSource,
+} from '../domain/info';
+import { apiDelete, apiList } from '../domain/api';
+import { headers } from '../domain/headers';
+import { breadcrumbView } from '../domain/breadcrumb';
+import {
+  toolsViewCreate,
+  toolsViewDelete,
+  toolsViewUpdate,
+  toolsViewList,
+} from '../domain/tools';
 
 interface ProductCategorytData {
   id: number;
@@ -22,60 +35,53 @@ interface ProductCategorytData {
   updated_at: string;
 }
 
-const ProductCategoriesView: React.FC = () => {
+const ProductAtributesView: React.FC = () => {
   let { id } = useParams<{ id: string }>();
   const history = useHistory();
   const location = useLocation<{ id: string; value: string }>();
-
-  const breadcrumb: Array<any> = [
-    {
-      name: 'Início',
-      to: '/',
-    },
-    {
-      name: 'Almoxarifado',
-    },
-    {
-      name: 'Produtos',
-    },
-    {
-      name: 'Categorias',
-      to: '/productCategories',
-    },
-    {
-      name: 'Visualizar',
-    },
-  ];
-
+  const { updateDataTable } = useUpdateDataTable();
   const [
     productCategory,
     setProductCategory,
   ] = useState<ProductCategorytData | null>(null);
-
   const { addToast } = useToast();
+  const searchParametersAuditLog = [{ entity: nameEntity, entity_id: id }];
+  const searchProductAtributes = [{ parent_id: id }];
+  const [alert, setIsActiveAlert] = useState<{
+    isActive: boolean;
+    id: number;
+    name: string;
+  }>({
+    id: 0,
+    isActive: false,
+    name: '',
+  });
 
-  const headers = [
-    { name: 'Cód.', field: 'id', sortable: true },
-    { name: 'Nome', field: 'name', sortable: true },
-    { name: 'Ações', field: 'actions', sortable: false },
-  ];
+  const [
+    currentItemUpdate,
+    setCurrentItemUpdate,
+  ] = useState<ProductCategorytData>({} as ProductCategorytData);
 
-  const searchParametersAuditLog = [
-    { entity: 'ProductCategory', entity_id: id },
-  ];
-  const searchProductCategories = [{ parent_id: id }];
-
-  const [isOpenModaCreate, setIsOpenModaCreate] = useState(false);
-  const { updateDataTable } = useUpdateDataTable();
+  const [modalEdit, setModalEdit] = useState(false);
+  const [modalCreate, setModalCreate] = useState(false);
 
   const handleClickOnClose = useCallback(() => {
-    setIsOpenModaCreate(false);
+    setModalCreate(false);
+    setModalEdit(false);
     updateDataTable();
-  }, [isOpenModaCreate]);
+  }, [modalCreate, modalEdit]);
+
+  const handlerOnClickButtonEditInCurrentRow = useCallback(
+    (currentValue: ProductCategorytData) => {
+      setCurrentItemUpdate(currentValue);
+      setModalEdit(true);
+    },
+    [currentItemUpdate, modalEdit],
+  );
 
   const handleClickOnOpenModalCreate = useCallback(() => {
-    setIsOpenModaCreate(true);
-  }, [isOpenModaCreate]);
+    setModalCreate(true);
+  }, [modalCreate]);
 
   const refModal = useRef(null);
   const { disableLoading, activeLoading } = useLoading();
@@ -85,7 +91,7 @@ const ProductCategoriesView: React.FC = () => {
       activeLoading();
       try {
         const response = await api.get<ProductCategorytData>(
-          `/productCategories/view/${location.state.id}`,
+          apiList(location.state.id),
         );
         const { data } = response;
         setProductCategory(data);
@@ -103,72 +109,104 @@ const ProductCategoriesView: React.FC = () => {
     loadCategory();
   }, [id, addToast]);
 
-  const tools: Array<ToolsContainerProps> = [
-    {
-      name: 'Editar',
-      to: `/productCategories/update/${id}`,
-      hasParams: false,
-      icon: 'fa fa-edit',
+  const handlerOnClickButtonRemoveInCurrentRow = useCallback(
+    ({ id, name }: ProductCategorytData) => {
+      setIsActiveAlert({ id, name, isActive: true });
     },
-    {
-      name: 'Remover',
-      to: '#!',
-      icon: 'fa fa-remove',
-      hasParams: false,
-    },
-    {
-      name: 'Adicionar',
-      to: `/productCategories/create`,
-      icon: 'fa fa-plus',
-      hasParams: false,
-    },
-    {
-      name: 'Listar',
-      to: '/productCategories',
-      icon: 'fa fa-list',
-      hasParams: false,
-    },
-  ];
-
-  const [isActiveAlert, setIsActiveAlert] = useState(false);
-
-  const handlerOpenAlert = useCallback(() => {
-    setIsActiveAlert(true);
-  }, [isActiveAlert]);
+    [alert],
+  );
 
   const handlerClickButtonCancellAlert = useCallback(() => {
-    setIsActiveAlert(false);
+    setIsActiveAlert({
+      id: 0,
+      isActive: false,
+      name: '',
+    });
     addToast({
       type: 'info',
       title: 'Operação cancelada.',
     });
-  }, [isActiveAlert]);
+  }, [alert]);
 
-  const handlerClickButtonConfirmAlert = useCallback(async () => {
-    try {
-      await api.delete(`/productCategories/${id}`);
-      setIsActiveAlert(false);
-      addToast({
-        type: 'success',
-        title: 'Categoria removida com sucesso.',
-      });
-      history.goBack();
-    } catch (err) {
-      setIsActiveAlert(false);
-      addToast({
-        type: 'error',
-        title: 'Categoria não removida, pois ainda está sendo usada.',
-      });
-    }
-  }, [isActiveAlert]);
+  const handlerClickButtonConfirmAlert = useCallback(
+    async (id: string) => {
+      try {
+        await api.delete(apiDelete(id));
+        setIsActiveAlert({
+          id: 0,
+          isActive: false,
+          name: '',
+        });
+        addToast({
+          type: 'success',
+          title: 'Atributo removido com sucesso.',
+        });
+      } catch (err) {
+        setIsActiveAlert({
+          id: 0,
+          isActive: false,
+          name: '',
+        });
+        addToast({
+          type: 'error',
+          title: 'Atributo não removido, pois ainda está sendo usada.',
+        });
+      }
+    },
+    [alert],
+  );
+
+  const [alertRemoveParent, setAlertRemoveParent] = useState(false);
+
+  const handleOnClickRemoveParent = useCallback(
+    ({ id, name }: { id: string; name: string }) => {
+      setAlertRemoveParent(true);
+    },
+    [alertRemoveParent],
+  );
+
+  const handlerOnClickButtonConfirmRemoveParent = useCallback(
+    async (id: number) => {
+      try {
+        await api.delete(apiDelete(String(id)));
+        setAlertRemoveParent(false);
+        addToast({
+          type: 'success',
+          title: 'Atributo removido com sucesso.',
+        });
+        history.goBack();
+      } catch (err) {
+        setAlertRemoveParent(false);
+        addToast({
+          type: 'error',
+          title: 'Atributo não removido, pois ainda está sendo usada.',
+        });
+      }
+    },
+    [alertRemoveParent],
+  );
+
+  const handlerOnClickButtonCancelRemoveParent = useCallback(() => {
+    setAlertRemoveParent(false);
+  }, []);
 
   return (
     <>
       <Container
-        pageTitle="Categorias de produtos"
-        portletTitle="Visualizar"
-        breadcrumb={breadcrumb}
-        tools={tools}
+        pageTitle={namePageTitle}
+        portletTitle={nameActions.read.name}
+        breadcrumb={breadcrumbView}
+        tools={[
+          toolsViewUpdate(String(id)),
+          toolsViewDelete(() => {
+            handleOnClickRemoveParent({
+              id: String(productCategory?.id),
+              name: String(productCategory?.name),
+            });
+          }),
+          toolsViewCreate(),
+          toolsViewList(),
+        ]}
       >
         <div className="form-body">
           <div className="row">
@@ -224,10 +262,14 @@ const ProductCategoriesView: React.FC = () => {
                     </div>
                     <div className="portlet-body form">
                       <DataTable
-                        source="productCategories"
-                        entity="ProductCategory"
+                        source={nameSource}
+                        entity={nameEntity}
                         headers={headers}
-                        searchParameters={searchProductCategories}
+                        searchParameters={searchProductAtributes}
+                        onActions={{
+                          onClickButtonEdit: handlerOnClickButtonEditInCurrentRow,
+                          onClickButtonRemove: handlerOnClickButtonRemoveInCurrentRow,
+                        }}
                       />
                     </div>
                   </div>
@@ -255,11 +297,30 @@ const ProductCategoriesView: React.FC = () => {
       <Modal
         refModal={refModal}
         onClickButtonCancel={handleClickOnClose}
-        isOpenModal={isOpenModaCreate}
-        pageTitle="Adicionar"
+        isOpenModal={modalCreate}
+        pageTitle={'Adicionar'}
         Children={
           <FormCategory
-            typeForm="create"
+            typeForm={'create'}
+            isOpenInModal={{
+              handleOnClose: handleClickOnClose,
+              idParent: Number(id),
+            }}
+          />
+        }
+      />
+      <Modal
+        refModal={refModal}
+        onClickButtonCancel={handleClickOnClose}
+        isOpenModal={modalEdit}
+        pageTitle={'Editar'}
+        Children={
+          <FormCategory
+            valueInput={currentItemUpdate.name}
+            typeForm={{
+              idUpdate: currentItemUpdate.id,
+              inputValue: currentItemUpdate.name,
+            }}
             isOpenInModal={{
               handleOnClose: handleClickOnClose,
               idParent: Number(id),
@@ -268,13 +329,23 @@ const ProductCategoriesView: React.FC = () => {
         }
       />
       <Alert
-        message={`Tem certeza que deseja excluir o registro ${productCategory?.name} ?`}
+        message={`Tem certeza que deseja excluir o registro ${alert.name} ?`}
         onClickCancellButton={handlerClickButtonCancellAlert}
-        onClickConfirmButton={handlerClickButtonConfirmAlert}
-        isActive={isActiveAlert}
+        onClickConfirmButton={() => {
+          handlerClickButtonConfirmAlert(String(alert.id));
+        }}
+        isActive={alert.isActive}
+      />
+      <Alert
+        message={`Tem certeza que deseja excluir o registro ${productCategory?.name} ?`}
+        onClickCancellButton={handlerOnClickButtonCancelRemoveParent}
+        onClickConfirmButton={() =>
+          handlerOnClickButtonConfirmRemoveParent(Number(productCategory?.id))
+        }
+        isActive={alertRemoveParent}
       />
     </>
   );
 };
 
-export default ProductCategoriesView;
+export default ProductAtributesView;

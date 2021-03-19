@@ -6,43 +6,18 @@ import Container, {
 import { useLoading } from '../../../../hooks/loading';
 import api from '../../../../services/api';
 import { FormCategory } from '../components/Form';
+import { apiList } from '../domain/api';
+import { nameActions, namePageTitle } from '../domain/info';
+import { breadcrumbUpdate } from '../domain/breadcrumb';
+import { toolsUpdate } from '../domain/tools';
 
-const ProductCategoriesUpdate: React.FC = () => {
-  const breadcrumb: Array<any> = [
-    {
-      name: 'Início',
-      to: '/',
-    },
-    {
-      name: 'Almoxarifado',
-    },
-    {
-      name: 'Produtos',
-    },
-    {
-      name: 'Categorias',
-      to: '/productCategories',
-    },
-    {
-      name: 'Editar',
-    },
-  ];
-  const location = useLocation<{ id: string; value: string }>();
-  const history = useHistory();
+const ProductAtributeUpdate = (): JSX.Element => {
+  const { location } = useHistory<{
+    id: string;
+    value: string;
+  }>();
   const { id } = useParams<{ id: string }>();
   const { activeLoading, disableLoading } = useLoading();
-  const tools: Array<ToolsContainerProps> = [
-    {
-      name: 'Listar',
-      to: '/productCategories',
-      icon: 'fa fa-list',
-      hasParams: {
-        id: location.state.id,
-        value: location.state.value,
-      },
-    },
-  ];
-
   const [categoryItem, setCategoryItem] = useState<{
     id: string;
     name: string;
@@ -51,7 +26,7 @@ const ProductCategoriesUpdate: React.FC = () => {
   useEffect(() => {
     async function loadData() {
       activeLoading();
-      const response = await api.get(`/productCategories/view/${id}`);
+      const response = await api.get(apiList(id));
       const { data } = response;
       setCategoryItem({ id: data.id, name: data.name });
       disableLoading();
@@ -61,10 +36,15 @@ const ProductCategoriesUpdate: React.FC = () => {
   }, []);
   return (
     <Container
-      pageTitle="Categorias de produtos"
-      portletTitle="Editar"
-      breadcrumb={breadcrumb}
-      tools={tools}
+      pageTitle={namePageTitle}
+      portletTitle={nameActions.update.name}
+      breadcrumb={breadcrumbUpdate}
+      tools={[
+        toolsUpdate({
+          id: location.state.id,
+          value: location.state.value,
+        }),
+      ]}
     >
       <div className="form-body">
         <FormCategory
@@ -79,4 +59,4 @@ const ProductCategoriesUpdate: React.FC = () => {
   );
 };
 
-export default ProductCategoriesUpdate;
+export default ProductAtributeUpdate;

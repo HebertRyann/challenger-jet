@@ -1,20 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FormHandles } from '@unform/core';
+import * as Yup from 'yup';
+import api from '../../../../../services/api';
+import getValidationErrors from '../../../../../utlis/getValidationErros';
 import FormComponent from '../../../../../components/Form';
 import Input from '../../../../../components/Input';
 import Button from '../../../../../components/Button';
+import { FormHandles } from '@unform/core';
 import { useHistory } from 'react-router-dom';
-import * as Yup from 'yup';
-import api from '../../../../../services/api';
 import { useToast } from '../../../../../hooks/toast';
-import getValidationErrors from '../../../../../utlis/getValidationErros';
 import { useLoading } from '../../../../../hooks/loading';
 import { useUpdateDataTable } from '../../../../../hooks/dataTable';
-interface ProductCategoryFormData {
-  id?: number;
-  parent_id?: number;
-  name: string;
-}
+import { FormDataProtocol } from '../../domain/protocols';
+import { apiCreate, apiUpdate } from '../../domain/api';
+import { nameActions } from '../../domain/info';
 
 type IsOpenInModalProps = {
   idParent: number;
@@ -62,7 +60,7 @@ export const FormCategory = ({
   const { activeLoading, disableLoading } = useLoading();
 
   const onSubmitForm = useCallback(
-    async (data: ProductCategoryFormData) => {
+    async (data: FormDataProtocol) => {
       try {
         formRef.current?.setErrors({});
 
@@ -83,10 +81,7 @@ export const FormCategory = ({
             };
             activeLoading();
             try {
-              const { status } = await api.post(
-                '/productCategories',
-                dataCreate,
-              );
+              await api.post(apiCreate(), dataCreate);
               handleOnClose();
               disableLoading();
               updateDataTable();
@@ -102,33 +97,47 @@ export const FormCategory = ({
               updateDataTable();
             }
           } else {
-            const dataCreate: { name: string } = {
-              name: data.name,
-            };
-
-            activeLoading();
-            await api.post('/productCategories', dataCreate);
-            disableLoading();
-            history.push('/productCategories');
+            try {
+              const dataCreate: { name: string } = {
+                name: data.name,
+              };
+              activeLoading();
+              await api.post(apiCreate(), dataCreate);
+              disableLoading();
+              history.push(nameActions.read.to);
+            } catch (error) {
+              addToast({
+                type: 'error',
+                title: 'Erro ao adicionar o registro',
+                description:
+                  'Ocorreu um erro ao fazer cadastro, por favor, tente novamente.',
+              });
+              disableLoading();
+              updateDataTable();
+            }
           }
         } else {
           if (isOpenInModal) {
             const { handleOnClose } = isOpenInModal;
             const id = data.id;
-
             let dataUpdate: { name: string } = {
               name: data.name,
             };
-            activeLoading();
-            const { status } = await api.put(
-              `/productCategories/update/${id}`,
-              dataUpdate,
-            );
-            updateDataTable();
-            disableLoading();
-            if (status !== 200) {
+
+            try {
+              activeLoading();
+              await api.put(apiUpdate(String(id)), dataUpdate);
+              updateDataTable();
               disableLoading();
-              history.push('/productCategories');
+              handleOnClose();
+              addToast({
+                type: 'success',
+                title: 'Registro atualizado',
+                description: 'Registro alterado com sucesso',
+              });
+            } catch (error) {
+              disableLoading();
+              handleOnClose();
               addToast({
                 type: 'error',
                 title: 'Erro ao atualizar o registro',
@@ -136,31 +145,32 @@ export const FormCategory = ({
                   'Ocorreu um erro ao fazer a atualização, por favor, tente novamente.',
               });
             }
-            handleOnClose();
           } else {
             let dataUpdate: { name: string } = {
               name: data.name,
             };
             const id = data.id;
-            activeLoading();
-            const { status } = await api.put(
-              `/productCategories/update/${id}`,
-              dataUpdate,
-            );
-            updateDataTable();
-            disableLoading();
 
-            if (status !== 200) {
+            try {
+              activeLoading();
+              await api.put(apiUpdate(String(id)), dataUpdate);
+              updateDataTable();
               disableLoading();
-              history.push('/productCategories');
+              history.push(nameActions.read.to);
+              addToast({
+                type: 'success',
+                title: 'Registro atualizado',
+                description: 'Registro alterado com sucesso',
+              });
+            } catch (error) {
+              history.push(nameActions.read.to);
               addToast({
                 type: 'error',
                 title: 'Erro ao atualizar o registro',
                 description:
-                  'Ocorreu um erro ao fazer cadastro, por favor, tente novamente.',
+                  'Ocorreu um erro ao fazer a atualização, por favor, tente novamente.',
               });
             }
-            history.push('/productCategories');
           }
         }
         disableLoading();

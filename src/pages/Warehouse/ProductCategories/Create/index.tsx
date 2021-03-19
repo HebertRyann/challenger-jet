@@ -1,55 +1,21 @@
 import React from 'react';
+import Container from '../../../../components/Container';
 import { FormCategory } from '../components/Form';
-import Container, {
-  ToolsContainerProps,
-} from '../../../../components/Container';
+import { namePageTitle, nameActions } from '../domain/info';
+import { breadcrumbCreate } from '../domain/breadcrumb';
+import { toolsCreate } from '../domain/tools/create';
 
-export interface ProductCategoryFormData {
-  parent_id?: number;
-  name: string;
-}
+const ProductAtributesCreate = (): JSX.Element => (
+  <Container
+    pageTitle={namePageTitle}
+    portletTitle={nameActions.create.name}
+    breadcrumb={breadcrumbCreate}
+    tools={[toolsCreate]}
+  >
+    <div className="form-body">
+      <FormCategory typeForm="create" />
+    </div>
+  </Container>
+);
 
-const ProductCategoriesCreate: React.FC = () => {
-  const breadcrumb: Array<any> = [
-    {
-      name: 'Início',
-      to: '/',
-    },
-    {
-      name: 'Almoxarifado',
-    },
-    {
-      name: 'Produtos',
-    },
-    {
-      name: 'Categorias',
-      to: '/productCategories',
-    },
-    {
-      name: 'Adicionar',
-    },
-  ];
-  const tools: Array<ToolsContainerProps> = [
-    {
-      name: 'Listar',
-      to: '/productCategories',
-      icon: 'fa fa-list',
-      hasParams: false,
-    },
-  ];
-
-  return (
-    <Container
-      pageTitle="Categorias de produtos"
-      portletTitle="Adicionar"
-      breadcrumb={breadcrumb}
-      tools={tools}
-    >
-      <div className="form-body">
-        <FormCategory typeForm="create" />
-      </div>
-    </Container>
-  );
-};
-
-export default ProductCategoriesCreate;
+export default ProductAtributesCreate;

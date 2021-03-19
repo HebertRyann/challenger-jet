@@ -1,55 +1,30 @@
 import React from 'react';
-import Container, {
-  ToolsContainerProps,
-} from '../../../../components/Container';
+import Container from '../../../../components/Container';
 import DataTable from '../../../../components/DataTable';
+import {
+  nameEntity,
+  namePageTitle,
+  nameActions,
+  nameSource,
+} from '../domain/info';
+import { headers } from '../domain/headers';
+import { breadcrumbList } from '../domain/breadcrumb';
+import { toolsList } from '../domain/tools';
 
-const ProductCategoriesList: React.FC = () => {
-  const breadcrumb: Array<any> = [
-    {
-      name: 'Início',
-      to: '/',
-    },
-    {
-      name: 'Almoxarifado',
-    },
-    {
-      name: 'Produtos',
-    },
-    {
-      name: 'Categorias',
-    },
-  ];
-  const tools: Array<ToolsContainerProps> = [
-    {
-      name: 'Adicionar',
-      to: '/productCategories/create',
-      icon: 'fa fa-plus',
-      hasParams: false,
-    },
-  ];
+const ProductAtributesList = (): JSX.Element => (
+  <Container
+    pageTitle={namePageTitle}
+    portletTitle={nameActions.read.name}
+    breadcrumb={breadcrumbList}
+    tools={[toolsList]}
+  >
+    <DataTable
+      source={nameSource}
+      entity={nameEntity}
+      notHasChildren
+      headers={headers}
+    />
+  </Container>
+);
 
-  const headers = [
-    { name: 'Cód.', field: 'id', sortable: true },
-    { name: 'Nome', field: 'name', sortable: true },
-    { name: 'Ações', field: 'actions', sortable: false },
-  ];
-
-  return (
-    <Container
-      pageTitle="Categorias de produtos"
-      portletTitle="Listagem"
-      breadcrumb={breadcrumb}
-      tools={tools}
-    >
-      <DataTable
-        source="productCategories"
-        entity="ProductCategory"
-        notHasChildren
-        headers={headers}
-      />
-    </Container>
-  );
-};
-
-export default ProductCategoriesList;
+export default ProductAtributesList;
