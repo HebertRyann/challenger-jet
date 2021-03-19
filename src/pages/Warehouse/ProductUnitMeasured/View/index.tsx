@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useParams, useLocation, useHistory } from 'react-router-dom';
 import Container from '../../../../components/Container';
 import Tabs from '../../../../components/Tabs';
 import Tab from '../../../../components/Tabs/Tab';
@@ -7,8 +7,9 @@ import DataTable from '../../../../components/DataTable';
 import api from '../../../../services/api';
 import { useToast } from '../../../../hooks/toast';
 import { useLoading } from '../../../../hooks/loading';
+import { Alert } from '../../../../components/Alert';
 import { nameActions, nameEntity, namePageTitle } from '../domain/info';
-import { apiList } from '../domain/api';
+import { apiDelete, apiList } from '../domain/api';
 import { breadcrumbView } from '../domain/breadcrumb';
 import {
   toolsViewCreate,
@@ -25,8 +26,9 @@ interface ProductCategorytData {
   updated_at: string;
 }
 
-const View: React.FC = () => {
+const View = (): JSX.Element => {
   let { id } = useParams<{ id: string }>();
+  const history = useHistory();
   const location = useLocation<{ id: string; value: string }>();
   const [
     productCategory,
@@ -60,6 +62,40 @@ const View: React.FC = () => {
     loadCategory();
   }, [id, addToast]);
 
+  const [alertRemoveParent, setAlertRemoveParent] = useState(false);
+
+  const handleOnClickRemoveParent = useCallback(
+    ({ id, name }: { id: string; name: string }) => {
+      setAlertRemoveParent(true);
+    },
+    [alertRemoveParent],
+  );
+
+  const handlerOnClickButtonConfirmRemoveParent = useCallback(
+    async (id: number) => {
+      try {
+        await api.delete(apiDelete(String(id)));
+        setAlertRemoveParent(false);
+        addToast({
+          type: 'success',
+          title: 'Atributo removido com sucesso.',
+        });
+        history.goBack();
+      } catch (err) {
+        setAlertRemoveParent(false);
+        addToast({
+          type: 'error',
+          title: 'Atributo não removido, pois ainda está sendo usada.',
+        });
+      }
+    },
+    [alertRemoveParent],
+  );
+
+  const handlerOnClickButtonCancelRemoveParent = useCallback(() => {
+    setAlertRemoveParent(false);
+  }, []);
+
   return (
     <>
       <Container
@@ -68,7 +104,12 @@ const View: React.FC = () => {
         breadcrumb={breadcrumbView}
         tools={[
           toolsViewUpdate(String(id)),
-          toolsViewDelete(),
+          toolsViewDelete(() => {
+            handleOnClickRemoveParent({
+              id: String(productCategory?.id),
+              name: String(productCategory?.name),
+            });
+          }),
           toolsViewCreate(),
           toolsViewList(),
         ]}
@@ -134,6 +175,14 @@ const View: React.FC = () => {
           </div>
         </div>
       </Container>
+      <Alert
+        message={`Tem certeza que deseja excluir o registro ${productCategory?.name} ?`}
+        onClickCancellButton={handlerOnClickButtonCancelRemoveParent}
+        onClickConfirmButton={() =>
+          handlerOnClickButtonConfirmRemoveParent(Number(productCategory?.id))
+        }
+        isActive={alertRemoveParent}
+      />
     </>
   );
 };

@@ -28,7 +28,7 @@ const nameActions: PortletTitleCrudType = {
     icon: 'fa fa-plus',
   },
   read: {
-    name: 'Visualizar',
+    name: 'Listagem',
     to: '/productCategories/',
     icon: 'fa fa-list',
   },
