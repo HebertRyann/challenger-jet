@@ -1,6 +1,6 @@
 import React from 'react';
-import Container from '../../../../components/Container';
-import DataTable from '../../../../components/DataTable';
+import Container from '../../../../../components/Container';
+import DataTable from '../../../../../components/DataTable';
 import {
   nameEntity,
   namePageTitle,

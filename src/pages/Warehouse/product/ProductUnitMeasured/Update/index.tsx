@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import Container from '../../../../components/Container';
-import { useLoading } from '../../../../hooks/loading';
-import api from '../../../../services/api';
+import Container from '../../../../../components/Container';
+import { useLoading } from '../../../../../hooks/loading';
+import api from '../../../../../services/api';
 import { FormCategory } from '../components/Form';
 import { apiList } from '../domain/api';
 import { nameActions, namePageTitle } from '../domain/info';

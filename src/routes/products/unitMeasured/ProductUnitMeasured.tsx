@@ -1,8 +1,8 @@
 import React from 'react';
-import List from '../../../pages/Warehouse/ProductUnitMeasured/List';
-import Update from '../../../pages/Warehouse/ProductUnitMeasured/Update';
-import Create from '../../../pages/Warehouse/ProductUnitMeasured/Create';
-import View from '../../../pages/Warehouse/ProductUnitMeasured/View';
+import List from '../../../pages/Warehouse/product/ProductUnitMeasured/List';
+import Update from '../../../pages/Warehouse/product/ProductUnitMeasured/Update';
+import Create from '../../../pages/Warehouse/product/ProductUnitMeasured/Create';
+import View from '../../../pages/Warehouse/product/ProductUnitMeasured/View';
 import Route from '../../Route';
 
 export const ProductUnitMeasuredRouter = (): JSX.Element => (
