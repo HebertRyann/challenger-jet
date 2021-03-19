@@ -19,11 +19,8 @@ export const toolsViewUpdate = (id: string): ToolsContainerProps => ({
   icon: nameActions.update.icon,
 });
 
-export const toolsViewDelete = (
-  handleOnClick: (pamams: any) => void,
-): ToolsContainerProps => ({
+export const toolsViewDelete = (): ToolsContainerProps => ({
   name: 'Remover',
   to: nameActions.delete.to,
   icon: nameActions.delete.icon,
-  handleOnClick,
 });
