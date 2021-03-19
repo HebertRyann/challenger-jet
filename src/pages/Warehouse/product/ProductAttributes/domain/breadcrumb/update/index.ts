@@ -1,5 +1,5 @@
 import { nameActionPageMain, nameActions } from '../../info';
-import { TypeBreadcrumb } from '../';
+import { TypeBreadcrumb } from '..';
 
 export const breadcrumbUpdate: TypeBreadcrumb[] = [
   {

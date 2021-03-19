@@ -1,4 +1,4 @@
-import { ToolsContainerProps } from '../../../../../../components/Container';
+import { ToolsContainerProps } from '../../../../../../../components/Container';
 import { nameActions } from '../../info';
 
 export const toolsList: ToolsContainerProps = {

@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { FormCategory } from '../components/Form';
-import Container from '../../../../components/Container';
-import Tabs from '../../../../components/Tabs';
-import Tab from '../../../../components/Tabs/Tab';
-import DataTable from '../../../../components/DataTable';
-import api from '../../../../services/api';
-import { useToast } from '../../../../hooks/toast';
-import Modal from '../../../../components/Modal';
-import { useLoading } from '../../../../hooks/loading';
-import { Alert } from '../../../../components/Alert';
-import { useUpdateDataTable } from '../../../../hooks/dataTable';
+import Container from '../../../../../components/Container';
+import Tabs from '../../../../../components/Tabs';
+import Tab from '../../../../../components/Tabs/Tab';
+import DataTable from '../../../../../components/DataTable';
+import api from '../../../../../services/api';
+import { useToast } from '../../../../../hooks/toast';
+import Modal from '../../../../../components/Modal';
+import { useLoading } from '../../../../../hooks/loading';
+import { Alert } from '../../../../../components/Alert';
+import { useUpdateDataTable } from '../../../../../hooks/dataTable';
 import {
   nameActions,
   nameEntity,
