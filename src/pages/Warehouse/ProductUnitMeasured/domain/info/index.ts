@@ -16,7 +16,7 @@ const nameSource = 'productUnitMeasured';
 const namePageTitle = 'Unidades de medidas dos produtos';
 
 const nameActionPageMain: TypeActionNameWithTo = {
-  name: 'Categorias',
+  name: 'Unidades de medidas',
   to: '/productUnitMeasured',
   icon: '',
 };
