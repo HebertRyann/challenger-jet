@@ -5,12 +5,6 @@ import TableHeader from './Header';
 import Pagination from './Pagination';
 import Search from './Search';
 import '../../assets/global/plugins/datatables/datatables.min.css';
-import Modal from '../Modal';
-import { FormCategory } from '../../pages/Warehouse/ProductCategories/components/Form';
-import { useToast } from '../../hooks/toast';
-import { useUpdateDataTable } from '../../hooks/dataTable';
-import { Alert } from '../Alert';
-
 interface Action {
   name: string;
   icon: string;

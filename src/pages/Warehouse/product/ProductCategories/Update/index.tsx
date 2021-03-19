@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import Container, {
   ToolsContainerProps,
-} from '../../../../components/Container';
-import { useLoading } from '../../../../hooks/loading';
-import api from '../../../../services/api';
+} from '../../../../../components/Container';
+import { useLoading } from '../../../../../hooks/loading';
+import api from '../../../../../services/api';
 import { FormCategory } from '../components/Form';
 import { apiList } from '../domain/api';
 import { nameActions, namePageTitle } from '../domain/info';

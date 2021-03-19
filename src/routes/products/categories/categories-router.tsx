@@ -1,8 +1,8 @@
 import React from 'react';
-import ProductCategoriesList from '../../../pages/Warehouse/ProductCategories/List';
-import ProductCategoriesUpdate from '../../../pages/Warehouse/ProductCategories/Update';
-import ProductCategoriesCreate from '../../../pages/Warehouse/ProductCategories/Create';
-import ProductCategoriesView from '../../../pages/Warehouse/ProductCategories/View';
+import ProductCategoriesList from '../../../pages/Warehouse/product/ProductCategories/List';
+import ProductCategoriesUpdate from '../../../pages/Warehouse/product/ProductCategories/Update';
+import ProductCategoriesCreate from '../../../pages/Warehouse/product/ProductCategories/Create';
+import ProductCategoriesView from '../../../pages/Warehouse/product/ProductCategories/View';
 import Route from '../../Route';
 
 export const ProductCategoriesRouter = (): JSX.Element => (
