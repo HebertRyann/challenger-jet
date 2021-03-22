@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { MdArrowDropDown } from 'react-icons/md';
+import { MdArrowDropDown, MdSearch } from 'react-icons/md';
 
 export const ContainerDropdown = styled.div`
   > header {
@@ -19,19 +19,27 @@ export const Content = styled.div<{ isActive: boolean }>`
   height: 100%;
   position: absolute;
   background-color: #fff;
-  width: 95%;
+  width: 90%;
   z-index: 1;
 
   ${({ isActive }) =>
     isActive &&
     css`
       display: block;
-    `} * {
+    `}
+  * {
     list-style: none;
   }
-  > input {
+
+  > header {
+    display: flex;
+    align-items: center;
+  }
+
+  > header > input {
+    position: relative;
     margin: 10px auto;
-    width: 95%;
+    width: 90%;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 1px 1px rgba(0, 0, 0, 0.23) !important;
   }
 
@@ -49,15 +57,14 @@ export const Content = styled.div<{ isActive: boolean }>`
       background-color: rgba(233, 237, 239, 0.2);
     }
 
-    > ul > li:nth-last-child(1){
-      margin-bottom: 15px;
-    }
-
     min-height: 100%;
     max-height: 300px;
     overflow-y: scroll;
 
     > ul {
+      margin-bottom: 0;
+      border: 1px solid rgba(0, 0, 0, 0.16);
+
       > li {
         border: 1px solid rgba(233, 237, 239, 0.5);
         padding: 10px 15px;
@@ -80,4 +87,13 @@ export const IconArrowDown = styled(MdArrowDropDown).attrs(() => ({
   background-color: rgba(233, 237, 239, 0.9);
   height: 100%;
   border: 1px solid #c2cad8;
+`;
+
+export const IconSearch = styled(MdSearch).attrs(() => ({
+  size: '18px',
+  color: '#555',
+}))`
+  position: absolute;
+  top: 0;
+  right: 0;
 `;
