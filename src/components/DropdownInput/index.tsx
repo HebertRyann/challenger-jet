@@ -5,12 +5,13 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { ContainerDropdown, Content, IconArrowDown } from './style';
+import { ContainerDropdown, Content, IconArrowDown, IconSearch } from './style';
 
 interface DropdownInputProps<T>
   extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   data: T[];
+  onChangeCurrentRow?: (value: any) => void;
 }
 
 export const DropdownInput = <
@@ -18,12 +19,14 @@ export const DropdownInput = <
 >({
   label,
   data,
+  onChangeCurrentRow,
   ...props
 }: DropdownInputProps<T>): JSX.Element => {
   const inputRef = useRef<HTMLDivElement>(null);
   const [inputValues, setInputValue] = useState<T[]>(data);
   const [isActiveInput, setIsActiveInput] = useState(false);
   const [selectItem, setSelectItem] = useState('selecione');
+  const [inputSearch, setInputSearch] = useState('');
   const handleFocusInput = useCallback(() => {
     setIsActiveInput(true);
   }, []);
@@ -36,6 +39,15 @@ export const DropdownInput = <
     });
   }, []);
 
+  const handleClickRow = useCallback(
+    (value: string) => {
+      setSelectItem(value);
+      if (onChangeCurrentRow) onChangeCurrentRow(value);
+      setIsActiveInput(false);
+    },
+    [selectItem, isActiveInput],
+  );
+
   return (
     <ContainerDropdown ref={inputRef}>
       <label htmlFor={label}>{label}</label>
@@ -46,18 +58,36 @@ export const DropdownInput = <
         </div>
       </header>
       <Content isActive={isActiveInput}>
-        <input type="text" className="form-control" />
+        <header>
+          <input
+            value={inputSearch}
+            placeholder="Buscar"
+            type="text"
+            className="form-control"
+          />
+          {/* <IconSearch /> */}
+        </header>
         <div>
-          <div>titulo</div>
-          <ul>
-            <li>test</li>
-            <li>test</li>
-            <li>test</li>
-            <li>test</li>
-            <li>test</li>
-            <li>test</li>
-            <li>test</li>
-          </ul>
+          {inputValues.map(({ children, name }) => {
+            return children.length > 0 ? (
+              <>
+                <div>titulo</div>
+                <ul>
+                  {children.map(({ name }) => (
+                    <li
+                      onClick={event => {
+                        handleClickRow(name);
+                      }}
+                    >
+                      {name}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <div>{name}</div>
+            );
+          })}
         </div>
       </Content>
     </ContainerDropdown>
