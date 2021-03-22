@@ -154,7 +154,7 @@ const View = (): JSX.Element => {
             <div className="col-md-12">
               <Tabs>
                 {[
-                  <Tab title="Logs">
+                  <Tab title="Histórico">
                     <div className="portlet light">
                       <div className="portlet-title">
                         <div className="caption">Listagem</div>

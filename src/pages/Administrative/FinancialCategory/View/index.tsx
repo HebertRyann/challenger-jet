@@ -274,7 +274,7 @@ const ProductAtributesView: React.FC = () => {
                     </div>
                   </div>
                 </Tab>
-                <Tab title="Logs">
+                <Tab title="Histórico">
                   <div className="portlet light">
                     <div className="portlet-title">
                       <div className="caption">Listagem</div>
