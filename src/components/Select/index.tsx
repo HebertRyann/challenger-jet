@@ -56,17 +56,17 @@ export const Select = ({
       className="form-control"
     >
       <header>
-        <div>{currentValue}</div>
+        <div>{currentValue.toUpperCase()}</div>
         <IconArrowDown />
       </header>
       <ul>
-        {data.map(dataValue => (
+        {data.map((dataValue: string) => (
           <li
             onClick={() => {
               handleClickRow(dataValue);
             }}
           >
-            {dataValue}
+            {dataValue.toUpperCase()}
           </li>
         ))}
       </ul>
