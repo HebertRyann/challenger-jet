@@ -12,6 +12,10 @@ export const Contanier = styled.div<ContanierProps>`
   border-radius: 10px;
   width: 100%;
 
+  > label {
+    font-weight: normal;
+  }
+
   & > div {
     position: relative;
   }
