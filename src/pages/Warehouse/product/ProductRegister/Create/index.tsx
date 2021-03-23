@@ -10,10 +10,11 @@ import FormComponent from '../../../../../components/Form';
 import { FormDataProtocol } from '../domain/protocols';
 import { VisibleContent, Wrapper } from './style';
 import { DropdownInput } from '../../../../../components/DropdownInput';
-import { fakeFinancy, fakeCatetory, fakeData } from './fakeData';
+import { fakeData } from './fakeData';
 import { Alert } from '../../../../../components/Alert';
 import { Select } from '../../../../../components/Select';
 import { useLocation } from 'react-router';
+import { DefaultInputs } from './inputs/Defaults';
 
 const ProductAtributesCreate = (): JSX.Element => {
   let { search } = useLocation();
@@ -39,6 +40,7 @@ const ProductAtributesCreate = (): JSX.Element => {
   const [isVisibleInputRevenda, setIsVisibleInputRevenda] = useState(false);
   const [isVisibleInputLocacao, setIsVisibleInputLocacao] = useState(false);
   const [isVisibleInputConsumo, setIsVisibleInputConsumo] = useState(false);
+  const [isVisibleDefault, setIsVisibleDefault] = useState(false);
 
   const data: string[] = [
     'Materia Prima',
@@ -89,6 +91,7 @@ const ProductAtributesCreate = (): JSX.Element => {
   useEffect(() => {
     if (currentValue.toLowerCase() === 'Materia Prima'.toLowerCase()) {
       setIsVisibleInputMateriaPrima(true);
+      setIsVisibleDefault(true);
       setIsVisibleInputConsumo(false);
       setIsVisibleInputLocacao(false);
       setIsVisibleInputRevenda(false);
@@ -97,6 +100,7 @@ const ProductAtributesCreate = (): JSX.Element => {
     }
     if (currentValue.toLowerCase() === 'Semi acabado'.toLowerCase()) {
       setIsVisibleInputSemiAcabado(true);
+      setIsVisibleDefault(true);
       setIsVisibleInputMateriaPrima(false);
       setIsVisibleInputConsumo(false);
       setIsVisibleInputLocacao(false);
@@ -105,6 +109,7 @@ const ProductAtributesCreate = (): JSX.Element => {
     }
     if (currentValue.toLowerCase() === 'Venda'.toLowerCase()) {
       setIsVisibleInputVenda(true);
+      setIsVisibleDefault(true);
       setIsVisibleInputMateriaPrima(false);
       setIsVisibleInputConsumo(false);
       setIsVisibleInputLocacao(false);
@@ -113,6 +118,7 @@ const ProductAtributesCreate = (): JSX.Element => {
     }
     if (currentValue.toLowerCase() === 'Revenda'.toLowerCase()) {
       setIsVisibleInputRevenda(true);
+      setIsVisibleDefault(true);
       setIsVisibleInputMateriaPrima(false);
       setIsVisibleInputConsumo(false);
       setIsVisibleInputLocacao(false);
@@ -121,6 +127,7 @@ const ProductAtributesCreate = (): JSX.Element => {
     }
     if (currentValue.toLowerCase() === 'Locação'.toLowerCase()) {
       setIsVisibleInputLocacao(true);
+      setIsVisibleDefault(true);
       setIsVisibleInputMateriaPrima(false);
       setIsVisibleInputConsumo(false);
       setIsVisibleInputRevenda(false);
@@ -129,6 +136,7 @@ const ProductAtributesCreate = (): JSX.Element => {
     }
     if (currentValue.toLowerCase() === 'Consumo'.toLowerCase()) {
       setIsVisibleInputConsumo(true);
+      setIsVisibleDefault(true);
       setIsVisibleInputMateriaPrima(false);
       setIsVisibleInputLocacao(false);
       setIsVisibleInputRevenda(false);
@@ -234,74 +242,9 @@ const ProductAtributesCreate = (): JSX.Element => {
                 />
               </div>
             </div>
-            <VisibleContent
-              id="content-materia-prima"
-              isVisible={isVisibleInputMateriaPrima}
-            >
-              <div className="row">
-                <div className="form-content col-md-3">
-                  <Wrapper>
-                    <label htmlFor="form">Materia prima</label>
-                  </Wrapper>
-                </div>
-              </div>
-            </VisibleContent>
-            <VisibleContent
-              id="content-semi-acabado"
-              isVisible={isVisibleInputSemiAcabado}
-            >
-              <div className="row">
-                <div className="form-content col-md-3">
-                  <Wrapper>
-                    <label htmlFor="form">Semi acabado</label>
-                  </Wrapper>
-                </div>
-              </div>
-            </VisibleContent>
-            <VisibleContent id="content-venda" isVisible={isVisibleInputVenda}>
-              <div className="row">
-                <div className="form-content col-md-3">
-                  <Wrapper>
-                    <label htmlFor="form">Venda</label>
-                  </Wrapper>
-                </div>
-              </div>
-            </VisibleContent>
-            <VisibleContent
-              id="content-revenda"
-              isVisible={isVisibleInputRevenda}
-            >
-              <div className="row">
-                <div className="form-content col-md-3">
-                  <Wrapper>
-                    <label htmlFor="form">Revenda</label>
-                  </Wrapper>
-                </div>
-              </div>
-            </VisibleContent>
-            <VisibleContent
-              id="content-locacao"
-              isVisible={isVisibleInputLocacao}
-            >
-              <div className="row">
-                <div className="form-content col-md-3">
-                  <Wrapper>
-                    <label htmlFor="form">Locação</label>
-                  </Wrapper>
-                </div>
-              </div>
-            </VisibleContent>
-            <VisibleContent
-              id="content-consumo"
-              isVisible={isVisibleInputConsumo}
-            >
-              <div className="row">
-                <div className="form-content col-md-3">
-                  <Wrapper>
-                    <label htmlFor="form">Consumo</label>
-                  </Wrapper>
-                </div>
-              </div>
+
+            <VisibleContent id="content-default" isVisible={isVisibleDefault}>
+              <DefaultInputs />
             </VisibleContent>
             <div className="form-actions right">
               <Button type="submit" className="btn dark btn-sm sbold uppercase">
