@@ -10,7 +10,7 @@ import FormComponent from '../../../../../components/Form';
 import { FormDataProtocol } from '../domain/protocols';
 import { Wrapper } from './style';
 import { DropdownInput } from '../../../../../components/DropdownInput';
-import { fakeFinancy } from './fakeData';
+import { fakeFinancy, fakeCatetory } from './fakeData';
 import { Alert } from '../../../../../components/Alert';
 import { Select } from '../../../../../components/Select';
 
@@ -146,7 +146,7 @@ const ProductAtributesCreate = (): JSX.Element => {
                 }>
                   className="form-control"
                   label="Grupo produto"
-                  data={fakeFinancy}
+                  data={fakeCatetory}
                   onChangeCurrentRow={handlerChangeCategoryProduct}
                 />
               </div>
