@@ -1,10 +1,4 @@
-import React, {
-  MutableRefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ContainerDropdown, Content, IconArrowDown, IconSearch } from './style';
 
 interface DropdownInputProps<T>
@@ -48,6 +42,13 @@ export const DropdownInput = <
     [selectItem, isActiveInput],
   );
 
+  const handlerChangeInput = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setInputSearch(event.target.value);
+    },
+    [inputSearch, inputValues],
+  );
+
   return (
     <ContainerDropdown ref={inputRef}>
       <label htmlFor={label}>{label}</label>
@@ -64,28 +65,43 @@ export const DropdownInput = <
             placeholder="Buscar"
             type="text"
             className="form-control"
+            onChange={handlerChangeInput}
           />
-          {/* <IconSearch /> */}
+          <IconSearch />
         </header>
         <div>
           {inputValues.map(({ children, name }) => {
             return children.length > 0 ? (
               <>
-                <div>titulo</div>
+                <div>{name}</div>
                 <ul>
-                  {children.map(({ name }) => (
-                    <li
-                      onClick={event => {
-                        handleClickRow(name);
-                      }}
-                    >
-                      {name}
-                    </li>
-                  ))}
+                  {children
+                    .filter(
+                      ({ name }) =>
+                        name
+                          .toLocaleLowerCase()
+                          .indexOf(inputSearch.toLocaleLowerCase()) > -1,
+                    )
+                    .map(currentChildren => (
+                      <li
+                        onClick={() => {
+                          handleClickRow(currentChildren.name);
+                        }}
+                      >
+                        {currentChildren.name}
+                      </li>
+                    ))}
                 </ul>
               </>
             ) : (
-              <div>{name}</div>
+              children
+                .filter(
+                  ({ name }) =>
+                    name
+                      .toLocaleUpperCase()
+                      .indexOf(inputSearch.toLocaleLowerCase()) > -1,
+                )
+                .map(({ name }) => <div>{name}</div>)
             );
           })}
         </div>
