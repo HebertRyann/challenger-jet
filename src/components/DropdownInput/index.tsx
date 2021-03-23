@@ -70,42 +70,67 @@ export const DropdownInput = <
           <IconSearch />
         </header>
         <div>
-          {inputValues.map(({ children, name }) => {
-            return children.length > 0 ? (
-              <>
-                <div>{name}</div>
-                <ul>
-                  {children
-                    .filter(
-                      ({ name }) =>
-                        name
-                          .toLocaleLowerCase()
-                          .indexOf(inputSearch.toLocaleLowerCase()) > -1,
-                    )
-                    .map(currentChildren => (
-                      <li
-                        onClick={() => {
-                          handleClickRow(currentChildren.name);
-                        }}
-                      >
-                        {currentChildren.name}
-                      </li>
-                    ))}
-                </ul>
-              </>
-            ) : (
-              children
-                .filter(
-                  ({ name }) =>
-                    name
-                      .toLocaleUpperCase()
-                      .indexOf(inputSearch.toLocaleLowerCase()) > -1,
-                )
-                .map(({ name }) => <div>{name}</div>)
-            );
-          })}
+          {inputValues
+            .filter(({ name }) => {
+              return name.toLowerCase().indexOf(inputSearch.toLowerCase()) > -1;
+            })
+            .map(({ children, name }) => {
+              return (
+                <>
+                  <div>{name}</div>
+                  {children.length > 0 && (
+                    <ul>
+                      {children.map(({ name }) => (
+                        <li
+                          onClick={() => {
+                            handleClickRow(name);
+                          }}
+                        >
+                          {name}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              );
+            })}
         </div>
       </Content>
     </ContainerDropdown>
   );
 };
+
+// inputValues.map(({ children, name }) => {
+//   return children.length > 0 ? (
+//     <>
+//       <div>{name}</div>
+//       <ul>
+//         {children
+//           .filter(
+//             ({ name }) =>
+//               name
+//                 .toLocaleLowerCase()
+//                 .indexOf(inputSearch.toLocaleLowerCase()) > -1,
+//           )
+//           .map(currentChildren => (
+//             <li
+//               onClick={() => {
+//                 handleClickRow(currentChildren.name);
+//               }}
+//             >
+//               {currentChildren.name}
+//             </li>
+//           ))}
+//       </ul>
+//     </>
+//   ) : (
+//     children
+//       .filter(
+//         ({ name }) =>
+//           name
+//             .toLocaleUpperCase()
+//             .indexOf(inputSearch.toLocaleLowerCase()) > -1,
+//       )
+//       .map(({ name }) => <div>{name}</div>)
+//   );
+// })
