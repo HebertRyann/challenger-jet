@@ -5,124 +5,39 @@ type Faker = {
 
 export const fakeCatetory: Faker[] = [
   {
-    name: 'Category 1',
+    name: '1',
     children: [
       {
-        name: 'Subcategory 1',
+        name: '2',
       },
       {
-        name: 'Subcategory 2',
-      },
-      {
-        name: 'Subcategory 3',
-      },
-      {
-        name: 'Subcategory 4',
-      },
-      {
-        name: 'Subcategory 5',
+        name: '3',
       },
     ],
   },
   {
-    name: 'Category 2',
+    name: '4',
     children: [
       {
-        name: 'Subcategory 1',
-      },
-      {
-        name: 'Subcategory 2',
-      },
-      {
-        name: 'Subcategory 3',
-      },
-      {
-        name: 'Subcategory 4',
-      },
-      {
-        name: 'Subcategory 5',
+        name: '5',
       },
     ],
   },
   {
-    name: 'Category 3',
-    children: [
-      {
-        name: 'Subcategory 1',
-      },
-      {
-        name: 'Subcategory 2',
-      },
-      {
-        name: 'Subcategory 3',
-      },
-      {
-        name: 'Subcategory 4',
-      },
-      {
-        name: 'Subcategory 5',
-      },
-    ],
+    name: '6',
+    children: [],
   },
   {
-    name: 'Category 4',
-    children: [
-      {
-        name: 'Subcategory 1',
-      },
-      {
-        name: 'Subcategory 2',
-      },
-      {
-        name: 'Subcategory 3',
-      },
-      {
-        name: 'Subcategory 4',
-      },
-      {
-        name: 'Subcategory 5',
-      },
-    ],
+    name: '7',
+    children: [],
   },
   {
-    name: 'Category 5',
-    children: [
-      {
-        name: 'Subcategory 1',
-      },
-      {
-        name: 'Subcategory 2',
-      },
-      {
-        name: 'Subcategory 3',
-      },
-      {
-        name: 'Subcategory 4',
-      },
-      {
-        name: 'Subcategory 5',
-      },
-    ],
+    name: '8',
+    children: [],
   },
   {
-    name: 'Category 6',
-    children: [
-      {
-        name: 'Subcategory 1',
-      },
-      {
-        name: 'Subcategory 2',
-      },
-      {
-        name: 'Subcategory 3',
-      },
-      {
-        name: 'Subcategory 4',
-      },
-      {
-        name: 'Subcategory 5',
-      },
-    ],
+    name: '9',
+    children: [],
   },
 ];
 
