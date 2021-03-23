@@ -39,7 +39,9 @@ export const Content = styled.div<{ isActive: boolean }>`
   > header > input {
     position: relative;
     margin: 10px auto;
+    padding-right: 25px;
     width: 90%;
+    color: #555;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 1px 1px rgba(0, 0, 0, 0.23) !important;
   }
 
@@ -94,6 +96,6 @@ export const IconSearch = styled(MdSearch).attrs(() => ({
   color: '#555',
 }))`
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 35%;
+  right: 20px;
 `;
