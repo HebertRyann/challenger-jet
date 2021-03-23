@@ -9,7 +9,7 @@ interface DropdownInputProps<T>
 }
 
 export const DropdownInput = <
-  T extends { name: string; children: { name: string }[] }
+  T extends { id: string; name: string; parent_id: string | null }
 >({
   label,
   data,
@@ -49,6 +49,22 @@ export const DropdownInput = <
     [inputSearch, inputValues],
   );
 
+  const isParent = (id: string): boolean => {
+    return inputValues.filter(({ parent_id }) => parent_id === id).length === 0;
+  };
+
+  const renderDataSearch = (): T[] => {
+    const result = inputValues.filter(({ name }) => {
+      if (name.toLowerCase().indexOf(inputSearch.toLowerCase()) > -1) {
+        return true;
+      } else {
+        return inputSearch.length > 0 && false;
+      }
+    });
+    console.log(result);
+    return [];
+  };
+
   return (
     <ContainerDropdown ref={inputRef}>
       <label htmlFor={label}>{label}</label>
@@ -72,65 +88,40 @@ export const DropdownInput = <
         <div>
           {inputValues
             .filter(({ name }) => {
-              return name.toLowerCase().indexOf(inputSearch.toLowerCase()) > -1;
+              if (name.toLowerCase().indexOf(inputSearch.toLowerCase()) > -1) {
+                return true;
+              } else {
+                return inputSearch.length > 0 && false;
+              }
             })
-            .map(({ children, name }) => {
-              return (
+            .map(({ name, parent_id, id }) =>
+              parent_id === null ? (
+                <div
+                  style={{ cursor: isParent(id) ? 'pointer' : 'default' }}
+                  onClick={() => {
+                    if (isParent(id)) {
+                      handleClickRow(name);
+                    }
+                  }}
+                >
+                  {name}
+                </div>
+              ) : (
                 <>
-                  <div>{name}</div>
-                  {children.length > 0 && (
-                    <ul>
-                      {children.map(({ name }) => (
-                        <li
-                          onClick={() => {
-                            handleClickRow(name);
-                          }}
-                        >
-                          {name}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  <ul>
+                    <li
+                      onClick={() => {
+                        handleClickRow(name);
+                      }}
+                    >
+                      {name}
+                    </li>
+                  </ul>
                 </>
-              );
-            })}
+              ),
+            )}
         </div>
       </Content>
     </ContainerDropdown>
   );
 };
-
-// inputValues.map(({ children, name }) => {
-//   return children.length > 0 ? (
-//     <>
-//       <div>{name}</div>
-//       <ul>
-//         {children
-//           .filter(
-//             ({ name }) =>
-//               name
-//                 .toLocaleLowerCase()
-//                 .indexOf(inputSearch.toLocaleLowerCase()) > -1,
-//           )
-//           .map(currentChildren => (
-//             <li
-//               onClick={() => {
-//                 handleClickRow(currentChildren.name);
-//               }}
-//             >
-//               {currentChildren.name}
-//             </li>
-//           ))}
-//       </ul>
-//     </>
-//   ) : (
-//     children
-//       .filter(
-//         ({ name }) =>
-//           name
-//             .toLocaleUpperCase()
-//             .indexOf(inputSearch.toLocaleLowerCase()) > -1,
-//       )
-//       .map(({ name }) => <div>{name}</div>)
-//   );
-// })
