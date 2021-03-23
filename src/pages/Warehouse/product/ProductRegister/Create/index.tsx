@@ -8,17 +8,17 @@ import Input from '../../../../../components/Input';
 import Button from '../../../../../components/Button';
 import FormComponent from '../../../../../components/Form';
 import { FormDataProtocol } from '../domain/protocols';
-import { Wrapper } from './style';
+import { VisibleContent, Wrapper } from './style';
 import { DropdownInput } from '../../../../../components/DropdownInput';
 import { fakeFinancy, fakeCatetory } from './fakeData';
 import { Alert } from '../../../../../components/Alert';
 import { Select } from '../../../../../components/Select';
+import { useLocation } from 'react-router';
 
 const ProductAtributesCreate = (): JSX.Element => {
+  let { search } = useLocation();
   const formRef = useRef<FormHandles>(null);
-
   const onSubmitForm = useCallback(async (data: FormDataProtocol) => {}, []);
-
   const [alert, setAlert] = useState<{ isActive: boolean; message: string }>({
     isActive: false,
     message: '',
@@ -29,6 +29,25 @@ const ProductAtributesCreate = (): JSX.Element => {
   const [currentValue, setCurrentValue] = useState('Selecione');
   const [oldValueSelect, setOldValueSelect] = useState('');
   const [isFilled, setIsFilled] = useState(false);
+  const [isVisibleInputMateriaPrima, setIsVisibleInputMateriaPrima] = useState(
+    false,
+  );
+  const [isVisibleInputSemiAcabado, setIsVisibleInputSemiAcabado] = useState(
+    false,
+  );
+  const [isVisibleInputVenda, setIsVisibleInputVenda] = useState(false);
+  const [isVisibleInputRevenda, setIsVisibleInputRevenda] = useState(false);
+  const [isVisibleInputLocacao, setIsVisibleInputLocacao] = useState(false);
+  const [isVisibleInputConsumo, setIsVisibleInputConsumo] = useState(false);
+
+  const data: string[] = [
+    'Materia Prima',
+    'Semi acabado',
+    'Venda',
+    'Revenda',
+    'Locação',
+    'Consumo',
+  ];
 
   const handlerChangeCategoryFinance = useCallback(
     (value: any) => {
@@ -49,8 +68,6 @@ const ProductAtributesCreate = (): JSX.Element => {
   const handlerChangeName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setName(event.currentTarget.value);
-      console.log(isFilled);
-      console.log(event.target.value);
       if (event.target.value === '') {
         setIsFilled(false);
       }
@@ -69,9 +86,73 @@ const ProductAtributesCreate = (): JSX.Element => {
     setIsFilled(true);
   }, [isFilled]);
 
+  useEffect(() => {
+    if (currentValue.toLowerCase() === 'Materia Prima'.toLowerCase()) {
+      setIsVisibleInputMateriaPrima(true);
+      setIsVisibleInputConsumo(false);
+      setIsVisibleInputLocacao(false);
+      setIsVisibleInputRevenda(false);
+      setIsVisibleInputSemiAcabado(false);
+      setIsVisibleInputVenda(false);
+    }
+    if (currentValue.toLowerCase() === 'Semi acabado'.toLowerCase()) {
+      setIsVisibleInputSemiAcabado(true);
+      setIsVisibleInputMateriaPrima(false);
+      setIsVisibleInputConsumo(false);
+      setIsVisibleInputLocacao(false);
+      setIsVisibleInputRevenda(false);
+      setIsVisibleInputVenda(false);
+    }
+    if (currentValue.toLowerCase() === 'Venda'.toLowerCase()) {
+      setIsVisibleInputVenda(true);
+      setIsVisibleInputMateriaPrima(false);
+      setIsVisibleInputConsumo(false);
+      setIsVisibleInputLocacao(false);
+      setIsVisibleInputRevenda(false);
+      setIsVisibleInputSemiAcabado(false);
+    }
+    if (currentValue.toLowerCase() === 'Revenda'.toLowerCase()) {
+      setIsVisibleInputRevenda(true);
+      setIsVisibleInputMateriaPrima(false);
+      setIsVisibleInputConsumo(false);
+      setIsVisibleInputLocacao(false);
+      setIsVisibleInputSemiAcabado(false);
+      setIsVisibleInputVenda(false);
+    }
+    if (currentValue.toLowerCase() === 'Locação'.toLowerCase()) {
+      setIsVisibleInputLocacao(true);
+      setIsVisibleInputMateriaPrima(false);
+      setIsVisibleInputConsumo(false);
+      setIsVisibleInputRevenda(false);
+      setIsVisibleInputSemiAcabado(false);
+      setIsVisibleInputVenda(false);
+    }
+    if (currentValue.toLowerCase() === 'Consumo'.toLowerCase()) {
+      setIsVisibleInputConsumo(true);
+      setIsVisibleInputMateriaPrima(false);
+      setIsVisibleInputLocacao(false);
+      setIsVisibleInputRevenda(false);
+      setIsVisibleInputSemiAcabado(false);
+      setIsVisibleInputVenda(false);
+    }
+  }, [currentValue]);
+
+  useEffect(() => {
+    const query = new URLSearchParams(search);
+    const queryParams = query.get('type');
+    const result = data.filter((name: string) => {
+      return name.toLowerCase() == queryParams?.toLowerCase();
+    });
+
+    if (result.length === 1) {
+      setCurrentValue(result[0]);
+    }
+  }, []);
+
   const onChangeSelectItem = useCallback(
     value => {
       setCurrentValue(value);
+
       if (isFilled) {
         setAlert({
           isActive: true,
@@ -91,15 +172,6 @@ const ProductAtributesCreate = (): JSX.Element => {
     setAlert({ ...alert, isActive: false });
     setCurrentValue(oldValueSelect);
   }, [alert, currentValue, oldValueSelect]);
-
-  const data: string[] = [
-    'Materia Prima',
-    'Semi acabado',
-    'Venda',
-    'Revenda',
-    'Locação',
-    'Consumo',
-  ];
 
   return (
     <Container
@@ -127,7 +199,7 @@ const ProductAtributesCreate = (): JSX.Element => {
                 </Wrapper>
               </div>
             </div>
-            <div className="row" style={{ marginBottom: '20px' }}>
+            <div className="row">
               <div className="form-content col-md-3">
                 <DropdownInput<{
                   name: string;
@@ -160,6 +232,75 @@ const ProductAtributesCreate = (): JSX.Element => {
                 />
               </div>
             </div>
+            <VisibleContent
+              id="content-materia-prima"
+              isVisible={isVisibleInputMateriaPrima}
+            >
+              <div className="row">
+                <div className="form-content col-md-3">
+                  <Wrapper>
+                    <label htmlFor="form">Materia prima</label>
+                  </Wrapper>
+                </div>
+              </div>
+            </VisibleContent>
+            <VisibleContent
+              id="content-semi-acabado"
+              isVisible={isVisibleInputSemiAcabado}
+            >
+              <div className="row">
+                <div className="form-content col-md-3">
+                  <Wrapper>
+                    <label htmlFor="form">Semi acabado</label>
+                  </Wrapper>
+                </div>
+              </div>
+            </VisibleContent>
+            <VisibleContent id="content-venda" isVisible={isVisibleInputVenda}>
+              <div className="row">
+                <div className="form-content col-md-3">
+                  <Wrapper>
+                    <label htmlFor="form">Venda</label>
+                  </Wrapper>
+                </div>
+              </div>
+            </VisibleContent>
+            <VisibleContent
+              id="content-revenda"
+              isVisible={isVisibleInputRevenda}
+            >
+              <div className="row">
+                <div className="form-content col-md-3">
+                  <Wrapper>
+                    <label htmlFor="form">Revenda</label>
+                  </Wrapper>
+                </div>
+              </div>
+            </VisibleContent>
+            <VisibleContent
+              id="content-locacao"
+              isVisible={isVisibleInputLocacao}
+            >
+              <div className="row">
+                <div className="form-content col-md-3">
+                  <Wrapper>
+                    <label htmlFor="form">Locação</label>
+                  </Wrapper>
+                </div>
+              </div>
+            </VisibleContent>
+            <VisibleContent
+              id="content-consumo"
+              isVisible={isVisibleInputConsumo}
+            >
+              <div className="row">
+                <div className="form-content col-md-3">
+                  <Wrapper>
+                    <label htmlFor="form">Consumo</label>
+                  </Wrapper>
+                </div>
+              </div>
+            </VisibleContent>
             <div className="form-actions right">
               <Button type="submit" className="btn dark btn-sm sbold uppercase">
                 Salvar
