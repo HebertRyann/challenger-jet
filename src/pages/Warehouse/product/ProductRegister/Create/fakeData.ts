@@ -163,3 +163,47 @@ export const fakeFinancy = [
     ],
   },
 ];
+
+type FakerData = {
+  id: string;
+  name: string;
+  parent_id: string | null;
+};
+
+export const fakeData: FakerData[] = [
+  {
+    id: '1',
+    name: 'casa',
+    parent_id: null,
+  },
+  {
+    id: '2',
+    name: 'amarelo',
+    parent_id: '1',
+  },
+  {
+    id: '3',
+    name: 'abre',
+    parent_id: '1',
+  },
+  {
+    id: '4',
+    name: 'jogo',
+    parent_id: '1',
+  },
+  {
+    id: '5',
+    name: 'csc',
+    parent_id: null,
+  },
+  {
+    id: '6',
+    name: 'controle',
+    parent_id: null,
+  },
+  {
+    id: '7',
+    name: 'fazer',
+    parent_id: null,
+  },
+];
