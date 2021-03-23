@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Container } from './style';
+import { Container, IconArrowDown } from './style';
 
 type TypeSelect = {
   data: any[];
@@ -55,7 +55,10 @@ export const Select = ({
       ref={selectRef}
       className="form-control"
     >
-      <div>{currentValue}</div>
+      <header>
+        <div>{currentValue}</div>
+        <IconArrowDown />
+      </header>
       <ul>
         {data.map(dataValue => (
           <li
