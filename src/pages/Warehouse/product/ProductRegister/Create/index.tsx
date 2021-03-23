@@ -10,7 +10,7 @@ import FormComponent from '../../../../../components/Form';
 import { FormDataProtocol } from '../domain/protocols';
 import { VisibleContent, Wrapper } from './style';
 import { DropdownInput } from '../../../../../components/DropdownInput';
-import { fakeFinancy, fakeCatetory } from './fakeData';
+import { fakeFinancy, fakeCatetory, fakeData } from './fakeData';
 import { Alert } from '../../../../../components/Alert';
 import { Select } from '../../../../../components/Select';
 import { useLocation } from 'react-router';
@@ -202,23 +202,25 @@ const ProductAtributesCreate = (): JSX.Element => {
             <div className="row">
               <div className="form-content col-md-3">
                 <DropdownInput<{
+                  id: string;
                   name: string;
-                  children: { name: string }[];
+                  parent_id: string | null;
                 }>
                   className="form-control"
                   label="Categoria custo"
-                  data={fakeFinancy}
+                  data={fakeData}
                   onChangeCurrentRow={handlerChangeCategoryFinance}
                 />
               </div>
               <div className="form-content col-md-3 ">
                 <DropdownInput<{
+                  id: string;
                   name: string;
-                  children: { name: string }[];
+                  parent_id: string | null;
                 }>
                   className="form-control"
                   label="Grupo produto"
-                  data={fakeCatetory}
+                  data={fakeData}
                   onChangeCurrentRow={handlerChangeCategoryProduct}
                 />
               </div>
