@@ -47,7 +47,12 @@ export const Content = styled.div<{ isActive: boolean }>`
 
   > div {
     background-color: #fff;
-    border-top: 1px solid #c2cad8;
+    border: 1px solid #c2cad8;
+
+    .no-content {
+      text-align: center;
+      margin-top: 15px;
+    }
     > div {
       padding: 10px;
       font-weight: bold;
@@ -62,7 +67,6 @@ export const Content = styled.div<{ isActive: boolean }>`
     min-height: 100%;
     max-height: 300px;
     overflow-y: scroll;
-
     > ul {
       margin-bottom: 0;
       border: 1px solid rgba(0, 0, 0, 0.16);
