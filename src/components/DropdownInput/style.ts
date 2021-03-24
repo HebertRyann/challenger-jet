@@ -22,6 +22,16 @@ export const Content = styled.div<{ isActive: boolean }>`
   width: 90%;
   z-index: 1;
 
+  .no-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    > h5 {
+      margin-top: -10px;
+    }
+  }
+
   ${({ isActive }) =>
     isActive &&
     css`
