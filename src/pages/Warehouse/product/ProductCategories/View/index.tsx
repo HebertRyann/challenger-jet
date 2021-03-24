@@ -1,24 +1,16 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { FormCategory } from '../components/Form';
 import Container from '../../../../../components/Container';
 import Tabs from '../../../../../components/Tabs';
 import Tab from '../../../../../components/Tabs/Tab';
 import DataTable from '../../../../../components/DataTable';
 import api from '../../../../../services/api';
 import { useToast } from '../../../../../hooks/toast';
-import Modal from '../../../../../components/Modal';
 import { useLoading } from '../../../../../hooks/loading';
 import { Alert } from '../../../../../components/Alert';
 import { useUpdateDataTable } from '../../../../../hooks/dataTable';
-import {
-  nameActions,
-  nameEntity,
-  namePageTitle,
-  nameSource,
-} from '../domain/info';
+import { nameActions, nameEntity, namePageTitle } from '../domain/info';
 import { apiDelete, apiList } from '../domain/api';
-import { headers } from '../domain/headers';
 import { breadcrumbView } from '../domain/breadcrumb';
 import {
   toolsViewCreate,
@@ -57,33 +49,8 @@ const ProductAtributesView: React.FC = () => {
     name: '',
   });
 
-  const [
-    currentItemUpdate,
-    setCurrentItemUpdate,
-  ] = useState<ProductCategorytData>({} as ProductCategorytData);
-
   const [modalEdit, setModalEdit] = useState(false);
   const [modalCreate, setModalCreate] = useState(false);
-
-  const handleClickOnClose = useCallback(() => {
-    setModalCreate(false);
-    setModalEdit(false);
-    updateDataTable();
-  }, [modalCreate, modalEdit]);
-
-  const handlerOnClickButtonEditInCurrentRow = useCallback(
-    (currentValue: ProductCategorytData) => {
-      setCurrentItemUpdate(currentValue);
-      setModalEdit(true);
-    },
-    [currentItemUpdate, modalEdit],
-  );
-
-  const handleClickOnOpenModalCreate = useCallback(() => {
-    setModalCreate(true);
-  }, [modalCreate]);
-
-  const refModal = useRef(null);
   const { disableLoading, activeLoading } = useLoading();
 
   useEffect(() => {
@@ -108,13 +75,6 @@ const ProductAtributesView: React.FC = () => {
     }
     loadCategory();
   }, [id, addToast]);
-
-  const handlerOnClickButtonRemoveInCurrentRow = useCallback(
-    ({ id, name }: ProductCategorytData) => {
-      setIsActiveAlert({ id, name, isActive: true });
-    },
-    [alert],
-  );
 
   const handlerClickButtonCancellAlert = useCallback(() => {
     setIsActiveAlert({
@@ -247,87 +207,28 @@ const ProductAtributesView: React.FC = () => {
           <div className="row">
             <div className="col-md-12">
               <Tabs>
-                <Tab title="Subcategoria">
-                  <div className="portlet light">
-                    <div className="portlet-title">
-                      <div className="caption">Listagem</div>
-                      <div className="tools">
-                        <div
-                          onClick={handleClickOnOpenModalCreate}
-                          style={{ cursor: 'pointer' }}
-                        >
-                          <i className="fa fa-plus" /> Adicionar
-                        </div>
+                {[
+                  <Tab title="Histórico">
+                    <div className="portlet light">
+                      <div className="portlet-title">
+                        <div className="caption">Listagem</div>
+                        <div className="tools"></div>
+                      </div>
+                      <div className="portlet-body form">
+                        <DataTable
+                          source="auditLogs"
+                          entity="AuditLog"
+                          searchParameters={searchParametersAuditLog}
+                        />
                       </div>
                     </div>
-                    <div className="portlet-body form">
-                      <DataTable
-                        source={nameSource}
-                        entity={nameEntity}
-                        headers={headers}
-                        searchParameters={searchProductAtributes}
-                        onActions={{
-                          onClickButtonEdit: handlerOnClickButtonEditInCurrentRow,
-                          onClickButtonRemove: handlerOnClickButtonRemoveInCurrentRow,
-                        }}
-                      />
-                    </div>
-                  </div>
-                </Tab>
-                <Tab title="Histórico">
-                  <div className="portlet light">
-                    <div className="portlet-title">
-                      <div className="caption">Listagem</div>
-                      <div className="tools"></div>
-                    </div>
-                    <div className="portlet-body form">
-                      <DataTable
-                        source="auditLogs"
-                        entity="AuditLog"
-                        searchParameters={searchParametersAuditLog}
-                      />
-                    </div>
-                  </div>
-                </Tab>
+                  </Tab>,
+                ]}
               </Tabs>
             </div>
           </div>
         </div>
       </Container>
-      <Modal
-        refModal={refModal}
-        onClickButtonCancel={handleClickOnClose}
-        isOpenModal={modalCreate}
-        pageTitle={'Adicionar'}
-        Children={
-          <FormCategory
-            typeForm={'create'}
-            isOpenInModal={{
-              handleOnClose: handleClickOnClose,
-              idParent: Number(id),
-            }}
-          />
-        }
-      />
-      <Modal
-        refModal={refModal}
-        onClickButtonCancel={handleClickOnClose}
-        isOpenModal={modalEdit}
-        pageTitle={'Editar'}
-        Children={
-          <FormCategory
-            valueInput={currentItemUpdate.name}
-            typeForm={{
-              idUpdate: currentItemUpdate.id,
-              inputValue: currentItemUpdate.name,
-            }}
-            isOpenInModal={{
-              handleOnClose: handleClickOnClose,
-              idParent: Number(id),
-            }}
-          />
-        }
-      />
       <Alert
         message={`Tem certeza que deseja excluir o registro ${alert.name} ?`}
         onClickCancellButton={handlerClickButtonCancellAlert}
