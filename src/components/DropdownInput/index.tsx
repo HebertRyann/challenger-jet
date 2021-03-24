@@ -31,7 +31,8 @@ export const DropdownInput = <
         setIsActiveInput(false);
       }
     });
-  }, []);
+    setInputValue(data);
+  }, [data]);
 
   const handleClickRow = useCallback(
     (value: string) => {
@@ -61,8 +62,7 @@ export const DropdownInput = <
         return inputSearch.length > 0 && false;
       }
     });
-    console.log(result);
-    return [];
+    return result;
   };
 
   return (
@@ -86,15 +86,12 @@ export const DropdownInput = <
           <IconSearch />
         </header>
         <div>
-          {inputValues
-            .filter(({ name }) => {
-              if (name.toLowerCase().indexOf(inputSearch.toLowerCase()) > -1) {
-                return true;
-              } else {
-                return inputSearch.length > 0 && false;
-              }
-            })
-            .map(({ name, parent_id, id }) =>
+          {renderDataSearch().length === 0 ? (
+            <div className="no-content">
+              <h5>Nenhum dado encontrado</h5>
+            </div>
+          ) : (
+            renderDataSearch().map(({ name, parent_id, id }) =>
               parent_id === null ? (
                 <div
                   style={{ cursor: isParent(id) ? 'pointer' : 'default' }}
@@ -119,7 +116,8 @@ export const DropdownInput = <
                   </ul>
                 </>
               ),
-            )}
+            )
+          )}
         </div>
       </Content>
     </ContainerDropdown>
