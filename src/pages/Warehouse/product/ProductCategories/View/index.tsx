@@ -154,7 +154,7 @@ const ProductAtributesView: React.FC = () => {
     <>
       <Container
         pageTitle={namePageTitle}
-        portletTitle={nameActions.read.name}
+        portletTitle={'Visualizar'}
         breadcrumb={breadcrumbView}
         tools={[
           toolsViewUpdate(String(id)),
