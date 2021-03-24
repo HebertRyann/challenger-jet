@@ -15,7 +15,7 @@ import { Alert } from '../../../../../components/Alert';
 import { Select } from '../../../../../components/Select';
 import { useLocation } from 'react-router';
 import { DefaultInputs } from './inputs/Defaults';
-import { loadCategoryData } from './api/loadCategoryCost';
+import { loadCategoryData, loadCategoryFinance } from './api/load';
 
 type DataProtocol = {
   id: string;
@@ -50,12 +50,16 @@ const ProductAtributesCreate = (): JSX.Element => {
   const [isVisibleDefault, setIsVisibleDefault] = useState(false);
 
   const [dataCategoryCost, setDataCategoryCost] = useState<DataProtocol[]>([]);
+  const [dataCategoryFinance, setDataCategoryFinance] = useState<
+    DataProtocol[]
+  >([]);
 
   useEffect(() => {
     async function load() {
-      const result = await loadCategoryData();
-      console.log(result);
-      setDataCategoryCost(result);
+      const categoryData = await loadCategoryData();
+      setDataCategoryCost(categoryData);
+      const categoryFinance = await loadCategoryFinance();
+      setDataCategoryFinance(categoryFinance);
     }
     load();
   }, []);
@@ -230,7 +234,7 @@ const ProductAtributesCreate = (): JSX.Element => {
                 <DropdownInput<DataProtocol>
                   className="form-control"
                   label="Categoria custo"
-                  data={dataCategoryCost}
+                  data={dataCategoryFinance}
                   onChangeCurrentRow={handlerChangeCategoryFinance}
                 />
               </div>
@@ -238,7 +242,7 @@ const ProductAtributesCreate = (): JSX.Element => {
                 <DropdownInput<DataProtocol>
                   className="form-control"
                   label="Grupo produto"
-                  data={fakeData}
+                  data={dataCategoryCost}
                   onChangeCurrentRow={handlerChangeCategoryProduct}
                 />
               </div>
