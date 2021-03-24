@@ -10,11 +10,18 @@ import FormComponent from '../../../../../components/Form';
 import { FormDataProtocol } from '../domain/protocols';
 import { VisibleContent, Wrapper } from './style';
 import { DropdownInput } from '../../../../../components/DropdownInput';
-import { fakeData } from './fakeData';
+import { fakeData } from './data';
 import { Alert } from '../../../../../components/Alert';
 import { Select } from '../../../../../components/Select';
 import { useLocation } from 'react-router';
 import { DefaultInputs } from './inputs/Defaults';
+import { loadCategoryData } from './api/loadCategoryCost';
+
+type DataProtocol = {
+  id: string;
+  name: string;
+  parent_id: string | null;
+};
 
 const ProductAtributesCreate = (): JSX.Element => {
   let { search } = useLocation();
@@ -41,6 +48,17 @@ const ProductAtributesCreate = (): JSX.Element => {
   const [isVisibleInputLocacao, setIsVisibleInputLocacao] = useState(false);
   const [isVisibleInputConsumo, setIsVisibleInputConsumo] = useState(false);
   const [isVisibleDefault, setIsVisibleDefault] = useState(false);
+
+  const [dataCategoryCost, setDataCategoryCost] = useState<DataProtocol[]>([]);
+
+  useEffect(() => {
+    async function load() {
+      const result = await loadCategoryData();
+      console.log(result);
+      setDataCategoryCost(result);
+    }
+    load();
+  }, []);
 
   const data: string[] = [
     'Materia Prima',
@@ -209,23 +227,15 @@ const ProductAtributesCreate = (): JSX.Element => {
             </div>
             <div className="row">
               <div className="form-content col-md-3">
-                <DropdownInput<{
-                  id: string;
-                  name: string;
-                  parent_id: string | null;
-                }>
+                <DropdownInput<DataProtocol>
                   className="form-control"
                   label="Categoria custo"
-                  data={fakeData}
+                  data={dataCategoryCost}
                   onChangeCurrentRow={handlerChangeCategoryFinance}
                 />
               </div>
               <div className="form-content col-md-3 ">
-                <DropdownInput<{
-                  id: string;
-                  name: string;
-                  parent_id: string | null;
-                }>
+                <DropdownInput<DataProtocol>
                   className="form-control"
                   label="Grupo produto"
                   data={fakeData}
