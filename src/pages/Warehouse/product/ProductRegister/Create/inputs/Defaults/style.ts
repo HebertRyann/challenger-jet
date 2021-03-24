@@ -5,4 +5,8 @@ export const Container = styled.div`
     margin: 15px 0;
   }
   margin-bottom: 10px;
+
+  .form-control {
+    height: 34px;
+  }
 `;
