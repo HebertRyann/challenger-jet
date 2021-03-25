@@ -2,19 +2,19 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router';
 import { Container, IconArrowDown } from './style';
 
-type TypeSelect = {
-  data: any[];
+type TypeSelect<T> = {
+  data: T[];
   selectValue: string;
   onClickSelect?: (value: any) => void;
-  onClickItem?: (value: any) => void;
+  onClickItem?: (value: T) => void;
 };
 
-export const Select = ({
+export const Select = <T extends { name: string }>({
   data,
   onClickSelect,
   onClickItem,
   selectValue,
-}: TypeSelect): JSX.Element => {
+}: TypeSelect<T>): JSX.Element => {
   const selectRef = useRef<HTMLDivElement>(null);
 
   const [currentValue, setCurrentValue] = useState(selectValue);
@@ -57,17 +57,17 @@ export const Select = ({
       className="form-control"
     >
       <header>
-        <div>{currentValue.toUpperCase()}</div>
+        <div>{currentValue}</div>
         <IconArrowDown />
       </header>
       <ul>
-        {data.map((dataValue: string) => (
+        {data.map(current => (
           <li
             onClick={() => {
-              handleClickRow(dataValue);
+              handleClickRow(current);
             }}
           >
-            {dataValue.toUpperCase()}
+            {current.name}
           </li>
         ))}
       </ul>
