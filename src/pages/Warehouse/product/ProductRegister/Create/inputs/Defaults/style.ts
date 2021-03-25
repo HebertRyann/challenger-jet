@@ -7,6 +7,6 @@ export const Container = styled.div`
   margin-bottom: 10px;
 
   .form-control {
-    height: 34px;
+    height: 90px;
   }
 `;
