@@ -10,12 +10,12 @@ import FormComponent from '../../../../../components/Form';
 import { FormDataProtocol } from '../domain/protocols';
 import { VisibleContent, Wrapper } from './style';
 import { DropdownInput } from '../../../../../components/DropdownInput';
-import { fakeData } from './data';
 import { Alert } from '../../../../../components/Alert';
 import { Select } from '../../../../../components/Select';
 import { useLocation } from 'react-router';
 import { DefaultInputs } from './inputs/Defaults';
 import { loadCategoryData, loadCategoryFinance } from './api/load';
+import DinamicInputs from './inputs/DinamicInputs';
 
 type DataProtocol = {
   id: string;
@@ -47,7 +47,6 @@ const ProductAtributesCreate = (): JSX.Element => {
   const [isVisibleInputRevenda, setIsVisibleInputRevenda] = useState(false);
   const [isVisibleInputLocacao, setIsVisibleInputLocacao] = useState(false);
   const [isVisibleInputConsumo, setIsVisibleInputConsumo] = useState(false);
-  const [isVisibleDefault, setIsVisibleDefault] = useState(false);
 
   const [dataCategoryCost, setDataCategoryCost] = useState<DataProtocol[]>([]);
   const [dataCategoryFinance, setDataCategoryFinance] = useState<
@@ -64,13 +63,17 @@ const ProductAtributesCreate = (): JSX.Element => {
     load();
   }, []);
 
-  const data: string[] = [
-    'Materia Prima',
-    'Semi acabado',
-    'Venda',
-    'Revenda',
-    'Locação',
-    'Consumo',
+  type TypeDataSelect = {
+    name: string;
+  };
+
+  const data: TypeDataSelect[] = [
+    { name: 'Materia Prima' },
+    { name: 'Semi acabado' },
+    { name: 'Venda' },
+    { name: 'Revenda' },
+    { name: 'Locação' },
+    { name: 'Consumo' },
   ];
 
   const handlerChangeCategoryFinance = useCallback(
@@ -113,7 +116,6 @@ const ProductAtributesCreate = (): JSX.Element => {
   useEffect(() => {
     if (currentValue.toLowerCase() === 'Materia Prima'.toLowerCase()) {
       setIsVisibleInputMateriaPrima(true);
-      setIsVisibleDefault(true);
       setIsVisibleInputConsumo(false);
       setIsVisibleInputLocacao(false);
       setIsVisibleInputRevenda(false);
@@ -122,7 +124,6 @@ const ProductAtributesCreate = (): JSX.Element => {
     }
     if (currentValue.toLowerCase() === 'Semi acabado'.toLowerCase()) {
       setIsVisibleInputSemiAcabado(true);
-      setIsVisibleDefault(true);
       setIsVisibleInputMateriaPrima(false);
       setIsVisibleInputConsumo(false);
       setIsVisibleInputLocacao(false);
@@ -131,7 +132,6 @@ const ProductAtributesCreate = (): JSX.Element => {
     }
     if (currentValue.toLowerCase() === 'Venda'.toLowerCase()) {
       setIsVisibleInputVenda(true);
-      setIsVisibleDefault(true);
       setIsVisibleInputMateriaPrima(false);
       setIsVisibleInputConsumo(false);
       setIsVisibleInputLocacao(false);
@@ -139,8 +139,6 @@ const ProductAtributesCreate = (): JSX.Element => {
       setIsVisibleInputSemiAcabado(false);
     }
     if (currentValue.toLowerCase() === 'Revenda'.toLowerCase()) {
-      setIsVisibleInputRevenda(true);
-      setIsVisibleDefault(true);
       setIsVisibleInputMateriaPrima(false);
       setIsVisibleInputConsumo(false);
       setIsVisibleInputLocacao(false);
@@ -149,7 +147,6 @@ const ProductAtributesCreate = (): JSX.Element => {
     }
     if (currentValue.toLowerCase() === 'Locação'.toLowerCase()) {
       setIsVisibleInputLocacao(true);
-      setIsVisibleDefault(true);
       setIsVisibleInputMateriaPrima(false);
       setIsVisibleInputConsumo(false);
       setIsVisibleInputRevenda(false);
@@ -158,7 +155,6 @@ const ProductAtributesCreate = (): JSX.Element => {
     }
     if (currentValue.toLowerCase() === 'Consumo'.toLowerCase()) {
       setIsVisibleInputConsumo(true);
-      setIsVisibleDefault(true);
       setIsVisibleInputMateriaPrima(false);
       setIsVisibleInputLocacao(false);
       setIsVisibleInputRevenda(false);
@@ -170,18 +166,18 @@ const ProductAtributesCreate = (): JSX.Element => {
   useEffect(() => {
     const query = new URLSearchParams(search);
     const queryParams = query.get('type');
-    const result = data.filter((name: string) => {
+    const result = data.filter(({ name }) => {
       return name.toLowerCase() == queryParams?.toLowerCase();
     });
 
     if (result.length === 1) {
-      setCurrentValue(result[0]);
+      setCurrentValue(result[0].name);
     }
   }, []);
 
   const onChangeSelectItem = useCallback(
     value => {
-      setCurrentValue(value);
+      setCurrentValue(value.name);
 
       if (isFilled) {
         setAlert({
@@ -220,7 +216,7 @@ const ProductAtributesCreate = (): JSX.Element => {
               <div className="form-content col-md-3">
                 <Wrapper>
                   <label htmlFor="form">Tipo de produto</label>
-                  <Select
+                  <Select<TypeDataSelect>
                     selectValue={currentValue}
                     onClickSelect={onChangeSelect}
                     onClickItem={onChangeSelectItem}
@@ -257,9 +253,9 @@ const ProductAtributesCreate = (): JSX.Element => {
               </div>
             </div>
 
-            <VisibleContent id="content-default" isVisible={isVisibleDefault}>
-              <DefaultInputs />
-            </VisibleContent>
+            <DefaultInputs />
+            <DinamicInputs />
+
             <div className="form-actions right">
               <Button type="submit" className="btn dark btn-sm sbold uppercase">
                 Salvar
