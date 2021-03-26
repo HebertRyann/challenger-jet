@@ -21,11 +21,13 @@ export const TooltipComponent = ({ message, label }: TypeTooltipComponent) => {
   return (
     <Container hidden={mouseUp}>
       <label htmlFor="form">{label}</label>
-      <span>{message}</span>
-      <JokerIcon
-        onMouseEnter={handlerMouseUp}
-        onMouseLeave={handlerMouseDown}
-      />
+      <div>
+        <span>{message}</span>
+        <JokerIcon
+          onMouseEnter={handlerMouseUp}
+          onMouseLeave={handlerMouseDown}
+        />
+      </div>
     </Container>
   );
 };
