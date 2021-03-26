@@ -32,6 +32,7 @@ export const AddChildren = (): JSX.Element => {
               indexItem={index}
               onClickRemoveButton={handlerRemoveItem}
             />
+            <hr/>
           </div>
         </div>
       ))}
@@ -39,7 +40,8 @@ export const AddChildren = (): JSX.Element => {
         onClick={handlerOnClickAddChildren}
         className="btn dark btn-sm sbold uppercase"
       >
-        Adicionar filho
+        <span className="fa fa-plus" style={{ marginRight: '5px' }} />
+        Variação
       </button>
     </Container>
   );
