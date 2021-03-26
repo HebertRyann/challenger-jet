@@ -23,7 +23,7 @@ export const Select = <T extends { name: string }>({
 
   const handleClickSelect = useCallback(
     (value: any) => {
-      if (!disable) {
+      if (!disable && data.length > 0) {
         setActiveSelect(!selectActive);
         if (onClickSelect) onClickSelect(value);
       }
