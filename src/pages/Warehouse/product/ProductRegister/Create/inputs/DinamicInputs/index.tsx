@@ -2,25 +2,35 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Container, IconDelete, Wrapper } from './style';
 import { Select } from '../../../../../../../components/Select';
 import { loadAtributes } from '../../api/load';
+import { TooltipComponent } from '../../../../../../../components/TooltipComponent';
 
 type DataProtocol = {
   id: string;
   name: string;
   parent_id: string | null;
   childrenList?: DataProtocol[];
+  isSelected?: boolean;
 };
 
-const DinamicInputs = (): JSX.Element => {
+type TypeDinamicInputsProps = {
+  indexItem: number;
+  onClickRemoveButton?: (index: number) => void;
+};
+
+const DinamicInputs = ({
+  indexItem,
+  onClickRemoveButton,
+}: TypeDinamicInputsProps): JSX.Element => {
   const [listItems, setListItems] = useState<DataProtocol[]>([
-    { id: '', name: '', parent_id: '' },
+    { id: '', name: 'selecione', parent_id: '' },
   ]);
   const [parents, setParents] = useState<DataProtocol[]>([]);
   const [currentParentSelect, setCurrentParentSelect] = useState<
     DataProtocol[]
-  >([{ id: '', name: '', parent_id: '' }]);
+  >([{ id: '', name: 'selecione', parent_id: '' }]);
   const [childrens, setChildrens] = useState<{ list: DataProtocol[] }[]>([
     {
-      list: [{ id: '', parent_id: '', name: '' }],
+      list: [{ id: '', parent_id: 'selecione', name: 'selecione' }],
     },
   ]);
 
@@ -29,7 +39,7 @@ const DinamicInputs = (): JSX.Element => {
   >([
     {
       id: '',
-      name: '',
+      name: 'selecione',
       parent_id: '',
     },
   ]);
@@ -51,19 +61,24 @@ const DinamicInputs = (): JSX.Element => {
   }, []);
 
   const handlerClickAddFiled = useCallback(() => {
-    setListItems([...listItems, { id: '', parent_id: '', name: '' }]);
-    setCurrentParentSelect([
-      ...currentParentSelect,
-      { id: '', name: '', parent_id: '' },
-    ]);
-    setCurrentChildrenSelect([
-      ...currentChildrenSelect,
-      { id: '', name: '', parent_id: '' },
-    ]);
-    setChildrens([
-      ...childrens,
-      { list: [{ id: '', name: '', parent_id: '' }] },
-    ]);
+    if (parents.length - 1 >= listItems.length) {
+      setListItems([
+        ...listItems,
+        { id: '', parent_id: '', name: 'selecione' },
+      ]);
+      setCurrentParentSelect([
+        ...currentParentSelect,
+        { id: '', name: 'selecione', parent_id: '' },
+      ]);
+      setCurrentChildrenSelect([
+        ...currentChildrenSelect,
+        { id: '', name: 'selecione', parent_id: '' },
+      ]);
+      setChildrens([
+        ...childrens,
+        { list: [{ id: '', name: 'selecione', parent_id: '' }] },
+      ]);
+    }
   }, [listItems, parents, childrens]);
 
   const handlerClickDelete = useCallback(
@@ -76,6 +91,7 @@ const DinamicInputs = (): JSX.Element => {
         const resultCurrentChildren = currentChildrenSelect.filter(
           (_, index) => index !== indexArray,
         );
+        parents[indexArray].isSelected = false;
         setListItems(result);
         setCurrentParentSelect(resultCurrentParentSelect);
         setCurrentChildrenSelect(resultCurrentChildren);
@@ -88,9 +104,10 @@ const DinamicInputs = (): JSX.Element => {
     (value: DataProtocol, index: number) => {
       let parentSelected = currentParentSelect;
       parentSelected[index] = value;
+      parentSelected[index].isSelected = true;
 
       let currentChildren = currentChildrenSelect;
-      currentChildren[index] = { id: '', name: '', parent_id: '' };
+      currentChildren[index] = { id: '', name: 'selecione', parent_id: '' };
 
       setCurrentChildrenSelect(JSON.parse(JSON.stringify(currentChildren)));
       setCurrentParentSelect(JSON.parse(JSON.stringify(parentSelected)));
@@ -100,7 +117,7 @@ const DinamicInputs = (): JSX.Element => {
         value.childrenList !== undefined ? value.childrenList : [];
       setChildrens(JSON.parse(JSON.stringify(children)));
     },
-    [currentParentSelect, currentChildrenSelect, childrens],
+    [currentParentSelect, currentChildrenSelect, childrens, parents],
   );
 
   const handlerClickRowChildren = useCallback(
@@ -118,17 +135,18 @@ const DinamicInputs = (): JSX.Element => {
       {listItems.map((_, index) => (
         <div key={Math.random()} className="row">
           <div className="form-content col-md-3">
-            <label htmlFor="form">Descrição</label>
+            <label htmlFor="form">Atributo</label>
             <Select<DataProtocol>
               onClickItem={current => {
                 handlerClickRowParent(current, index);
               }}
-              data={parents}
+              data={parents.filter(({ isSelected }) => isSelected !== true)}
               selectValue={currentParentSelect[index].name}
+              disable={currentParentSelect[index].isSelected}
             />
           </div>
           <div className="form-content col-md-3 ">
-            <label htmlFor="form">Conteúdo</label>
+            <TooltipComponent label="Valor" message="Informe o valor" />
             <Select<DataProtocol>
               data={childrens[index].list}
               selectValue={currentChildrenSelect[index].name}
@@ -150,7 +168,20 @@ const DinamicInputs = (): JSX.Element => {
             className="btn dark btn-sm sbold uppercase"
             onClick={handlerClickAddFiled}
           >
-            Adicionar atributos
+            <span className="fa fa-plus" style={{ marginRight: '10px' }} />
+            Adicionar
+          </button>
+          <button
+            onClick={() => {
+              if (onClickRemoveButton) {
+                onClickRemoveButton(indexItem);
+              }
+            }}
+            style={{ marginLeft: '15px' }}
+            className="btn btn-sm sbold uppercase"
+          >
+            <span className="fa fa-remove" style={{ marginRight: '10px' }} />
+            Remover
           </button>
         </div>
       </div>
