@@ -131,38 +131,42 @@ const DinamicInputs = ({
 
   return (
     <Container>
+      <h4>Variação</h4>
       <hr />
       {listItems.map((_, index) => (
-        <div key={Math.random()} className="row">
-          <div className="form-content col-md-3">
-            <label htmlFor="form">Atributo</label>
-            <Select<DataProtocol>
-              onClickItem={current => {
-                handlerClickRowParent(current, index);
-              }}
-              data={parents.filter(({ isSelected }) => isSelected !== true)}
-              selectValue={currentParentSelect[index].name}
-              disable={currentParentSelect[index].isSelected}
-            />
+        <>
+          <div key={Math.random()} className="row">
+            <div className="form-content col-md-3">
+              <label htmlFor="form">Atributo</label>
+              <Select<DataProtocol>
+                onClickItem={current => {
+                  handlerClickRowParent(current, index);
+                }}
+                data={parents.filter(({ isSelected }) => isSelected !== true)}
+                selectValue={currentParentSelect[index].name}
+                disable={currentParentSelect[index].isSelected}
+              />
+            </div>
+            <div className="form-content col-md-3 ">
+              <TooltipComponent label="Valor" message="Informe o valor" />
+              <Select<DataProtocol>
+                data={childrens[index].list.filter(
+                  ({ name }) => name !== 'selecione',
+                )}
+                selectValue={currentChildrenSelect[index].name}
+                onClickItem={current => {
+                  handlerClickRowChildren(current, index);
+                }}
+                search
+              />
+            </div>
+            <div className="form-content col-md-1">
+              <Wrapper>
+                <IconDelete onClick={() => handlerClickDelete(index)} />
+              </Wrapper>
+            </div>
           </div>
-          <div className="form-content col-md-3 ">
-            <TooltipComponent label="Valor" message="Informe o valor" />
-            <Select<DataProtocol>
-              data={childrens[index].list.filter(
-                ({ name }) => name !== 'selecione',
-              )}
-              selectValue={currentChildrenSelect[index].name}
-              onClickItem={current => {
-                handlerClickRowChildren(current, index);
-              }}
-            />
-          </div>
-          <div className="form-content col-md-1">
-            <Wrapper>
-              <IconDelete onClick={() => handlerClickDelete(index)} />
-            </Wrapper>
-          </div>
-        </div>
+        </>
       ))}
       <div className="row">
         <div className="form-content col-md-3">
@@ -170,21 +174,21 @@ const DinamicInputs = ({
             className="btn dark btn-sm sbold uppercase"
             onClick={handlerClickAddFiled}
           >
-            <span className="fa fa-plus" style={{ marginRight: '10px' }} />
+            <span className="fa fa-plus" style={{ marginRight: '5px' }} />
             Adicionar
           </button>
-          <button
+          {/* <button
             onClick={() => {
               if (onClickRemoveButton) {
                 onClickRemoveButton(indexItem);
               }
             }}
-            style={{ marginLeft: '20px' }}
+            style={{ marginLeft: '15px' }}
             className="btn btn-sm sbold uppercase"
           >
             <span className="fa fa-remove" style={{ marginRight: '10px' }} />
             Remover
-          </button>
+          </button> */}
         </div>
       </div>
     </Container>
