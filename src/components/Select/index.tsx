@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router';
 import { Container, IconArrowDown } from './style';
 
 type TypeSelect<T> = {
@@ -7,6 +6,7 @@ type TypeSelect<T> = {
   selectValue: string;
   onClickSelect?: (value: any) => void;
   onClickItem?: (value: T) => void;
+  disable?: boolean;
 };
 
 export const Select = <T extends { name: string }>({
@@ -14,6 +14,7 @@ export const Select = <T extends { name: string }>({
   onClickSelect,
   onClickItem,
   selectValue,
+  disable,
 }: TypeSelect<T>): JSX.Element => {
   const selectRef = useRef<HTMLDivElement>(null);
 
@@ -22,8 +23,10 @@ export const Select = <T extends { name: string }>({
 
   const handleClickSelect = useCallback(
     (value: any) => {
-      setActiveSelect(!selectActive);
-      if (onClickSelect) onClickSelect(value);
+      if (!disable) {
+        setActiveSelect(!selectActive);
+        if (onClickSelect) onClickSelect(value);
+      }
     },
     [selectActive],
   );
@@ -55,6 +58,7 @@ export const Select = <T extends { name: string }>({
       isActive={selectActive}
       ref={selectRef}
       className="form-control"
+      disable={!!disable}
     >
       <header>
         <div>{currentValue}</div>
