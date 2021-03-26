@@ -16,6 +16,7 @@ import { useLocation } from 'react-router';
 import { DefaultInputs } from './inputs/Defaults';
 import { loadCategoryData, loadCategoryFinance } from './api/load';
 import DinamicInputs from './inputs/DinamicInputs';
+import { AddChildren } from './components/AddChildren';
 
 type DataProtocol = {
   id: string;
@@ -254,8 +255,7 @@ const ProductAtributesCreate = (): JSX.Element => {
             </div>
 
             <DefaultInputs />
-            <DinamicInputs />
-
+            <AddChildren />
             <div className="form-actions right">
               <Button type="submit" className="btn dark btn-sm sbold uppercase">
                 Salvar
