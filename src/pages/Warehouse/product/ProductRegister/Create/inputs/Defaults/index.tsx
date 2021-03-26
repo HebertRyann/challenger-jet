@@ -1,5 +1,4 @@
 import React from 'react';
-import Input from '../../../../../../../components/Input';
 import { Container } from './style';
 
 export const DefaultInputs = (): JSX.Element => {
