@@ -1,11 +1,21 @@
 import styled, { css } from 'styled-components';
 import { MdArrowDropDown } from 'react-icons/md';
 
-export const Container = styled.div<{ isActive: boolean }>`
+export const Container = styled.div<{ isActive: boolean; disable: boolean }>`
   position: relative;
   margin: 0 0 20px 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  ${({ disable }) =>
+    disable &&
+    css`
+      background-color: #fff;
+      color: #ddd;
+      cursor: default;
+    `}
   > ul {
     display: none;
+    text-transform: uppercase;
     ${({ isActive }) =>
       isActive &&
       css`
