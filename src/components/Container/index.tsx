@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { HTMLAttributes, StyleHTMLAttributes } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useLoading } from '../../hooks/loading';
 import { Loading } from '../Loading';
@@ -20,11 +20,13 @@ export interface ToolsContainerProps {
   handleOnClick?: <T>(currentValue: T | any) => void;
 }
 
-interface ContainerProps {
+interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   pageTitle: string;
   portletTitle: string;
   breadcrumb?: Breadcrumb[];
   tools?: ToolsContainerProps[];
+  styleContent?: HTMLAttributes<HTMLDivElement>;
+  Content?: () => JSX.Element;
 }
 
 const Container: React.FC<ContainerProps> = ({
@@ -33,6 +35,8 @@ const Container: React.FC<ContainerProps> = ({
   breadcrumb,
   tools,
   children,
+  Content,
+  ...props
 }) => {
   const history = useHistory();
   const { loading } = useLoading();
@@ -56,7 +60,7 @@ const Container: React.FC<ContainerProps> = ({
   };
 
   return (
-    <div className="page-content-wrapper">
+    <div {...props} className="page-content-wrapper">
       <Loading isActive={loading} />
       <div className="page-head">
         <div className="container-fluid">
@@ -85,27 +89,33 @@ const Container: React.FC<ContainerProps> = ({
               <div className="row">
                 <div className="col-md-12">
                   <div className="portlet light bordered">
-                    <div className="portlet-title">
-                      <div className="caption">{portletTitle}</div>
-                      {tools && (
-                        <div className="tools">
-                          {tools.map(tool => (
-                            <a
-                              style={{
-                                cursor: 'pointer',
-                              }}
-                              key={Math.random()}
-                              onClick={() => {
-                                handleClickAction(tool);
-                              }}
-                            >
-                              <i className={tool.icon} /> {tool.name}
-                            </a>
-                          ))}
+                    {Content ? (
+                      <Content />
+                    ) : (
+                      <>
+                        <div className="portlet-title">
+                          <div className="caption">{portletTitle}</div>
+                          {tools && (
+                            <div className="tools">
+                              {tools.map(tool => (
+                                <a
+                                  style={{
+                                    cursor: 'pointer',
+                                  }}
+                                  key={Math.random()}
+                                  onClick={() => {
+                                    handleClickAction(tool);
+                                  }}
+                                >
+                                  <i className={tool.icon} /> {tool.name}
+                                </a>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                    <div className="portlet-body form">{children} </div>
+                        <div className="portlet-body form">{children} </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
