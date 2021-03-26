@@ -3,7 +3,6 @@ import { FiTrash } from 'react-icons/fi';
 
 export const Container = styled.div`
   margin: 15px 0;
-  border: 1px solid #c2cad8;
   padding: 20px 10px;
   > hr {
     margin-bottom: 10px;
