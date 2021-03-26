@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Container, IconArrowDown } from './style';
+import { Container, IconArrowDown, IconSearch } from './style';
 
 type TypeSelect<T> = {
   data: T[];
@@ -7,6 +7,7 @@ type TypeSelect<T> = {
   onClickSelect?: (value: any) => void;
   onClickItem?: (value: T) => void;
   disable?: boolean;
+  search?: boolean;
 };
 
 export const Select = <T extends { name: string }>({
@@ -15,11 +16,13 @@ export const Select = <T extends { name: string }>({
   onClickItem,
   selectValue,
   disable,
+  search,
 }: TypeSelect<T>): JSX.Element => {
   const selectRef = useRef<HTMLDivElement>(null);
 
   const [currentValue, setCurrentValue] = useState(selectValue);
   const [selectActive, setActiveSelect] = useState(false);
+  const [inputSearch, setInputSearch] = useState('');
 
   const handleClickSelect = useCallback(
     (value: any) => {
@@ -38,6 +41,13 @@ export const Select = <T extends { name: string }>({
     [currentValue],
   );
 
+  const handlerChangeInput = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setInputSearch(event.target.value);
+    },
+    [inputSearch],
+  );
+
   useEffect(() => {
     setCurrentValue(selectValue);
   }, [selectValue]);
@@ -49,6 +59,17 @@ export const Select = <T extends { name: string }>({
       }
     });
   }, []);
+
+  const renderDataSearch = (): T[] => {
+    const result = data.filter(({ name }) => {
+      if (name.toLowerCase().indexOf(inputSearch.toLowerCase()) > -1) {
+        return true;
+      } else {
+        return inputSearch.length > 0 && false;
+      }
+    });
+    return result;
+  };
 
   return (
     <Container
@@ -64,17 +85,51 @@ export const Select = <T extends { name: string }>({
         <div>{currentValue}</div>
         <IconArrowDown />
       </header>
-      <ul>
-        {data.map(current => (
-          <li
-            onClick={() => {
-              handleClickRow(current);
-            }}
-          >
-            {current.name}
-          </li>
-        ))}
-      </ul>
+      <main>
+        {!!search ? (
+          <section>
+            <header>
+              <input
+                value={inputSearch}
+                placeholder="Buscar"
+                type="text"
+                className="form-control"
+                onChange={handlerChangeInput}
+              />
+              <IconSearch />
+            </header>
+            {renderDataSearch().length === 0 ? (
+              <div className="no-content">
+                <h5>Nenhum dado encontrado</h5>
+              </div>
+            ) : (
+              <ul>
+                {renderDataSearch().map(current => (
+                  <li
+                    onClick={() => {
+                      handleClickRow(current);
+                    }}
+                  >
+                    {current.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ) : (
+          <ul>
+            {data.map(current => (
+              <li
+                onClick={() => {
+                  handleClickRow(current);
+                }}
+              >
+                {current.name}
+              </li>
+            ))}
+          </ul>
+        )}
+      </main>
     </Container>
   );
 };
