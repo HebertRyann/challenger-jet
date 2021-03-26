@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { MdArrowDropDown } from 'react-icons/md';
+import { MdArrowDropDown, MdSearch } from 'react-icons/md';
 
 export const Container = styled.div<{ isActive: boolean; disable: boolean }>`
   position: relative;
@@ -13,7 +13,51 @@ export const Container = styled.div<{ isActive: boolean; disable: boolean }>`
       color: #ddd;
       cursor: default;
     `}
-  > ul {
+
+  > main {
+    > section {
+      > ul {
+        list-style: none;
+        > li {
+          border: 1px solid rgba(233, 237, 239, 0.5);
+          padding: 10px 15px;
+          :hover {
+            background-color: rgba(233, 237, 239, 0.8);
+            cursor: pointer;
+          }
+        }
+        > li:nth-child(2n) {
+          background-color: rgba(233, 237, 239, 0.2);
+        }
+      }
+    }
+
+    > ul {
+      list-style: none;
+      > li {
+        border: 1px solid rgba(233, 237, 239, 0.5);
+        padding: 10px 15px;
+        :hover {
+          background-color: rgba(233, 237, 239, 0.8);
+          cursor: pointer;
+        }
+      }
+      > li:nth-child(2n) {
+        background-color: rgba(233, 237, 239, 0.2);
+      }
+    }
+
+    > section {
+      > header {
+        position: relative;
+        padding: 10px 10px 0 10px;
+
+        > input {
+          margin-bottom: 10px;
+        }
+      }
+    }
+
     display: none;
     text-transform: uppercase;
     ${({ isActive }) =>
@@ -29,19 +73,10 @@ export const Container = styled.div<{ isActive: boolean; disable: boolean }>`
     background-color: #fff;
     border: 1px solid #c2cad8;
     z-index: 1;
+  }
 
-    > ul > li:nth-child(2n) {
-      background-color: rgba(233, 237, 239, 0.2);
-    }
-
-    > li {
-      border: 1px solid rgba(233, 237, 239, 0.5);
-      padding: 10px 15px;
-      :hover {
-        background-color: rgba(233, 237, 239, 0.8);
-        cursor: pointer;
-      }
-    }
+  > section {
+    background-color: red;
   }
 `;
 
@@ -55,4 +90,13 @@ export const IconArrowDown = styled(MdArrowDropDown).attrs(() => ({
   background-color: rgba(233, 237, 239, 0.9);
   height: 100%;
   border: 1px solid #c2cad8;
+`;
+
+export const IconSearch = styled(MdSearch).attrs(() => ({
+  size: '18px',
+  color: '#555',
+}))`
+  position: absolute;
+  top: 40%;
+  right: 20px;
 `;
