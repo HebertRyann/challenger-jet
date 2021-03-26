@@ -148,7 +148,9 @@ const DinamicInputs = ({
           <div className="form-content col-md-3 ">
             <TooltipComponent label="Valor" message="Informe o valor" />
             <Select<DataProtocol>
-              data={childrens[index].list}
+              data={childrens[index].list.filter(
+                ({ name }) => name !== 'selecione',
+              )}
               selectValue={currentChildrenSelect[index].name}
               onClickItem={current => {
                 handlerClickRowChildren(current, index);
@@ -177,7 +179,7 @@ const DinamicInputs = ({
                 onClickRemoveButton(indexItem);
               }
             }}
-            style={{ marginLeft: '15px' }}
+            style={{ marginLeft: '20px' }}
             className="btn btn-sm sbold uppercase"
           >
             <span className="fa fa-remove" style={{ marginRight: '10px' }} />
