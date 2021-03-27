@@ -3,7 +3,7 @@ import { ContainerDropdown, Content, IconArrowDown, IconSearch } from './style';
 
 interface DropdownInputProps<T>
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+  label?: string;
   data: T[];
   onChangeCurrentRow?: (value: any) => void;
 }
@@ -67,7 +67,7 @@ export const DropdownInput = <
 
   return (
     <ContainerDropdown ref={inputRef}>
-      <label htmlFor={label}>{label}</label>
+      {label && <label htmlFor={label}>{label}</label>}
       <header>
         <div onClick={handleFocusInput} {...props}>
           {selectItem.toUpperCase()}
