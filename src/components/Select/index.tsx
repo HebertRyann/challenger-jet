@@ -3,7 +3,7 @@ import { Container, IconArrowDown, IconSearch } from './style';
 
 type TypeSelect<T> = {
   data: T[];
-  selectValue: string;
+  selectValue: T;
   onClickSelect?: (value: any) => void;
   onClickItem?: (value: T) => void;
   disable?: boolean;
@@ -20,7 +20,7 @@ export const Select = <T extends { name: string }>({
 }: TypeSelect<T>): JSX.Element => {
   const selectRef = useRef<HTMLDivElement>(null);
 
-  const [currentValue, setCurrentValue] = useState(selectValue);
+  const [currentValue, setCurrentValue] = useState<T>(selectValue);
   const [selectActive, setActiveSelect] = useState(false);
   const [inputSearch, setInputSearch] = useState('');
 
@@ -82,7 +82,7 @@ export const Select = <T extends { name: string }>({
       disable={!!disable}
     >
       <header>
-        <div>{currentValue}</div>
+        <div>{currentValue.name}</div>
         <IconArrowDown />
       </header>
       <main>
