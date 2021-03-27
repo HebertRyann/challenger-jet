@@ -11,6 +11,13 @@ export const Container = styled.div`
 export const ContentItem = styled.div`
   position: relative;
   margin-top: 40px;
+  > footer {
+    margin-top: 20px;
+
+    & button + button {
+      margin-left: 10px;
+    }
+  }
 `;
 
 export const TabName = styled.div<{ isActive: boolean }>`
