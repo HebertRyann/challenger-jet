@@ -38,6 +38,7 @@ export const Content = (): JSX.Element => {
               ))}
             </TabHeaderContainer>
             <TabPanelContainer>
+              <hr style={{ marginBottom: '20px' }} />
               {tabs.map(({ Component, name }, index) => {
                 if (name === currentTab) {
                   return (
@@ -49,10 +50,29 @@ export const Content = (): JSX.Element => {
                   return null;
                 }
               })}
+              <hr style={{ marginBottom: '20px' }} />
+              <FooterCreateProduct />
             </TabPanelContainer>
           </div>
+          <footer>
+            <button className="btn dark btn-sm sbold uppercase">
+              <span
+                className="fa fa-check"
+                aria-hidden="true"
+                style={{ marginRight: '5px' }}
+              />
+              Cadastrar
+            </button>
+            <button className="btn btn-sm sbold uppercase">
+              <span
+                className="fa fa-remove"
+                aria-hidden="true"
+                style={{ marginRight: '5px' }}
+              />
+              Cancelar
+            </button>
+          </footer>
         </ContentItem>
-        <FooterCreateProduct />
       </Container>
     </>
   );
