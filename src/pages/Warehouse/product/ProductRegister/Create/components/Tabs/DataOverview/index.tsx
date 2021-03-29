@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { DropdownInput } from '../../../../../../../../components/DropdownInput';
-import {
-  loadCategoryFinance,
-  loadCategoryData,
-  loadAtributes,
-} from '../../../services/api';
+import { loadCategoryFinance, loadCategoryData } from '../../../services/api';
 import { Select } from '../../../../../../../../components/Select';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
-import Input from '../../../../../../../../components/Input';
+import { nameHasVariation } from '../HasVariation';
+import { useTabs } from '../../../../../../../../hooks/tabs';
+import { nameHasComposition } from '../HasComposition';
+import { typeProducts, TypeProduct, SALE, SEMI_FINISHED } from './products';
+
 export const labelDataOverview = 'Dados';
 export const nameDataOverview = '@@tabs-overview';
 
@@ -17,60 +17,23 @@ type DataProtocol = {
   parent_id: string | null;
 };
 
-type TypeDataSelect = {
+export type TypeTabNameEnableOrDisable = {
+  keyTab: string;
   name: string;
-  id: number;
+  active: boolean;
 };
 
-type TypeTrueOrFalse = {
-  name: string;
-};
-
-const data: TypeDataSelect[] = [
-  { id: 1, name: 'Materia Prima' },
-  { id: 2, name: 'Semi acabado' },
-  { id: 3, name: 'Venda' },
-  { id: 4, name: 'Revenda' },
-  { id: 5, name: 'Locação' },
-  { id: 6, name: 'Consumo' },
-];
-
-const trueOrFalse: TypeTrueOrFalse[] = [
+const dataHasVariation: TypeTabNameEnableOrDisable[] = [
   {
+    keyTab: nameHasVariation,
     name: 'Sim',
+    active: true,
   },
-  { name: 'Não' },
+  { keyTab: nameHasVariation, name: 'Não', active: false },
 ];
 
 export const DataOverview = (): JSX.Element => {
-  const [oldSelect, setOldSelect] = useState<TypeDataSelect>({
-    id: 0,
-    name: '',
-  });
-
-  const [currentSelect, setCurrentSelect] = useState<TypeDataSelect>({
-    id: 0,
-    name: 'Selecione',
-  });
-
-  const handlerChangeSelect = useCallback((value: TypeDataSelect) => {
-    setCurrentSelect(value);
-  }, []);
-
-  const handlerClickSelect = useCallback((value: TypeDataSelect) => {
-    setOldSelect(value);
-  }, []);
-
-  useEffect(() => {
-    async function load() {
-      const categoryData = await loadCategoryData();
-      setDataCategoryCost(categoryData);
-      const categoryFinance = await loadCategoryFinance();
-      setDataCategoryFinance(categoryFinance);
-    }
-    load();
-  }, []);
-
+  const { activeTab, disableTab } = useTabs();
   const [dataCategoryFinance, setDataCategoryFinance] = useState<
     DataProtocol[]
   >([]);
@@ -81,17 +44,41 @@ export const DataOverview = (): JSX.Element => {
     },
     [categoryFinance],
   );
-
   const [dataCategoryCost, setDataCategoryCost] = useState<DataProtocol[]>([]);
-  const [categoryProduct, setCategoryProduct] = useState('');
+  const [categoryProduct, setCategoryProduct] = useState<DataProtocol>();
+  const [name, setName] = useState('');
+  const [hasVariation, setHasvariation] = useState<TypeTabNameEnableOrDisable>({
+    keyTab: '',
+    name: 'Selecione',
+    active: true,
+  });
+  const [
+    hasComposition,
+    setHasComposition,
+  ] = useState<TypeTabNameEnableOrDisable>({
+    keyTab: '',
+    name: 'Selecione',
+    active: true,
+  });
+  const [selectTypeProduct, setSelectTypeProduct] = useState<TypeProduct>({
+    id: 0,
+    name: 'Selecione',
+  });
+  const [internalCode, setInternalCode] = useState('');
+
   const handlerChangeCategoryProduct = useCallback(
-    (value: any) => {
+    (value: DataProtocol) => {
       setCategoryProduct(value);
+      console.log(value.id);
+      if (selectTypeProduct.id > 0) {
+        console.log('Tipo selecionado');
+      } else {
+        console.error('NO SELECTED TYPE PRODUCT');
+      }
     },
-    [categoryProduct],
+    [categoryProduct, selectTypeProduct],
   );
 
-  const [name, setName] = useState('');
   const handlerChangeName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setName(event.currentTarget.value);
@@ -101,9 +88,51 @@ export const DataOverview = (): JSX.Element => {
     [name],
   );
 
-  const [hasVariation, setHasvariation] = useState<TypeTrueOrFalse>({
-    name: 'Selecione',
-  });
+  const handlerHasVariation = useCallback(
+    (current: TypeTabNameEnableOrDisable) => {
+      if (current.active) {
+        activeTab(current.keyTab);
+        setHasvariation(current);
+      } else {
+        disableTab(current.keyTab);
+        setHasvariation(current);
+      }
+    },
+    [hasVariation],
+  );
+
+  const handlerSelectTypeProduct = useCallback(
+    (value: TypeProduct) => {
+      setSelectTypeProduct(value);
+      if (value === SALE || value === SEMI_FINISHED) {
+        activeTab(nameHasComposition);
+        setHasComposition({
+          active: true,
+          keyTab: nameHasComposition,
+          name: 'Sim',
+        });
+      } else {
+        disableTab(nameHasComposition);
+        setHasComposition({
+          active: false,
+          keyTab: nameHasComposition,
+          name: 'Selecione',
+        });
+      }
+    },
+    [selectTypeProduct, hasComposition],
+  );
+
+  useEffect(() => {
+    async function load() {
+      const categoryData = await loadCategoryData();
+      setDataCategoryCost(categoryData);
+      console.log(categoryData);
+      const categoryFinance = await loadCategoryFinance();
+      setDataCategoryFinance(categoryFinance);
+    }
+    load();
+  }, []);
 
   return (
     <>
@@ -113,11 +142,10 @@ export const DataOverview = (): JSX.Element => {
             label="Tipo de produto"
             message="Selecione o tipo do produto"
           />
-          <Select<TypeDataSelect>
-            selectValue={currentSelect}
-            onClickSelect={handlerClickSelect}
-            onClickItem={handlerChangeSelect}
-            data={data}
+          <Select<TypeProduct>
+            selectValue={selectTypeProduct}
+            onClickItem={handlerSelectTypeProduct}
+            data={typeProducts}
           />
         </div>
         <div className="form-content col-md-3">
@@ -163,34 +191,18 @@ export const DataOverview = (): JSX.Element => {
             label="Possui variação?"
             message="Selecione o tipo do produto"
           />
-          <Select<TypeTrueOrFalse>
+          <Select<TypeTabNameEnableOrDisable>
             selectValue={hasVariation}
-            onClickSelect={() => {}}
-            onClickItem={() => {}}
-            data={trueOrFalse}
+            onClickItem={handlerHasVariation}
+            data={dataHasVariation}
           />
         </div>
         <div className="form-content col-md-3">
-          <TooltipComponent
-            label="Possui composição?"
-            message="Selecione o tipo do produto"
-          />
-          <Select<TypeTrueOrFalse>
-            selectValue={hasVariation}
-            onClickSelect={() => {}}
-            onClickItem={() => {}}
-            data={trueOrFalse}
-          />
-        </div>
-        <div className="form-content col-md-3">
-          <TooltipComponent
-            label="Código interno"
-            message="Selecione o tipo do produto"
-          />
           <input
-            onChange={handlerChangeName}
-            value={name}
+            disabled
+            value={internalCode}
             name="category"
+            type="hidden"
             className="form-control"
           />
         </div>
