@@ -1,105 +1,115 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container } from './style';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
+import { useTabs } from '../../../../../../../../hooks/tabs';
+import { makeTabsFiscal } from './tabs';
+import {
+  TabHeaderContainerFiscal,
+  TabNameFiscal,
+  TabPanelContainerFiscal,
+} from './style';
+
 export const labelFiscal = 'Fiscal';
 export const nameFiscal = '@@tabs-fiscal';
 
+export type TypeContentTabsFiscal = {
+  name: string;
+  label: string;
+  isEnable?: boolean;
+  Component: JSX.Element;
+};
+
 export const Fiscal = (): JSX.Element => {
+  const { loadTabs, addTab } = useTabs();
+  const tabs = makeTabsFiscal();
+
+  useEffect(() => {
+    tabs.map(tab => addTab(tab));
+  }, []);
+
+  const allTabsData = loadTabs();
+
+  const [currentTab, setCurrentTab] = useState(tabs[0].name);
+
   return (
     <>
       <Container className="row">
-        <div className="form-content col-md-4">
+        <div className="form-content col-md-6">
           <TooltipComponent label="NCM" message="Infome o peso em kg" />
           <input
             className="form-control"
             type="text"
-            placeholder="Digíte um código ou descrição NCM"
+            placeholder="Digíte o código"
           />
         </div>
-        <div className="form-content col-md-4">
+        <div className="form-content col-md-6">
           <TooltipComponent
-            label="CEST"
+            label="CFOP"
             message="Digíte um código ou descrição CEST"
           />
           <input
             className="form-control"
             type="text"
-            placeholder="Digíte um código ou descrição CEST"
+            placeholder="Digíte o código"
           />
-        </div>
-        <div className="form-content col-md-4">
-          <TooltipComponent
-            label="Origem"
-            message="Informe a altura em metros"
-          />
-          <input className="form-control" type="text" />
         </div>
       </Container>
       <Container className="row">
-        <div className="form-content col-md-3">
-          <TooltipComponent
-            label="Peso líquido"
-            message="Infome o peso em kg"
-          />
-          <input className="form-control" type="text" />
+        <div className="form-content col-md-12">
+          <TabHeaderContainerFiscal>
+            {allTabsData.map(
+              ({ label, name, isEnable }, index) =>
+                isEnable && (
+                  <TabNameFiscal
+                    key={index}
+                    onClick={() => setCurrentTab(name)}
+                    isActive={name === currentTab}
+                  >
+                    {label}
+                  </TabNameFiscal>
+                ),
+            )}
+          </TabHeaderContainerFiscal>
+          <TabPanelContainerFiscal>
+            <hr />
+            {allTabsData.map(({ Component, name }, index) => {
+              if (name === currentTab) {
+                return <div key={index}>{Component}</div>;
+              } else {
+                return null;
+              }
+            })}
+            <hr />
+          </TabPanelContainerFiscal>
         </div>
-        <div className="form-content col-md-3">
-          <TooltipComponent
-            label="Peso bruto"
-            message="Informe a largura em metros"
-          />
-          <input className="form-control" type="text" />
-        </div>
-        <div className="form-content col-md-3">
-          <TooltipComponent
-            label="Número FCI"
-            message="Informe a altura em metros"
-          />
-          <input className="form-control" type="text" />
-        </div>
-        <div className="form-content col-md-3">
-          <TooltipComponent
-            label="% Vr. aprox. tribut."
-            message="Informe a comprimento em metros"
-          />
-          <input className="form-control" type="text" />
-        </div>
-      </Container>
-      <Container>
-        <hr />
-        <div className="name-fisco">
-          <h4>PIS / COFINS</h4>
-        </div>
-        <div className="row">
-          <div className="form-content col-md-3">
-            <TooltipComponent
-              label="Valor fixo PIS"
-              message="Infome o peso em kg"
-            />
-            <input className="form-control" type="text" />
-          </div>
-          <div className="form-content col-md-3">
-            <TooltipComponent
-              label="Valor fixo PIS ST"
-              message="Informe a largura em metros"
-            />
-            <input className="form-control" type="text" />
-          </div>
-          <div className="form-content col-md-3">
-            <TooltipComponent
-              label="Valor fixo COFINS"
-              message="Informe a altura em metros"
-            />
-            <input className="form-control" type="text" />
-          </div>
-          <div className="form-content col-md-3">
-            <TooltipComponent
-              label="Valor fixo COFINS ST"
-              message="Informe a altura em metros"
-            />
-            <input className="form-control" type="text" />
-          </div>
-        </div>
+
+        {/*
+        <TabHeaderContainerFiscal>
+          {allTabsData.map(
+            ({ label, name, isEnable }, index) =>
+              isEnable && (
+                <TabNameFiscal
+                  key={index}
+                  onClick={() => setCurrentTab(name)}
+                  isActive={name === currentTab}
+                >
+                  {label}
+                </TabNameFiscal>
+              ),
+          )}
+        </TabHeaderContainerFiscal>
+        <TabPanelContainerFiscal>
+          <hr />
+          {allTabsData.map(({ Component, name }, index) => {
+            if (name === currentTab) {
+              return <div key={index}>{Component}</div>;
+            } else {
+              return null;
+            }
+          })}
+          <hr />
+        </TabPanelContainerFiscal>
+        */}
       </Container>
     </>
   );
