@@ -138,7 +138,7 @@ const DinamicInputs = ({
           <div key={Math.random()} className="row">
             <div className="form-content col-md-3">
               <label htmlFor="form">Atributo</label>
-              <Select<DataProtocol>
+              {/* <Select<DataProtocol>
                 onClickItem={current => {
                   handlerClickRowParent(current, index);
                 }}
@@ -158,7 +158,7 @@ const DinamicInputs = ({
                   handlerClickRowChildren(current, index);
                 }}
                 search
-              />
+              /> */}
             </div>
             <div className="form-content col-md-1">
               <Wrapper>

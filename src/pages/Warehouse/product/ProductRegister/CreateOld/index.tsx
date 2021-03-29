@@ -33,7 +33,9 @@ const ProductAtributesCreate = (): JSX.Element => {
     message: '',
   });
   const [name, setName] = useState('');
+
   const [categoryFinance, setCategoryFinance] = useState('');
+
   const [categoryProduct, setCategoryProduct] = useState('');
   const [currentValue, setCurrentValue] = useState('Selecione');
   const [oldValueSelect, setOldValueSelect] = useState('');
@@ -217,12 +219,12 @@ const ProductAtributesCreate = (): JSX.Element => {
               <div className="form-content col-md-3">
                 <Wrapper>
                   <label htmlFor="form">Tipo de produto</label>
-                  <Select<TypeDataSelect>
+                  {/* <Select<TypeDataSelect>
                     selectValue={currentValue}
                     onClickSelect={onChangeSelect}
                     onClickItem={onChangeSelectItem}
                     data={data}
-                  />
+                  /> */}
                 </Wrapper>
               </div>
             </div>
