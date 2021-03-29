@@ -94,6 +94,7 @@ export const DropdownInput = <
             renderDataSearch().map(({ name, parent_id, id }) =>
               parent_id === null ? (
                 <div
+                  key={Math.random()}
                   style={{ cursor: isParent(id) ? 'pointer' : 'default' }}
                   onClick={() => {
                     if (isParent(id)) {
@@ -105,7 +106,7 @@ export const DropdownInput = <
                 </div>
               ) : (
                 <>
-                  <ul>
+                  <ul key={Math.random()}>
                     <li
                       onClick={() => {
                         handleClickRow(name);
