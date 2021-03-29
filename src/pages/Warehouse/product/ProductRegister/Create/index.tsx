@@ -4,6 +4,7 @@ import { breadcrumbCreate } from '../domain/breadcrumb';
 import { nameActions, namePageTitle } from '../domain/info';
 import { toolsCreate } from '../domain/tools/create';
 import { Content } from './components/Content';
+import { TabsProvider } from '../../../../../hooks/tabs';
 
 const Create = (): JSX.Element => {
   return (
@@ -11,7 +12,11 @@ const Create = (): JSX.Element => {
       style={{
         margin: '0 -10px',
       }}
-      Content={() => <Content />}
+      Content={() => (
+        <TabsProvider>
+          <Content />
+        </TabsProvider>
+      )}
       pageTitle={namePageTitle}
       portletTitle={nameActions.create.name}
       breadcrumb={breadcrumbCreate}
