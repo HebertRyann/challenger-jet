@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FooterCreateProduct } from '../footer';
 import { HeaderCreateProduct } from '../Header';
+import { TypeTabNameEnableOrDisable } from '../Tabs/DataOverview';
 import {
   Container,
   ContentItem,
@@ -8,16 +9,26 @@ import {
   TabName,
   TabPanelContainer,
 } from './styles';
-
-import { tabs } from './tables';
+import { useTabs } from '../../../../../../../hooks/tabs';
+import { makeTabs } from './tabs';
 
 export type TypeContentTabs = {
   name: string;
   label: string;
-  Component: () => JSX.Element;
+  isEnable?: boolean;
+  Component: JSX.Element;
 };
 
 export const Content = (): JSX.Element => {
+  const { loadTabs, addTab } = useTabs();
+  const tabs = makeTabs();
+
+  useEffect(() => {
+    tabs.map(tab => addTab(tab));
+  }, []);
+
+  const allTabsData = loadTabs();
+
   const [currentTab, setCurrentTab] = useState(tabs[0].name);
 
   return (
@@ -27,50 +38,34 @@ export const Content = (): JSX.Element => {
         <ContentItem>
           <div>
             <TabHeaderContainer>
-              {tabs.map((tab, index) => (
-                <TabName
-                  key={index}
-                  onClick={() => setCurrentTab(tab.name)}
-                  isActive={tab.name === currentTab}
-                >
-                  {tab.label}
-                </TabName>
-              ))}
+              {allTabsData.map(
+                ({ label, name, isEnable }, index) =>
+                  isEnable && (
+                    <TabName
+                      key={index}
+                      onClick={() => setCurrentTab(name)}
+                      isActive={name === currentTab}
+                    >
+                      {label}
+                    </TabName>
+                  ),
+              )}
             </TabHeaderContainer>
             <TabPanelContainer>
-              <hr style={{ marginBottom: '20px' }} />
-              {tabs.map(({ Component, name }, index) => {
+              <hr />
+              {allTabsData.map(({ Component, name }, index) => {
                 if (name === currentTab) {
-                  return (
-                    <div key={index}>
-                      <Component />
-                    </div>
-                  );
+                  return <div key={index}>{Component}</div>;
                 } else {
                   return null;
                 }
               })}
-              <hr style={{ marginBottom: '20px' }} />
+              <hr />
               <FooterCreateProduct />
             </TabPanelContainer>
           </div>
           <footer>
-            <button className="btn dark btn-sm sbold uppercase">
-              <span
-                className="fa fa-check"
-                aria-hidden="true"
-                style={{ marginRight: '5px' }}
-              />
-              Cadastrar
-            </button>
-            <button className="btn btn-sm sbold uppercase">
-              <span
-                className="fa fa-remove"
-                aria-hidden="true"
-                style={{ marginRight: '5px' }}
-              />
-              Cancelar
-            </button>
+            <button className="btn dark btn-sm sbold uppercase">salvar</button>
           </footer>
         </ContentItem>
       </Container>
