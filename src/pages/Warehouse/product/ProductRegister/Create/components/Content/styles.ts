@@ -13,10 +13,9 @@ export const ContentItem = styled.div`
   margin-top: 40px;
   > footer {
     margin-top: 20px;
-
-    & button + button {
-      margin-left: 10px;
-    }
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
   }
 `;
 
@@ -44,4 +43,8 @@ export const TabHeaderContainer = styled.div`
 export const TabPanelContainer = styled.div`
   border: 1px solid #e3e3e3;
   padding: 20px;
+
+  hr {
+    margin-bottom: 20px;
+  }
 `;
