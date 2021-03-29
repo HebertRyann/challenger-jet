@@ -82,34 +82,6 @@ export const Fiscal = (): JSX.Element => {
             <hr />
           </TabPanelContainerFiscal>
         </div>
-
-        {/*
-        <TabHeaderContainerFiscal>
-          {allTabsData.map(
-            ({ label, name, isEnable }, index) =>
-              isEnable && (
-                <TabNameFiscal
-                  key={index}
-                  onClick={() => setCurrentTab(name)}
-                  isActive={name === currentTab}
-                >
-                  {label}
-                </TabNameFiscal>
-              ),
-          )}
-        </TabHeaderContainerFiscal>
-        <TabPanelContainerFiscal>
-          <hr />
-          {allTabsData.map(({ Component, name }, index) => {
-            if (name === currentTab) {
-              return <div key={index}>{Component}</div>;
-            } else {
-              return null;
-            }
-          })}
-          <hr />
-        </TabPanelContainerFiscal>
-        */}
       </Container>
     </>
   );
