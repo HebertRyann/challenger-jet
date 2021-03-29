@@ -23,6 +23,8 @@ import {
   nameHasComposition,
 } from '../Tabs/HasComposition';
 
+import { TabsProvider } from '../../../../../../../hooks/tabs';
+
 export const makeTabs = (): TypeContentTabs[] => [
   {
     label: labelDataOverview,
@@ -40,7 +42,11 @@ export const makeTabs = (): TypeContentTabs[] => [
     label: labelFiscal,
     name: labelFiscal,
     isEnable: true,
-    Component: <Fiscal />,
+    Component: (
+      <TabsProvider>
+        <Fiscal />
+      </TabsProvider>
+    ),
   },
   {
     label: labelHasVariation,
