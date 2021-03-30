@@ -39,20 +39,20 @@ export const makeTabs = (): TypeContentTabs[] => [
     Component: <Details />,
   },
   {
+    label: labelHasVariation,
+    name: nameHasVariation,
+    isEnable: false,
+    Component: <HasVariation />,
+  },
+  {
     label: labelFiscal,
     name: labelFiscal,
-    isEnable: true,
+    isEnable: false,
     Component: (
       <TabsProvider>
         <Fiscal />
       </TabsProvider>
     ),
-  },
-  {
-    label: labelHasVariation,
-    name: nameHasVariation,
-    isEnable: false,
-    Component: <HasVariation />,
   },
   {
     label: labelHasComposition,
