@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Container } from './styles';
 import {
   loadAtributes,
+  loadUnitMensured,
   ResponseEntiryWithIdNameWithChildren,
 } from '../../../services/api';
 import { Table } from './component/Table';
@@ -11,8 +12,16 @@ export const HasVariation = (): JSX.Element => {
     ResponseEntiryWithIdNameWithChildren[]
   >([]);
 
+  const [unitMensured, setUnitMensured] = useState<
+    {
+      id: string;
+      name: string;
+    }[]
+  >([]);
+
   useEffect(() => {
     async function load() {
+      const unitMensured = await loadUnitMensured();
       const resultData = await loadAtributes();
       const resultList: ResponseEntiryWithIdNameWithChildren[] = resultData.filter(
         ({ parent_id }) => parent_id === null,
@@ -22,6 +31,7 @@ export const HasVariation = (): JSX.Element => {
           ({ parent_id }) => parent_id === id,
         );
       });
+      setUnitMensured(unitMensured);
       setAtributesList(resultList);
     }
     load();
@@ -56,6 +66,7 @@ export const HasVariation = (): JSX.Element => {
       </Container>
       <div className="row">
         <Table
+          unitMensured={unitMensured}
           dataRenderTable={atributesList.filter(({ isChecked }) => isChecked)}
         />
       </div>
