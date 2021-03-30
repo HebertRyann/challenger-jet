@@ -2,10 +2,21 @@ import React from 'react';
 
 import { Container } from './styles';
 
-export const FooterCreateProduct = (): JSX.Element => {
+type TypeFooterCreateProduct = {
+  onClickButtonBack?: (params: any) => any;
+  onClickButtonNext?: (params: any) => any;
+};
+
+export const FooterCreateProduct = ({
+  onClickButtonBack,
+  onClickButtonNext,
+}: TypeFooterCreateProduct): JSX.Element => {
   return (
     <Container>
-      <button className="btn disabled dark btn-sm sbold uppercase">
+      <button
+        onClick={onClickButtonBack}
+        className="btn disabled dark btn-sm sbold uppercase"
+      >
         <span
           className="fa fa-arrow-left"
           aria-hidden="true"
@@ -13,7 +24,10 @@ export const FooterCreateProduct = (): JSX.Element => {
         />
         Voltar
       </button>
-      <button className="btn dark btn-sm sbold uppercase">
+      <button
+        onClick={onClickButtonNext}
+        className="btn dark btn-sm sbold uppercase"
+      >
         Continuar
         <span
           className="fa fa-arrow-right"
