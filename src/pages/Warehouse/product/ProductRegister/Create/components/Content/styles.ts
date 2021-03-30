@@ -48,3 +48,12 @@ export const TabPanelContainer = styled.div`
     margin: 10px 0;
   }
 `;
+
+export const RenderComponent = styled.div<{ isActive: boolean }>`
+  display: none;
+  ${({ isActive }) =>
+    isActive &&
+    css`
+      display: block;
+    `};
+`;
