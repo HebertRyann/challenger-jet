@@ -45,6 +45,6 @@ export const TabPanelContainer = styled.div`
   padding: 20px;
 
   hr {
-    margin-bottom: 20px;
+    margin: 10px 0;
   }
 `;
