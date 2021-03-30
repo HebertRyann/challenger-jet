@@ -3,8 +3,14 @@ import { Container, IconRemove } from './style';
 import { Select } from '../../../../../../../../../../components/Select';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../../../services/api';
 
+type TypeUnitMensured = {
+  id: string;
+  name: string;
+};
+
 type TypeTableProps = {
   dataRenderTable: ResponseEntiryWithIdNameWithChildren[];
+  unitMensured: TypeUnitMensured[];
 };
 
 type TypeVariation = {
@@ -14,6 +20,7 @@ type TypeVariation = {
 
 export const Table = ({
   dataRenderTable,
+  unitMensured,
 }: TypeTableProps): JSX.Element | null => {
   const [variations, setVariations] = useState<TypeVariation[]>([
     { isEnable: true, key: Math.random() },
@@ -31,18 +38,17 @@ export const Table = ({
           variations[index].isEnable = false;
         }
       });
-      console.log(variations);
       setVariations([...variations]);
     },
     [variations],
   );
 
-
-  return dataRenderTable.length > 0 ? (
+  return (
     <Container className="table-responsive">
       <table className="table table-bordered margin-bottom-0">
         <tbody>
           <tr>
+            <th>Unidade de medidas</th>
             {dataRenderTable.map(
               ({ name, parent_id }) => parent_id === null && <th>{name}</th>,
             )}
@@ -53,28 +59,36 @@ export const Table = ({
             .filter(({ isEnable }) => isEnable)
             .map(({ key, isEnable }, index) => (
               <tr>
+                <td>
+                  <select
+                    className="form-control"
+                    name="Selecione"
+                    id="Selecione"
+                    defaultValue="Selecione"
+                  >
+                    <option value="litro">litro</option>
+                    <option value="grama">grama</option>
+                    <option value="quilo">quilo</option>
+                  </select>
+                </td>
                 {dataRenderTable.map(
                   ({ parent_id, childrenList }, index) =>
                     parent_id === null && (
                       <td key={index}>
-                        <Select<ResponseEntiryWithIdNameWithChildren>
-                          selectValue={{
-                            id: '',
-                            name: 'Selecione',
-                            parent_id: null,
-                            childrenList: [],
-                          }}
-                          data={childrenList}
-                        />
+                        <select
+                          className="form-control"
+                          name="Selecione"
+                          id="Selecione"
+                        >
+                          {childrenList.map(({ name }) => (
+                            <option value={name}>{name}</option>
+                          ))}
+                        </select>
                       </td>
                     ),
                 )}
                 <td>
-                  <input
-                    defaultValue={key}
-                    className="form-control"
-                    type="text"
-                  />
+                  <input className="form-control" type="text" />
                 </td>
                 <td className="actions">
                   <IconRemove
@@ -95,11 +109,9 @@ export const Table = ({
             aria-hidden="true"
             style={{ marginRight: '5px' }}
           />
-          Inserir nova variação
+          variação
         </button>
       </footer>
     </Container>
-  ) : (
-    <div></div>
   );
 };
