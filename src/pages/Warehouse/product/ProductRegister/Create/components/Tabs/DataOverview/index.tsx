@@ -1,12 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { Container } from './style';
 import { DropdownInput } from '../../../../../../../../components/DropdownInput';
 import { loadCategoryFinance, loadCategoryData } from '../../../services/api';
 import { Select } from '../../../../../../../../components/Select';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
 import { nameHasVariation } from '../HasVariation';
+import { nameFiscal } from '../Fiscal';
 import { useTabs } from '../../../../../../../../hooks/tabs';
 import { nameHasComposition } from '../HasComposition';
-import { typeProducts, TypeProduct, SALE, SEMI_FINISHED } from './products';
+import {
+  typeProducts,
+  TypeProduct,
+  SALE,
+  SEMI_FINISHED,
+  RE_SALE,
+} from './products';
+import { nameStock } from '../Stock';
+import { FooterCreateProduct } from '../../footer';
 
 export const labelDataOverview = 'Dados';
 export const nameDataOverview = '@@tabs-overview';
@@ -67,17 +77,14 @@ export const DataOverview = (): JSX.Element => {
   const [internalCode, setInternalCode] = useState('');
 
   const handlerChangeCategoryProduct = useCallback(
-    (value: DataProtocol) => {
-      setCategoryProduct(value);
-      console.log(value.id);
-      if (selectTypeProduct.id > 0) {
-        console.log('Tipo selecionado');
-      } else {
-        console.error('NO SELECTED TYPE PRODUCT');
-      }
-    },
+    (value: DataProtocol) => {},
     [categoryProduct, selectTypeProduct],
   );
+
+  useEffect(() => {
+    console.log('UPDATE SELECTED');
+    console.log(selectTypeProduct);
+  }, [selectTypeProduct]);
 
   const handlerChangeName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,7 +100,9 @@ export const DataOverview = (): JSX.Element => {
       if (current.active) {
         activeTab(current.keyTab);
         setHasvariation(current);
+        disableTab(nameStock);
       } else {
+        activeTab(nameStock);
         disableTab(current.keyTab);
         setHasvariation(current);
       }
@@ -104,34 +113,39 @@ export const DataOverview = (): JSX.Element => {
   const handlerSelectTypeProduct = useCallback(
     (value: TypeProduct) => {
       setSelectTypeProduct(value);
-      if (value === SALE || value === SEMI_FINISHED) {
+      if (value === SALE) {
         activeTab(nameHasComposition);
-        setHasComposition({
-          active: true,
-          keyTab: nameHasComposition,
-          name: 'Sim',
-        });
-      } else {
-        disableTab(nameHasComposition);
-        setHasComposition({
-          active: false,
-          keyTab: nameHasComposition,
-          name: 'Selecione',
-        });
+        activeTab(nameFiscal);
+        return;
       }
+      if (value === RE_SALE) {
+        activeTab(nameFiscal);
+        disableTab(nameHasComposition);
+        return;
+      }
+      if (value === SEMI_FINISHED) {
+        activeTab(nameHasComposition);
+        disableTab(nameFiscal);
+        return;
+      }
+      disableTab(nameHasComposition);
+      disableTab(nameFiscal);
     },
-    [selectTypeProduct, hasComposition],
+    [selectTypeProduct],
   );
 
   useEffect(() => {
     async function load() {
       const categoryData = await loadCategoryData();
       setDataCategoryCost(categoryData);
-      console.log(categoryData);
       const categoryFinance = await loadCategoryFinance();
       setDataCategoryFinance(categoryFinance);
     }
     load();
+  }, []);
+
+  const handlerClickNextAba = useCallback(() => {
+    console.log('Validar');
   }, []);
 
   return (
@@ -185,7 +199,7 @@ export const DataOverview = (): JSX.Element => {
           />
         </div>
       </div>
-      <div className="row">
+      <Container className="row">
         <div className="form-content col-md-3">
           <TooltipComponent
             label="Possui variação?"
@@ -206,7 +220,9 @@ export const DataOverview = (): JSX.Element => {
             className="form-control"
           />
         </div>
-      </div>
+      </Container>
+      <hr />
+      <FooterCreateProduct onClickButtonNext={handlerClickNextAba} />
     </>
   );
 };
