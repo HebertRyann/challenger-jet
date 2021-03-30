@@ -5,6 +5,7 @@ import { TypeTabNameEnableOrDisable } from '../Tabs/DataOverview';
 import {
   Container,
   ContentItem,
+  RenderComponent,
   TabHeaderContainer,
   TabName,
   TabPanelContainer,
@@ -36,34 +37,28 @@ export const Content = (): JSX.Element => {
       <HeaderCreateProduct />
       <Container>
         <ContentItem>
-          <div>
-            <TabHeaderContainer>
-              {allTabsData.map(
-                ({ label, name, isEnable }, index) =>
-                  isEnable && (
-                    <TabName
-                      key={index}
-                      onClick={() => setCurrentTab(name)}
-                      isActive={name === currentTab}
-                    >
-                      {label}
-                    </TabName>
-                  ),
-              )}
-            </TabHeaderContainer>
-            <TabPanelContainer>
-              <hr />
-              {allTabsData.map(({ Component, name }, index) => {
-                if (name === currentTab) {
-                  return <div key={index}>{Component}</div>;
-                } else {
-                  return null;
-                }
-              })}
-              <hr />
-              <FooterCreateProduct />
-            </TabPanelContainer>
-          </div>
+          <TabHeaderContainer>
+            {allTabsData.map(
+              ({ label, name, isEnable }, index) =>
+                isEnable && (
+                  <TabName
+                    key={index}
+                    onClick={() => setCurrentTab(name)}
+                    isActive={name === currentTab}
+                  >
+                    {label}
+                  </TabName>
+                ),
+            )}
+          </TabHeaderContainer>
+          <TabPanelContainer>
+            <hr />
+            {allTabsData.map(({ Component, name }, index) => (
+              <RenderComponent isActive={name === currentTab}>
+                {Component}
+              </RenderComponent>
+            ))}
+          </TabPanelContainer>
           <footer>
             <button className="btn dark btn-sm sbold uppercase">salvar</button>
           </footer>
