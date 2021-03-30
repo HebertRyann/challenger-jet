@@ -3,7 +3,7 @@ import { MdArrowDropDown, MdSearch } from 'react-icons/md';
 
 export const Container = styled.div<{ isActive: boolean; disable: boolean }>`
   position: relative;
-  margin: 0 0 20px 0;
+  margin: 0;
   text-transform: uppercase;
   cursor: pointer;
   ${({ disable }) =>
