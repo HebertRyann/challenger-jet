@@ -71,3 +71,13 @@ export const loadAtributes = async (): Promise<
   }
   return [];
 };
+
+export const loadUnitMensured = async (): Promise<
+  { id: string; name: string }[]
+> => {
+  const { data, status } = await api.get<{ id: string; name: string }[]>(
+    '/productUnitMeasured',
+  );
+  if (status === 200) return data;
+  return [];
+};
