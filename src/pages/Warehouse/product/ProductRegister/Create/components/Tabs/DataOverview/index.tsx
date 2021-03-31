@@ -8,6 +8,7 @@ import { nameHasVariation } from '../HasVariation';
 import { nameFiscal } from '../Fiscal';
 import { useTabs } from '../../../../../../../../hooks/tabs';
 import { nameHasComposition } from '../HasComposition';
+import { namePriceComposition } from '../PriceComposition';
 import { NewInput } from '../../../../../../../../components/NewInput';
 import {
   typeProducts,
@@ -140,20 +141,24 @@ export const DataOverview = (): JSX.Element => {
       if (value.id === SALE.id) {
         activeTab(nameHasComposition);
         activeTab(nameFiscal);
+        activeTab(namePriceComposition);
         return;
       }
       if (value.id === RE_SALE.id) {
         activeTab(nameFiscal);
         disableTab(nameHasComposition);
+        activeTab(namePriceComposition);
         return;
       }
       if (value.id === SEMI_FINISHED.id) {
         activeTab(nameHasComposition);
         disableTab(nameFiscal);
+        disableTab(namePriceComposition);
         return;
       }
       disableTab(nameHasComposition);
       disableTab(nameFiscal);
+      disableTab(namePriceComposition);
     },
     [selectTypeProduct],
   );

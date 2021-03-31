@@ -25,6 +25,12 @@ import {
 
 import { Stock, labelStock, nameStock } from '../Tabs/Stock';
 
+import {
+  PriceComposition,
+  labelPriceComposition,
+  namePriceComposition,
+} from '../Tabs/PriceComposition';
+
 import { TabsProvider } from '../../../../../../../hooks/tabs';
 
 export const makeTabs = (): TypeContentTabs[] => [
@@ -51,6 +57,12 @@ export const makeTabs = (): TypeContentTabs[] => [
     name: nameHasVariation,
     isEnable: false,
     Component: <HasVariation />,
+  },
+  {
+    label: labelPriceComposition,
+    name: namePriceComposition,
+    isEnable: false,
+    Component: <PriceComposition />,
   },
   {
     label: labelFiscal,
