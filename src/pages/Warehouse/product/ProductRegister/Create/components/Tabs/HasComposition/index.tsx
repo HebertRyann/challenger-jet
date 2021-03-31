@@ -1,10 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Container } from './styles';
-import {
-  loadAtributes,
-  ResponseEntiryWithIdNameWithChildren,
-} from '../../../services/api';
+import React, { useState } from 'react';
+import { ResponseEntiryWithIdNameWithChildren } from '../../../services/api';
 import { Table } from './Table';
+import { FooterCreateProduct } from '../../footer';
+import { SaveFooter } from '../../footer/saveFooter';
 
 export const HasComposition = (): JSX.Element => {
   const [atributesList, setAtributesList] = useState<
@@ -14,6 +12,12 @@ export const HasComposition = (): JSX.Element => {
   return (
     <div className="row">
       <Table />
+      <div>
+        <hr />
+        <FooterCreateProduct onClickButtonNext={() => {}} />
+        <hr />
+        <SaveFooter onSave={() => {}} />
+      </div>
     </div>
   );
 };

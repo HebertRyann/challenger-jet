@@ -6,6 +6,8 @@ import {
   ResponseEntiryWithIdNameWithChildren,
 } from '../../../services/api';
 import { Table } from './component/Table';
+import { FooterCreateProduct } from '../../footer';
+import { SaveFooter } from '../../footer/saveFooter';
 
 export const HasVariation = (): JSX.Element => {
   const [atributesList, setAtributesList] = useState<
@@ -69,6 +71,12 @@ export const HasVariation = (): JSX.Element => {
           unitMensured={unitMensured}
           dataRenderTable={atributesList.filter(({ isChecked }) => isChecked)}
         />
+      </div>
+      <div style={{ padding: '0 20px' }}>
+        <hr />
+        <FooterCreateProduct onClickButtonNext={() => {}} />
+        <hr />
+        <SaveFooter onSave={() => {}} />
       </div>
     </>
   );

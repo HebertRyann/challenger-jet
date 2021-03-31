@@ -8,6 +8,8 @@ import {
   TabNameFiscal,
   TabPanelContainerFiscal,
 } from './style';
+import { FooterCreateProduct } from '../../footer';
+import { SaveFooter } from '../../footer/saveFooter';
 
 export const labelFiscal = 'Fiscal';
 export const nameFiscal = '@@tabs-fiscal';
@@ -83,6 +85,12 @@ export const Fiscal = (): JSX.Element => {
           </TabPanelContainerFiscal>
         </div>
       </Container>
+      <div >
+        <hr />
+        <FooterCreateProduct onClickButtonNext={() => {}} />
+        <hr />
+        <SaveFooter onSave={() => {}} />
+      </div>
     </>
   );
 };

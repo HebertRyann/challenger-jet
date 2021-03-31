@@ -1,5 +1,7 @@
 import React from 'react';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
+import { FooterCreateProduct } from '../../footer';
+import { SaveFooter } from '../../footer/saveFooter';
 import { Container } from './style';
 
 export const labelDetails = 'Detalhes';
@@ -10,10 +12,7 @@ export const Details = (): JSX.Element => {
     <Container>
       <div className="row">
         <div className="form-content col-md-3">
-          <TooltipComponent
-            label="Peso (kg)"
-            message="Infome o peso em kg"
-          />
+          <TooltipComponent label="Peso (kg)" message="Infome o peso em kg" />
           <input className="form-control" type="text" placeholder="0,00" />
         </div>
         <div className="form-content col-md-3">
@@ -62,6 +61,10 @@ export const Details = (): JSX.Element => {
           </div>
         </div>
       </div>
+      <hr />
+      <FooterCreateProduct onClickButtonNext={() => {}} />
+      <hr />
+      <SaveFooter onSave={() => {}} />
     </Container>
   );
 };

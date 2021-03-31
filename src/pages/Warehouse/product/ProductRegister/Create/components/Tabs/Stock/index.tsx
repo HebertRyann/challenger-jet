@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Container } from './styles';
 import {
   loadAtributes,
   loadUnitMensured,
   ResponseEntiryWithIdNameWithChildren,
 } from '../../../services/api';
 import { Table } from './component/Table';
+import { FooterCreateProduct } from '../../footer';
+import { SaveFooter } from '../../footer/saveFooter';
 
 export const Stock = (): JSX.Element => {
   const [atributesList, setAtributesList] = useState<
@@ -51,6 +52,12 @@ export const Stock = (): JSX.Element => {
         unitMensured={unitMensured}
         dataRenderTable={atributesList.filter(({ isChecked }) => isChecked)}
       />
+      <div style={{ padding: '0 20px' }}>
+        <hr />
+        <FooterCreateProduct onClickButtonNext={() => {}} />
+        <hr />
+        <SaveFooter onSave={() => {}} />
+      </div>
     </div>
   );
 };
