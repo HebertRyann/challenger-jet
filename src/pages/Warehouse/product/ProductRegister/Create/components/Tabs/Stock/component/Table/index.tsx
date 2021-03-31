@@ -1,16 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Container, IconRemove } from './style';
-import { Select } from '../../../../../../../../../../components/Select';
-import { ResponseEntiryWithIdNameWithChildren } from '../../../../../services/api';
+import React, { useEffect, useState } from 'react';
+import { Container } from './style';
+import { ResponseEntityOnlyIdAndName } from '../../../../../services/api';
+import { loadUnitMensured } from '../../../../../services/api';
 
 type TypeUnitMensured = {
   id: string;
   name: string;
-};
-
-type TypeTableProps = {
-  dataRenderTable: ResponseEntiryWithIdNameWithChildren[];
-  unitMensured: TypeUnitMensured[];
 };
 
 type TypeVariation = {
@@ -18,30 +13,39 @@ type TypeVariation = {
   isEnable: boolean;
 };
 
-export const Table = ({
-  dataRenderTable,
-  unitMensured,
-}: TypeTableProps): JSX.Element | null => {
+export const Table = (): JSX.Element => {
   const [variations, setVariations] = useState<TypeVariation[]>([
     { isEnable: true, key: Math.random() },
   ]);
 
-  const handlerAddNewVariation = useCallback(() => {
-    variations.push({ isEnable: true, key: Math.random() });
-    setVariations([...variations]);
-  }, [variations]);
+  const [unitMensureds, setUnitMensured] = useState<
+    ResponseEntityOnlyIdAndName[]
+  >([]);
 
-  const handleRemoveVariation = useCallback(
-    (keyVariation: TypeVariation) => {
-      variations.map(({ key }, index) => {
-        if (key === keyVariation.key) {
-          variations[index].isEnable = false;
-        }
-      });
-      setVariations([...variations]);
-    },
-    [variations],
-  );
+  // const handlerAddNewVariation = useCallback(() => {
+  //   variations.push({ isEnable: true, key: Math.random() });
+  //   setVariations([...variations]);
+  // }, [variations]);
+
+  // const handleRemoveVariation = useCallback(
+  //   (keyVariation: TypeVariation) => {
+  //     variations.map(({ key }, index) => {
+  //       if (key === keyVariation.key) {
+  //         variations[index].isEnable = false;
+  //       }
+  //     });
+  //     setVariations([...variations]);
+  //   },
+  //   [variations],
+  // );
+
+  useEffect(() => {
+    async function load() {
+      const result = await loadUnitMensured();
+      setUnitMensured(result);
+    }
+    load();
+  }, []);
 
   return (
     <Container className="table-responsive">
@@ -50,7 +54,7 @@ export const Table = ({
           <tr>
             <th>Unidade de medidas</th>
             <th>Estoque atual</th>
-            <th>Ações</th>
+            {/* <th>Ações</th> */}
           </tr>
           {variations
             .filter(({ isEnable }) => isEnable)
@@ -66,19 +70,22 @@ export const Table = ({
                     <option className="disabled" disabled selected>
                       Selecione
                     </option>
-                    <option value="litro">litro</option>
-                    <option value="grama">grama</option>
-                    <option value="quilo">quilo</option>
+                    {unitMensureds.map(
+                      ({ id, name }) => (
+                        <option value={`${id}+${name}`}>{name}</option>
+                      ),
+                      [],
+                    )}
                   </select>
                 </td>
                 <td>
                   <input className="form-control" type="text" />
                 </td>
-                <td className="actions">
+                {/* <td className="actions">
                   <IconRemove
                     onClick={() => handleRemoveVariation({ key, isEnable })}
                   />
-                </td>
+                </td> */}
               </tr>
             ))}
         </tbody>
