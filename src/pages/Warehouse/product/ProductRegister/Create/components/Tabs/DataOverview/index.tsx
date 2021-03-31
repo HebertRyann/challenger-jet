@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Container, Select } from './style';
+import { Container } from './style';
 import { DropdownInput } from '../../../../../../../../components/DropdownInput';
 import { loadCategoryFinance, loadCategoryData } from '../../../services/api';
-// import { Select } from '../../../../../../../../components/Select';
+import { SaveFooter } from '../../footer/saveFooter';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
 import { nameHasVariation } from '../HasVariation';
 import { nameFiscal } from '../Fiscal';
 import { useTabs } from '../../../../../../../../hooks/tabs';
 import { nameHasComposition } from '../HasComposition';
+import { NewInput } from '../../../../../../../../components/NewInput';
 import {
   typeProducts,
   TypeProduct,
@@ -21,6 +22,7 @@ import {
   NewSelect,
   TypeErrorSelect,
 } from '../../../../../../../../components/NewSelect';
+import { nameDetails } from '../Details';
 
 type DataProtocol = {
   id: string;
@@ -38,7 +40,7 @@ const dataHasVariation: TypeTabNameEnableOrDisable[] = [
   {
     keyTab: nameHasVariation,
     name: 'Sim',
-    active: true,
+    active: false,
   },
   { keyTab: nameHasVariation, name: 'Não', active: false },
 ];
@@ -60,9 +62,20 @@ export const DataOverview = (): JSX.Element => {
     },
     [categoryFinance, errorCategoryFinance],
   );
-  const [dataCategoryCost, setDataCategoryCost] = useState<DataProtocol[]>([]);
+  const [dataCategoryProduct, setDataCategoryProduct] = useState<
+    DataProtocol[]
+  >([]);
+  const [
+    errorCategoryProduct,
+    setErrorCategoryProduct,
+  ] = useState<TypeErrorSelect>({ isError: false, descriptionError: '' });
+
   const [categoryProduct, setCategoryProduct] = useState<DataProtocol>();
   const [name, setName] = useState('');
+  const [errorName, setErrorName] = useState<TypeErrorSelect>({
+    isError: false,
+    descriptionError: '',
+  });
   const [hasVariation, setHasvariation] = useState<TypeTabNameEnableOrDisable>({
     keyTab: '',
     name: 'Selecione',
@@ -87,27 +100,27 @@ export const DataOverview = (): JSX.Element => {
   const [internalCode, setInternalCode] = useState('');
 
   const handlerChangeCategoryProduct = useCallback(
-    (value: DataProtocol) => {},
+    (value: DataProtocol) => {
+      setErrorCategoryProduct({
+        ...errorCategoryProduct,
+        isError: false,
+      });
+      setCategoryProduct(value);
+    },
     [categoryProduct, selectTypeProduct],
   );
-
-  useEffect(() => {
-    console.log('UPDATE SELECTED');
-    console.log(selectTypeProduct);
-  }, [selectTypeProduct]);
 
   const handlerChangeName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setName(event.currentTarget.value);
-      if (event.target.value === '') {
-      }
+      setErrorName({ ...errorName, isError: false });
     },
-    [name],
+    [name, errorName],
   );
 
   const handlerHasVariation = useCallback(
     (current: TypeTabNameEnableOrDisable) => {
-      if (current.active) {
+      if (current.name.toLowerCase() === 'sim') {
         activeTab(current.keyTab);
         setHasvariation(current);
         disableTab(nameStock);
@@ -148,7 +161,7 @@ export const DataOverview = (): JSX.Element => {
   useEffect(() => {
     async function load() {
       const categoryData = await loadCategoryData();
-      setDataCategoryCost(categoryData);
+      setDataCategoryProduct(categoryData);
       const categoryFinance = await loadCategoryFinance();
       setDataCategoryFinance(categoryFinance);
     }
@@ -156,20 +169,44 @@ export const DataOverview = (): JSX.Element => {
   }, []);
 
   const handlerClickNextAba = useCallback(() => {
+    let isError = false;
     if (selectTypeProduct.id === 0) {
+      isError = true;
       setErrorSelectTypeProduct({
         isError: true,
         descriptionError: 'Campo não selecionado',
       });
     }
     if (categoryFinance.length <= 0) {
+      isError = true;
       setErrorCategoryFinance({
         isError: true,
         descriptionError: 'Campo não selecionado',
       });
     }
-  }, [selectTypeProduct, categoryFinance]);
+    if (!categoryProduct) {
+      isError = true;
+      setErrorCategoryProduct({
+        isError: true,
+        descriptionError: 'Campo não selecionado',
+      });
+    }
+    if (name === '') {
+      isError = true;
+      setErrorName({
+        isError: true,
+        descriptionError: 'Campo não preenchido',
+      });
+    }
+    if (!isError) {
+      console.log('fg');
+      activeTab(nameDetails);
+    }
+  }, [selectTypeProduct, categoryFinance, categoryProduct, name]);
 
+  const handlerOnSave = useCallback(() => {
+    handlerClickNextAba();
+  }, []);
   return (
     <>
       <div className="row">
@@ -188,9 +225,7 @@ export const DataOverview = (): JSX.Element => {
             }}
           >
             {typeProducts.map(({ id, name }) => (
-              <option data-icon="glyphicon-music" value={id + '+' + name}>
-                {name}
-              </option>
+              <option value={id + '+' + name}>{name}</option>
             ))}
           </NewSelect>
         </div>
@@ -211,9 +246,8 @@ export const DataOverview = (): JSX.Element => {
             message="Selecione o tipo do produto"
           />
           <DropdownInput<DataProtocol>
-            className="form-control"
-            label=""
-            data={dataCategoryCost}
+            error={errorCategoryProduct}
+            data={dataCategoryProduct}
             onChangeCurrentRow={handlerChangeCategoryProduct}
           />
         </div>
@@ -222,11 +256,11 @@ export const DataOverview = (): JSX.Element => {
             label="Nome do produto"
             message="Selecione o tipo do produto"
           />
-          <input
+          <NewInput
+            error={errorName}
             onChange={handlerChangeName}
             value={name}
             name="category"
-            className="form-control"
           />
         </div>
       </div>
@@ -236,11 +270,21 @@ export const DataOverview = (): JSX.Element => {
             label="Possui variação?"
             message="Selecione o tipo do produto"
           />
-          {/* <Select<TypeTabNameEnableOrDisable>
-            selectValue={hasVariation}
-            onClickItem={handlerHasVariation}
-            data={dataHasVariation}
-          /> */}
+          <NewSelect
+            onChange={event => {
+              const split = event.target.value.split('+');
+              const active = split[0];
+              const keyTab = split[1];
+              const name = split[2];
+              handlerHasVariation({ active: Boolean(active), keyTab, name });
+            }}
+          >
+            {dataHasVariation.map(({ active, keyTab, name }) => (
+              <option value={String(active) + '+' + keyTab + '+' + name}>
+                {name}
+              </option>
+            ))}
+          </NewSelect>
         </div>
         <div className="form-content col-md-3">
           <input
@@ -254,6 +298,8 @@ export const DataOverview = (): JSX.Element => {
       </Container>
       <hr />
       <FooterCreateProduct onClickButtonNext={handlerClickNextAba} />
+      <hr />
+      <SaveFooter onSave={handlerOnSave} />
     </>
   );
 };
