@@ -3,8 +3,8 @@ import React, { createContext, useContext, useState } from 'react';
 type TypeTabs = {
   name: string;
   label: string;
-  isEnable?: boolean | undefined;
   Component: JSX.Element;
+  isEnable?: boolean | undefined;
 };
 
 type TypeTabsContext = {
