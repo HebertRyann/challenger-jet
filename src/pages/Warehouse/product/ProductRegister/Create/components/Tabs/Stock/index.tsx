@@ -48,10 +48,7 @@ export const Stock = (): JSX.Element => {
 
   return (
     <div className="row">
-      <Table
-        unitMensured={unitMensured}
-        dataRenderTable={atributesList.filter(({ isChecked }) => isChecked)}
-      />
+      <Table />
       <div style={{ padding: '0 20px' }}>
         <hr />
         <FooterCreateProduct onClickButtonNext={() => {}} />
