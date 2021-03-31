@@ -14,6 +14,11 @@ export type ResponseEntiryWithIdNameWithChildren = {
   isChecked?: boolean;
 };
 
+export type ResponseEntityOnlyIdAndName = {
+  id: string;
+  name: string;
+};
+
 export const loadCategoryData = async (): Promise<
   ResponseEntityWithIdName[]
 > => {
@@ -72,12 +77,19 @@ export const loadAtributes = async (): Promise<
   return [];
 };
 
-export const loadUnitMensured = async (): Promise<
-  { id: string; name: string }[]
-> => {
-  const { data, status } = await api.get<{ id: string; name: string }[]>(
+export const loadUnitMensured = async (): Promise<ResponseEntityOnlyIdAndName[]> => {
+  const { data, status } = await api.get<ResponseEntityOnlyIdAndName[]>(
     '/productUnitMeasured',
   );
-  if (status === 200) return data;
+  if (status === 200) {
+    const resultData: ResponseEntityOnlyIdAndName[] = [];
+    data.map((result: any) =>
+      resultData.push({
+        id: result.id,
+        name: result.name,
+      }),
+    );
+    return resultData;
+  }
   return [];
 };
