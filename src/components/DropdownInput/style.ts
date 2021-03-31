@@ -1,12 +1,31 @@
 import styled, { css } from 'styled-components';
-import { MdArrowDropDown, MdSearch } from 'react-icons/md';
+import { MdSearch } from 'react-icons/md';
+import { FiChevronDown } from 'react-icons/fi';
 
-export const ContainerDropdown = styled.div`
+export const ContainerDropdown = styled.div<{ isError: boolean | undefined }>`
+  > label {
+    margin-top: 5px;
+    color: #d43f3a !important;
+  }
   > header {
     cursor: pointer;
     position: relative;
     display: flex;
     align-items: center;
+    ${({ isError }) =>
+      isError &&
+      css`
+        .form-control {
+          border-color: #d43f3a !important;
+          background-color: #ebcccc !important;
+          color: #d43f3a;
+          svg {
+            * {
+              color: #d43f3a;
+            }
+          }
+        }
+      `}
   }
   background-color: #fff;
   z-index: 1;
@@ -93,16 +112,14 @@ export const Content = styled.div<{ isActive: boolean }>`
   }
 `;
 
-export const IconArrowDown = styled(MdArrowDropDown).attrs(() => ({
-  size: '18px',
+export const IconArrowDown = styled(FiChevronDown).attrs(() => ({
+  size: '16px',
   color: '#555',
 }))`
   position: absolute;
   top: 0;
-  right: 0;
-  background-color: rgba(233, 237, 239, 0.9);
+  right: 3px;
   height: 100%;
-  border: 1px solid #c2cad8;
 `;
 
 export const IconSearch = styled(MdSearch).attrs(() => ({
