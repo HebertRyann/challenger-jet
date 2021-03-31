@@ -8,6 +8,7 @@ export const ContainerDropdown = styled.div<{ isError: boolean | undefined }>`
     color: #d43f3a !important;
   }
   > header {
+    text-transform: uppercase;
     cursor: pointer;
     position: relative;
     display: flex;
@@ -77,7 +78,7 @@ export const Content = styled.div<{ isActive: boolean }>`
   > div {
     background-color: #fff;
     border: 1px solid #c2cad8;
-
+    text-transform: uppercase;
     .no-content {
       text-align: center;
       margin-top: 15px;
