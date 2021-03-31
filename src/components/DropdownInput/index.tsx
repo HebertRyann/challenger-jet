@@ -26,7 +26,15 @@ export const DropdownInput = <
   const inputRef = useRef<HTMLDivElement>(null);
   const [inputValues, setInputValue] = useState<T[]>(data);
   const [isActiveInput, setIsActiveInput] = useState(false);
-  const [selectItem, setSelectItem] = useState('selecione');
+  const [selectItem, setSelectItem] = useState<{
+    id: string;
+    name: string;
+    parent_id: string | null;
+  }>({
+    id: '0',
+    name: 'selecione',
+    parent_id: null,
+  });
   const [inputSearch, setInputSearch] = useState('');
   const handleFocusInput = useCallback(() => {
     setIsActiveInput(true);
@@ -42,7 +50,7 @@ export const DropdownInput = <
   }, [data]);
 
   const handleClickRow = useCallback(
-    (value: string) => {
+    (value: T) => {
       setSelectItem(value);
       if (onChangeCurrentRow) onChangeCurrentRow(value);
       setIsActiveInput(false);
@@ -77,7 +85,7 @@ export const DropdownInput = <
       {label && <label htmlFor={label}>{label}</label>}
       <header>
         <div className="form-control" onClick={handleFocusInput} {...props}>
-          {selectItem.toUpperCase()}
+          {selectItem.name}
           <IconArrowDown />
         </div>
       </header>
@@ -99,28 +107,30 @@ export const DropdownInput = <
               <h5>Nenhum dado encontrado</h5>
             </div>
           ) : (
-            renderDataSearch().map(({ name, parent_id, id }) =>
-              parent_id === null ? (
+            renderDataSearch().map((current: T) =>
+              current.parent_id === null ? (
                 <div
                   key={Math.random()}
-                  style={{ cursor: isParent(id) ? 'pointer' : 'default' }}
+                  style={{
+                    cursor: isParent(current.id) ? 'pointer' : 'default',
+                  }}
                   onClick={() => {
-                    if (isParent(id)) {
-                      handleClickRow(name);
+                    if (isParent(current.id)) {
+                      handleClickRow(current);
                     }
                   }}
                 >
-                  {name}
+                  {current.name}
                 </div>
               ) : (
                 <>
                   <ul key={Math.random()}>
                     <li
                       onClick={() => {
-                        handleClickRow(name);
+                        handleClickRow(current);
                       }}
                     >
-                      {name}
+                      {current.name}
                     </li>
                   </ul>
                 </>
