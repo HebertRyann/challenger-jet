@@ -1,11 +1,17 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ContainerDropdown, Content, IconArrowDown, IconSearch } from './style';
 
+type TypeError = {
+  isError: boolean;
+  descriptionError: string;
+};
+
 interface DropdownInputProps<T>
   extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   data: T[];
   onChangeCurrentRow?: (value: any) => void;
+  error?: TypeError;
 }
 
 export const DropdownInput = <
@@ -14,6 +20,7 @@ export const DropdownInput = <
   label,
   data,
   onChangeCurrentRow,
+  error,
   ...props
 }: DropdownInputProps<T>): JSX.Element => {
   const inputRef = useRef<HTMLDivElement>(null);
@@ -66,14 +73,15 @@ export const DropdownInput = <
   };
 
   return (
-    <ContainerDropdown ref={inputRef}>
+    <ContainerDropdown isError={error?.isError} ref={inputRef}>
       {label && <label htmlFor={label}>{label}</label>}
       <header>
-        <div onClick={handleFocusInput} {...props}>
+        <div className="form-control" onClick={handleFocusInput} {...props}>
           {selectItem.toUpperCase()}
           <IconArrowDown />
         </div>
       </header>
+      {error?.isError && <label>{error.descriptionError}</label>}
       <Content isActive={isActiveInput}>
         <header>
           <input
