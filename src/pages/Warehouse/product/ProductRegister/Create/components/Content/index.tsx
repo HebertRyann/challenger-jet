@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FooterCreateProduct } from '../footer';
 import { HeaderCreateProduct } from '../Header';
-import { TypeTabNameEnableOrDisable } from '../Tabs/DataOverview';
 import {
   Container,
   ContentItem,
@@ -59,9 +57,6 @@ export const Content = (): JSX.Element => {
               </RenderComponent>
             ))}
           </TabPanelContainer>
-          <footer>
-            <button className="btn dark btn-sm sbold uppercase">salvar</button>
-          </footer>
         </ContentItem>
       </Container>
     </>
