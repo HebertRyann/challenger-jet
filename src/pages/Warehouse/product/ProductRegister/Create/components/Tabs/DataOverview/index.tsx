@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Container } from './style';
+import { Container, Select } from './style';
 import { DropdownInput } from '../../../../../../../../components/DropdownInput';
 import { loadCategoryFinance, loadCategoryData } from '../../../services/api';
-import { Select } from '../../../../../../../../components/Select';
+// import { Select } from '../../../../../../../../components/Select';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
 import { nameHasVariation } from '../HasVariation';
 import { nameFiscal } from '../Fiscal';
@@ -17,9 +17,10 @@ import {
 } from './products';
 import { nameStock } from '../Stock';
 import { FooterCreateProduct } from '../../footer';
-
-export const labelDataOverview = 'Dados';
-export const nameDataOverview = '@@tabs-overview';
+import {
+  NewSelect,
+  TypeErrorSelect,
+} from '../../../../../../../../components/NewSelect';
 
 type DataProtocol = {
   id: string;
@@ -47,12 +48,17 @@ export const DataOverview = (): JSX.Element => {
   const [dataCategoryFinance, setDataCategoryFinance] = useState<
     DataProtocol[]
   >([]);
+  const [
+    errorCategoryFinance,
+    setErrorCategoryFinance,
+  ] = useState<TypeErrorSelect>({ isError: false, descriptionError: '' });
   const [categoryFinance, setCategoryFinance] = useState('');
   const handlerChangeCategoryFinance = useCallback(
     (value: any) => {
+      setErrorCategoryFinance({ ...errorCategoryFinance, isError: false });
       setCategoryFinance(value);
     },
-    [categoryFinance],
+    [categoryFinance, errorCategoryFinance],
   );
   const [dataCategoryCost, setDataCategoryCost] = useState<DataProtocol[]>([]);
   const [categoryProduct, setCategoryProduct] = useState<DataProtocol>();
@@ -74,6 +80,10 @@ export const DataOverview = (): JSX.Element => {
     id: 0,
     name: 'Selecione',
   });
+  const [
+    errorSelectTypeProduct,
+    setErrorSelectTypeProduct,
+  ] = useState<TypeErrorSelect>({ isError: false, descriptionError: '' });
   const [internalCode, setInternalCode] = useState('');
 
   const handlerChangeCategoryProduct = useCallback(
@@ -112,18 +122,19 @@ export const DataOverview = (): JSX.Element => {
 
   const handlerSelectTypeProduct = useCallback(
     (value: TypeProduct) => {
+      setErrorSelectTypeProduct({ ...errorSelectTypeProduct, isError: false });
       setSelectTypeProduct(value);
-      if (value === SALE) {
+      if (value.id === SALE.id) {
         activeTab(nameHasComposition);
         activeTab(nameFiscal);
         return;
       }
-      if (value === RE_SALE) {
+      if (value.id === RE_SALE.id) {
         activeTab(nameFiscal);
         disableTab(nameHasComposition);
         return;
       }
-      if (value === SEMI_FINISHED) {
+      if (value.id === SEMI_FINISHED.id) {
         activeTab(nameHasComposition);
         disableTab(nameFiscal);
         return;
@@ -145,8 +156,19 @@ export const DataOverview = (): JSX.Element => {
   }, []);
 
   const handlerClickNextAba = useCallback(() => {
-    console.log('Validar');
-  }, []);
+    if (selectTypeProduct.id === 0) {
+      setErrorSelectTypeProduct({
+        isError: true,
+        descriptionError: 'Campo não selecionado',
+      });
+    }
+    if (categoryFinance.length <= 0) {
+      setErrorCategoryFinance({
+        isError: true,
+        descriptionError: 'Campo não selecionado',
+      });
+    }
+  }, [selectTypeProduct, categoryFinance]);
 
   return (
     <>
@@ -156,11 +178,21 @@ export const DataOverview = (): JSX.Element => {
             label="Tipo de produto"
             message="Selecione o tipo do produto"
           />
-          <Select<TypeProduct>
-            selectValue={selectTypeProduct}
-            onClickItem={handlerSelectTypeProduct}
-            data={typeProducts}
-          />
+          <NewSelect
+            error={errorSelectTypeProduct}
+            onChange={event => {
+              const split = event.target.value.split('+');
+              const id = split[0];
+              const name = split[1];
+              handlerSelectTypeProduct({ id: Number(id), name });
+            }}
+          >
+            {typeProducts.map(({ id, name }) => (
+              <option data-icon="glyphicon-music" value={id + '+' + name}>
+                {name}
+              </option>
+            ))}
+          </NewSelect>
         </div>
         <div className="form-content col-md-3">
           <TooltipComponent
@@ -168,8 +200,7 @@ export const DataOverview = (): JSX.Element => {
             message="Selecione o tipo do produto"
           />
           <DropdownInput<DataProtocol>
-            className="form-control"
-            label=""
+            error={errorCategoryFinance}
             data={dataCategoryFinance}
             onChangeCurrentRow={handlerChangeCategoryFinance}
           />
@@ -205,11 +236,11 @@ export const DataOverview = (): JSX.Element => {
             label="Possui variação?"
             message="Selecione o tipo do produto"
           />
-          <Select<TypeTabNameEnableOrDisable>
+          {/* <Select<TypeTabNameEnableOrDisable>
             selectValue={hasVariation}
             onClickItem={handlerHasVariation}
             data={dataHasVariation}
-          />
+          /> */}
         </div>
         <div className="form-content col-md-3">
           <input
@@ -226,3 +257,6 @@ export const DataOverview = (): JSX.Element => {
     </>
   );
 };
+
+export const labelDataOverview = 'Dados';
+export const nameDataOverview = '@@tabs-overview';
