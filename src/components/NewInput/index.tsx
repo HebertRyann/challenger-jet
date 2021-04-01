@@ -35,7 +35,6 @@ export const NewInput = ({
       if (value === '')
         setCurrentError({
           isError: true,
-          descriptionError: 'Campo não preenchido',
         });
     },
     [error],
@@ -53,7 +52,9 @@ export const NewInput = ({
         className="form-control"
         {...props}
       />
-      {currentError.descriptionError && <label>{currentError.descriptionError}</label>}
+      {currentError.descriptionError && (
+        <label>{currentError.descriptionError}</label>
+      )}
     </Container>
   );
 };
