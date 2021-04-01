@@ -17,7 +17,7 @@ export const nameFiscal = '@@tabs-fiscal';
 export type TypeContentTabsFiscal = {
   name: string;
   label: string;
-  isEnable?: boolean;
+  isEnable: boolean;
   Component: JSX.Element;
 };
 

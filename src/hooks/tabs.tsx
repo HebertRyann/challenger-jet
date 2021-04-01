@@ -4,7 +4,7 @@ type TypeTabs = {
   name: string;
   label: string;
   Component: JSX.Element;
-  isEnable?: boolean | undefined;
+  isEnable: boolean;
 };
 
 type TypeTabsContext = {
