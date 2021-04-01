@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container, IconRemove } from './style';
-import { Select } from '../../../../../../../../../../components/Select';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../../../services/api';
 
 type TypeUnitMensured = {
@@ -32,20 +31,27 @@ export const Table = ({
   }, [variations]);
 
   const handleRemoveVariation = useCallback(
-    (keyVariation: TypeVariation) => {
-      variations.map(({ key }, index) => {
-        if (key === keyVariation.key) {
-          variations[index].isEnable = false;
-        }
-      });
-      setVariations([...variations]);
+    (keyVariation: TypeVariation, index: number) => {
+      const result = variations.filter(({ key }) => key !== keyVariation.key);
+      if (result.length === 0) {
+        const initialState: TypeVariation = {
+          isEnable: true,
+          key: Math.random(),
+        };
+        setVariations([initialState]);
+      } else {
+        setVariations([...result]);
+      }
     },
     [variations],
   );
 
   return (
     <Container className="table-responsive">
-      <table className="table table-bordered margin-bottom-0">
+      <table
+        key={Math.random()}
+        className="table table-bordered margin-bottom-0"
+      >
         <tbody>
           <tr>
             <th>Unidade de medidas</th>
@@ -58,17 +64,18 @@ export const Table = ({
           {variations
             .filter(({ isEnable }) => isEnable)
             .map(({ key, isEnable }, index) => (
-              <tr>
+              <tr key={index}>
                 <td>
-                  <select
-                    className="form-control"
-                    name="Selecione"
-                    id="Selecione"
-                    defaultValue="Selecione"
-                  >
-                    <option value="litro">litro</option>
-                    <option value="grama">grama</option>
-                    <option value="quilo">quilo</option>
+                  <select className="select form-control" name="Selecione">
+                    <option className="disabled" disabled selected>
+                      Selecione
+                    </option>
+                    {unitMensured.map(
+                      ({ id, name }) => (
+                        <option value={`${id}+${name}`}>{name}</option>
+                      ),
+                      [],
+                    )}
                   </select>
                 </td>
                 {dataRenderTable.map(
@@ -92,7 +99,9 @@ export const Table = ({
                 </td>
                 <td className="actions">
                   <IconRemove
-                    onClick={() => handleRemoveVariation({ key, isEnable })}
+                    onClick={() =>
+                      handleRemoveVariation({ key, isEnable }, index)
+                    }
                   />
                 </td>
               </tr>
