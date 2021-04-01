@@ -10,6 +10,7 @@ import { useTabs } from '../../../../../../../../hooks/tabs';
 import { nameHasComposition } from '../HasComposition';
 import { namePriceComposition } from '../PriceComposition';
 import { NewInput } from '../../../../../../../../components/NewInput';
+import { Alert } from '../../../../../../../../components/Alert';
 import {
   typeProducts,
   TypeProduct,
@@ -24,13 +25,6 @@ import {
   TypeErrorSelect,
 } from '../../../../../../../../components/NewSelect';
 import { nameDetails } from '../Details';
-
-type DataProtocol = {
-  id: string;
-  name: string;
-  parent_id: string | null;
-};
-
 export type TypeTabNameEnableOrDisable = {
   keyTab: string;
   name: string;
@@ -46,15 +40,26 @@ const dataHasVariation: TypeTabNameEnableOrDisable[] = [
   { keyTab: nameHasVariation, name: 'Não', active: false },
 ];
 
-export const DataOverview = (): JSX.Element => {
+export type TypeEntityWithIdAndName = {
+  id: string;
+  name: string;
+  parent_id: string | null;
+};
+
+export const DataOverview = ({
+  categoryFinances,
+  categoryProducts,
+}: {
+  categoryFinances: TypeEntityWithIdAndName[];
+  categoryProducts: TypeEntityWithIdAndName[];
+}): JSX.Element => {
+  const [alert, setAlert] = useState(false);
   const { activeTab, disableTab } = useTabs();
-  const [dataCategoryFinance, setDataCategoryFinance] = useState<
-    DataProtocol[]
-  >([]);
+
   const [
     errorCategoryFinance,
     setErrorCategoryFinance,
-  ] = useState<TypeErrorSelect>({ isError: false, descriptionError: '' });
+  ] = useState<TypeErrorSelect>({ isError: false });
   const [categoryFinance, setCategoryFinance] = useState('');
   const handlerChangeCategoryFinance = useCallback(
     (value: any) => {
@@ -63,19 +68,19 @@ export const DataOverview = (): JSX.Element => {
     },
     [categoryFinance, errorCategoryFinance],
   );
-  const [dataCategoryProduct, setDataCategoryProduct] = useState<
-    DataProtocol[]
-  >([]);
+
   const [
     errorCategoryProduct,
     setErrorCategoryProduct,
-  ] = useState<TypeErrorSelect>({ isError: false, descriptionError: '' });
+  ] = useState<TypeErrorSelect>({ isError: false });
 
-  const [categoryProduct, setCategoryProduct] = useState<DataProtocol>();
+  const [
+    categoryProduct,
+    setCategoryProduct,
+  ] = useState<TypeEntityWithIdAndName>();
   const [name, setName] = useState('');
   const [errorName, setErrorName] = useState<TypeErrorSelect>({
     isError: false,
-    descriptionError: '',
   });
   const [hasVariation, setHasvariation] = useState<TypeTabNameEnableOrDisable>({
     keyTab: '',
@@ -97,11 +102,11 @@ export const DataOverview = (): JSX.Element => {
   const [
     errorSelectTypeProduct,
     setErrorSelectTypeProduct,
-  ] = useState<TypeErrorSelect>({ isError: false, descriptionError: '' });
+  ] = useState<TypeErrorSelect>({ isError: false });
   const [internalCode, setInternalCode] = useState('');
 
   const handlerChangeCategoryProduct = useCallback(
-    (value: DataProtocol) => {
+    (value: TypeEntityWithIdAndName) => {
       setErrorCategoryProduct({
         ...errorCategoryProduct,
         isError: false,
@@ -118,6 +123,10 @@ export const DataOverview = (): JSX.Element => {
     },
     [name, errorName],
   );
+
+  const handlerClickAlertConfirm = useCallback(() => {
+    setAlert(false);
+  }, [alert]);
 
   const handlerHasVariation = useCallback(
     (current: TypeTabNameEnableOrDisable) => {
@@ -136,6 +145,7 @@ export const DataOverview = (): JSX.Element => {
 
   const handlerSelectTypeProduct = useCallback(
     (value: TypeProduct) => {
+      console.log(value);
       setErrorSelectTypeProduct({ ...errorSelectTypeProduct, isError: false });
       setSelectTypeProduct(value);
       if (value.id === SALE.id) {
@@ -163,49 +173,36 @@ export const DataOverview = (): JSX.Element => {
     [selectTypeProduct],
   );
 
-  useEffect(() => {
-    async function load() {
-      const categoryData = await loadCategoryData();
-      setDataCategoryProduct(categoryData);
-      const categoryFinance = await loadCategoryFinance();
-      setDataCategoryFinance(categoryFinance);
-    }
-    load();
-  }, []);
-
   const handlerClickNextAba = useCallback(() => {
     let isError = false;
     if (selectTypeProduct.id === 0) {
       isError = true;
       setErrorSelectTypeProduct({
         isError: true,
-        descriptionError: 'Campo não selecionado',
       });
     }
     if (categoryFinance.length <= 0) {
       isError = true;
       setErrorCategoryFinance({
         isError: true,
-        descriptionError: 'Campo não selecionado',
       });
     }
     if (!categoryProduct) {
       isError = true;
       setErrorCategoryProduct({
         isError: true,
-        descriptionError: 'Campo não selecionado',
       });
     }
     if (name === '') {
       isError = true;
       setErrorName({
         isError: true,
-        descriptionError: 'Campo não preenchido',
       });
     }
     if (!isError) {
-      console.log('fg');
       activeTab(nameDetails);
+    } else {
+      setAlert(true);
     }
   }, [selectTypeProduct, categoryFinance, categoryProduct, name]);
 
@@ -239,9 +236,9 @@ export const DataOverview = (): JSX.Element => {
             label="Categoria custo"
             message="Selecione o tipo do produto"
           />
-          <DropdownInput<DataProtocol>
+          <DropdownInput<TypeEntityWithIdAndName>
             error={errorCategoryFinance}
-            data={dataCategoryFinance}
+            data={categoryFinances}
             onChangeCurrentRow={handlerChangeCategoryFinance}
           />
         </div>
@@ -250,9 +247,9 @@ export const DataOverview = (): JSX.Element => {
             label="Grupo produto"
             message="Selecione o tipo do produto"
           />
-          <DropdownInput<DataProtocol>
+          <DropdownInput<TypeEntityWithIdAndName>
             error={errorCategoryProduct}
-            data={dataCategoryProduct}
+            data={categoryProducts}
             onChangeCurrentRow={handlerChangeCategoryProduct}
           />
         </div>
@@ -301,6 +298,12 @@ export const DataOverview = (): JSX.Element => {
           />
         </div>
       </Container>
+      <Alert
+        isActive={alert}
+        onlyConfirm
+        message="Os campos destacados são de preenchimento obrigatório"
+        onClickConfirmButton={handlerClickAlertConfirm}
+      />
       <hr />
       <FooterCreateProduct onClickButtonNext={handlerClickNextAba} />
       <hr />
