@@ -3,7 +3,7 @@ import { ContainerDropdown, Content, IconArrowDown, IconSearch } from './style';
 
 type TypeError = {
   isError: boolean;
-  descriptionError: string;
+  descriptionError?: string;
 };
 
 interface DropdownInputProps<T>
@@ -89,7 +89,7 @@ export const DropdownInput = <
           <IconArrowDown />
         </div>
       </header>
-      {error?.isError && <label>{error.descriptionError}</label>}
+      {error?.descriptionError && <label>{error.descriptionError}</label>}
       <Content isActive={isActiveInput}>
         <header>
           <input
