@@ -1,43 +1,35 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container } from './styles';
-import {
-  loadAtributes,
-  loadUnitMensured,
-  ResponseEntiryWithIdNameWithChildren,
-} from '../../../services/api';
+import { ResponseEntiryWithIdNameWithChildren } from '../../../services/api';
 import { Table } from './component/Table';
 import { FooterCreateProduct } from '../../footer';
 import { SaveFooter } from '../../footer/saveFooter';
 
-export const HasVariation = (): JSX.Element => {
+type TypeAtributes = {
+  id: string;
+  name: string;
+  parent_id: string | null;
+  childrenList: ResponseEntiryWithIdNameWithChildren[];
+  isChecked?: boolean;
+};
+
+type TypeUnitMensured = {
+  id: string;
+  name: string;
+};
+
+type TypeHasVariationProps = {
+  unitMensureds: TypeUnitMensured[];
+  atributes: TypeAtributes[];
+};
+
+export const HasVariation = ({
+  unitMensureds,
+  atributes,
+}: TypeHasVariationProps): JSX.Element => {
   const [atributesList, setAtributesList] = useState<
     ResponseEntiryWithIdNameWithChildren[]
-  >([]);
-
-  const [unitMensured, setUnitMensured] = useState<
-    {
-      id: string;
-      name: string;
-    }[]
-  >([]);
-
-  useEffect(() => {
-    async function load() {
-      const unitMensured = await loadUnitMensured();
-      const resultData = await loadAtributes();
-      const resultList: ResponseEntiryWithIdNameWithChildren[] = resultData.filter(
-        ({ parent_id }) => parent_id === null,
-      );
-      resultList.map(({ id }, index) => {
-        resultList[index].childrenList = resultData.filter(
-          ({ parent_id }) => parent_id === id,
-        );
-      });
-      setUnitMensured(unitMensured);
-      setAtributesList(resultList);
-    }
-    load();
-  }, []);
+  >(atributes);
 
   const handlerClickCheckBox = useCallback(
     (index: number) => {
@@ -68,7 +60,7 @@ export const HasVariation = (): JSX.Element => {
       </Container>
       <div className="row">
         <Table
-          unitMensured={unitMensured}
+          unitMensured={unitMensureds}
           dataRenderTable={atributesList.filter(({ isChecked }) => isChecked)}
         />
       </div>
