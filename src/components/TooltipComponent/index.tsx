@@ -12,11 +12,11 @@ export const TooltipComponent = ({ message, label }: TypeTooltipComponent) => {
 
   const handlerMouseUp = useCallback(() => {
     setMouseUp(true);
-  }, [mouseUp]);
+  }, []);
 
   const handlerMouseDown = useCallback(() => {
     setMouseUp(false);
-  }, [mouseUp]);
+  }, []);
 
   return (
     <Container hidden={mouseUp}>
