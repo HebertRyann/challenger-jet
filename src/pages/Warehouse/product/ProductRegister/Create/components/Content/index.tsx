@@ -10,25 +10,32 @@ import {
 } from './styles';
 import { useTabs } from '../../../../../../../hooks/tabs';
 import { makeTabs } from './tabs';
+import { useLoading } from '../../../../../../../hooks/loading';
 
 export type TypeContentTabs = {
   name: string;
   label: string;
-  isEnable?: boolean;
+  isEnable: boolean;
   Component: JSX.Element;
 };
 
 export const Content = (): JSX.Element => {
   const { loadTabs, addTab } = useTabs();
-  const tabs = makeTabs();
+  const [currentTab, setCurrentTab] = useState('');
+  const { activeLoading, disableLoading } = useLoading();
+  const [tabs, setTabs] = useState<TypeContentTabs[]>([]);
 
   useEffect(() => {
-    tabs.map(tab => addTab(tab));
+    async function load() {
+      activeLoading();
+      const tabs = await makeTabs();
+      tabs.map(tab => addTab(tab));
+      setCurrentTab(tabs[0].name);
+      setTabs(loadTabs());
+      disableLoading();
+    }
+    load();
   }, []);
-
-  const allTabsData = loadTabs();
-
-  const [currentTab, setCurrentTab] = useState(tabs[0].name);
 
   return (
     <>
@@ -36,7 +43,7 @@ export const Content = (): JSX.Element => {
       <Container>
         <ContentItem>
           <TabHeaderContainer>
-            {allTabsData.map(
+            {tabs.map(
               ({ label, name, isEnable }, index) =>
                 isEnable && (
                   <TabName
@@ -51,7 +58,7 @@ export const Content = (): JSX.Element => {
           </TabHeaderContainer>
           <TabPanelContainer>
             <hr />
-            {allTabsData.map(({ Component, name }, index) => (
+            {tabs.map(({ Component, name }, index) => (
               <RenderComponent isActive={name === currentTab}>
                 {Component}
               </RenderComponent>
