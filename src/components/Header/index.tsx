@@ -56,7 +56,6 @@ const Header: React.FC = () => {
             </li>
           );
         }
-        console.log(menu);
         return '';
       });
 
