@@ -6,14 +6,14 @@ import React, {
 } from 'react';
 import { Container } from './styles';
 
-export type TypeErrorSelect = {
+export type TypeErrorInput = {
   isError: boolean;
   descriptionError?: string;
 };
 
 export interface TypeNewInputProps
   extends InputHTMLAttributes<HTMLInputElement> {
-  error?: TypeErrorSelect;
+  error?: TypeErrorInput;
   name: string;
 }
 
@@ -22,7 +22,7 @@ export const NewInput = ({
   error,
   ...props
 }: TypeNewInputProps): JSX.Element => {
-  const [currentError, setCurrentError] = useState<TypeErrorSelect>(
+  const [currentError, setCurrentError] = useState<TypeErrorInput>(
     error ? error : { isError: false, descriptionError: '' },
   );
 

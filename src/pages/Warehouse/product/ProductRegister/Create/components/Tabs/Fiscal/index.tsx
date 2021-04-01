@@ -84,7 +84,9 @@ export const Fiscal = (): JSX.Element => {
           </TabPanelContainerFiscal>
         </div>
       </Container>
-      <Footer onClickButtonNext={() => {}} />
+      <div style={{ margin: '20px 3px 0 0' }}>
+        <Footer onClickButtonNext={() => {}} />
+      </div>
     </>
   );
 };

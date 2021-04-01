@@ -4,7 +4,7 @@ import { Footer } from '../../footer';
 import { Container, TextArea } from './style';
 import {
   NewInput,
-  TypeErrorSelect,
+  TypeErrorInput,
 } from '../../../../../../../../components/NewInput';
 import { useTabs } from '../../../../../../../../hooks/tabs';
 import { Alert } from '../../../../../../../../components/Alert';
@@ -24,37 +24,37 @@ export const Details = (): JSX.Element => {
   const [especification, setEspecification] = useState('');
   const [wayOfUse, setWayOfUse] = useState('');
 
-  const [errorPeso, setErrorPeso] = useState<TypeErrorSelect>({
+  const [errorPeso, setErrorPeso] = useState<TypeErrorInput>({
     isError: false,
   });
 
-  const [errorLargura, setErrorLargura] = useState<TypeErrorSelect>({
+  const [errorLargura, setErrorLargura] = useState<TypeErrorInput>({
     isError: false,
   });
 
-  const [errorAltura, setErrorAltura] = useState<TypeErrorSelect>({
+  const [errorAltura, setErrorAltura] = useState<TypeErrorInput>({
     isError: false,
   });
 
-  const [errorComprimento, setErrorComprimento] = useState<TypeErrorSelect>({
+  const [errorComprimento, setErrorComprimento] = useState<TypeErrorInput>({
     isError: false,
   });
 
   const [
     errorDescriptionAndDetails,
     setErrorDescriptionAndDetails,
-  ] = useState<TypeErrorSelect>({
+  ] = useState<TypeErrorInput>({
     isError: false,
   });
 
   const [
     errorEspecification,
     setErrorEspecification,
-  ] = useState<TypeErrorSelect>({
+  ] = useState<TypeErrorInput>({
     isError: false,
   });
 
-  const [errorWayOfUse, setErrorWayOfUse] = useState<TypeErrorSelect>({
+  const [errorWayOfUse, setErrorWayOfUse] = useState<TypeErrorInput>({
     isError: false,
   });
 
