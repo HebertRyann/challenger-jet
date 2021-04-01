@@ -20,6 +20,8 @@ type TypeTabsContext = {
   changeCurrentTab: (keyTab: string) => void;
   changeCurrentTabForNext: (keyTab: string) => void;
   loadCurrentTab: () => TypeCurrentTab;
+  hasNextTab: (keyTab: string) => boolean;
+  hasPreviousTab: (keyTab: string) => boolean;
 };
 
 type TypeTabsProvider = {
@@ -110,9 +112,15 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
     [currentTab],
   );
 
+  const hasNextTab = useCallback((keyTab: string) => false, []);
+
+  const hasPreviousTab = useCallback((keyTab: string) => false, []);
+
   return (
     <TabsContext.Provider
       value={{
+        hasNextTab,
+        hasPreviousTab,
         addTab,
         removeTab,
         loadTabs,
