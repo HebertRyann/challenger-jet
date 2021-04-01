@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container } from './style';
 import { DropdownInput } from '../../../../../../../../components/DropdownInput';
-import { loadCategoryFinance, loadCategoryData } from '../../../services/api';
 import { SaveFooter } from '../../footer/saveFooter';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
 import { nameHasVariation } from '../HasVariation';
@@ -24,7 +23,6 @@ import {
   NewSelect,
   TypeErrorSelect,
 } from '../../../../../../../../components/NewSelect';
-import { nameDetails } from '../Details';
 export type TypeTabNameEnableOrDisable = {
   keyTab: string;
   name: string;
@@ -104,6 +102,7 @@ export const DataOverview = ({
     setErrorSelectTypeProduct,
   ] = useState<TypeErrorSelect>({ isError: false });
   const [internalCode, setInternalCode] = useState('');
+  const { changeCurrentTabForNext } = useTabs();
 
   const handlerChangeCategoryProduct = useCallback(
     (value: TypeEntityWithIdAndName) => {
@@ -199,7 +198,7 @@ export const DataOverview = ({
       });
     }
     if (!isError) {
-      activeTab(nameDetails);
+      changeCurrentTabForNext(nameDataOverview);
     } else {
       setAlert(true);
     }
@@ -226,7 +225,9 @@ export const DataOverview = ({
             }}
           >
             {typeProducts.map(({ id, name }) => (
-              <option key={id} value={id + '+' + name}>{name}</option>
+              <option key={id} value={id + '+' + name}>
+                {name}
+              </option>
             ))}
           </NewSelect>
         </div>
