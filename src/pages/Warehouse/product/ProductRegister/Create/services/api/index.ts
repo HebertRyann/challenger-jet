@@ -61,7 +61,6 @@ export const loadAtributes = async (): Promise<
   ResponseEntiryWithIdNameWithChildren[]
 > => {
   const { data, status } = await api.get('/productAttributes');
-
   if (status === 200) {
     const resultData: ResponseEntiryWithIdNameWithChildren[] = [];
     data.map((result: any) =>
@@ -77,7 +76,9 @@ export const loadAtributes = async (): Promise<
   return [];
 };
 
-export const loadUnitMensured = async (): Promise<ResponseEntityOnlyIdAndName[]> => {
+export const loadUnitMensured = async (): Promise<
+  ResponseEntityOnlyIdAndName[]
+> => {
   const { data, status } = await api.get<ResponseEntityOnlyIdAndName[]>(
     '/productUnitMeasured',
   );
