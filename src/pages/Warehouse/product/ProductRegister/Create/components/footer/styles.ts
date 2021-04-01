@@ -13,3 +13,10 @@ export const Container = styled.div`
     margin-left: 10px;
   }
 `;
+
+export const ContainerFooter = styled.footer`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+`;
