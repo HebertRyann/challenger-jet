@@ -7,12 +7,19 @@ type TypeTabs = {
   isEnable: boolean;
 };
 
+type TypeCurrentTab = {
+  key: string;
+};
+
 type TypeTabsContext = {
   addTab: (newTab: TypeTabs) => void;
   removeTab: (keyTab: string) => void;
   loadTabs: () => TypeTabs[];
   activeTab: (keyTab: string) => void;
   disableTab: (keyTab: string) => void;
+  changeCurrentTab: (keyTab: string) => void;
+  changeCurrentTabForNext: (keyTab: string) => void;
+  loadCurrentTab: () => TypeCurrentTab;
 };
 
 type TypeTabsProvider = {
@@ -23,6 +30,7 @@ const TabsContext = createContext<TypeTabsContext>({} as TypeTabsContext);
 
 const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
   const [tabs, setTabs] = useState<TypeTabs[]>([]);
+  const [currentTab, setCurrentTab] = useState<TypeCurrentTab>({ key: '' });
 
   const addTab = (newTab: TypeTabs): void => {
     tabs.push(newTab);
@@ -80,9 +88,40 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
     }
   };
 
+  const changeCurrentTab = useCallback(
+    (keyTab: string): void => setCurrentTab({ key: keyTab }),
+    [currentTab],
+  );
+
+  const loadCurrentTab = (): TypeCurrentTab => currentTab;
+
+  const changeCurrentTabForNext = useCallback(
+    (keyTab: string) => {
+      const result = tabs.filter(({ name }) => name === keyTab);
+      if (result) {
+        const indexTab = tabs.indexOf(result[0]);
+        const exitsNext = tabs[indexTab + 1];
+        if (exitsNext.isEnable) {
+          setCurrentTab({ key: exitsNext.name });
+        }
+        return;
+      }
+    },
+    [currentTab],
+  );
+
   return (
     <TabsContext.Provider
-      value={{ addTab, removeTab, loadTabs, activeTab, disableTab }}
+      value={{
+        addTab,
+        removeTab,
+        loadTabs,
+        activeTab,
+        disableTab,
+        changeCurrentTab,
+        loadCurrentTab,
+        changeCurrentTabForNext,
+      }}
     >
       {children}
     </TabsContext.Provider>
