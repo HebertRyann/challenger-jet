@@ -1,5 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { Footer } from '../../../../footer';
 import { Container } from './style';
+import {
+  NewInput,
+  TypeErrorSelect,
+} from '../../../../../../../../../../components/NewInput';
+import { NewSelect } from '../../../../../../../../../../components/NewSelect';
+import { useTabs } from '../../../../../../../../../../hooks/tabs';
+import { Alert } from '../../../../../../../../../../components/Alert';
 
 type TypeUnitMensured = {
   id: string;
@@ -16,9 +24,61 @@ type TypeTableProps = {
 };
 
 export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
-  const [variations, setVariations] = useState<TypeVariation[]>([
-    { isEnable: true, key: Math.random() },
-  ]);
+  const { changeCurrentTabForNext } = useTabs();
+  const [alert, setAlert] = useState(false);
+
+  const [
+    selectUnitMensured,
+    setSelectUnitMensured,
+  ] = useState<TypeUnitMensured>({ id: '', name: '' });
+
+  const [stock, setStock] = useState('');
+
+  const [errorUnitMensured, setErrorUnitMensured] = useState<TypeErrorSelect>({
+    isError: false,
+  });
+  const [errorStock, setErrorStock] = useState<TypeErrorSelect>({
+    isError: false,
+  });
+
+  const handlerChangeSelectUnitMensured = useCallback(
+    (currentSelectedUnitMensured: TypeUnitMensured) => {
+      setErrorUnitMensured({ isError: false });
+      setSelectUnitMensured(currentSelectedUnitMensured);
+    },
+    [unitMensured],
+  );
+
+  const handlerChangeStock = useCallback(
+    (currentStock: string) => {
+      setErrorStock({ isError: false });
+      setStock(currentStock);
+    },
+    [stock],
+  );
+
+  const handlerClickButtonNextTab = useCallback(() => {
+    let isError = false;
+
+    if (selectUnitMensured.id === '') {
+      isError = true;
+      setErrorUnitMensured({ isError: true });
+    }
+
+    if (stock === '') {
+      isError = true;
+      setErrorStock({ isError: true });
+    }
+
+    if (!isError) {
+    } else {
+      setAlert(true);
+    }
+  }, [unitMensured, stock]);
+
+  const handlerClickAlertConfirm = useCallback(() => {
+    setAlert(false);
+  }, [alert]);
 
   return (
     <Container className="table-responsive">
@@ -30,24 +90,45 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
           </tr>
           <tr>
             <td>
-              <select className="select form-control" name="Selecione">
-                <option className="disabled" disabled selected>
-                  Selecione
-                </option>
+              <NewSelect
+                error={errorUnitMensured}
+                onChange={event => {
+                  const id = event.target.value.split('+')[0];
+                  const name = event.target.value.split('+')[1];
+                  if (id && name) {
+                    handlerChangeSelectUnitMensured({ id, name });
+                  }
+                }}
+                className="select form-control"
+                name="Selecione"
+              >
                 {unitMensured.map(
                   ({ id, name }) => (
                     <option value={`${id}+${name}`}>{name}</option>
                   ),
                   [],
                 )}
-              </select>
+              </NewSelect>
             </td>
             <td>
-              <input className="form-control" type="text" />
+              <NewInput
+                onChange={event => handlerChangeStock(event.target.value)}
+                error={errorStock}
+                name="stock"
+                className="form-control"
+                type="text"
+              />
             </td>
           </tr>
         </tbody>
       </table>
+      <Footer onClickButtonNext={handlerClickButtonNextTab} />
+      <Alert
+        isActive={alert}
+        onlyConfirm
+        message="Os campos destacados são de preenchimento obrigatório"
+        onClickConfirmButton={handlerClickAlertConfirm}
+      />
     </Container>
   );
 };
