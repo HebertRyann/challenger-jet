@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
-import { ResponseEntiryWithIdNameWithChildren } from '../../../services/api';
+import React from 'react';
 import { Table } from './Table';
-import { Footer } from '../../footer';
 
 export const HasComposition = (): JSX.Element => (
   <div className="row">
     <Table />
-    <Footer />
   </div>
 );
 
