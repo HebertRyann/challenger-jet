@@ -6,7 +6,8 @@ type AlertProps = {
   message: string;
   isActive: boolean;
   onClickConfirmButton: (id: string) => void;
-  onClickCancellButton: () => void;
+  onClickCancellButton?: () => void;
+  onlyConfirm?: boolean;
 };
 
 export const Alert = ({
@@ -14,6 +15,7 @@ export const Alert = ({
   onClickCancellButton,
   onClickConfirmButton,
   isActive,
+  onlyConfirm,
 }: AlertProps): JSX.Element => {
   return (
     <Container isActive={isActive}>
@@ -29,12 +31,14 @@ export const Alert = ({
           >
             Ok
           </button>
-          <button
-            className="btn btn-default btn-sm sbold uppercase"
-            onClick={onClickCancellButton}
-          >
-            Cancelar
-          </button>
+          {!onlyConfirm && (
+            <button
+              className="btn btn-default btn-sm sbold uppercase"
+              onClick={onClickCancellButton}
+            >
+              Cancelar
+            </button>
+          )}
         </footer>
       </main>
     </Container>
