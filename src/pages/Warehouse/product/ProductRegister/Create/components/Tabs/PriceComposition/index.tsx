@@ -6,9 +6,11 @@ import { Container } from './styles';
 export const PriceComposition = (): JSX.Element => (
   <Container>
     <Table />
-    <Footer onClickButtonNext={() => {}} />
+    <div style={{ marginTop: '20px' }}>
+      <Footer onClickButtonNext={() => {}} />
+    </div>
   </Container>
 );
 
-export const labelPriceComposition = 'Composição de preço';
-export const namePriceComposition = '@@tabs-price-composition';
+export const labelPriceComposition = 'Formaçao de preço';
+export const namePriceComposition = '@@tabs-price-training';
