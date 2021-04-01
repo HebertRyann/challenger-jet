@@ -1,10 +1,9 @@
 import React from 'react';
 import { TooltipComponent } from '../../../../../../../../../components/TooltipComponent';
-import { Container } from './style';
 
 export const Table = (): JSX.Element => (
   <>
-    <Container className="row">
+    <div className="row">
       <div className="form-content col-md-3">
         <TooltipComponent
           label="Margem de lucro"
@@ -33,6 +32,6 @@ export const Table = (): JSX.Element => (
         />
         <input className="form-control" type="text" />
       </div>
-    </Container>
+    </div>
   </>
 );
