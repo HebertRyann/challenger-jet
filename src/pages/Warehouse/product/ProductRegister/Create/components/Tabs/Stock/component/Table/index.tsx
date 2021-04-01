@@ -3,7 +3,7 @@ import { Footer } from '../../../../footer';
 import { Container } from './style';
 import {
   NewInput,
-  TypeErrorSelect,
+  TypeErrorInput,
 } from '../../../../../../../../../../components/NewInput';
 import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 import { useTabs } from '../../../../../../../../../../hooks/tabs';
@@ -34,10 +34,10 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
 
   const [stock, setStock] = useState('');
 
-  const [errorUnitMensured, setErrorUnitMensured] = useState<TypeErrorSelect>({
+  const [errorUnitMensured, setErrorUnitMensured] = useState<TypeErrorInput>({
     isError: false,
   });
-  const [errorStock, setErrorStock] = useState<TypeErrorSelect>({
+  const [errorStock, setErrorStock] = useState<TypeErrorInput>({
     isError: false,
   });
 
