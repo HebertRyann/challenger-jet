@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Container } from './styles';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../services/api';
 import { Table } from './component/Table';
-import { FooterCreateProduct } from '../../footer';
-import { SaveFooter } from '../../footer/saveFooter';
+import { Footer } from '../../footer';
 
 type TypeAtributes = {
   id: string;
@@ -64,12 +63,7 @@ export const HasVariation = ({
           dataRenderTable={atributesList.filter(({ isChecked }) => isChecked)}
         />
       </div>
-      <div style={{ padding: '0 20px' }}>
-        <hr />
-        <FooterCreateProduct onClickButtonNext={() => {}} />
-        <hr />
-        <SaveFooter onSave={() => {}} />
-      </div>
+      <Footer />
     </>
   );
 };

@@ -1,18 +1,13 @@
 import React from 'react';
 import { Table } from './Table';
-import { FooterCreateProduct } from '../../footer';
-import { SaveFooter } from '../../footer/saveFooter';
+import { Footer } from '../../footer';
+import { Container } from './styles';
 
 export const PriceComposition = (): JSX.Element => (
-  <div className="row">
+  <Container>
     <Table />
-    <div style={{padding: '0 20px'}}>
-      <hr />
-      <FooterCreateProduct onClickButtonNext={() => {}} />
-      <hr />
-      <SaveFooter onSave={() => {}} />
-    </div>
-  </div>
+    <Footer onClickButtonNext={() => {}} />
+  </Container>
 );
 
 export const labelPriceComposition = 'Composição de preço';
