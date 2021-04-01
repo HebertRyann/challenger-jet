@@ -145,7 +145,6 @@ export const DataOverview = ({
 
   const handlerSelectTypeProduct = useCallback(
     (value: TypeProduct) => {
-      console.log(value);
       setErrorSelectTypeProduct({ ...errorSelectTypeProduct, isError: false });
       setSelectTypeProduct(value);
       if (value.id === SALE.id) {
@@ -227,7 +226,7 @@ export const DataOverview = ({
             }}
           >
             {typeProducts.map(({ id, name }) => (
-              <option value={id + '+' + name}>{name}</option>
+              <option key={id} value={id + '+' + name}>{name}</option>
             ))}
           </NewSelect>
         </div>
