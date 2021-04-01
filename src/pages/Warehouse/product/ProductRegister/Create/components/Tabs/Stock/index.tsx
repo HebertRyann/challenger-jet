@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from './component/Table';
-import { FooterCreateProduct } from '../../footer';
-import { SaveFooter } from '../../footer/saveFooter';
+import { Footer } from '../../footer';
 
 type TypeHasVariationProps = {
   unitMensureds: {
@@ -14,15 +13,11 @@ export const Stock = ({
   unitMensureds,
 }: TypeHasVariationProps): JSX.Element => {
   return (
-    <div className="row">
-      <Table unitMensured={unitMensureds} />
-      <div style={{ padding: '0 20px' }}>
-        <hr />
-        <FooterCreateProduct onClickButtonNext={() => {}} />
-        <hr />
-        <SaveFooter onSave={() => {}} />
+    <>
+      <div className="row">
+        <Table unitMensured={unitMensureds} />
       </div>
-    </div>
+    </>
   );
 };
 

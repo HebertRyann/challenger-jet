@@ -18,7 +18,7 @@ import {
   RE_SALE,
 } from './products';
 import { nameStock } from '../Stock';
-import { FooterCreateProduct } from '../../footer';
+import { Footer } from '../../footer';
 import {
   NewSelect,
   TypeErrorSelect,
@@ -304,10 +304,7 @@ export const DataOverview = ({
         message="Os campos destacados são de preenchimento obrigatório"
         onClickConfirmButton={handlerClickAlertConfirm}
       />
-      <hr />
-      <FooterCreateProduct onClickButtonNext={handlerClickNextAba} />
-      <hr />
-      <SaveFooter onSave={handlerOnSave} />
+      <Footer onClickButtonNext={handlerClickNextAba} />
     </>
   );
 };
