@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { Footer } from '../../../footer';
 import { Container, IconRemove } from './style';
 
 type TypeVariation = {
@@ -81,6 +82,9 @@ export const Table = (): JSX.Element | null => {
           produto
         </button>
       </footer>
+      <div style={{ margin: '20px 20px 0 0' }}>
+        <Footer onClickButtonNext={() => {}} />
+      </div>
     </Container>
   );
 };
