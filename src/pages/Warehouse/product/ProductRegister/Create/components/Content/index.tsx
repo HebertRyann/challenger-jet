@@ -20,8 +20,7 @@ export type TypeContentTabs = {
 };
 
 export const Content = (): JSX.Element => {
-  const { loadTabs, addTab } = useTabs();
-  const [currentTab, setCurrentTab] = useState('');
+  const { loadTabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs();
   const { activeLoading, disableLoading } = useLoading();
   const [tabs, setTabs] = useState<TypeContentTabs[]>([]);
 
@@ -30,7 +29,7 @@ export const Content = (): JSX.Element => {
       activeLoading();
       const tabs = await makeTabs();
       tabs.map(tab => addTab(tab));
-      setCurrentTab(tabs[0].name);
+      changeCurrentTab(tabs[0].name);
       setTabs(loadTabs());
       disableLoading();
     }
@@ -48,8 +47,8 @@ export const Content = (): JSX.Element => {
                 isEnable && (
                   <TabName
                     key={index}
-                    onClick={() => setCurrentTab(name)}
-                    isActive={name === currentTab}
+                    onClick={() => changeCurrentTab(name)}
+                    isActive={name === loadCurrentTab().key}
                   >
                     {label}
                   </TabName>
@@ -58,8 +57,8 @@ export const Content = (): JSX.Element => {
           </TabHeaderContainer>
           <TabPanelContainer>
             <hr />
-            {tabs.map(({ Component, name }, index) => (
-              <RenderComponent isActive={name === currentTab}>
+            {tabs.map(({ Component, name }) => (
+              <RenderComponent isActive={name === loadCurrentTab().key}>
                 {Component}
               </RenderComponent>
             ))}
