@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useState } from 'react';
 
 type TypeTabs = {
   name: string;
@@ -47,20 +47,23 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
 
   const loadTabs = (): TypeTabs[] => tabs;
 
-  const activeTab = (keyTab: string) => {
-    try {
-      const result = tabs.filter(({ name }) => name === keyTab);
-      if (result) {
-        const indexTab = tabs.indexOf(result[0]);
-        tabs[indexTab].isEnable = true;
-        setTabs([...tabs]);
-        return;
+  const activeTab = useCallback(
+    (keyTab: string) => {
+      try {
+        const result = tabs.filter(({ name }) => name === keyTab);
+        if (result) {
+          const indexTab = tabs.indexOf(result[0]);
+          tabs[indexTab].isEnable = true;
+          setTabs([...tabs]);
+          return;
+        }
+        throw new Error('No find tab with id');
+      } catch (error) {
+        console.error(error.message);
       }
-      throw new Error('No find tab with id');
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+    },
+    [tabs],
+  );
 
   const disableTab = (keyTab: string) => {
     try {
