@@ -3,7 +3,7 @@ import { Container } from './styles';
 
 export type TypeErrorSelect = {
   isError: boolean;
-  descriptionError: string;
+  descriptionError?: string;
 };
 
 export interface TypeNewSelectProps
@@ -25,7 +25,7 @@ export const NewSelect = ({
         </option>
         {children}
       </select>
-      {error && <label>{error.descriptionError}</label>}
+      {error?.descriptionError && <label>{error.descriptionError}</label>}
     </Container>
   );
 };

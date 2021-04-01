@@ -8,7 +8,7 @@ import { Container } from './styles';
 
 export type TypeErrorSelect = {
   isError: boolean;
-  descriptionError: string;
+  descriptionError?: string;
 };
 
 export interface TypeNewInputProps
@@ -53,7 +53,7 @@ export const NewInput = ({
         className="form-control"
         {...props}
       />
-      {currentError.isError && <label>{currentError.descriptionError}</label>}
+      {currentError.descriptionError && <label>{currentError.descriptionError}</label>}
     </Container>
   );
 };
