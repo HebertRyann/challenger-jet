@@ -9,7 +9,7 @@ export type TypeErrorSelect = {
 export interface TypeNewSelectProps
   extends SelectHTMLAttributes<HTMLSelectElement> {
   error?: TypeErrorSelect;
-  children: JSX.Element[];
+  children?: JSX.Element[];
 }
 
 export const NewSelect = ({
@@ -20,7 +20,12 @@ export const NewSelect = ({
   return (
     <Container className="selectdiv" isError={error?.isError}>
       <select className="form-control" {...props}>
-        <option disabled selected>
+        <option
+          style={{ display: 'none' }}
+          className="disabled"
+          disabled
+          selected
+        >
           selecione
         </option>
         {children}
