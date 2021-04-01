@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container } from './style';
 import { DropdownInput } from '../../../../../../../../components/DropdownInput';
-import { SaveFooter } from '../../footer/saveFooter';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
 import { nameHasVariation } from '../HasVariation';
 import { nameFiscal } from '../Fiscal';
