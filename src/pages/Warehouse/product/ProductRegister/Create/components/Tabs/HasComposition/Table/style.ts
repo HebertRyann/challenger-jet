@@ -14,6 +14,27 @@ export const Container = styled.div`
 export const IconRemove = styled(FaTrashAlt).attrs(() => ({
   size: '16px',
 }))`
-  margin: 10px auto;
+  margin: 0 auto;
   cursor: pointer;
+`;
+
+export const FooterStyled = styled.footer`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  > button {
+    height: 30px;
+  }
+  > div {
+    > h4 {
+      font-size: 14px;
+      font-weight: bolder;
+    }
+    > h6 {
+      margin-top: -5px;
+      font-size: 14px;
+      font-weight: bolder;
+      text-align: end;
+    }
+  }
 `;
