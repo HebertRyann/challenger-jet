@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Container } from './style';
 import { DropdownInput } from '../../../../../../../../components/DropdownInput';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
@@ -50,21 +50,33 @@ export const DataOverview = ({
   categoryFinances: TypeEntityWithIdAndName[];
   categoryProducts: TypeEntityWithIdAndName[];
 }): JSX.Element => {
-  const [alert, setAlert] = useState(false);
-  const { activeTab, disableTab } = useTabs();
+  const { activeTab, disableTab, changeCurrentTabForNext } = useTabs();
+  const [alert, setAlert] = useState<{ active: boolean; message: string }>({
+    active: false,
+    message: '',
+  });
 
   const [
-    errorCategoryFinance,
-    setErrorCategoryFinance,
-  ] = useState<TypeErrorSelect>({ isError: false });
-  const [categoryFinance, setCategoryFinance] = useState('');
-  const handlerChangeCategoryFinance = useCallback(
-    (value: any) => {
-      setErrorCategoryFinance({ ...errorCategoryFinance, isError: false });
-      setCategoryFinance(value);
-    },
-    [categoryFinance, errorCategoryFinance],
-  );
+    categoryFinance,
+    setCategoryFinance,
+  ] = useState<TypeEntityWithIdAndName>({ id: '', name: '', parent_id: null });
+
+  const [subCategoryFinance, setSubCategoryFinance] = useState<
+    TypeEntityWithIdAndName[]
+  >([{ id: '', name: '', parent_id: null }]);
+
+  const [
+    categoryProduct,
+    setCategoryProduct,
+  ] = useState<TypeEntityWithIdAndName>();
+
+  const [name, setName] = useState('');
+
+  const [hasVariation, setHasvariation] = useState<TypeTabNameEnableOrDisable>({
+    keyTab: '',
+    name: 'Selecione',
+    active: true,
+  });
 
   const [
     errorCategoryProduct,
@@ -72,36 +84,36 @@ export const DataOverview = ({
   ] = useState<TypeErrorSelect>({ isError: false });
 
   const [
-    categoryProduct,
-    setCategoryProduct,
-  ] = useState<TypeEntityWithIdAndName>();
-  const [name, setName] = useState('');
+    errorCategoryFinance,
+    setErrorCategoryFinance,
+  ] = useState<TypeErrorSelect>({ isError: false });
+
+  const handlerChangeCategoryFinance = useCallback(
+    ({ id, name, parent_id }: TypeEntityWithIdAndName) => {
+      setErrorCategoryFinance({ ...errorCategoryFinance, isError: false });
+      setCategoryFinance({ id, name, parent_id });
+      const childrens = categoryFinances.filter(
+        parents => parents.parent_id == id,
+      );
+      setSubCategoryFinance(childrens);
+    },
+    [errorCategoryFinance, categoryFinance, subCategoryFinance],
+  );
+
   const [errorName, setErrorName] = useState<TypeErrorSelect>({
     isError: false,
   });
-  const [hasVariation, setHasvariation] = useState<TypeTabNameEnableOrDisable>({
-    keyTab: '',
-    name: 'Selecione',
-    active: true,
-  });
-  const [
-    hasComposition,
-    setHasComposition,
-  ] = useState<TypeTabNameEnableOrDisable>({
-    keyTab: '',
-    name: 'Selecione',
-    active: true,
-  });
+
   const [selectTypeProduct, setSelectTypeProduct] = useState<TypeProduct>({
     id: 0,
     name: 'Selecione',
   });
+
   const [
     errorSelectTypeProduct,
     setErrorSelectTypeProduct,
   ] = useState<TypeErrorSelect>({ isError: false });
   const [internalCode, setInternalCode] = useState('');
-  const { changeCurrentTabForNext } = useTabs();
 
   const handlerChangeCategoryProduct = useCallback(
     (value: TypeEntityWithIdAndName) => {
@@ -123,7 +135,7 @@ export const DataOverview = ({
   );
 
   const handlerClickAlertConfirm = useCallback(() => {
-    setAlert(false);
+    setAlert({ active: false, message: '' });
   }, [alert]);
 
   const handlerHasVariation = useCallback(
@@ -178,7 +190,7 @@ export const DataOverview = ({
         isError: true,
       });
     }
-    if (categoryFinance.length <= 0) {
+    if (categoryFinance.id === '') {
       isError = true;
       setErrorCategoryFinance({
         isError: true,
@@ -199,13 +211,13 @@ export const DataOverview = ({
     if (!isError) {
       changeCurrentTabForNext(nameDataOverview);
     } else {
-      setAlert(true);
+      setAlert({
+        active: true,
+        message: 'Os campos destacados são de preenchimento obrigatório',
+      });
     }
   }, [selectTypeProduct, categoryFinance, categoryProduct, name]);
 
-  const handlerOnSave = useCallback(() => {
-    handlerClickNextAba();
-  }, []);
   return (
     <>
       <div className="row">
@@ -235,16 +247,60 @@ export const DataOverview = ({
             label="Categoria custo"
             message="Selecione o tipo do produto"
           />
-          <DropdownInput<TypeEntityWithIdAndName>
+          <NewSelect
             error={errorCategoryFinance}
-            data={categoryFinances}
-            onChangeCurrentRow={handlerChangeCategoryFinance}
+            onChange={event => {
+              const split = event.target.value.split('+');
+              const id = split[0];
+              const name = split[1];
+              handlerChangeCategoryFinance({ id, name, parent_id: null });
+            }}
+          >
+            {categoryFinances
+              .filter(({ parent_id }) => parent_id === null)
+              .map(({ id, name }) => (
+                <option key={id} value={id + '+' + name}>
+                  {name}
+                </option>
+              ))}
+          </NewSelect>
+        </div>
+        <div className="form-content col-md-3">
+          <TooltipComponent
+            label="Subcategoria custo"
+            message="Selecione o tipo do produto"
           />
+          <NewSelect
+            error={errorCategoryFinance}
+            onClick={event => {
+              console.log('Click');
+              if (categoryFinance.id === '') {
+                setAlert({
+                  active: false,
+                  message: 'Selecionar categoria custo ',
+                });
+                return;
+              }
+            }}
+            onChange={event => {
+              const split = event.target.value.split('+');
+              const id = split[0];
+              const name = split[1];
+              // handlerChangeCategoryFinance
+              // handlerSelectTypeProduct({ id: Number(id), name });
+            }}
+          >
+            {subCategoryFinance.map(({ id, name }) => (
+              <option key={id} value={id + '+' + name}>
+                {name}
+              </option>
+            ))}
+          </NewSelect>
         </div>
         <div className="form-content col-md-3">
           <TooltipComponent
             label="Grupo produto"
-            message="Selecione o tipo do produto"
+            message="Selecione Categoria custo"
           />
           <DropdownInput<TypeEntityWithIdAndName>
             error={errorCategoryProduct}
@@ -252,6 +308,8 @@ export const DataOverview = ({
             onChangeCurrentRow={handlerChangeCategoryProduct}
           />
         </div>
+      </div>
+      <Container className="row">
         <div className="form-content col-md-3">
           <TooltipComponent
             label="Nome do produto"
@@ -264,8 +322,6 @@ export const DataOverview = ({
             name="category"
           />
         </div>
-      </div>
-      <Container className="row">
         <div className="form-content col-md-3">
           <TooltipComponent
             label="Possui variação?"
@@ -298,9 +354,9 @@ export const DataOverview = ({
         </div>
       </Container>
       <Alert
-        isActive={alert}
+        isActive={alert.active}
         onlyConfirm
-        message="Os campos destacados são de preenchimento obrigatório"
+        message={alert.message}
         onClickConfirmButton={handlerClickAlertConfirm}
       />
       <Footer onClickButtonNext={handlerClickNextAba} />
