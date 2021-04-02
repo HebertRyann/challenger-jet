@@ -165,20 +165,61 @@ export const Details = (): JSX.Element => {
     setAlert(false);
   }, [alert]);
 
+  function mask(value: string) {
+    let newValue = value
+      .replace(/\D/g, '')
+      .replace(/(\d{2})(\d{1,2})/, '$1,$2');
+    if (newValue.length > 5) {
+      newValue = value
+        .replace(/\D/g, '')
+        .replace(',', '')
+        .replace(/(\d{3})(\d{1,2})/, '$1,$2');
+      if (newValue.length > 6) {
+        newValue = value
+          .replace(/\D/g, '')
+          .replace(',', '')
+          .replace(/(\d{1})(\d{1,3})(\d{1,2})/, '$1.$2,$3');
+      }
+      if (newValue.length > 7) {
+        newValue = value
+          .replace(/\D/g, '')
+          .replace(',', '')
+          .replace(/(\d{2})(\d{1,3})(\d{1,2})/, '$1.$2,$3');
+        console.log(newValue);
+      }
+    }
+    return newValue;
+  }
+
   return (
     <Container>
       <div className="row">
-        <div className="form-content col-md-3">
+        {/* <div className="form-content col-md-3">
           <TooltipComponent label="Peso (kg)" message="Infome o peso em kg" />
           <NewInput
             onKeyPress={event => {
               const regex = /^[0-9.]+$/;
               if (regex.test(event.key)) {
-                handlerChangerPeso(event.currentTarget.value);
+                const value = event.currentTarget.value;
+                const result = value.replace(/(\d{2})(\d)/, '$1,$2');
+                event.currentTarget.value = result;
+                handlerChangerPeso(result);
                 return;
               }
               event.preventDefault();
             }}
+            error={errorPeso}
+            name="peso"
+            className="form-control"
+            type="text"
+            placeholder="0,00"
+          />
+        </div> */}
+        <div className="form-content col-md-3">
+          <TooltipComponent label="Peso (kg)" message="Infome o peso em kg" />
+          <NewInput
+            value={mask(peso)}
+            onChange={e => setPeso(e.target.value)}
             error={errorPeso}
             name="peso"
             className="form-control"
