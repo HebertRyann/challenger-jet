@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Footer } from '../../../footer';
-import { Container, IconRemove } from './style';
+import { Container, FooterStyled, IconRemove } from './style';
 
 type TypeVariation = {
   key: number;
@@ -37,7 +37,7 @@ export const Table = (): JSX.Element | null => {
             <th style={{ width: '50%' }}>Produto</th>
             <th>Quantidade</th>
             <th>Custo</th>
-            <th>Total</th>
+            <th>Subtotal</th>
             <th>Ações</th>
           </tr>
           {variations
@@ -69,7 +69,8 @@ export const Table = (): JSX.Element | null => {
             ))}
         </tbody>
       </table>
-      <footer>
+      <hr />
+      <FooterStyled>
         <button
           onClick={handlerAddNewVariation}
           className="btn dark btn-sm sbold uppercase"
@@ -81,8 +82,12 @@ export const Table = (): JSX.Element | null => {
           />
           produto
         </button>
-      </footer>
-      <div style={{ margin: '20px 20px 0 0' }}>
+        <div>
+          <h4>Total</h4>
+          <h6>10</h6>
+        </div>
+      </FooterStyled>
+      <div style={{ margin: '20px 0px 0 0' }}>
         <Footer onClickButtonNext={() => {}} />
       </div>
     </Container>
