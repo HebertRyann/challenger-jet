@@ -3,6 +3,7 @@ import { Container, IconRemove } from './style';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../../../services/api';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
 import { RE_SALE, SALE } from '../../../DataOverview/products';
+import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 
 type TypeUnitMensured = {
   id: string;
@@ -16,30 +17,40 @@ type TypeTableProps = {
 
 type TypeVariation = {
   key: number;
-  isEnable: boolean;
+  unitPrice: {
+    id: string;
+    value: string;
+  };
+  priceCost: string;
 };
 
 export const Table = ({
   dataRenderTable,
   unitMensured,
 }: TypeTableProps): JSX.Element | null => {
-  const [variations, setVariations] = useState<TypeVariation[]>([
-    { isEnable: true, key: Math.random() },
-  ]);
+  const { getDataOverView } = useTabCreate();
+  const selectType = getDataOverView().typeSelectProdut;
+  const initialState: TypeVariation = {
+    key: Math.random(),
+    unitPrice: {
+      id: '',
+      value: '',
+    },
+    priceCost: '',
+  };
+  const [variations, setVariations] = useState<TypeVariation[]>([initialState]);
+
+  const [pricesCost, setPricesCost] = useState(['']);
 
   const handlerAddNewVariation = useCallback(() => {
-    variations.push({ isEnable: true, key: Math.random() });
+    variations.push({ ...initialState, key: Math.random() });
     setVariations([...variations]);
   }, [variations]);
 
   const handleRemoveVariation = useCallback(
-    (keyVariation: TypeVariation, index: number) => {
-      const result = variations.filter(({ key }) => key !== keyVariation.key);
+    (keyVariation: number) => {
+      const result = variations.filter(({ key }) => key !== keyVariation);
       if (result.length === 0) {
-        const initialState: TypeVariation = {
-          isEnable: true,
-          key: Math.random(),
-        };
         setVariations([initialState]);
       } else {
         setVariations([...result]);
@@ -48,8 +59,34 @@ export const Table = ({
     [variations],
   );
 
-  const { getDataOverView } = useTabCreate();
-  const selectType = getDataOverView().typeSelectProdut;
+  const handlerChangeSelect = useCallback(
+    (currentVariation: {
+      key: number;
+      unitPrice: {
+        id: string;
+        value: string;
+      };
+    }) => {
+      const result = variations.filter(
+        ({ key }) => key === currentVariation.key,
+      );
+      const index = variations.indexOf(result[0]);
+      variations[index].unitPrice = currentVariation.unitPrice;
+      setVariations([...variations]);
+    },
+    [variations],
+  );
+
+  const handlerChangePriceCost = useCallback(
+    (keyInput: number, value: string) => {
+      const result = variations.filter(({ key }) => key === keyInput);
+      const index = variations.indexOf(result[0]);
+      variations[index].priceCost = value;
+      setVariations([...variations]);
+      console.log(value);
+    },
+    [variations],
+  );
 
   return (
     <Container className="table-responsive">
@@ -69,58 +106,79 @@ export const Table = ({
             ) : null}
             <th>Ações</th>
           </tr>
-          {variations
-            .filter(({ isEnable }) => isEnable)
-            .map(({ key, isEnable }, index) => (
-              <tr key={index}>
-                <td>
-                  <select className="select form-control" name="Selecione">
-                    <option className="disabled" disabled selected>
-                      Selecione
+          {variations.map(({ key, unitPrice, priceCost }, index) => (
+            <tr key={key}>
+              <td>
+                <NewSelect
+                  onChange={event => {
+                    const split = event.target.value.split('+');
+                    const key = split[0];
+                    const id = split[1];
+                    const value = split[2];
+                    handlerChangeSelect({
+                      key: Number(key),
+                      unitPrice: {
+                        id,
+                        value,
+                      },
+                    });
+                  }}
+                  className="select form-control"
+                  name="Selecione"
+                >
+                  {unitPrice.id !== '' ? (
+                    <option style={{ display: 'none' }} selected>
+                      {unitPrice.value}
                     </option>
-                    {unitMensured.map(
-                      ({ id, name }) => (
-                        <option value={`${id}+${name}`}>{name}</option>
-                      ),
-                      [],
-                    )}
-                  </select>
-                </td>
-                {dataRenderTable.map(
-                  ({ parent_id, childrenList }, index) =>
-                    parent_id === null && (
-                      <td key={index}>
-                        <select
-                          className="form-control"
-                          name="Selecione"
-                          id="Selecione"
-                        >
-                          {childrenList.map(({ name }) => (
-                            <option value={name}>{name}</option>
-                          ))}
-                        </select>
-                      </td>
-                    ),
-                )}
+                  ) : (
+                    <div />
+                  )}
+                  <>
+                    {unitMensured.map(({ id, name }) => (
+                      <option value={`${key}+${id}+${name}`}>{name}</option>
+                    ))}
+                  </>
+                </NewSelect>
+              </td>
+              {dataRenderTable.map(
+                ({ parent_id, childrenList }, index) =>
+                  parent_id === null && (
+                    <td key={key}>
+                      <NewSelect
+                        className="form-control"
+                        name="Selecione"
+                        id="Selecione"
+                      >
+                        {childrenList.map(({ name }) => (
+                          <option value={name}>{name}</option>
+                        ))}
+                      </NewSelect>
+                    </td>
+                  ),
+              )}
+              <td>
+                <input className="form-control" type="text" />
+              </td>
+              {selectType.name == SALE.name ||
+              selectType.name == RE_SALE.name ? (
                 <td>
-                  <input className="form-control" type="text" />
-                </td>
-                {selectType.name == SALE.name ||
-                selectType.name == RE_SALE.name ? (
-                  <td>
-                    <input className="form-control" type="text" />
-                  </td>
-                ) : null}
-
-                <td className="actions">
-                  <IconRemove
-                    onClick={() =>
-                      handleRemoveVariation({ key, isEnable }, index)
-                    }
+                  <input
+                    key={key}
+                    value={priceCost}
+                    onChange={event => {
+                      handlerChangePriceCost(key, event.target.value);
+                    }}
+                    className="form-control"
+                    type="text"
                   />
                 </td>
-              </tr>
-            ))}
+              ) : null}
+
+              <td className="actions">
+                <IconRemove onClick={() => handleRemoveVariation(key)} />
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <footer>
