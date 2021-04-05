@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
 import { Footer } from '../../footer';
 import { Container, TextArea } from './style';
@@ -6,17 +6,21 @@ import { NewInput } from '../../../../../../../../components/NewInput';
 import { Alert } from '../../../../../../../../components/Alert';
 import { numericMask } from '../../../../../../../../utlis/mask';
 import { useTabCreate } from '../../../providers/tabsProvider';
-
-export const labelDetails = 'Detalhes';
-export const nameDetails = '@@tabs-details';
+import { useTabs } from '../../../../../../../../hooks/tabs';
+import { nameDataOverview } from '../DataOverview';
 
 export const Details = (): JSX.Element => {
+  const { changeCurrentTab } = useTabs();
   const [alert, setAlert] = useState<{ active: boolean; message: string }>({
     active: false,
     message: '',
   });
 
-  const { getDetails, setDetails } = useTabCreate();
+  const {
+    getDetails,
+    setDetails,
+    validationAndSetErrorAllFieldsDetails,
+  } = useTabCreate();
   const {
     weight,
     width,
@@ -32,51 +36,7 @@ export const Details = (): JSX.Element => {
   }, [alert]);
 
   const handlerClickNextButton = useCallback(() => {
-    let isError = false;
-
-    if (weight.value === '') {
-      isError = true;
-      weight.error.isError = true;
-      setDetails({ ...getDetails() });
-    }
-
-    if (width.value === '') {
-      isError = true;
-      width.error.isError = true;
-      setDetails({ ...getDetails() });
-    }
-
-    if (height.value === '') {
-      isError = true;
-      height.error.isError = true;
-      setDetails({ ...getDetails() });
-    }
-
-    if (length.value === '') {
-      isError = true;
-      length.error.isError = true;
-      setDetails({ ...getDetails() });
-    }
-
-    if (descriptionAndDetails.value === '') {
-      isError = true;
-      descriptionAndDetails.error.isError = true;
-      setDetails({ ...getDetails() });
-    }
-
-    if (technicalSpecification.value === '') {
-      isError = true;
-      technicalSpecification.error.isError = true;
-      setDetails({ ...getDetails() });
-    }
-
-    if (wayOfUse.value === '') {
-      isError = true;
-      wayOfUse.error.isError = true;
-      setDetails({ ...getDetails() });
-    }
-
-    if (isError) {
+    if (validationAndSetErrorAllFieldsDetails()) {
       setAlert({
         active: true,
         message:
@@ -234,7 +194,10 @@ export const Details = (): JSX.Element => {
           </div>
         </div>
       </div>
-      <Footer onClickButtonNext={handlerClickNextButton} />
+      <Footer
+        onClickButtonNext={handlerClickNextButton}
+        onClickButtonBack={() => changeCurrentTab(nameDataOverview)}
+      />
       <Alert
         isActive={alert.active}
         onlyConfirm
@@ -244,3 +207,6 @@ export const Details = (): JSX.Element => {
     </Container>
   );
 };
+
+export const labelDetails = 'Detalhes';
+export const nameDetails = '@@tabs-details';
