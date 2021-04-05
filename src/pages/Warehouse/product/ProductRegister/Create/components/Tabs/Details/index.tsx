@@ -16,11 +16,8 @@ export const Details = (): JSX.Element => {
     message: '',
   });
 
-  const {
-    getDetails,
-    setDetails,
-    validationAndSetErrorAllFieldsDetails,
-  } = useTabCreate();
+  const { details, overview } = useTabCreate();
+  const { typeSelectProdut, categoryCost } = overview.getData();
   const {
     weight,
     width,
@@ -29,14 +26,15 @@ export const Details = (): JSX.Element => {
     descriptionAndDetails,
     technicalSpecification,
     wayOfUse,
-  } = getDetails();
+  } = details.getData();
 
   const handlerClickAlertConfirm = useCallback(() => {
     setAlert({ ...alert, active: false });
   }, [alert]);
 
   const handlerClickNextButton = useCallback(() => {
-    if (validationAndSetErrorAllFieldsDetails()) {
+    console.log(overview.getData());
+    if (details.validate()) {
       setAlert({
         active: true,
         message:
@@ -51,6 +49,8 @@ export const Details = (): JSX.Element => {
     descriptionAndDetails,
     technicalSpecification,
     wayOfUse,
+    typeSelectProdut,
+    categoryCost,
   ]);
 
   return (
@@ -61,8 +61,8 @@ export const Details = (): JSX.Element => {
           <NewInput
             value={numericMask(weight.value)}
             onChange={e =>
-              setDetails({
-                ...getDetails(),
+              details.setData({
+                ...details.getData(),
                 weight: { error: { isError: false }, value: e.target.value },
               })
             }
@@ -81,8 +81,8 @@ export const Details = (): JSX.Element => {
           <NewInput
             value={numericMask(width.value)}
             onChange={e =>
-              setDetails({
-                ...getDetails(),
+              details.setData({
+                ...details.getData(),
                 width: { error: { isError: false }, value: e.target.value },
               })
             }
@@ -101,8 +101,8 @@ export const Details = (): JSX.Element => {
           <NewInput
             value={numericMask(height.value)}
             onChange={e =>
-              setDetails({
-                ...getDetails(),
+              details.setData({
+                ...details.getData(),
                 height: { error: { isError: false }, value: e.target.value },
               })
             }
@@ -121,8 +121,8 @@ export const Details = (): JSX.Element => {
           <NewInput
             value={numericMask(length.value)}
             onChange={e =>
-              setDetails({
-                ...getDetails(),
+              details.setData({
+                ...details.getData(),
                 length: { error: { isError: false }, value: e.target.value },
               })
             }
@@ -141,8 +141,8 @@ export const Details = (): JSX.Element => {
             <TextArea
               isError={descriptionAndDetails.error.isError}
               onChange={e =>
-                setDetails({
-                  ...getDetails(),
+                details.setData({
+                  ...details.getData(),
                   descriptionAndDetails: {
                     error: { isError: false },
                     value: e.target.value,
@@ -161,8 +161,8 @@ export const Details = (): JSX.Element => {
             <TextArea
               isError={technicalSpecification.error.isError}
               onChange={e =>
-                setDetails({
-                  ...getDetails(),
+                details.setData({
+                  ...details.getData(),
                   technicalSpecification: {
                     error: { isError: false },
                     value: e.target.value,
@@ -181,8 +181,8 @@ export const Details = (): JSX.Element => {
             <TextArea
               isError={wayOfUse.error.isError}
               onChange={e =>
-                setDetails({
-                  ...getDetails(),
+                details.setData({
+                  ...details.getData(),
                   wayOfUse: {
                     error: { isError: false },
                     value: e.target.value,
