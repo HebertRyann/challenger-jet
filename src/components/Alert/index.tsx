@@ -20,7 +20,9 @@ export const Alert = ({
   return (
     <Container isActive={isActive}>
       <main>
-        <h4>{message}</h4>
+        <h4>Atenção</h4>
+        <hr />
+        <h4 style={{ fontWeight: 500 }}>{message}</h4>
         <hr />
         <footer>
           <button
