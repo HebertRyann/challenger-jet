@@ -22,6 +22,7 @@ import {
   NewSelect,
   TypeErrorSelect,
 } from '../../../../../../../../components/NewSelect';
+import { useTabCreate } from '../../../providers/tabsProvider';
 export type TypeTabNameEnableOrDisable = {
   keyTab: string;
   name: string;
@@ -51,24 +52,34 @@ export const DataOverview = ({
   categoryProducts: TypeEntityWithIdAndName[];
 }): JSX.Element => {
   const { activeTab, disableTab, changeCurrentTabForNext } = useTabs();
+  const { setDataOverView } = useTabCreate();
   const [alert, setAlert] = useState<{ active: boolean; message: string }>({
     active: false,
     message: '',
   });
 
+  const initialState: TypeEntityWithIdAndName = {
+    id: '',
+    name: '',
+    parent_id: null,
+  };
+
   const [
     categoryFinance,
     setCategoryFinance,
-  ] = useState<TypeEntityWithIdAndName>({ id: '', name: '', parent_id: null });
+  ] = useState<TypeEntityWithIdAndName>(initialState);
 
-  const [subCategoryFinance, setSubCategoryFinance] = useState<
+  const [subCategoryFinanceData, setSubCategoryFinanceData] = useState<
     TypeEntityWithIdAndName[]
-  >([{ id: '', name: '', parent_id: null }]);
-
+  >([initialState]);
+  const [
+    subCategoryFinance,
+    setSubCategoryFinance,
+  ] = useState<TypeEntityWithIdAndName>(initialState);
   const [
     categoryProduct,
     setCategoryProduct,
-  ] = useState<TypeEntityWithIdAndName>();
+  ] = useState<TypeEntityWithIdAndName>(initialState);
 
   const [name, setName] = useState('');
 
@@ -95,9 +106,24 @@ export const DataOverview = ({
       const childrens = categoryFinances.filter(
         parents => parents.parent_id == id,
       );
-      setSubCategoryFinance(childrens);
+      setSubCategoryFinanceData(childrens);
     },
-    [errorCategoryFinance, categoryFinance, subCategoryFinance],
+    [errorCategoryFinance, categoryFinance, subCategoryFinanceData],
+  );
+
+  const [
+    errorSubCategoryFinance,
+    setErrorSubCategoryFinance,
+  ] = useState<TypeErrorSelect>({
+    isError: false,
+  });
+
+  const handlerChangeSubCategoryFinance = useCallback(
+    (value: TypeEntityWithIdAndName) => {
+      setErrorSubCategoryFinance({ isError: false });
+      setSubCategoryFinance(value);
+    },
+    [subCategoryFinance],
   );
 
   const [errorName, setErrorName] = useState<TypeErrorSelect>({
@@ -196,6 +222,12 @@ export const DataOverview = ({
         isError: true,
       });
     }
+    if (subCategoryFinance.id === '') {
+      isError = true;
+      setErrorSubCategoryFinance({
+        isError: true,
+      });
+    }
     if (!categoryProduct) {
       isError = true;
       setErrorCategoryProduct({
@@ -209,6 +241,21 @@ export const DataOverview = ({
       });
     }
     if (!isError) {
+      setDataOverView({
+        typeSelectProdut: {
+          id: selectTypeProduct.id.toString(),
+          name: selectTypeProduct.name,
+          parent_id: null,
+        },
+        categoryCost: categoryFinance,
+        subCategoryCost: categoryFinance,
+        groupProduct: categoryProduct,
+        nameProduct: name,
+        hasVariation: {
+          name: hasVariation.name,
+          hasVariation: hasVariation.active,
+        },
+      });
       changeCurrentTabForNext(nameDataOverview);
     } else {
       setAlert({
@@ -216,7 +263,13 @@ export const DataOverview = ({
         message: 'Os campos destacados são de preenchimento obrigatório',
       });
     }
-  }, [selectTypeProduct, categoryFinance, categoryProduct, name]);
+  }, [
+    selectTypeProduct,
+    categoryFinance,
+    subCategoryFinance,
+    categoryProduct,
+    name,
+  ]);
 
   return (
     <>
@@ -271,27 +324,22 @@ export const DataOverview = ({
             message="Selecione o tipo do produto"
           />
           <NewSelect
-            error={errorCategoryFinance}
-            onClick={event => {
-              console.log('Click');
-              if (categoryFinance.id === '') {
-                setAlert({
-                  active: false,
-                  message: 'Selecionar categoria custo ',
-                });
-                return;
-              }
-            }}
+            disabled={categoryFinance.id === ''}
+            error={errorSubCategoryFinance}
             onChange={event => {
               const split = event.target.value.split('+');
               const id = split[0];
               const name = split[1];
-              // handlerChangeCategoryFinance
-              // handlerSelectTypeProduct({ id: Number(id), name });
+              const parent_id = split[2];
+              handlerChangeSubCategoryFinance({
+                id,
+                name,
+                parent_id,
+              });
             }}
           >
-            {subCategoryFinance.map(({ id, name }) => (
-              <option key={id} value={id + '+' + name}>
+            {subCategoryFinanceData.map(({ id, name, parent_id }) => (
+              <option key={id} value={id + '+' + name + '+' + parent_id}>
                 {name}
               </option>
             ))}
@@ -302,11 +350,21 @@ export const DataOverview = ({
             label="Grupo produto"
             message="Selecione Categoria custo"
           />
-          <DropdownInput<TypeEntityWithIdAndName>
-            error={errorCategoryProduct}
-            data={categoryProducts}
-            onChangeCurrentRow={handlerChangeCategoryProduct}
-          />
+          <NewSelect
+            error={errorCategoryFinance}
+            onChange={event => {
+              const split = event.target.value.split('+');
+              const id = split[0];
+              const name = split[1];
+              handlerChangeCategoryProduct({ id, name, parent_id: null });
+            }}
+          >
+            {categoryProducts.map(({ id, name }) => (
+              <option key={id} value={id + '+' + name}>
+                {name}
+              </option>
+            ))}
+          </NewSelect>
         </div>
       </div>
       <Container className="row">
