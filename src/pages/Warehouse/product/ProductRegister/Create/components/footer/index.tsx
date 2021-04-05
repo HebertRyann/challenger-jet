@@ -18,7 +18,11 @@ export const Footer = ({
       <Container>
         <button
           onClick={onClickButtonBack}
-          className="btn disabled dark btn-sm sbold uppercase"
+          className={
+            onClickButtonBack !== undefined
+              ? 'btn dark btn-sm sbold uppercase'
+              : 'btn disabled dark btn-sm sbold uppercase'
+          }
         >
           <span
             className="fa fa-arrow-left"
@@ -29,7 +33,7 @@ export const Footer = ({
         </button>
         <button
           onClick={onClickButtonNext}
-          className="btn dark btn-sm sbold uppercase"
+          className="btn dark btn-sm bold uppercase"
         >
           Continuar
           <span
@@ -41,7 +45,7 @@ export const Footer = ({
       </Container>
       <hr />
       <ContainerFooter>
-        <button onClick={onSave} className="btn dark btn-sm sbold uppercase">
+        <button onClick={onSave} className="btn dark btn-sm bold uppercase">
           salvar
         </button>
       </ContainerFooter>
