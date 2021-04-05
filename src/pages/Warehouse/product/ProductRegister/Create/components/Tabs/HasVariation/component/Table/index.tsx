@@ -28,8 +28,8 @@ export const Table = ({
   dataRenderTable,
   unitMensured,
 }: TypeTableProps): JSX.Element | null => {
-  const { getDataOverView } = useTabCreate();
-  const selectType = getDataOverView().typeSelectProdut;
+  const { overview } = useTabCreate();
+  const selectType = overview.getData().typeSelectProdut;
   const initialState: TypeVariation = {
     key: Math.random(),
     unitPrice: {
@@ -100,7 +100,8 @@ export const Table = ({
               ({ name, parent_id }) => parent_id === null && <th>{name}</th>,
             )}
             <th>Estoque atual</th>
-            {selectType.name == SALE.name || selectType.name == RE_SALE.name ? (
+            {selectType.value.name == SALE.name ||
+            selectType.value.name == RE_SALE.name ? (
               <th>Preço de custo</th>
             ) : null}
             <th>Ações</th>
@@ -158,8 +159,8 @@ export const Table = ({
               <td>
                 <input className="form-control" type="text" />
               </td>
-              {selectType.name == SALE.name ||
-              selectType.name == RE_SALE.name ? (
+              {selectType.value.name == SALE.name ||
+              selectType.value.name == RE_SALE.name ? (
                 <td>
                   <input
                     key={key}
