@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Table } from './component/Table';
-import { Footer } from '../../footer';
 
 type TypeHasVariationProps = {
   unitMensureds: {
@@ -21,5 +20,5 @@ export const Stock = ({
   );
 };
 
-export const labelStock = 'Estoque';
+export const labelStock = 'Estoque/Variação';
 export const nameStock = '@@tabs-stock';
