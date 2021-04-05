@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import { Container } from './style';
-import { DropdownInput } from '../../../../../../../../components/DropdownInput';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
 import { nameHasVariation } from '../HasVariation';
 import { nameFiscal } from '../Fiscal';
@@ -52,11 +51,8 @@ export const DataOverview = ({
   categoryProducts: TypeEntityWithIdAndName[];
 }): JSX.Element => {
   const { activeTab, disableTab, changeCurrentTabForNext } = useTabs();
-  const {
-    setDataOverView,
-    getDetails,
-    validationAndSetErrorAllFieldsDetails,
-  } = useTabCreate();
+  const { overview, details } = useTabCreate();
+  const { typeSelectProdut, categoryCost } = overview.getData();
   const [alert, setAlert] = useState<{ active: boolean; message: string }>({
     active: false,
     message: '',
@@ -67,11 +63,6 @@ export const DataOverview = ({
     name: '',
     parent_id: null,
   };
-
-  const [
-    categoryFinance,
-    setCategoryFinance,
-  ] = useState<TypeEntityWithIdAndName>(initialState);
 
   const [subCategoryFinanceData, setSubCategoryFinanceData] = useState<
     TypeEntityWithIdAndName[]
@@ -98,21 +89,21 @@ export const DataOverview = ({
     setErrorCategoryProduct,
   ] = useState<TypeErrorSelect>({ isError: false });
 
-  const [
-    errorCategoryFinance,
-    setErrorCategoryFinance,
-  ] = useState<TypeErrorSelect>({ isError: false });
-
   const handlerChangeCategoryFinance = useCallback(
     ({ id, name, parent_id }: TypeEntityWithIdAndName) => {
-      setErrorCategoryFinance({ ...errorCategoryFinance, isError: false });
-      setCategoryFinance({ id, name, parent_id });
+      overview.setData({
+        ...overview.getData(),
+        categoryCost: {
+          error: { isError: false },
+          value: { id, name, parent_id },
+        },
+      });
       const childrens = categoryFinances.filter(
         parents => parents.parent_id == id,
       );
       setSubCategoryFinanceData(childrens);
     },
-    [errorCategoryFinance, categoryFinance, subCategoryFinanceData],
+    [categoryCost, subCategoryFinanceData],
   );
 
   const [
@@ -134,15 +125,6 @@ export const DataOverview = ({
     isError: false,
   });
 
-  const [selectTypeProduct, setSelectTypeProduct] = useState<TypeProduct>({
-    id: 0,
-    name: 'Selecione',
-  });
-
-  const [
-    errorSelectTypeProduct,
-    setErrorSelectTypeProduct,
-  ] = useState<TypeErrorSelect>({ isError: false });
   const [internalCode, setInternalCode] = useState('');
 
   const handlerChangeCategoryProduct = useCallback(
@@ -153,7 +135,7 @@ export const DataOverview = ({
       });
       setCategoryProduct(value);
     },
-    [categoryProduct, selectTypeProduct],
+    [categoryProduct, typeSelectProdut],
   );
 
   const handlerChangeName = useCallback(
@@ -185,8 +167,17 @@ export const DataOverview = ({
 
   const handlerSelectTypeProduct = useCallback(
     (value: TypeProduct) => {
-      setErrorSelectTypeProduct({ ...errorSelectTypeProduct, isError: false });
-      setSelectTypeProduct(value);
+      overview.setData({
+        ...overview.getData(),
+        typeSelectProdut: {
+          value: {
+            id: value.id.toString(),
+            name: value.name,
+            parent_id: null,
+          },
+          error: { isError: false },
+        },
+      });
       if (value.id === SALE.id) {
         activeTab(nameHasComposition);
         activeTab(nameFiscal);
@@ -209,7 +200,7 @@ export const DataOverview = ({
       disableTab(nameFiscal);
       disableTab(namePriceComposition);
     },
-    [selectTypeProduct],
+    [typeSelectProdut],
   );
 
   const handlerClickNextAba = useCallback(() => {
@@ -221,18 +212,6 @@ export const DataOverview = ({
       active: false,
       message: 'Os campos destacados são de preenchimento obrigatório',
     };
-    if (selectTypeProduct.id === 0) {
-      error.active = true;
-      setErrorSelectTypeProduct({
-        isError: true,
-      });
-    }
-    if (categoryFinance.id === '') {
-      error.active = true;
-      setErrorCategoryFinance({
-        isError: true,
-      });
-    }
     if (subCategoryFinance.id === '') {
       error.active = true;
       setErrorSubCategoryFinance({
@@ -251,23 +230,24 @@ export const DataOverview = ({
         isError: true,
       });
     }
+    console.log(overview.getData());
     if (!error.active) {
-      setDataOverView({
-        typeSelectProdut: {
-          id: selectTypeProduct.id.toString(),
-          name: selectTypeProduct.name,
-          parent_id: null,
-        },
-        categoryCost: categoryFinance,
-        subCategoryCost: categoryFinance,
-        groupProduct: categoryProduct,
-        nameProduct: name,
-        hasVariation: {
-          name: hasVariation.name,
-          hasVariation: hasVariation.active,
-        },
-      });
-      if (validationAndSetErrorAllFieldsDetails()) {
+      // overview.setData({
+      //   typeSelectProdut: {
+      //     id: selectTypeProduct.id.toString(),
+      //     name: selectTypeProduct.name,
+      //     parent_id: null,
+      //   },
+      //   categoryCost: categoryFinance,
+      //   subCategoryCost: categoryFinance,
+      //   groupProduct: categoryProduct,
+      //   nameProduct: name,
+      //   hasVariation: {
+      //     name: hasVariation.name,
+      //     hasVariation: hasVariation.active,
+      //   },
+      // });
+      if (details.validate()) {
         setAlert({
           active: true,
           message:
@@ -275,17 +255,16 @@ export const DataOverview = ({
         });
         return;
       }
-      console.log(getDetails());
     } else {
       setAlert(error);
     }
   }, [
-    selectTypeProduct,
-    categoryFinance,
+    typeSelectProdut,
+    categoryCost,
     subCategoryFinance,
     categoryProduct,
     name,
-    getDetails(),
+    details.getData(),
   ]);
 
   return (
@@ -297,7 +276,7 @@ export const DataOverview = ({
             message="Selecione o tipo do produto"
           />
           <NewSelect
-            error={errorSelectTypeProduct}
+            error={typeSelectProdut.error}
             onChange={event => {
               const split = event.target.value.split('+');
               const id = split[0];
@@ -318,7 +297,7 @@ export const DataOverview = ({
             message="Selecione o tipo do produto"
           />
           <NewSelect
-            error={errorCategoryFinance}
+            error={categoryCost.error}
             onChange={event => {
               const split = event.target.value.split('+');
               const id = split[0];
@@ -341,7 +320,7 @@ export const DataOverview = ({
             message="Selecione o tipo do produto"
           />
           <NewSelect
-            disabled={categoryFinance.id === ''}
+            disabled={categoryCost.value.id === ''}
             error={errorSubCategoryFinance}
             onChange={event => {
               const split = event.target.value.split('+');
