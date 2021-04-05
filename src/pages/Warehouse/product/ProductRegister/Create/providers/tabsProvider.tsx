@@ -41,6 +41,7 @@ type TypeDetailsProps = {
 interface TabCreateContext {
   setDataOverView: (overView: TypeDataOverViewProps) => void;
   getDataOverView: () => TypeDataOverViewProps;
+  validationAndSetErrorAllFieldsDataOverView: () => boolean;
   setDetails: (details: TypeDetailsProps) => void;
   getDetails: () => TypeDetailsProps;
   validationAndSetErrorAllFieldsDetails: () => boolean;
@@ -90,6 +91,15 @@ const TabCreateProvider = ({
   const getDataOverView = (): TypeDataOverViewProps => {
     return overView;
   };
+
+  const validationAndSetErrorAllFieldsDataOverView = useCallback(() => {
+    let isError = false;
+    if (overView.typeSelectProdut.id === '') {
+      isError = true;
+      console.log('teste');
+    }
+    return isError;
+  }, [overView]);
 
   const setDetails = (details: TypeDetailsProps) => setDetail(details);
 
@@ -141,6 +151,7 @@ const TabCreateProvider = ({
       value={{
         getDataOverView,
         setDataOverView,
+        validationAndSetErrorAllFieldsDataOverView,
         setDetails,
         getDetails,
         validationAndSetErrorAllFieldsDetails,
