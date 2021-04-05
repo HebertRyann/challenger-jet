@@ -98,12 +98,6 @@ export const makeTabs = async (): Promise<TypeContentTabs[]> => {
       Component: <Details />,
     },
     {
-      label: labelPriceComposition,
-      name: namePriceComposition,
-      isEnable: false,
-      Component: <PriceComposition />,
-    },
-    {
       label: labelStock,
       name: nameStock,
       isEnable: true,
@@ -116,6 +110,12 @@ export const makeTabs = async (): Promise<TypeContentTabs[]> => {
       Component: (
         <HasVariation atributes={atributes} unitMensureds={unitMensureds} />
       ),
+    },
+    {
+      label: labelPriceComposition,
+      name: namePriceComposition,
+      isEnable: false,
+      Component: <PriceComposition />,
     },
     {
       label: labelFiscal,
