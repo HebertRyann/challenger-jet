@@ -51,7 +51,7 @@ export const DataOverview = ({
   categoryFinances: TypeEntityWithIdAndName[];
   categoryProducts: TypeEntityWithIdAndName[];
 }): JSX.Element => {
-  const { activeTab, disableTab, changeCurrentTab } = useTabs();
+  const { activeTab, disableTab, changeCurrentTabForNext } = useTabs();
   const {
     setDataOverView,
     getDetails,
@@ -213,6 +213,10 @@ export const DataOverview = ({
   );
 
   const handlerClickNextAba = useCallback(() => {
+    changeCurrentTabForNext(nameDataOverview);
+  }, []);
+
+  const handlerClickSaveAba = useCallback(() => {
     const error = {
       active: false,
       message: 'Os campos destacados são de preenchimento obrigatório',
@@ -235,7 +239,7 @@ export const DataOverview = ({
         isError: true,
       });
     }
-    if (!categoryProduct) {
+    if (categoryProduct.id === '') {
       error.active = true;
       setErrorCategoryProduct({
         isError: true,
@@ -271,6 +275,7 @@ export const DataOverview = ({
         });
         return;
       }
+      console.log(getDetails());
     } else {
       setAlert(error);
     }
@@ -363,7 +368,7 @@ export const DataOverview = ({
             message="Selecione Categoria custo"
           />
           <NewSelect
-            error={errorCategoryFinance}
+            error={errorCategoryProduct}
             onChange={event => {
               const split = event.target.value.split('+');
               const id = split[0];
@@ -429,7 +434,10 @@ export const DataOverview = ({
         message={alert.message}
         onClickConfirmButton={handlerClickAlertConfirm}
       />
-      <Footer onClickButtonNext={handlerClickNextAba} />
+      <Footer
+        onClickButtonNext={handlerClickNextAba}
+        onSave={handlerClickSaveAba}
+      />
     </>
   );
 };
