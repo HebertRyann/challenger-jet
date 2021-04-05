@@ -368,7 +368,7 @@ export const DataOverview = ({
         </div>
       </div>
       <Container className="row">
-        <div className="form-content col-md-3">
+        <div className="form-content col-md-6">
           <TooltipComponent
             label="Nome do produto"
             message="Selecione o tipo do produto"
