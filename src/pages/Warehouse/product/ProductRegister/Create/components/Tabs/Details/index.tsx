@@ -9,14 +9,15 @@ import {
 import { useTabs } from '../../../../../../../../hooks/tabs';
 import { Alert } from '../../../../../../../../components/Alert';
 import { numericMask } from '../../../../../../../../utlis/mask';
+import { useTabCreate } from '../../../providers/tabsProvider';
 
 export const labelDetails = 'Detalhes';
 export const nameDetails = '@@tabs-details';
 
 export const Details = (): JSX.Element => {
   const { changeCurrentTabForNext } = useTabs();
+  const { getDataOverView } = useTabCreate();
   const [alert, setAlert] = useState(false);
-
   const [peso, setPeso] = useState('');
   const [altura, setAltura] = useState('');
   const [largura, setLargura] = useState('');
@@ -187,14 +188,8 @@ export const Details = (): JSX.Element => {
             message="Informe a largura em metros"
           />
           <NewInput
-            onKeyPress={event => {
-              const regex = /^[0-9.]+$/;
-              if (regex.test(event.key)) {
-                handlerChangerAltura(event.currentTarget.value);
-                return;
-              }
-              event.preventDefault();
-            }}
+            value={numericMask(largura)}
+            onChange={e => setLargura(e.target.value)}
             error={errorLargura}
             name="largura"
             className="form-control"
@@ -208,14 +203,8 @@ export const Details = (): JSX.Element => {
             message="Informe a altura em metros"
           />
           <NewInput
-            onKeyPress={event => {
-              const regex = /^[0-9.]+$/;
-              if (regex.test(event.key)) {
-                handlerChangerAltura(event.currentTarget.value);
-                return;
-              }
-              event.preventDefault();
-            }}
+            value={numericMask(altura)}
+            onChange={e => setAltura(e.target.value)}
             error={errorAltura}
             name="altura"
             className="form-control"
@@ -229,14 +218,8 @@ export const Details = (): JSX.Element => {
             message="Informe a comprimento em metros"
           />
           <NewInput
-            onKeyPress={event => {
-              const regex = /^[0-9.]+$/;
-              if (regex.test(event.key)) {
-                handlerChangerComprimento(event.currentTarget.value);
-                return;
-              }
-              event.preventDefault();
-            }}
+            value={numericMask(comprimento)}
+            onChange={e => setComprimento(e.target.value)}
             error={errorComprimento}
             name="comprimento"
             className="form-control"

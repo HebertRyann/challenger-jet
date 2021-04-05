@@ -4,6 +4,8 @@ import {
   NewInput,
   TypeErrorInput,
 } from '../../../../../../../../../components/NewInput';
+import { numericMask } from '../../../../../../../../../utlis/mask';
+import { ContainerInput } from './style';
 
 export const Table = (): JSX.Element => {
   const [alert, setAlert] = useState(false);
@@ -71,34 +73,62 @@ export const Table = (): JSX.Element => {
   return (
     <>
       <div className="row">
-        <div className="form-content col-md-3">
+        <ContainerInput className="form-content col-md-3">
           <TooltipComponent
             label="Margem de lucro"
             message="Selecione o tipo do produto"
           />
-          <input className="form-control" type="text" />
-        </div>
-        <div className="form-content col-md-3">
+          <NewInput
+            name="input"
+            value={numericMask(profit)}
+            onChange={e => setProif(e.target.value)}
+            className="form-control"
+            type="text"
+            placeholder="0,00"
+          />
+        </ContainerInput>
+        <ContainerInput className="form-content col-md-3">
           <TooltipComponent
             label="IPI (%)"
             message="Selecione o tipo do produto"
           />
-          <input className="form-control" type="text" />
-        </div>
-        <div className="form-content col-md-3">
+          <NewInput
+            name="input"
+            value={numericMask(ipi)}
+            onChange={e => setIpi(e.target.value)}
+            className="form-control"
+            type="text"
+            placeholder="0,00"
+          />
+        </ContainerInput>
+        <ContainerInput className="form-content col-md-3">
           <TooltipComponent
             label="Custo fixo"
             message="Selecione o tipo do produto"
           />
-          <input className="form-control" type="text" />
-        </div>
-        <div className="form-content col-md-3">
+          <NewInput
+            name="input"
+            value={numericMask(cost)}
+            onChange={e => setCost(e.target.value)}
+            className="form-control"
+            type="text"
+            placeholder="0,00"
+          />
+        </ContainerInput>
+        <ContainerInput className="form-content col-md-3">
           <TooltipComponent
             label="DIF ICMS"
             message="Selecione o tipo do produto"
           />
-          <input className="form-control" type="text" />
-        </div>
+          <NewInput
+            name="input"
+            value={numericMask(dif)}
+            onChange={e => setDif(e.target.value)}
+            className="form-control"
+            type="text"
+            placeholder="0,00"
+          />
+        </ContainerInput>
       </div>
     </>
   );
