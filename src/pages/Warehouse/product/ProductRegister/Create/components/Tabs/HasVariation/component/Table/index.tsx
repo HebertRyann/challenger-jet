@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container, IconRemove } from './style';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../../../services/api';
+import { useTabCreate } from '../../../../../providers/tabsProvider';
+import { SALE } from '../../../DataOverview/products';
 
 type TypeUnitMensured = {
   id: string;
@@ -46,6 +48,9 @@ export const Table = ({
     [variations],
   );
 
+  const { getDataOverView } = useTabCreate();
+  const selectType = getDataOverView().typeSelectProdut;
+
   return (
     <Container className="table-responsive">
       <table
@@ -59,6 +64,7 @@ export const Table = ({
               ({ name, parent_id }) => parent_id === null && <th>{name}</th>,
             )}
             <th>Estoque atual</th>
+            {selectType.name == SALE.name ? <th>Preço de custo</th> : null}
             <th>Ações</th>
           </tr>
           {variations
@@ -97,6 +103,12 @@ export const Table = ({
                 <td>
                   <input className="form-control" type="text" />
                 </td>
+                {selectType.name == SALE.name ? (
+                  <td>
+                    <input className="form-control" type="text" />
+                  </td>
+                ) : null}
+
                 <td className="actions">
                   <IconRemove
                     onClick={() =>
