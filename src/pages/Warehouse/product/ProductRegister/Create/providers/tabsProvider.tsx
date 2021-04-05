@@ -20,9 +20,30 @@ type TypeDataOverViewProps = {
   nameProduct: string;
 };
 
+type TypeValueAndError = {
+  value: string;
+  error: {
+    isError: boolean;
+    descriptionError?: string;
+  };
+};
+
+type TypeDetailsProps = {
+  weight: TypeValueAndError;
+  width: TypeValueAndError;
+  height: TypeValueAndError;
+  length: TypeValueAndError;
+  descriptionAndDetails: TypeValueAndError;
+  technicalSpecification: TypeValueAndError;
+  wayOfUse: TypeValueAndError;
+};
+
 interface TabCreateContext {
   setDataOverView: (overView: TypeDataOverViewProps) => void;
   getDataOverView: () => TypeDataOverViewProps;
+  setDetails: (details: TypeDetailsProps) => void;
+  getDetails: () => TypeDetailsProps;
+  validationAndSetErrorAllFieldsDetails: () => boolean;
 }
 
 const TabCreateContext = createContext<TabCreateContext>(
@@ -35,18 +56,33 @@ const TabCreateProvider = ({
   children: JSX.Element;
 }): JSX.Element => {
   const initialStateIdAndNameFieild = { id: '', name: '', parent_id: null };
-  const initialState: TypeDataOverViewProps = {
+
+  const initialStateOverview: TypeDataOverViewProps = {
     categoryCost: initialStateIdAndNameFieild,
     subCategoryCost: initialStateIdAndNameFieild,
     groupProduct: initialStateIdAndNameFieild,
     typeSelectProdut: initialStateIdAndNameFieild,
     hasVariation: {
       name: '',
-      hasVariation: false
+      hasVariation: false,
     },
     nameProduct: '',
   };
-  const [overView, setOverView] = useState<TypeDataOverViewProps>(initialState);
+
+  const initialStateDetails: TypeDetailsProps = {
+    descriptionAndDetails: { value: '', error: { isError: false } },
+    height: { value: '', error: { isError: false } },
+    length: { value: '', error: { isError: false } },
+    technicalSpecification: { value: '', error: { isError: false } },
+    wayOfUse: { value: '', error: { isError: false } },
+    weight: { value: '', error: { isError: false } },
+    width: { value: '', error: { isError: false } },
+  };
+
+  const [overView, setOverView] = useState<TypeDataOverViewProps>(
+    initialStateOverview,
+  );
+  const [detail, setDetail] = useState<TypeDetailsProps>(initialStateDetails);
 
   const setDataOverView = (NewoverView: TypeDataOverViewProps) => {
     setOverView(NewoverView);
@@ -55,8 +91,32 @@ const TabCreateProvider = ({
     return overView;
   };
 
+  const setDetails = (details: TypeDetailsProps) => setDetail(details);
+
+  const getDetails = (): TypeDetailsProps => detail;
+
+  const validationAndSetErrorAllFieldsDetails = useCallback(() => {
+    let isError = false;
+    if (detail.weight.value === '') {
+      isError = true;
+      setDetail({
+        ...detail,
+        weight: { ...detail.weight, error: { isError: true } },
+      });
+    }
+    return isError;
+  }, [detail]);
+
   return (
-    <TabCreateContext.Provider value={{ getDataOverView, setDataOverView }}>
+    <TabCreateContext.Provider
+      value={{
+        getDataOverView,
+        setDataOverView,
+        setDetails,
+        getDetails,
+        validationAndSetErrorAllFieldsDetails,
+      }}
+    >
       {children}
     </TabCreateContext.Provider>
   );
