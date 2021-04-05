@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Container } from './styles';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../services/api';
 import { Table } from './component/Table';
