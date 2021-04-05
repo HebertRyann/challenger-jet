@@ -1,12 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
 import { Footer } from '../../footer';
 import { Container, TextArea } from './style';
-import {
-  NewInput,
-  TypeErrorInput,
-} from '../../../../../../../../components/NewInput';
-import { useTabs } from '../../../../../../../../hooks/tabs';
+import { NewInput } from '../../../../../../../../components/NewInput';
 import { Alert } from '../../../../../../../../components/Alert';
 import { numericMask } from '../../../../../../../../utlis/mask';
 import { useTabCreate } from '../../../providers/tabsProvider';
@@ -15,157 +11,44 @@ export const labelDetails = 'Detalhes';
 export const nameDetails = '@@tabs-details';
 
 export const Details = (): JSX.Element => {
-  const { changeCurrentTabForNext } = useTabs();
-  const { getDataOverView } = useTabCreate();
-  const [alert, setAlert] = useState(false);
-  const [peso, setPeso] = useState('');
-  const [altura, setAltura] = useState('');
-  const [largura, setLargura] = useState('');
-  const [comprimento, setComprimento] = useState('');
-  const [descriptionAndDetails, setDescriptionAndDetails] = useState('');
-  const [especification, setEspecification] = useState('');
-  const [wayOfUse, setWayOfUse] = useState('');
-
-  const [errorPeso, setErrorPeso] = useState<TypeErrorInput>({
-    isError: false,
+  const [alert, setAlert] = useState<{ active: boolean; message: string }>({
+    active: false,
+    message: '',
   });
 
-  const [errorLargura, setErrorLargura] = useState<TypeErrorInput>({
-    isError: false,
-  });
+  const { getDetails, setDetails } = useTabCreate();
+  const { weight, width, height, length } = getDetails();
 
-  const [errorAltura, setErrorAltura] = useState<TypeErrorInput>({
-    isError: false,
-  });
-
-  const [errorComprimento, setErrorComprimento] = useState<TypeErrorInput>({
-    isError: false,
-  });
-
-  const [
-    errorDescriptionAndDetails,
-    setErrorDescriptionAndDetails,
-  ] = useState<TypeErrorInput>({
-    isError: false,
-  });
-
-  const [
-    errorEspecification,
-    setErrorEspecification,
-  ] = useState<TypeErrorInput>({
-    isError: false,
-  });
-
-  const [errorWayOfUse, setErrorWayOfUse] = useState<TypeErrorInput>({
-    isError: false,
-  });
-
-  const handlerChangerPeso = useCallback(
-    (value: string) => {
-      setErrorPeso({ isError: false });
-      setPeso(value);
-    },
-    [peso],
-  );
-
-  const handlerChangerLargura = useCallback(
-    (value: string) => {
-      setErrorLargura({ isError: false });
-      setLargura(value);
-    },
-    [largura],
-  );
-
-  const handlerChangerAltura = useCallback(
-    (value: string) => {
-      setErrorAltura({ isError: false });
-      setAltura(value);
-    },
-    [altura],
-  );
-
-  const handlerChangerComprimento = useCallback(
-    (value: string) => {
-      setErrorComprimento({ isError: false });
-      setComprimento(value);
-    },
-    [comprimento],
-  );
-
-  const handlerChangerDescriptionAndDetails = useCallback(
-    (value: string) => {
-      setErrorDescriptionAndDetails({ isError: false });
-      setDescriptionAndDetails(value);
-    },
-    [descriptionAndDetails],
-  );
-
-  const handlerChangerEspecification = useCallback(
-    (value: string) => {
-      setErrorEspecification({ isError: false });
-      setEspecification(value);
-    },
-    [especification],
-  );
-
-  const handlerChangerWayOfUse = useCallback(
-    (value: string) => {
-      setErrorWayOfUse({ isError: false });
-      setWayOfUse(value);
-    },
-    [comprimento],
-  );
+  const handlerClickAlertConfirm = useCallback(() => {
+    setAlert({ ...alert, active: false });
+  }, [alert]);
 
   const handlerClickNextButton = useCallback(() => {
     let isError = false;
 
-    if (peso === '') {
+    if (weight.value === '') {
       isError = true;
-      setErrorPeso({ isError: true });
+      setDetails({
+        ...getDetails(),
+        weight: { ...weight, error: { isError: true } },
+      });
     }
-    if (altura === '') {
+    if (width.value === '') {
       isError = true;
-      setErrorAltura({ isError: true });
-    }
-    if (largura === '') {
-      isError = true;
-      setErrorLargura({ isError: true });
-    }
-    if (comprimento === '') {
-      isError = true;
-      setErrorComprimento({ isError: true });
-    }
-    if (descriptionAndDetails === '') {
-      isError = true;
-      setErrorDescriptionAndDetails({ isError: true });
-    }
-    if (especification === '') {
-      isError = true;
-      setErrorEspecification({ isError: true });
-    }
-    if (wayOfUse === '') {
-      isError = true;
-      setErrorWayOfUse({ isError: true });
+      setDetails({
+        ...getDetails(),
+        width: { ...width, error: { isError: true } },
+      });
     }
 
-    if (!isError) {
-      changeCurrentTabForNext(nameDetails);
-    } else {
-      setAlert(true);
+    if (isError) {
+      setAlert({
+        active: true,
+        message:
+          'Os campos destacados na aba "Detalhes" são de preenchimento obrigatório',
+      });
     }
-  }, [
-    errorPeso,
-    errorLargura,
-    errorAltura,
-    errorComprimento,
-    descriptionAndDetails,
-    especification,
-    wayOfUse,
-  ]);
-
-  const handlerClickAlertConfirm = useCallback(() => {
-    setAlert(false);
-  }, [alert]);
+  }, [weight, width]);
 
   return (
     <Container>
@@ -173,9 +56,14 @@ export const Details = (): JSX.Element => {
         <div className="form-content col-md-3">
           <TooltipComponent label="Peso (kg)" message="Infome o peso em kg" />
           <NewInput
-            value={numericMask(peso)}
-            onChange={e => setPeso(e.target.value)}
-            error={errorPeso}
+            value={numericMask(weight.value)}
+            onChange={e =>
+              setDetails({
+                ...getDetails(),
+                weight: { error: { isError: false }, value: e.target.value },
+              })
+            }
+            error={weight.error}
             name="peso"
             className="form-control"
             type="text"
@@ -188,9 +76,14 @@ export const Details = (): JSX.Element => {
             message="Informe a largura em metros"
           />
           <NewInput
-            value={numericMask(largura)}
-            onChange={e => setLargura(e.target.value)}
-            error={errorLargura}
+            value={numericMask(width.value)}
+            onChange={e =>
+              setDetails({
+                ...getDetails(),
+                width: { error: { isError: false }, value: e.target.value },
+              })
+            }
+            error={width.error}
             name="largura"
             className="form-control"
             type="text"
@@ -203,9 +96,14 @@ export const Details = (): JSX.Element => {
             message="Informe a altura em metros"
           />
           <NewInput
-            value={numericMask(altura)}
-            onChange={e => setAltura(e.target.value)}
-            error={errorAltura}
+            value={numericMask(height.value)}
+            onChange={e =>
+              setDetails({
+                ...getDetails(),
+                height: { error: { isError: false }, value: e.target.value },
+              })
+            }
+            error={height.error}
             name="altura"
             className="form-control"
             type="text"
@@ -218,9 +116,14 @@ export const Details = (): JSX.Element => {
             message="Informe a comprimento em metros"
           />
           <NewInput
-            value={numericMask(comprimento)}
-            onChange={e => setComprimento(e.target.value)}
-            error={errorComprimento}
+            value={numericMask(length.value)}
+            onChange={e =>
+              setDetails({
+                ...getDetails(),
+                length: { error: { isError: false }, value: e.target.value },
+              })
+            }
+            error={length.error}
             name="comprimento"
             className="form-control"
             type="text"
@@ -233,10 +136,11 @@ export const Details = (): JSX.Element => {
           <div className="form-group">
             <label>Descrição e detalhes</label>
             <TextArea
-              isError={errorDescriptionAndDetails.isError}
-              onChange={event =>
-                handlerChangerDescriptionAndDetails(event.target.value)
-              }
+              // isError={errorDescriptionAndDetails.isError}
+              isError={false}
+              // onChange={event =>
+              //   handlerChangerDescriptionAndDetails(event.target.value)
+              // }
               className="form-control"
             />
           </div>
@@ -247,10 +151,11 @@ export const Details = (): JSX.Element => {
           <div className="form-group">
             <label>Especificação Técnica</label>
             <TextArea
-              isError={errorEspecification.isError}
-              onChange={event =>
-                handlerChangerEspecification(event.target.value)
-              }
+              // isError={errorEspecification.isError}
+              isError={false}
+              // onChange={event =>
+              //   handlerChangerEspecification(event.target.value)
+              // }
               className="form-control"
             />
           </div>
@@ -261,8 +166,9 @@ export const Details = (): JSX.Element => {
           <div className="form-group">
             <label>Forma de utilização</label>
             <TextArea
-              isError={errorWayOfUse.isError}
-              onChange={event => handlerChangerWayOfUse(event.target.value)}
+              // isError={errorWayOfUse.isError}
+              isError={false}
+              // onChange={event => handlerChangerWayOfUse(event.target.value)}
               className="form-control"
             />
           </div>
@@ -270,9 +176,9 @@ export const Details = (): JSX.Element => {
       </div>
       <Footer onClickButtonNext={handlerClickNextButton} />
       <Alert
-        isActive={alert}
+        isActive={alert.active}
         onlyConfirm
-        message="Os campos destacados são de preenchimento obrigatório"
+        message={alert.message}
         onClickConfirmButton={handlerClickAlertConfirm}
       />
     </Container>
