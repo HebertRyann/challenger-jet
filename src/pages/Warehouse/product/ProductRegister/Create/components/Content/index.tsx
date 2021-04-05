@@ -11,6 +11,7 @@ import {
 import { useTabs } from '../../../../../../../hooks/tabs';
 import { makeTabs } from './tabs';
 import { useLoading } from '../../../../../../../hooks/loading';
+import { TabCreateProvider } from '../../providers/tabsProvider';
 
 export type TypeContentTabs = {
   name: string;
@@ -57,11 +58,15 @@ export const Content = (): JSX.Element => {
           </TabHeaderContainer>
           <TabPanelContainer>
             <hr />
-            {tabs.map(({ Component, name }) => (
-              <RenderComponent isActive={name === loadCurrentTab().key}>
-                {Component}
-              </RenderComponent>
-            ))}
+            <TabCreateProvider>
+              <>
+                {tabs.map(({ Component, name }) => (
+                  <RenderComponent isActive={name === loadCurrentTab().key}>
+                    {Component}
+                  </RenderComponent>
+                ))}
+              </>
+            </TabCreateProvider>
           </TabPanelContainer>
         </ContentItem>
       </Container>
