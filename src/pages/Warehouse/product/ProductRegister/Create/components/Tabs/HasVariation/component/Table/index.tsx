@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Container, IconRemove } from './style';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../../../services/api';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
-import { SALE } from '../../../DataOverview/products';
+import { RE_SALE, SALE } from '../../../DataOverview/products';
 
 type TypeUnitMensured = {
   id: string;
@@ -64,7 +64,9 @@ export const Table = ({
               ({ name, parent_id }) => parent_id === null && <th>{name}</th>,
             )}
             <th>Estoque atual</th>
-            {selectType.name == SALE.name ? <th>Preço de custo</th> : null}
+            {selectType.name == SALE.name || selectType.name == RE_SALE.name ? (
+              <th>Preço de custo</th>
+            ) : null}
             <th>Ações</th>
           </tr>
           {variations
@@ -103,7 +105,8 @@ export const Table = ({
                 <td>
                   <input className="form-control" type="text" />
                 </td>
-                {selectType.name == SALE.name ? (
+                {selectType.name == SALE.name ||
+                selectType.name == RE_SALE.name ? (
                   <td>
                     <input className="form-control" type="text" />
                   </td>
