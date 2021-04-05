@@ -83,7 +83,6 @@ export const Table = ({
       const index = variations.indexOf(result[0]);
       variations[index].priceCost = value;
       setVariations([...variations]);
-      console.log(value);
     },
     [variations],
   );
