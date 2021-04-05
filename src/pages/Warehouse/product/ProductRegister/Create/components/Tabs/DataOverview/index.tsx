@@ -51,8 +51,12 @@ export const DataOverview = ({
   categoryFinances: TypeEntityWithIdAndName[];
   categoryProducts: TypeEntityWithIdAndName[];
 }): JSX.Element => {
-  const { activeTab, disableTab, changeCurrentTabForNext } = useTabs();
-  const { setDataOverView } = useTabCreate();
+  const { activeTab, disableTab, changeCurrentTab } = useTabs();
+  const {
+    setDataOverView,
+    getDetails,
+    validationAndSetErrorAllFieldsDetails,
+  } = useTabCreate();
   const [alert, setAlert] = useState<{ active: boolean; message: string }>({
     active: false,
     message: '',
@@ -209,38 +213,41 @@ export const DataOverview = ({
   );
 
   const handlerClickNextAba = useCallback(() => {
-    let isError = false;
+    const error = {
+      active: false,
+      message: 'Os campos destacados são de preenchimento obrigatório',
+    };
     if (selectTypeProduct.id === 0) {
-      isError = true;
+      error.active = true;
       setErrorSelectTypeProduct({
         isError: true,
       });
     }
     if (categoryFinance.id === '') {
-      isError = true;
+      error.active = true;
       setErrorCategoryFinance({
         isError: true,
       });
     }
     if (subCategoryFinance.id === '') {
-      isError = true;
+      error.active = true;
       setErrorSubCategoryFinance({
         isError: true,
       });
     }
     if (!categoryProduct) {
-      isError = true;
+      error.active = true;
       setErrorCategoryProduct({
         isError: true,
       });
     }
     if (name === '') {
-      isError = true;
+      error.active = true;
       setErrorName({
         isError: true,
       });
     }
-    if (!isError) {
+    if (!error.active) {
       setDataOverView({
         typeSelectProdut: {
           id: selectTypeProduct.id.toString(),
@@ -256,12 +263,16 @@ export const DataOverview = ({
           hasVariation: hasVariation.active,
         },
       });
-      changeCurrentTabForNext(nameDataOverview);
+      if (validationAndSetErrorAllFieldsDetails()) {
+        setAlert({
+          active: true,
+          message:
+            'Os campos destacados na aba "Detalhes" são de preenchimento obrigatório',
+        });
+        return;
+      }
     } else {
-      setAlert({
-        active: true,
-        message: 'Os campos destacados são de preenchimento obrigatório',
-      });
+      setAlert(error);
     }
   }, [
     selectTypeProduct,
@@ -269,6 +280,7 @@ export const DataOverview = ({
     subCategoryFinance,
     categoryProduct,
     name,
+    getDetails(),
   ]);
 
   return (
