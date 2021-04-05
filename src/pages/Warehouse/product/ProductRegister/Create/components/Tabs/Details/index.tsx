@@ -17,7 +17,15 @@ export const Details = (): JSX.Element => {
   });
 
   const { getDetails, setDetails } = useTabCreate();
-  const { weight, width, height, length } = getDetails();
+  const {
+    weight,
+    width,
+    height,
+    length,
+    descriptionAndDetails,
+    technicalSpecification,
+    wayOfUse,
+  } = getDetails();
 
   const handlerClickAlertConfirm = useCallback(() => {
     setAlert({ ...alert, active: false });
@@ -28,17 +36,44 @@ export const Details = (): JSX.Element => {
 
     if (weight.value === '') {
       isError = true;
-      setDetails({
-        ...getDetails(),
-        weight: { ...weight, error: { isError: true } },
-      });
+      weight.error.isError = true;
+      setDetails({ ...getDetails() });
     }
+
     if (width.value === '') {
       isError = true;
-      setDetails({
-        ...getDetails(),
-        width: { ...width, error: { isError: true } },
-      });
+      width.error.isError = true;
+      setDetails({ ...getDetails() });
+    }
+
+    if (height.value === '') {
+      isError = true;
+      height.error.isError = true;
+      setDetails({ ...getDetails() });
+    }
+
+    if (length.value === '') {
+      isError = true;
+      length.error.isError = true;
+      setDetails({ ...getDetails() });
+    }
+
+    if (descriptionAndDetails.value === '') {
+      isError = true;
+      descriptionAndDetails.error.isError = true;
+      setDetails({ ...getDetails() });
+    }
+
+    if (technicalSpecification.value === '') {
+      isError = true;
+      technicalSpecification.error.isError = true;
+      setDetails({ ...getDetails() });
+    }
+
+    if (wayOfUse.value === '') {
+      isError = true;
+      wayOfUse.error.isError = true;
+      setDetails({ ...getDetails() });
     }
 
     if (isError) {
@@ -48,7 +83,15 @@ export const Details = (): JSX.Element => {
           'Os campos destacados na aba "Detalhes" são de preenchimento obrigatório',
       });
     }
-  }, [weight, width]);
+  }, [
+    weight,
+    width,
+    height,
+    length,
+    descriptionAndDetails,
+    technicalSpecification,
+    wayOfUse,
+  ]);
 
   return (
     <Container>
@@ -136,11 +179,16 @@ export const Details = (): JSX.Element => {
           <div className="form-group">
             <label>Descrição e detalhes</label>
             <TextArea
-              // isError={errorDescriptionAndDetails.isError}
-              isError={false}
-              // onChange={event =>
-              //   handlerChangerDescriptionAndDetails(event.target.value)
-              // }
+              isError={descriptionAndDetails.error.isError}
+              onChange={e =>
+                setDetails({
+                  ...getDetails(),
+                  descriptionAndDetails: {
+                    error: { isError: false },
+                    value: e.target.value,
+                  },
+                })
+              }
               className="form-control"
             />
           </div>
@@ -151,11 +199,16 @@ export const Details = (): JSX.Element => {
           <div className="form-group">
             <label>Especificação Técnica</label>
             <TextArea
-              // isError={errorEspecification.isError}
-              isError={false}
-              // onChange={event =>
-              //   handlerChangerEspecification(event.target.value)
-              // }
+              isError={technicalSpecification.error.isError}
+              onChange={e =>
+                setDetails({
+                  ...getDetails(),
+                  technicalSpecification: {
+                    error: { isError: false },
+                    value: e.target.value,
+                  },
+                })
+              }
               className="form-control"
             />
           </div>
@@ -166,9 +219,16 @@ export const Details = (): JSX.Element => {
           <div className="form-group">
             <label>Forma de utilização</label>
             <TextArea
-              // isError={errorWayOfUse.isError}
-              isError={false}
-              // onChange={event => handlerChangerWayOfUse(event.target.value)}
+              isError={wayOfUse.error.isError}
+              onChange={e =>
+                setDetails({
+                  ...getDetails(),
+                  wayOfUse: {
+                    error: { isError: false },
+                    value: e.target.value,
+                  },
+                })
+              }
               className="form-control"
             />
           </div>
