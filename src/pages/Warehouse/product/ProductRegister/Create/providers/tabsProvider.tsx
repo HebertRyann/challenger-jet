@@ -11,21 +11,28 @@ type HasVariation = {
   name: string;
 };
 
+type TypeGenericValueWithError<T> = {
+  value: T;
+  error: TypeError;
+};
+
 type TypeDataOverViewProps = {
-  typeSelectProdut: EntityWithIdAndNameField;
-  categoryCost: EntityWithIdAndNameField;
-  subCategoryCost: EntityWithIdAndNameField;
-  groupProduct: EntityWithIdAndNameField;
-  hasVariation: HasVariation;
-  nameProduct: string;
+  typeSelectProdut: TypeGenericValueWithError<EntityWithIdAndNameField>;
+  categoryCost: TypeGenericValueWithError<EntityWithIdAndNameField>;
+  subCategoryCost: TypeGenericValueWithError<EntityWithIdAndNameField>;
+  groupProduct: TypeGenericValueWithError<EntityWithIdAndNameField>;
+  hasVariation: TypeGenericValueWithError<HasVariation>;
+  nameProduct: TypeGenericValueWithError<string>;
+};
+
+type TypeError = {
+  isError: boolean;
+  descriptionError?: string;
 };
 
 type TypeValueAndError = {
   value: string;
-  error: {
-    isError: boolean;
-    descriptionError?: string;
-  };
+  error: TypeError;
 };
 
 type TypeDetailsProps = {
@@ -38,13 +45,15 @@ type TypeDetailsProps = {
   wayOfUse: TypeValueAndError;
 };
 
+type TypeGetAndSetAndValidateAba<T> = {
+  getData: () => T;
+  setData: (data: T) => void;
+  validate: () => boolean;
+};
+
 interface TabCreateContext {
-  setDataOverView: (overView: TypeDataOverViewProps) => void;
-  getDataOverView: () => TypeDataOverViewProps;
-  validationAndSetErrorAllFieldsDataOverView: () => boolean;
-  setDetails: (details: TypeDetailsProps) => void;
-  getDetails: () => TypeDetailsProps;
-  validationAndSetErrorAllFieldsDetails: () => boolean;
+  overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps>;
+  details: TypeGetAndSetAndValidateAba<TypeDetailsProps>;
 }
 
 const TabCreateContext = createContext<TabCreateContext>(
@@ -56,7 +65,18 @@ const TabCreateProvider = ({
 }: {
   children: JSX.Element;
 }): JSX.Element => {
-  const initialStateIdAndNameFieild = { id: '', name: '', parent_id: null };
+  const initialStateError: TypeError = {
+    isError: false,
+    descriptionError: '',
+  };
+  const initialStateIdAndNameFieild: TypeGenericValueWithError<EntityWithIdAndNameField> = {
+    error: initialStateError,
+    value: {
+      id: '',
+      name: '',
+      parent_id: null,
+    },
+  };
 
   const initialStateOverview: TypeDataOverViewProps = {
     categoryCost: initialStateIdAndNameFieild,
@@ -64,10 +84,10 @@ const TabCreateProvider = ({
     groupProduct: initialStateIdAndNameFieild,
     typeSelectProdut: initialStateIdAndNameFieild,
     hasVariation: {
-      name: '',
-      hasVariation: false,
+      error: initialStateError,
+      value: { name: '', hasVariation: false },
     },
-    nameProduct: '',
+    nameProduct: { error: initialStateError, value: '' },
   };
 
   const initialStateDetails: TypeDetailsProps = {
@@ -94,7 +114,7 @@ const TabCreateProvider = ({
 
   const validationAndSetErrorAllFieldsDataOverView = useCallback(() => {
     let isError = false;
-    if (overView.typeSelectProdut.id === '') {
+    if (overView.typeSelectProdut.value.id === '') {
       isError = true;
       console.log('teste');
     }
@@ -146,15 +166,22 @@ const TabCreateProvider = ({
     return isError;
   }, [detail]);
 
+  const overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps> = {
+    getData: getDataOverView,
+    setData: setDataOverView,
+    validate: validationAndSetErrorAllFieldsDataOverView,
+  };
+  const details: TypeGetAndSetAndValidateAba<TypeDetailsProps> = {
+    getData: getDetails,
+    setData: setDetails,
+    validate: validationAndSetErrorAllFieldsDetails,
+  };
+
   return (
     <TabCreateContext.Provider
       value={{
-        getDataOverView,
-        setDataOverView,
-        validationAndSetErrorAllFieldsDataOverView,
-        setDetails,
-        getDetails,
-        validationAndSetErrorAllFieldsDetails,
+        overview,
+        details,
       }}
     >
       {children}
