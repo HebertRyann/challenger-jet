@@ -97,12 +97,41 @@ const TabCreateProvider = ({
 
   const validationAndSetErrorAllFieldsDetails = useCallback(() => {
     let isError = false;
+
     if (detail.weight.value === '') {
       isError = true;
-      setDetail({
-        ...detail,
-        weight: { ...detail.weight, error: { isError: true } },
-      });
+      detail.weight.error.isError = true;
+      setDetail({ ...detail });
+    }
+    if (detail.width.value === '') {
+      isError = true;
+      detail.width.error.isError = true;
+      setDetail({ ...detail });
+    }
+    if (detail.height.value === '') {
+      isError = true;
+      detail.height.error.isError = true;
+      setDetail({ ...detail });
+    }
+    if (detail.length.value === '') {
+      isError = true;
+      detail.length.error.isError = true;
+      setDetail({ ...detail });
+    }
+    if (detail.descriptionAndDetails.value === '') {
+      isError = true;
+      detail.descriptionAndDetails.error.isError = true;
+      setDetail({ ...detail });
+    }
+    if (detail.technicalSpecification.value === '') {
+      isError = true;
+      detail.technicalSpecification.error.isError = true;
+      setDetail({ ...detail });
+    }
+    if (detail.wayOfUse.value === '') {
+      isError = true;
+      detail.wayOfUse.error.isError = true;
+      setDetail({ ...detail });
     }
     return isError;
   }, [detail]);
