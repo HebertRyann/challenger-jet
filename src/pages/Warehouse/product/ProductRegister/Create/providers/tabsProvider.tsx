@@ -55,6 +55,13 @@ type TypeStockProps = {
   stockCurrent: TypeValueAndError;
 };
 
+type TypePriceCompositionProps = {
+  profit: TypeValueAndError;
+  ipi: TypeValueAndError;
+  cost: TypeValueAndError;
+  dif: TypeValueAndError;
+};
+
 type TypeGetAndSetAndValidateAba<T> = {
   getData: () => T;
   setData: (data: T) => void;
@@ -65,6 +72,7 @@ interface TabCreateContext {
   overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps>;
   details: TypeGetAndSetAndValidateAba<TypeDetailsProps>;
   stock: TypeGetAndSetAndValidateAba<TypeStockProps>;
+  priceComposition: TypeGetAndSetAndValidateAba<TypePriceCompositionProps>;
 }
 
 const TabCreateContext = createContext<TabCreateContext>(
@@ -116,12 +124,22 @@ const TabCreateProvider = ({
     unitMensured: { value: { id: '', name: '' }, error: { isError: false } },
   };
 
+  const initialStatePriceComposition: TypePriceCompositionProps = {
+    cost: { error: { isError: false }, value: '' },
+    dif: { error: { isError: false }, value: '' },
+    ipi: { error: { isError: false }, value: '' },
+    profit: { error: { isError: false }, value: '' },
+  };
+
   const [overView, setOverView] = useState<TypeDataOverViewProps>(
     initialStateOverview,
   );
   const [detail, setDetail] = useState<TypeDetailsProps>(initialStateDetails);
-
   const [stocks, setStocks] = useState<TypeStockProps>(initialStateStock);
+  const [
+    priceCompositionState,
+    setPriceCompositionState,
+  ] = useState<TypePriceCompositionProps>(initialStatePriceComposition);
 
   const setDataOverView = (newoverView: TypeDataOverViewProps) => {
     setOverView(newoverView);
@@ -222,12 +240,60 @@ const TabCreateProvider = ({
     validate: validationAndSetErrorAllFieldsStock,
   };
 
+  const getDataPriceComposition = (): TypePriceCompositionProps =>
+    priceCompositionState;
+
+  const setDataPriceComposition = (
+    priceComposition: TypePriceCompositionProps,
+  ) => setPriceCompositionState(priceComposition);
+
+  const validationAndSetErrorAllFieldsPriceComposition = useCallback(() => {
+    console.log(priceCompositionState);
+    let isError = false;
+    if (priceCompositionState.cost.value === '') {
+      isError = true;
+      setPriceCompositionState(old => ({
+        ...old,
+        cost: { ...old.cost, error: { isError: true } },
+      }));
+    }
+    if (priceCompositionState.dif.value === '') {
+      isError = true;
+      setPriceCompositionState(old => ({
+        ...old,
+        dif: { ...old.dif, error: { isError: true } },
+      }));
+    }
+    if (priceCompositionState.ipi.value === '') {
+      isError = true;
+      setPriceCompositionState(old => ({
+        ...old,
+        ipi: { ...old.ipi, error: { isError: true } },
+      }));
+    }
+    if (priceCompositionState.profit.value === '') {
+      isError = true;
+      setPriceCompositionState(old => ({
+        ...old,
+        profit: { ...old.profit, error: { isError: true } },
+      }));
+    }
+    return isError;
+  }, [priceCompositionState]);
+
+  const priceComposition: TypeGetAndSetAndValidateAba<TypePriceCompositionProps> = {
+    getData: getDataPriceComposition,
+    setData: setDataPriceComposition,
+    validate: validationAndSetErrorAllFieldsPriceComposition,
+  };
+
   return (
     <TabCreateContext.Provider
       value={{
         overview,
         details,
         stock,
+        priceComposition,
       }}
     >
       {children}
