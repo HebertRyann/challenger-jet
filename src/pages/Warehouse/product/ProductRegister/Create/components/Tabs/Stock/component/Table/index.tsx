@@ -6,17 +6,14 @@ import {
   TypeErrorInput,
 } from '../../../../../../../../../../components/NewInput';
 import { NewSelect } from '../../../../../../../../../../components/NewSelect';
-import { useTabs } from '../../../../../../../../../../hooks/tabs';
+import { useTabCreate } from '../../../../../providers/tabsProvider';
 import { Alert } from '../../../../../../../../../../components/Alert';
+import { nameDetails } from '../../../Details';
+import { useTabs } from '../../../../../../../../../../hooks/tabs';
 
 type TypeUnitMensured = {
   id: string;
   name: string;
-};
-
-type TypeVariation = {
-  key: number;
-  isEnable: boolean;
 };
 
 type TypeTableProps = {
@@ -25,13 +22,14 @@ type TypeTableProps = {
 
 export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
   const [alert, setAlert] = useState(false);
+  const { changeCurrentTab } = useTabs();
 
   const [
     selectUnitMensured,
     setSelectUnitMensured,
   ] = useState<TypeUnitMensured>({ id: '', name: '' });
 
-  const [stock, setStock] = useState('');
+  const [stocks, setStocks] = useState('');
 
   const [errorUnitMensured, setErrorUnitMensured] = useState<TypeErrorInput>({
     isError: false,
@@ -51,9 +49,9 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
   const handlerChangeStock = useCallback(
     (currentStock: string) => {
       setErrorStock({ isError: false });
-      setStock(currentStock);
+      setStocks(currentStock);
     },
-    [stock],
+    [stocks],
   );
 
   const handlerClickButtonNextTab = useCallback(() => {
@@ -64,7 +62,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
       setErrorUnitMensured({ isError: true });
     }
 
-    if (stock === '') {
+    if (stocks === '') {
       isError = true;
       setErrorStock({ isError: true });
     }
@@ -73,12 +71,18 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
     } else {
       setAlert(true);
     }
-  }, [unitMensured, stock]);
+  }, [unitMensured, stocks]);
 
   const handlerClickAlertConfirm = useCallback(() => {
     setAlert(false);
   }, [alert]);
 
+  const { stock } = useTabCreate();
+  const { stockCurrent } = stock.getData();
+  const unitMensureds = stock.getData().unitMensured;
+  const validate = () => {
+    stock.validate();
+  };
   return (
     <Container className="table-responsive">
       <table className="table table-bordered margin-bottom-0">
@@ -90,11 +94,18 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
           <tr>
             <td>
               <NewSelect
-                error={errorUnitMensured}
+                error={unitMensureds.error}
                 onChange={event => {
                   const id = event.target.value.split('+')[0];
                   const name = event.target.value.split('+')[1];
                   if (id && name) {
+                    stock.setData({
+                      ...stock.getData(),
+                      unitMensured: {
+                        error: { isError: false },
+                        value: { id, name },
+                      },
+                    });
                     handlerChangeSelectUnitMensured({ id, name });
                   }
                 }}
@@ -111,8 +122,16 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
             </td>
             <td>
               <NewInput
-                onChange={event => handlerChangeStock(event.target.value)}
-                error={errorStock}
+                onChange={event => {
+                  stock.setData({
+                    ...stock.getData(),
+                    stockCurrent: {
+                      error: { isError: false },
+                      value: event.currentTarget.value,
+                    },
+                  });
+                }}
+                error={stockCurrent.error}
                 name="stock"
                 className="form-control"
                 type="text"
@@ -121,7 +140,11 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
           </tr>
         </tbody>
       </table>
-      <Footer onClickButtonNext={handlerClickButtonNextTab} />
+      <Footer
+        onClickButtonBack={() => changeCurrentTab(nameDetails)}
+        onSave={validate}
+        onClickButtonNext={handlerClickButtonNextTab}
+      />
       <Alert
         isActive={alert}
         onlyConfirm
