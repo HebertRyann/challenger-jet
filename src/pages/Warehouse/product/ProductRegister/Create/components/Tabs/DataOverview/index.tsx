@@ -173,7 +173,31 @@ export const DataOverview = ({
   }, []);
 
   const handlerClickSaveAba = useCallback(() => {
-    if (overview.validate()) {
+    let isError = false;
+
+    if (typeSelectProdut.value.id === '') {
+      isError = true;
+      overview.setData({
+        ...overview.getData(),
+        typeSelectProdut: {
+          ...overview.getData().typeSelectProdut,
+          error: { isError: true },
+        },
+      });
+    }
+
+    if (categoryCost.value.id === '') {
+      isError = true;
+      overview.setData({
+        ...overview.getData(),
+        categoryCost: {
+          ...overview.getData().categoryCost,
+          error: { isError: true },
+        },
+      });
+    }
+
+    if (isError) {
       setAlert({
         active: true,
         message: 'Os campos destacados são de preenchimento obrigatório',
@@ -201,10 +225,7 @@ export const DataOverview = ({
       });
       return;
     }
-  }, [
-    details.getData(),
-    overview.getData()
-  ]);
+  }, [details.getData(), overview.getData()]);
 
   return (
     <>
