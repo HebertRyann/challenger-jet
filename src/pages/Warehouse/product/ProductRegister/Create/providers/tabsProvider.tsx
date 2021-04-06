@@ -1,4 +1,10 @@
-import React, { createContext, useCallback, useContext, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 type EntityWithIdAndNameField = {
   id: string;
@@ -106,9 +112,9 @@ const TabCreateProvider = ({
   const [detail, setDetail] = useState<TypeDetailsProps>(initialStateDetails);
 
   const setDataOverView = (newoverView: TypeDataOverViewProps) => {
-    console.log(newoverView);
     setOverView(newoverView);
   };
+
   const getDataOverView = (): TypeDataOverViewProps => {
     return overView;
   };
@@ -116,30 +122,19 @@ const TabCreateProvider = ({
   const validationAndSetErrorAllFieldsDataOverView = useCallback(() => {
     let isError = false;
 
-    if (overView.groupProduct.value.id === '') {
-      isError = true;
-      setOverView({
-        ...overView,
-        groupProduct: {
-          ...overView.groupProduct,
-          error: { isError: true },
-        },
-      });
-    }
-
     if (overView.typeSelectProdut.value.id === '') {
       isError = true;
       setOverView({
         ...overView,
         typeSelectProdut: {
-          ...overView.typeSelectProdut,
           error: { isError: true },
-        },
-        groupProduct: {
-          ...overView.groupProduct,
-          error: { isError: true },
+          value: { id: '', name: '', parent_id: null },
         },
       });
+    }
+
+    if (overView.categoryCost.value.id === '') {
+      console.log(getDataOverView());
     }
 
     return isError;
