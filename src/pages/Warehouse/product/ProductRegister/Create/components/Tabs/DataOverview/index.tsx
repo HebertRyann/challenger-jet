@@ -14,6 +14,7 @@ import {
   SALE,
   SEMI_FINISHED,
   RE_SALE,
+  LOCATION,
 } from './products';
 import { nameStock } from '../Stock';
 import { Footer } from '../../footer';
@@ -54,7 +55,7 @@ export const DataOverview = ({
     changeCurrentTab,
     changeCurrentTabForNext,
   } = useTabs();
-  const { overview, details } = useTabCreate();
+  const { overview, details, stock } = useTabCreate();
   const {
     typeSelectProdut,
     categoryCost,
@@ -204,7 +205,34 @@ export const DataOverview = ({
       });
       return;
     }
-    if (details.validate()) {
+    if (
+      typeSelectProdut.value.name === SALE.name ||
+      typeSelectProdut.value.name === RE_SALE.name ||
+      typeSelectProdut.value.name === LOCATION.name
+    ) {
+      if (details.validate()) {
+        setAlert({
+          active: true,
+          component: (): JSX.Element => (
+            <h4 style={{ fontWeight: 300 }}>
+              Os campos destacados na aba{' '}
+              <span
+                onClick={() => {
+                  handlerClickAlertConfirm();
+                  changeCurrentTab(nameDetails);
+                }}
+                style={{ fontWeight: 700, cursor: 'pointer' }}
+              >
+                Detalhes{' '}
+              </span>
+              são de preenchimento obrigatório
+            </h4>
+          ),
+        });
+        return;
+      }
+    }
+    if (stock.validate()) {
       setAlert({
         active: true,
         component: (): JSX.Element => (
@@ -213,11 +241,11 @@ export const DataOverview = ({
             <span
               onClick={() => {
                 handlerClickAlertConfirm();
-                changeCurrentTab(nameDetails);
+                changeCurrentTab(nameStock);
               }}
               style={{ fontWeight: 700, cursor: 'pointer' }}
             >
-              Detalhes{' '}
+              Estoque/Variação{' '}
             </span>
             são de preenchimento obrigatório
           </h4>
@@ -225,7 +253,7 @@ export const DataOverview = ({
       });
       return;
     }
-  }, [details.getData(), overview.getData()]);
+  }, [details.getData(), overview.getData(), stock.getData()]);
 
   return (
     <>
