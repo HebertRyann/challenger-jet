@@ -24,7 +24,6 @@ type TypeTableProps = {
 };
 
 export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
-  const { changeCurrentTabForNext } = useTabs();
   const [alert, setAlert] = useState(false);
 
   const [

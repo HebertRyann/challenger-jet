@@ -17,11 +17,9 @@ import {
 } from './products';
 import { nameStock } from '../Stock';
 import { Footer } from '../../footer';
-import {
-  NewSelect,
-  TypeErrorSelect,
-} from '../../../../../../../../components/NewSelect';
+import { NewSelect } from '../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../providers/tabsProvider';
+import { nameDetails } from '../Details';
 export type TypeTabNameEnableOrDisable = {
   keyTab: string;
   name: string;
@@ -50,10 +48,26 @@ export const DataOverview = ({
   categoryFinances: TypeEntityWithIdAndName[];
   categoryProducts: TypeEntityWithIdAndName[];
 }): JSX.Element => {
-  const { activeTab, disableTab, changeCurrentTabForNext } = useTabs();
+  const {
+    activeTab,
+    disableTab,
+    changeCurrentTab,
+    changeCurrentTabForNext,
+  } = useTabs();
   const { overview, details } = useTabCreate();
-  const { typeSelectProdut, categoryCost } = overview.getData();
-  const [alert, setAlert] = useState<{ active: boolean; message: string }>({
+  const {
+    typeSelectProdut,
+    categoryCost,
+    subCategoryCost,
+    groupProduct,
+    nameProduct,
+    hasVariation,
+  } = overview.getData();
+  const [alert, setAlert] = useState<{
+    active: boolean;
+    message?: string;
+    component?: () => JSX.Element;
+  }>({
     active: false,
     message: '',
   });
@@ -67,29 +81,8 @@ export const DataOverview = ({
   const [subCategoryFinanceData, setSubCategoryFinanceData] = useState<
     TypeEntityWithIdAndName[]
   >([initialState]);
-  const [
-    subCategoryFinance,
-    setSubCategoryFinance,
-  ] = useState<TypeEntityWithIdAndName>(initialState);
-  const [
-    categoryProduct,
-    setCategoryProduct,
-  ] = useState<TypeEntityWithIdAndName>(initialState);
 
-  const [name, setName] = useState('');
-
-  const [hasVariation, setHasvariation] = useState<TypeTabNameEnableOrDisable>({
-    keyTab: '',
-    name: 'Selecione',
-    active: true,
-  });
-
-  const [
-    errorCategoryProduct,
-    setErrorCategoryProduct,
-  ] = useState<TypeErrorSelect>({ isError: false });
-
-  const handlerChangeCategoryFinance = useCallback(
+  const handlerChangeCategoryCost = useCallback(
     ({ id, name, parent_id }: TypeEntityWithIdAndName) => {
       overview.setData({
         ...overview.getData(),
@@ -103,47 +96,7 @@ export const DataOverview = ({
       );
       setSubCategoryFinanceData(childrens);
     },
-    [categoryCost, subCategoryFinanceData],
-  );
-
-  const [
-    errorSubCategoryFinance,
-    setErrorSubCategoryFinance,
-  ] = useState<TypeErrorSelect>({
-    isError: false,
-  });
-
-  const handlerChangeSubCategoryFinance = useCallback(
-    (value: TypeEntityWithIdAndName) => {
-      setErrorSubCategoryFinance({ isError: false });
-      setSubCategoryFinance(value);
-    },
-    [subCategoryFinance],
-  );
-
-  const [errorName, setErrorName] = useState<TypeErrorSelect>({
-    isError: false,
-  });
-
-  const [internalCode, setInternalCode] = useState('');
-
-  const handlerChangeCategoryProduct = useCallback(
-    (value: TypeEntityWithIdAndName) => {
-      setErrorCategoryProduct({
-        ...errorCategoryProduct,
-        isError: false,
-      });
-      setCategoryProduct(value);
-    },
-    [categoryProduct, typeSelectProdut],
-  );
-
-  const handlerChangeName = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setName(event.currentTarget.value);
-      setErrorName({ ...errorName, isError: false });
-    },
-    [name, errorName],
+    [subCategoryFinanceData, overview.getData()],
   );
 
   const handlerClickAlertConfirm = useCallback(() => {
@@ -151,18 +104,30 @@ export const DataOverview = ({
   }, [alert]);
 
   const handlerHasVariation = useCallback(
-    (current: TypeTabNameEnableOrDisable) => {
-      if (current.name.toLowerCase() === 'sim') {
-        activeTab(current.keyTab);
-        setHasvariation(current);
+    ({ active, keyTab, name }: TypeTabNameEnableOrDisable) => {
+      if (name.toLowerCase() === 'sim') {
+        activeTab(keyTab);
+        overview.setData({
+          ...overview.getData(),
+          hasVariation: {
+            error: { isError: false },
+            value: { name, hasVariation: active },
+          },
+        });
         disableTab(nameStock);
       } else {
         activeTab(nameStock);
-        disableTab(current.keyTab);
-        setHasvariation(current);
+        disableTab(keyTab);
+        overview.setData({
+          ...overview.getData(),
+          hasVariation: {
+            error: { isError: false },
+            value: { name, hasVariation: active },
+          },
+        });
       }
     },
-    [hasVariation],
+    [overview.getData()],
   );
 
   const handlerSelectTypeProduct = useCallback(
@@ -200,7 +165,7 @@ export const DataOverview = ({
       disableTab(nameFiscal);
       disableTab(namePriceComposition);
     },
-    [typeSelectProdut],
+    [typeSelectProdut, groupProduct, nameProduct],
   );
 
   const handlerClickNextAba = useCallback(() => {
@@ -208,63 +173,37 @@ export const DataOverview = ({
   }, []);
 
   const handlerClickSaveAba = useCallback(() => {
-    const error = {
-      active: false,
-      message: 'Os campos destacados são de preenchimento obrigatório',
-    };
-    if (subCategoryFinance.id === '') {
-      error.active = true;
-      setErrorSubCategoryFinance({
-        isError: true,
+    if (overview.validate()) {
+      setAlert({
+        active: true,
+        message: 'Os campos destacados são de preenchimento obrigatório',
       });
+      return;
     }
-    if (categoryProduct.id === '') {
-      error.active = true;
-      setErrorCategoryProduct({
-        isError: true,
+    if (details.validate()) {
+      setAlert({
+        active: true,
+        component: (): JSX.Element => (
+          <h4 style={{ fontWeight: 300 }}>
+            Os campos destacados na aba{' '}
+            <span
+              onClick={() => {
+                handlerClickAlertConfirm();
+                changeCurrentTab(nameDetails);
+              }}
+              style={{ fontWeight: 700, cursor: 'pointer' }}
+            >
+              Detalhes{' '}
+            </span>
+            são de preenchimento obrigatório
+          </h4>
+        ),
       });
-    }
-    if (name === '') {
-      error.active = true;
-      setErrorName({
-        isError: true,
-      });
-    }
-    console.log(overview.getData());
-    if (!error.active) {
-      // overview.setData({
-      //   typeSelectProdut: {
-      //     id: selectTypeProduct.id.toString(),
-      //     name: selectTypeProduct.name,
-      //     parent_id: null,
-      //   },
-      //   categoryCost: categoryFinance,
-      //   subCategoryCost: categoryFinance,
-      //   groupProduct: categoryProduct,
-      //   nameProduct: name,
-      //   hasVariation: {
-      //     name: hasVariation.name,
-      //     hasVariation: hasVariation.active,
-      //   },
-      // });
-      if (details.validate()) {
-        setAlert({
-          active: true,
-          message:
-            'Os campos destacados na aba "Detalhes" são de preenchimento obrigatório',
-        });
-        return;
-      }
-    } else {
-      setAlert(error);
+      return;
     }
   }, [
-    typeSelectProdut,
-    categoryCost,
-    subCategoryFinance,
-    categoryProduct,
-    name,
     details.getData(),
+    overview.getData()
   ]);
 
   return (
@@ -302,7 +241,7 @@ export const DataOverview = ({
               const split = event.target.value.split('+');
               const id = split[0];
               const name = split[1];
-              handlerChangeCategoryFinance({ id, name, parent_id: null });
+              handlerChangeCategoryCost({ id, name, parent_id: null });
             }}
           >
             {categoryFinances
@@ -321,16 +260,22 @@ export const DataOverview = ({
           />
           <NewSelect
             disabled={categoryCost.value.id === ''}
-            error={errorSubCategoryFinance}
+            error={subCategoryCost.error}
             onChange={event => {
               const split = event.target.value.split('+');
               const id = split[0];
               const name = split[1];
               const parent_id = split[2];
-              handlerChangeSubCategoryFinance({
-                id,
-                name,
-                parent_id,
+              overview.setData({
+                ...overview.getData(),
+                subCategoryCost: {
+                  error: { isError: false },
+                  value: {
+                    id,
+                    name,
+                    parent_id,
+                  },
+                },
               });
             }}
           >
@@ -347,12 +292,22 @@ export const DataOverview = ({
             message="Selecione Categoria custo"
           />
           <NewSelect
-            error={errorCategoryProduct}
+            error={groupProduct.error}
             onChange={event => {
               const split = event.target.value.split('+');
               const id = split[0];
               const name = split[1];
-              handlerChangeCategoryProduct({ id, name, parent_id: null });
+              overview.setData({
+                ...overview.getData(),
+                groupProduct: {
+                  error: { isError: false },
+                  value: {
+                    id,
+                    name,
+                    parent_id: null,
+                  },
+                },
+              });
             }}
           >
             {categoryProducts.map(({ id, name }) => (
@@ -370,9 +325,17 @@ export const DataOverview = ({
             message="Selecione o tipo do produto"
           />
           <NewInput
-            error={errorName}
-            onChange={handlerChangeName}
-            value={name}
+            error={nameProduct.error}
+            onChange={event => {
+              overview.setData({
+                ...overview.getData(),
+                nameProduct: {
+                  error: { isError: false },
+                  value: event.target.value,
+                },
+              });
+            }}
+            value={nameProduct.value}
             name="category"
           />
         </div>
@@ -387,6 +350,7 @@ export const DataOverview = ({
               const active = split[0];
               const keyTab = split[1];
               const name = split[2];
+
               handlerHasVariation({ active: Boolean(active), keyTab, name });
             }}
           >
@@ -397,20 +361,12 @@ export const DataOverview = ({
             ))}
           </NewSelect>
         </div>
-        <div className="form-content col-md-3">
-          <input
-            disabled
-            value={internalCode}
-            name="category"
-            type="hidden"
-            className="form-control"
-          />
-        </div>
       </Container>
       <Alert
         isActive={alert.active}
         onlyConfirm
         message={alert.message}
+        RenderComponent={alert.component}
         onClickConfirmButton={handlerClickAlertConfirm}
       />
       <Footer

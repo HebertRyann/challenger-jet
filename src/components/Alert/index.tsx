@@ -3,10 +3,11 @@ import React from 'react';
 import { Container } from './style';
 
 type AlertProps = {
-  message: string;
+  message?: string;
   isActive: boolean;
   onClickConfirmButton: (id: string) => void;
   onClickCancellButton?: () => void;
+  RenderComponent?: () => JSX.Element;
   onlyConfirm?: boolean;
 };
 
@@ -16,12 +17,14 @@ export const Alert = ({
   onClickConfirmButton,
   isActive,
   onlyConfirm,
+  RenderComponent,
 }: AlertProps): JSX.Element => {
   return (
     <Container isActive={isActive}>
       <main>
         <h4>Atenção</h4>
         <hr />
+        {RenderComponent && <RenderComponent />}
         <h4 style={{ fontWeight: 500 }}>{message}</h4>
         <hr />
         <footer>

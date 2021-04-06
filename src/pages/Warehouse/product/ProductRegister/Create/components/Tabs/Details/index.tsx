@@ -11,13 +11,16 @@ import { nameDataOverview } from '../DataOverview';
 
 export const Details = (): JSX.Element => {
   const { changeCurrentTab } = useTabs();
-  const [alert, setAlert] = useState<{ active: boolean; message: string }>({
+  const [alert, setAlert] = useState<{
+    active: boolean;
+    message?: string;
+    component?: () => JSX.Element;
+  }>({
     active: false,
     message: '',
   });
 
   const { details, overview } = useTabCreate();
-  const { typeSelectProdut, categoryCost } = overview.getData();
   const {
     weight,
     width,
@@ -33,25 +36,35 @@ export const Details = (): JSX.Element => {
   }, [alert]);
 
   const handlerClickNextButton = useCallback(() => {
-    console.log(overview.getData());
     if (details.validate()) {
       setAlert({
         active: true,
-        message:
-          'Os campos destacados na aba "Detalhes" são de preenchimento obrigatório',
+        message: 'Os campos destacados são de preenchimento obrigatório',
       });
+      return;
     }
-  }, [
-    weight,
-    width,
-    height,
-    length,
-    descriptionAndDetails,
-    technicalSpecification,
-    wayOfUse,
-    typeSelectProdut,
-    categoryCost,
-  ]);
+    if (overview.validate()) {
+      setAlert({
+        active: true,
+        component: (): JSX.Element => (
+          <h4 style={{ fontWeight: 300 }}>
+            Os campos destacados na aba{' '}
+            <span
+              onClick={() => {
+                handlerClickAlertConfirm();
+                changeCurrentTab(nameDataOverview);
+              }}
+              style={{ fontWeight: 700, cursor: 'pointer' }}
+            >
+              Dados{' '}
+            </span>
+            são de preenchimento obrigatório
+          </h4>
+        ),
+      });
+      return;
+    }
+  }, [details.getData(), overview.getData()]);
 
   return (
     <Container>
@@ -202,6 +215,7 @@ export const Details = (): JSX.Element => {
         isActive={alert.active}
         onlyConfirm
         message={alert.message}
+        RenderComponent={alert.component}
         onClickConfirmButton={handlerClickAlertConfirm}
       />
     </Container>
