@@ -1,15 +1,14 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { createContext, useCallback, useContext, useState } from 'react';
+
+type EntityWithIdAndNameFieldAndParentId = {
+  id: string;
+  name: string;
+  parent_id: string | null;
+};
 
 type EntityWithIdAndNameField = {
   id: string;
   name: string;
-  parent_id: string | null;
 };
 
 type HasVariation = {
@@ -23,10 +22,10 @@ type TypeGenericValueWithError<T> = {
 };
 
 type TypeDataOverViewProps = {
-  typeSelectProdut: TypeGenericValueWithError<EntityWithIdAndNameField>;
-  categoryCost: TypeGenericValueWithError<EntityWithIdAndNameField>;
-  subCategoryCost: TypeGenericValueWithError<EntityWithIdAndNameField>;
-  groupProduct: TypeGenericValueWithError<EntityWithIdAndNameField>;
+  typeSelectProdut: TypeGenericValueWithError<EntityWithIdAndNameFieldAndParentId>;
+  categoryCost: TypeGenericValueWithError<EntityWithIdAndNameFieldAndParentId>;
+  subCategoryCost: TypeGenericValueWithError<EntityWithIdAndNameFieldAndParentId>;
+  groupProduct: TypeGenericValueWithError<EntityWithIdAndNameFieldAndParentId>;
   hasVariation: TypeGenericValueWithError<HasVariation>;
   nameProduct: TypeGenericValueWithError<string>;
 };
@@ -51,6 +50,11 @@ type TypeDetailsProps = {
   wayOfUse: TypeValueAndError;
 };
 
+type TypeStockProps = {
+  unitMensured: TypeGenericValueWithError<EntityWithIdAndNameField>;
+  stockCurrent: TypeValueAndError;
+};
+
 type TypeGetAndSetAndValidateAba<T> = {
   getData: () => T;
   setData: (data: T) => void;
@@ -60,6 +64,7 @@ type TypeGetAndSetAndValidateAba<T> = {
 interface TabCreateContext {
   overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps>;
   details: TypeGetAndSetAndValidateAba<TypeDetailsProps>;
+  stock: TypeGetAndSetAndValidateAba<TypeStockProps>;
 }
 
 const TabCreateContext = createContext<TabCreateContext>(
@@ -75,7 +80,7 @@ const TabCreateProvider = ({
     isError: false,
     descriptionError: '',
   };
-  const initialStateIdAndNameFieild: TypeGenericValueWithError<EntityWithIdAndNameField> = {
+  const initialStateIdAndNameFieild: TypeGenericValueWithError<EntityWithIdAndNameFieldAndParentId> = {
     error: initialStateError,
     value: {
       id: '',
@@ -106,10 +111,17 @@ const TabCreateProvider = ({
     width: { value: '', error: { isError: false } },
   };
 
+  const initialStateStock: TypeStockProps = {
+    stockCurrent: { value: '', error: { isError: false } },
+    unitMensured: { value: { id: '', name: '' }, error: { isError: false } },
+  };
+
   const [overView, setOverView] = useState<TypeDataOverViewProps>(
     initialStateOverview,
   );
   const [detail, setDetail] = useState<TypeDetailsProps>(initialStateDetails);
+
+  const [stocks, setStocks] = useState<TypeStockProps>(initialStateStock);
 
   const setDataOverView = (newoverView: TypeDataOverViewProps) => {
     setOverView(newoverView);
@@ -122,23 +134,8 @@ const TabCreateProvider = ({
   const validationAndSetErrorAllFieldsDataOverView = useCallback(() => {
     let isError = false;
 
-    if (overView.typeSelectProdut.value.id === '') {
-      isError = true;
-      setOverView({
-        ...overView,
-        typeSelectProdut: {
-          error: { isError: true },
-          value: { id: '', name: '', parent_id: null },
-        },
-      });
-    }
-
-    if (overView.categoryCost.value.id === '') {
-      console.log(getDataOverView());
-    }
-
     return isError;
-  }, [overView]);
+  }, []);
 
   const setDetails = (details: TypeDetailsProps) => setDetail(details);
 
@@ -196,11 +193,41 @@ const TabCreateProvider = ({
     validate: validationAndSetErrorAllFieldsDetails,
   };
 
+  const setStock = (stock: TypeStockProps) => setStocks(stock);
+
+  const getStock = (): TypeStockProps => stocks;
+
+  const validationAndSetErrorAllFieldsStock = () => {
+    let isError = false;
+    if (stocks.stockCurrent.value === '') {
+      isError = true;
+      setStocks(old => ({
+        ...old,
+        stockCurrent: { ...old.stockCurrent, error: { isError: true } },
+      }));
+    }
+    if (stocks.unitMensured.value.id === '') {
+      isError = true;
+      setStocks(old => ({
+        ...old,
+        unitMensured: { ...old.unitMensured, error: { isError: true } },
+      }));
+    }
+    return isError;
+  };
+
+  const stock: TypeGetAndSetAndValidateAba<TypeStockProps> = {
+    setData: setStock,
+    getData: getStock,
+    validate: validationAndSetErrorAllFieldsStock,
+  };
+
   return (
     <TabCreateContext.Provider
       value={{
         overview,
         details,
+        stock,
       }}
     >
       {children}
