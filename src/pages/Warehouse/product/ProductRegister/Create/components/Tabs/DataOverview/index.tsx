@@ -55,7 +55,7 @@ export const DataOverview = ({
     changeCurrentTab,
     changeCurrentTabForNext,
   } = useTabs();
-  const { overview, details, stock } = useTabCreate();
+  const { overview, details, stock, priceComposition } = useTabCreate();
   const {
     typeSelectProdut,
     categoryCost,
@@ -205,11 +205,35 @@ export const DataOverview = ({
       });
       return;
     }
+
     if (
       typeSelectProdut.value.name === SALE.name ||
       typeSelectProdut.value.name === RE_SALE.name ||
       typeSelectProdut.value.name === LOCATION.name
     ) {
+      if (typeSelectProdut.value.name !== LOCATION.name) {
+        if (priceComposition.validate()) {
+          setAlert({
+            active: true,
+            component: (): JSX.Element => (
+              <h4 style={{ fontWeight: 300 }}>
+                Os campos destacados na aba{' '}
+                <span
+                  onClick={() => {
+                    handlerClickAlertConfirm();
+                    changeCurrentTab(namePriceComposition);
+                  }}
+                  style={{ fontWeight: 700, cursor: 'pointer' }}
+                >
+                  Formaçao de preço{' '}
+                </span>
+                são de preenchimento obrigatório
+              </h4>
+            ),
+          });
+          return;
+        }
+      }
       if (details.validate()) {
         setAlert({
           active: true,
@@ -253,7 +277,12 @@ export const DataOverview = ({
       });
       return;
     }
-  }, [details.getData(), overview.getData(), stock.getData()]);
+  }, [
+    details.getData(),
+    overview.getData(),
+    stock.getData(),
+    priceComposition.getData(),
+  ]);
 
   return (
     <>
