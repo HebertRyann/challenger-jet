@@ -80,9 +80,11 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
   const { stock } = useTabCreate();
   const { stockCurrent } = stock.getData();
   const unitMensureds = stock.getData().unitMensured;
+
   const validate = () => {
     stock.validate();
   };
+
   return (
     <Container className="table-responsive">
       <table className="table table-bordered margin-bottom-0">
