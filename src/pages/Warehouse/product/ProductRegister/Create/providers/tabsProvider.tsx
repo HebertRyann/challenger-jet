@@ -62,9 +62,31 @@ type TypePriceCompositionProps = {
   dif: TypeValueAndError;
 };
 
+type TypeProduct = {
+  nameProduct: TypeValueAndError;
+  amount: TypeValueAndError;
+  cost: TypeValueAndError;
+  subtotal: TypeValueAndError;
+};
+
 type TypeGetAndSetAndValidateAba<T> = {
   getData: () => T;
   setData: (data: T) => void;
+  validate: () => boolean;
+};
+
+type ResolverComposition = {
+  changeInputNameProduct: (name: string, index: number) => void;
+  changeInputAmount: (amount: string, index: number) => void;
+  changeInputCost: (cost: string, index: number) => void;
+  changeInputSubTotal: (subtotal: string, index: number) => void;
+  addComposition: () => void;
+  removeComposition: (index: number) => void;
+};
+
+type TypeGetAndSetComposition<T> = {
+  getData: () => T;
+  setData: ResolverComposition;
   validate: () => boolean;
 };
 
@@ -73,6 +95,7 @@ interface TabCreateContext {
   details: TypeGetAndSetAndValidateAba<TypeDetailsProps>;
   stock: TypeGetAndSetAndValidateAba<TypeStockProps>;
   priceComposition: TypeGetAndSetAndValidateAba<TypePriceCompositionProps>;
+  composition: TypeGetAndSetComposition<TypeProduct[]>;
 }
 
 const TabCreateContext = createContext<TabCreateContext>(
@@ -124,13 +147,21 @@ const TabCreateProvider = ({
     unitMensured: { value: { id: '', name: '' }, error: { isError: false } },
   };
 
+  const initialStateComposition: TypeProduct[] = [
+    {
+      amount: { error: { isError: false }, value: '' },
+      cost: { error: { isError: false }, value: '' },
+      nameProduct: { error: { isError: false }, value: '' },
+      subtotal: { error: { isError: false }, value: '' },
+    },
+  ];
+
   const initialStatePriceComposition: TypePriceCompositionProps = {
     cost: { error: { isError: false }, value: '' },
     dif: { error: { isError: false }, value: '' },
     ipi: { error: { isError: false }, value: '' },
     profit: { error: { isError: false }, value: '' },
   };
-
   const [overView, setOverView] = useState<TypeDataOverViewProps>(
     initialStateOverview,
   );
@@ -140,6 +171,10 @@ const TabCreateProvider = ({
     priceCompositionState,
     setPriceCompositionState,
   ] = useState<TypePriceCompositionProps>(initialStatePriceComposition);
+
+  const [compositionState, setCompositionState] = useState<TypeProduct[]>(
+    initialStateComposition,
+  );
 
   const setDataOverView = (newoverView: TypeDataOverViewProps) => {
     setOverView(newoverView);
@@ -287,6 +322,90 @@ const TabCreateProvider = ({
     validate: validationAndSetErrorAllFieldsPriceComposition,
   };
 
+  const getDataComposition = (): TypeProduct[] => compositionState;
+
+  const setDataComposition = (): ResolverComposition => {
+    const addComposition = () => {
+      setCompositionState([...compositionState, initialStateComposition[0]]);
+    };
+
+    const removeComposition = (index: number) => {
+      const productWithOutIndex = compositionState[index];
+      const result = compositionState.filter(
+        product => product !== productWithOutIndex,
+      );
+      if (result.length === 0) {
+        setCompositionState(initialStateComposition);
+      } else {
+        setCompositionState([...result]);
+      }
+    };
+
+    const changeInputNameProduct = (name: string, index: number) => {
+      compositionState[index].nameProduct.value = name;
+      compositionState[index].nameProduct.error.isError = false;
+      setCompositionState([...compositionState]);
+      console.log(compositionState[index].nameProduct);
+    };
+
+    const changeInputAmount = (amount: string, index: number) => {
+      compositionState[index].amount.value = amount;
+      compositionState[index].amount.error.isError = false;
+      setCompositionState([...compositionState]);
+    };
+
+    const changeInputCost = (cost: string, index: number) => {
+      compositionState[index].cost.value = cost;
+      compositionState[index].cost.error.isError = false;
+      setCompositionState([...compositionState]);
+    };
+
+    const changeInputSubTotal = (subtotal: string, index: number) => {
+      compositionState[index].subtotal.value = subtotal;
+      compositionState[index].subtotal.error.isError = false;
+      setCompositionState([...compositionState]);
+    };
+
+    return {
+      addComposition,
+      removeComposition,
+      changeInputAmount,
+      changeInputCost,
+      changeInputNameProduct,
+      changeInputSubTotal,
+    };
+  };
+
+  const validationAndSetErrorAllFieldsComposition = () => {
+    let isError = false;
+    composition.getData().map(({ amount, cost, nameProduct, subtotal }) => {
+      if (amount.value === '') {
+        isError = true;
+        amount.error.isError = true;
+      }
+      if (cost.value === '') {
+        isError = true;
+        cost.error.isError = true;
+      }
+      if (nameProduct.value === '') {
+        isError = true;
+        nameProduct.error.isError = true;
+      }
+      if (subtotal.value === '') {
+        isError = true;
+        subtotal.error.isError = true;
+      }
+    });
+    setCompositionState([...compositionState]);
+    return isError;
+  };
+
+  const composition: TypeGetAndSetComposition<TypeProduct[]> = {
+    getData: getDataComposition,
+    setData: setDataComposition(),
+    validate: validationAndSetErrorAllFieldsComposition,
+  };
+
   return (
     <TabCreateContext.Provider
       value={{
@@ -294,6 +413,7 @@ const TabCreateProvider = ({
         details,
         stock,
         priceComposition,
+        composition,
       }}
     >
       {children}
