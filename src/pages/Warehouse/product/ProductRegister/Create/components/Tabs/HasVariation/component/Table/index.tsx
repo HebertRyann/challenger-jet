@@ -40,8 +40,6 @@ export const Table = ({
   };
   const [variations, setVariations] = useState<TypeVariation[]>([initialState]);
 
-  const [pricesCost, setPricesCost] = useState(['']);
-
   const handlerAddNewVariation = useCallback(() => {
     variations.push({ ...initialState, key: Math.random() });
     setVariations([...variations]);

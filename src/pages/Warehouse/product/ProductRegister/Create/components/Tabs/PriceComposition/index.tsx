@@ -8,5 +8,5 @@ export const PriceComposition = (): JSX.Element => (
   </Container>
 );
 
-export const labelPriceComposition = 'Formaçao de preço';
+export const labelPriceComposition = 'Formação de preço';
 export const namePriceComposition = '@@tabs-price-training';
