@@ -10,7 +10,7 @@ const Create = (): JSX.Element => {
   return (
     <Container
       style={{
-        margin: '0 -10px',
+        margin: '0 -40px',
       }}
       Content={() => (
         <TabsProvider>
