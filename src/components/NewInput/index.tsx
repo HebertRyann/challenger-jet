@@ -30,22 +30,9 @@ export const NewInput = ({
     setCurrentError(error ? error : { isError: false, descriptionError: '' });
   }, [error]);
 
-  const handlerOnBlur = useCallback(
-    (value: string) => {
-      if (value === '')
-        setCurrentError({
-          isError: true,
-        });
-    },
-    [error],
-  );
-
   return (
     <Container isError={currentError.isError}>
       <input
-        onBlur={event => {
-          handlerOnBlur(event.target.value);
-        }}
         autoComplete="off"
         name={name}
         type="text"
