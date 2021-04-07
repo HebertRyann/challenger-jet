@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Footer } from '../../../footer';
 import { Container, FooterStyled, IconRemove } from './style';
+import { NewInput } from '../../../../../../../../../components/NewInput';
+import { useTabCreate } from '../../../../providers/tabsProvider';
+import { Alert } from '../../../../../../../../../components/Alert';
 
 type Product = {
   name: string;
@@ -9,52 +12,40 @@ type Product = {
   subtotal: string;
 };
 
-export const Table = (): JSX.Element | null => {
-  const initialStateProduct = { amount: '', cost: '', name: '', subtotal: '' };
+export const Table = (): JSX.Element => {
+  const [alert, setAlert] = useState(false);
+  const { composition } = useTabCreate();
+
+  const products = composition.getData();
+
+  const {
+    removeComposition,
+    addComposition,
+    changeInputNameProduct,
+    changeInputAmount,
+    changeInputCost,
+    changeInputSubTotal,
+  } = composition.setData;
+
   const [total, setTotal] = useState(0);
-  const [productList, setProductList] = useState<Product[]>([
-    initialStateProduct,
-  ]);
-
-  const handlerAddNewVariation = () => {
-    setProductList([...productList, initialStateProduct]);
-  };
-
-  const handlerChangeInputName = (name: string, index: number) => {
-    productList[index].name = name;
-    setProductList([...productList]);
-  };
-
-  const handlerChangeInputAmount = (amount: string, index: number) => {
-    productList[index].amount = amount;
-    setProductList([...productList]);
-  };
-
-  const handlerChangeInputCost = (cost: string, index: number) => {
-    productList[index].cost = cost;
-    setProductList([...productList]);
-  };
-
-  const handlerChangeInputNameSubTotal = (subtotal: string, index: number) => {
-    productList[index].subtotal = subtotal;
-    setProductList([...productList]);
-  };
-
-  const handleRemoveProduct = (index: number) => {
-    const productWithOutIndex = productList[index];
-    const result = productList.filter(
-      product => product !== productWithOutIndex,
-    );
-    setProductList([...result]);
-  };
 
   useEffect(() => {
     let soma = 0;
-    for (let i = 0; i < productList.length; i++) {
-      soma += Number(productList[i].subtotal);
+    for (let i = 0; i < products.length; i++) {
+      soma += Number(products[i].subtotal.value);
     }
     setTotal(soma);
-  }, [productList]);
+  }, [products]);
+
+  const handleClickOnSaveButton = () => {
+    if (composition.validate()) {
+      setAlert(true);
+    }
+  };
+
+  const handlerClickAlertConfirm = useCallback(() => {
+    setAlert(false);
+  }, [alert]);
 
   return (
     <Container className="table-responsive">
@@ -67,54 +58,74 @@ export const Table = (): JSX.Element | null => {
             <th>Subtotal</th>
             <th>Ações</th>
           </tr>
-          {productList.map(({ amount, cost, name, subtotal }, index) => (
+          {products.map(({ amount, cost, nameProduct, subtotal }, index) => (
             <tr>
               <td>
-                <input
+                <NewInput
+                  name="nameProduct"
                   placeholder="Informe o nome do produto"
                   className="form-control"
                   type="text"
-                  value={name}
-                  onChange={event => {
-                    handlerChangeInputName(event.currentTarget.value, index);
-                  }}
+                  value={nameProduct.value}
+                  error={nameProduct.error}
+                  onChange={event =>
+                    changeInputNameProduct(event.currentTarget.value, index)
+                  }
                 />
               </td>
               <td>
-                <input
-                  value={amount}
-                  onChange={event => {
-                    handlerChangeInputAmount(event.currentTarget.value, index);
+                <NewInput
+                  name="amount"
+                  value={amount.value}
+                  error={amount.error}
+                  placeholder="0"
+                  onKeyPress={event => {
+                    const regex = /^[0-9]+$/;
+                    if (!regex.test(event.key)) event.preventDefault();
                   }}
+                  onChange={event =>
+                    changeInputAmount(event.currentTarget.value, index)
+                  }
                   className="form-control"
                   type="text"
                 />
               </td>
               <td>
-                <input
-                  value={cost}
-                  onChange={event => {
-                    handlerChangeInputCost(event.currentTarget.value, index);
+                <NewInput
+                  name="input"
+                  value={cost.value}
+                  error={cost.error}
+                  placeholder="0.00"
+                  onKeyPress={event => {
+                    const regex = /^[0-9.]+$/;
+                    if (!regex.test(event.key)) event.preventDefault();
                   }}
+                  onChange={event =>
+                    changeInputCost(event.currentTarget.value, index)
+                  }
                   className="form-control"
                   type="text"
                 />
               </td>
               <td>
-                <input
-                  value={subtotal}
-                  onChange={event => {
-                    handlerChangeInputNameSubTotal(
-                      event.currentTarget.value,
-                      index,
-                    );
+                <NewInput
+                  name="input"
+                  value={subtotal.value}
+                  error={subtotal.error}
+                  placeholder="0.00"
+                  onKeyPress={event => {
+                    const regex = /^[0-9.]+$/;
+                    if (!regex.test(event.key)) event.preventDefault();
                   }}
+                  onChange={event =>
+                    changeInputSubTotal(event.currentTarget.value, index)
+                  }
                   className="form-control"
                   type="text"
                 />
               </td>
               <td className="actions">
-                <IconRemove onClick={() => handleRemoveProduct(index)} />
+                <IconRemove onClick={() => removeComposition(index)} />
               </td>
             </tr>
           ))}
@@ -123,7 +134,7 @@ export const Table = (): JSX.Element | null => {
       <hr />
       <FooterStyled>
         <button
-          onClick={handlerAddNewVariation}
+          onClick={addComposition}
           className="btn dark btn-sm sbold uppercase"
         >
           <span
@@ -139,8 +150,14 @@ export const Table = (): JSX.Element | null => {
         </div>
       </FooterStyled>
       <div style={{ margin: '20px 0px 0 0' }}>
-        <Footer onClickButtonNext={() => console.log(productList)} />
+        <Footer onSave={handleClickOnSaveButton} />
       </div>
+      <Alert
+        isActive={alert}
+        onlyConfirm
+        message="Os campos destacados são de preenchimento obrigatório"
+        onClickConfirmButton={handlerClickAlertConfirm}
+      />
     </Container>
   );
 };
