@@ -62,6 +62,46 @@ type TypePriceCompositionProps = {
   dif: TypeValueAndError;
 };
 
+type FieldWithIdNameAndParentId = {
+  id: string;
+  name: string;
+  parent_id: string | null;
+};
+
+type TypeHasVariation = {
+  unitMensured: TypeGenericValueWithError<FieldWithIdNameAndParentId>;
+  currentStock: TypeValueAndError;
+  cost: TypeValueAndError;
+  priceCost: TypeValueAndError;
+  priceSale: TypeValueAndError;
+  variations: TypeGenericValueWithError<FieldWithIdNameAndParentId>[];
+};
+
+type ResolverHasVariation = {
+  changeUnitMensured: (
+    unitMensured: FieldWithIdNameAndParentId,
+    index: number,
+  ) => void;
+  changeCurrentStock: (stock: string, index: number) => void;
+  changeCost: (cost: string, index: number) => void;
+  changePriceSale: (priceSale: string, index: number) => void;
+  changeVariations: (variation: string, x: number, y: number) => void;
+  addVariations: (
+    variation: FieldWithIdNameAndParentId,
+    x: number,
+    y: number,
+  ) => void;
+  removeVariations: (x: number, y: number) => void;
+  addVariation: () => void;
+  removeVariation: (index: number) => void;
+};
+
+type TypeGetAndSetHasVariation<T> = {
+  getData: () => T;
+  setData: ResolverHasVariation;
+  validate: () => boolean;
+};
+
 type TypeProduct = {
   nameProduct: TypeValueAndError;
   amount: TypeValueAndError;
@@ -96,6 +136,7 @@ interface TabCreateContext {
   stock: TypeGetAndSetAndValidateAba<TypeStockProps>;
   priceComposition: TypeGetAndSetAndValidateAba<TypePriceCompositionProps>;
   composition: TypeGetAndSetComposition<TypeProduct[]>;
+  variation: TypeGetAndSetHasVariation<TypeHasVariation[]>;
 }
 
 const TabCreateContext = createContext<TabCreateContext>(
@@ -107,12 +148,12 @@ const TabCreateProvider = ({
 }: {
   children: JSX.Element;
 }): JSX.Element => {
-  const initialStateError: TypeError = {
+  const error: TypeError = {
     isError: false,
     descriptionError: '',
   };
   const initialStateIdAndNameFieild: TypeGenericValueWithError<EntityWithIdAndNameFieldAndParentId> = {
-    error: initialStateError,
+    error,
     value: {
       id: '',
       name: '',
@@ -126,42 +167,60 @@ const TabCreateProvider = ({
     groupProduct: initialStateIdAndNameFieild,
     typeSelectProdut: initialStateIdAndNameFieild,
     hasVariation: {
-      error: initialStateError,
+      error,
       value: { name: '', hasVariation: false },
     },
-    nameProduct: { error: initialStateError, value: '' },
+    nameProduct: { error, value: '' },
   };
 
   const initialStateDetails: TypeDetailsProps = {
-    descriptionAndDetails: { value: '', error: { isError: false } },
-    height: { value: '', error: { isError: false } },
-    length: { value: '', error: { isError: false } },
-    technicalSpecification: { value: '', error: { isError: false } },
-    wayOfUse: { value: '', error: { isError: false } },
+    descriptionAndDetails: { value: '', error },
+    height: { value: '', error },
+    length: { value: '', error },
+    technicalSpecification: { value: '', error },
+    wayOfUse: { value: '', error },
     weight: { value: '', error: { isError: false } },
     width: { value: '', error: { isError: false } },
   };
 
   const initialStateStock: TypeStockProps = {
-    stockCurrent: { value: '', error: { isError: false } },
-    unitMensured: { value: { id: '', name: '' }, error: { isError: false } },
+    stockCurrent: { value: '', error },
+    unitMensured: { value: { id: '', name: '' }, error },
   };
 
   const initialStateComposition: TypeProduct[] = [
     {
-      amount: { error: { isError: false }, value: '' },
-      cost: { error: { isError: false }, value: '' },
-      nameProduct: { error: { isError: false }, value: '' },
-      subtotal: { error: { isError: false }, value: '' },
+      amount: { error, value: '' },
+      cost: { error, value: '' },
+      nameProduct: { error, value: '' },
+      subtotal: { error, value: '' },
     },
   ];
 
   const initialStatePriceComposition: TypePriceCompositionProps = {
-    cost: { error: { isError: false }, value: '' },
-    dif: { error: { isError: false }, value: '' },
-    ipi: { error: { isError: false }, value: '' },
-    profit: { error: { isError: false }, value: '' },
+    cost: { error, value: '' },
+    dif: { error, value: '' },
+    ipi: { error, value: '' },
+    profit: { error, value: '' },
   };
+
+  const intialStateHasVariation: TypeHasVariation[] = [
+    {
+      unitMensured: {
+        error,
+        value: { id: '', name: '', parent_id: '' },
+      },
+      priceCost: { error, value: '' },
+      currentStock: {
+        error,
+        value: '',
+      },
+      cost: { error, value: '' },
+      priceSale: { error, value: '' },
+      variations: [{ error, value: { id: '', name: '', parent_id: '' } }],
+    },
+  ];
+
   const [overView, setOverView] = useState<TypeDataOverViewProps>(
     initialStateOverview,
   );
@@ -174,6 +233,10 @@ const TabCreateProvider = ({
 
   const [compositionState, setCompositionState] = useState<TypeProduct[]>(
     initialStateComposition,
+  );
+
+  const [variationState, setVariationState] = useState<TypeHasVariation[]>(
+    intialStateHasVariation,
   );
 
   const setDataOverView = (newoverView: TypeDataOverViewProps) => {
@@ -404,6 +467,82 @@ const TabCreateProvider = ({
     validate: validationAndSetErrorAllFieldsComposition,
   };
 
+  const getDataVariation = (): TypeHasVariation[] => variationState;
+
+  const setDataVariation = (): ResolverHasVariation => {
+    const changeUnitMensured = (
+      unitMensured: FieldWithIdNameAndParentId,
+      index: number,
+    ) => {
+      variationState[index].unitMensured.value = unitMensured;
+      variationState[index].currentStock.error.isError = false;
+      setVariationState([...variationState]);
+    };
+
+    const changeCurrentStock = (stock: string, index: number) => {
+      variationState[index].currentStock.value = stock;
+      variationState[index].currentStock.error.isError = false;
+      setVariationState([...variationState]);
+    };
+
+    const changeCost = (cost: string, index: number) => {
+      variationState[index].cost.value = cost;
+      variationState[index].cost.error.isError = false;
+      setVariationState([...variationState]);
+    };
+
+    const changePriceSale = (priceSale: string, index: number) => {
+      variationState[index].priceSale.value = priceSale;
+      variationState[index].priceSale.error.isError = false;
+      setVariationState([...variationState]);
+    };
+
+    const changeVariations = (variation: string, x: number, y: number) => {};
+
+    const addVariations = (
+      variation: FieldWithIdNameAndParentId,
+      x: number,
+      y: number,
+    ) => {};
+    const removeVariations = (x: number, y: number) => {};
+
+    const removeVariation = (index: number) => {
+      const variationWithOutIndex = variationState[index];
+      const result = variationState.filter(
+        variation => variation !== variationWithOutIndex,
+      );
+      if (result.length === 0) {
+        setVariationState(intialStateHasVariation);
+      } else {
+        setVariationState([...result]);
+      }
+    };
+
+    const addVariation = () => {
+      setVariationState([...variationState, intialStateHasVariation[0]]);
+    };
+
+    return {
+      changeUnitMensured,
+      changeCurrentStock,
+      changeCost,
+      changePriceSale,
+      changeVariations,
+      addVariations,
+      removeVariations,
+      removeVariation,
+      addVariation,
+    };
+  };
+
+  const validationAndSetErrorAllFieldsVariation = () => false;
+
+  const variation: TypeGetAndSetHasVariation<TypeHasVariation[]> = {
+    getData: getDataVariation,
+    setData: setDataVariation(),
+    validate: validationAndSetErrorAllFieldsVariation,
+  };
+
   return (
     <TabCreateContext.Provider
       value={{
@@ -412,6 +551,7 @@ const TabCreateProvider = ({
         stock,
         priceComposition,
         composition,
+        variation,
       }}
     >
       {children}
