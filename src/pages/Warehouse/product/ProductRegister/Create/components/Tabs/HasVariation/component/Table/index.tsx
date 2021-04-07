@@ -102,12 +102,16 @@ export const Table = ({
             selectType.value.name == RE_SALE.name ? (
               <th>Preço de custo</th>
             ) : null}
+            <th colSpan={2}>Preço</th>
             <th>Ações</th>
           </tr>
           {variations.map(({ key, unitPrice, priceCost }, index) => (
             <tr key={key}>
               <td>
                 <NewSelect
+                  style={{
+                    marginTop: '18px',
+                  }}
                   onChange={event => {
                     const split = event.target.value.split('+');
                     const key = split[0];
@@ -133,7 +137,14 @@ export const Table = ({
                   )}
                   <>
                     {unitMensured.map(({ id, name }) => (
-                      <option value={`${key}+${id}+${name}`}>{name}</option>
+                      <option
+                        style={{
+                          marginTop: '18px',
+                        }}
+                        value={`${key}+${id}+${name}`}
+                      >
+                        {name}
+                      </option>
                     ))}
                   </>
                 </NewSelect>
@@ -143,6 +154,9 @@ export const Table = ({
                   parent_id === null && (
                     <td key={key}>
                       <NewSelect
+                        style={{
+                          marginTop: '18px',
+                        }}
                         className="form-control"
                         name="Selecione"
                         id="Selecione"
@@ -155,7 +169,13 @@ export const Table = ({
                   ),
               )}
               <td>
-                <input className="form-control" type="text" />
+                <input
+                  style={{
+                    marginTop: '18px',
+                  }}
+                  className="form-control"
+                  type="text"
+                />
               </td>
               {selectType.value.name == SALE.name ||
               selectType.value.name == RE_SALE.name ? (
@@ -171,9 +191,29 @@ export const Table = ({
                   />
                 </td>
               ) : null}
-
-              <td className="actions">
-                <IconRemove onClick={() => handleRemoveVariation(key)} />
+              <td style={{ width: '150px' }}>
+                <tr>
+                  <th>Custo</th>
+                </tr>
+                <tr>
+                  <input className="form-control" type="text" />
+                </tr>
+              </td>
+              <td style={{ width: '150px' }}>
+                <tr>
+                  <th>Venda</th>
+                </tr>
+                <tr>
+                  <input disabled className="form-control" type="text" />
+                </tr>
+              </td>
+              <td style={{ width: '20px' }}>
+                <IconRemove
+                  style={{
+                    marginTop: '20px',
+                  }}
+                  onClick={() => handleRemoveVariation(key)}
+                />
               </td>
             </tr>
           ))}
