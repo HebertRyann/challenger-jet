@@ -4,8 +4,11 @@ import { TooltipComponent } from '../../../../../../../../components/TooltipComp
 import { nameHasVariation } from '../HasVariation';
 import { nameFiscal } from '../Fiscal';
 import { useTabs } from '../../../../../../../../hooks/tabs';
-import { nameHasComposition } from '../HasComposition';
-import { namePriceComposition } from '../PriceComposition';
+import { labelHasComposition, nameHasComposition } from '../HasComposition';
+import {
+  labelPriceComposition,
+  namePriceComposition,
+} from '../PriceComposition';
 import { NewInput } from '../../../../../../../../components/NewInput';
 import { Alert } from '../../../../../../../../components/Alert';
 import {
@@ -16,11 +19,11 @@ import {
   RE_SALE,
   LOCATION,
 } from './products';
-import { nameStock } from '../Stock';
+import { labelStock, nameStock } from '../Stock';
 import { Footer } from '../../footer';
 import { NewSelect } from '../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../providers/tabsProvider';
-import { nameDetails } from '../Details';
+import { labelDetails, nameDetails } from '../Details';
 export type TypeTabNameEnableOrDisable = {
   keyTab: string;
   name: string;
@@ -55,14 +58,19 @@ export const DataOverview = ({
     changeCurrentTab,
     changeCurrentTabForNext,
   } = useTabs();
-  const { overview, details, stock, priceComposition } = useTabCreate();
+  const {
+    overview,
+    details,
+    stock,
+    priceComposition,
+    composition,
+  } = useTabCreate();
   const {
     typeSelectProdut,
     categoryCost,
     subCategoryCost,
     groupProduct,
     nameProduct,
-    hasVariation,
   } = overview.getData();
   const [alert, setAlert] = useState<{
     active: boolean;
@@ -99,10 +107,6 @@ export const DataOverview = ({
     },
     [subCategoryFinanceData, overview.getData()],
   );
-
-  const handlerClickAlertConfirm = useCallback(() => {
-    setAlert({ active: false, message: '' });
-  }, [alert]);
 
   const handlerHasVariation = useCallback(
     ({ active, keyTab, name }: TypeTabNameEnableOrDisable) => {
@@ -173,115 +177,195 @@ export const DataOverview = ({
     changeCurrentTabForNext(nameDataOverview);
   }, []);
 
+  type Link = {
+    link: string;
+    name: string;
+  };
+
+  const [links, setLinks] = useState<Link[]>([{ link: '', name: '' }]);
+
+  const handlerClickAlertConfirm = useCallback(() => {
+    setAlert({ active: false, message: '' });
+    setLinks([]);
+  }, [alert, links]);
+
+  const renderComponentAlertWithLink = useCallback(
+    (): JSX.Element => (
+      <h4 style={{ fontWeight: 300 }}>
+        Os campos destacados na aba(s){' '}
+        {links
+          .filter(({ link }) => link !== '')
+          .map(({ link, name }, index) => (
+            <>
+              <span
+                onClick={() => {
+                  handlerClickAlertConfirm();
+                  changeCurrentTab(link);
+                }}
+                style={{ fontWeight: 700, cursor: 'pointer' }}
+              >
+                {name}
+                {', '}
+              </span>
+            </>
+          ))}
+        são de preenchimento obrigatório
+      </h4>
+    ),
+    [links],
+  );
+
   const handlerClickSaveAba = useCallback(() => {
-    let isError = false;
-
-    if (typeSelectProdut.value.id === '') {
-      isError = true;
-      overview.setData({
-        ...overview.getData(),
-        typeSelectProdut: {
-          ...overview.getData().typeSelectProdut,
-          error: { isError: true },
-        },
-      });
-    }
-
-    if (categoryCost.value.id === '') {
-      isError = true;
-      overview.setData({
-        ...overview.getData(),
-        categoryCost: {
-          ...overview.getData().categoryCost,
-          error: { isError: true },
-        },
-      });
-    }
-
-    if (isError) {
-      setAlert({
-        active: true,
-        message: 'Os campos destacados são de preenchimento obrigatório',
-      });
-      return;
-    }
-
+    let activeAlert = false;
     if (
       typeSelectProdut.value.name === SALE.name ||
       typeSelectProdut.value.name === RE_SALE.name ||
       typeSelectProdut.value.name === LOCATION.name
     ) {
-      if (typeSelectProdut.value.name !== LOCATION.name) {
-        if (priceComposition.validate()) {
-          setAlert({
-            active: true,
-            component: (): JSX.Element => (
-              <h4 style={{ fontWeight: 300 }}>
-                Os campos destacados na aba{' '}
-                <span
-                  onClick={() => {
-                    handlerClickAlertConfirm();
-                    changeCurrentTab(namePriceComposition);
-                  }}
-                  style={{ fontWeight: 700, cursor: 'pointer' }}
-                >
-                  Formaçao de preço{' '}
-                </span>
-                são de preenchimento obrigatório
-              </h4>
-            ),
-          });
-          return;
+      if (details.validate()) {
+        setLinks(oldValue => [
+          ...oldValue,
+          { link: nameDetails, name: labelDetails },
+        ]);
+        activeAlert = true;
+      }
+      if (stock.validate()) {
+        setLinks(oldValue => [
+          ...oldValue,
+          { link: nameStock, name: labelStock },
+        ]);
+        activeAlert = true;
+      }
+      if (
+        typeSelectProdut.value.name !== LOCATION.name &&
+        priceComposition.validate()
+      ) {
+        setLinks(oldValue => [
+          ...oldValue,
+          { link: namePriceComposition, name: labelPriceComposition },
+        ]);
+        activeAlert = true;
+      }
+      if (
+        typeSelectProdut.value.name === SALE.name ||
+        typeSelectProdut.value.name === SEMI_FINISHED.name
+      ) {
+        if (composition.validate()) {
+          setLinks(oldValue => [
+            ...oldValue,
+            { link: nameHasComposition, name: labelHasComposition },
+          ]);
+          activeAlert = true;
         }
       }
-      if (details.validate()) {
-        setAlert({
-          active: true,
-          component: (): JSX.Element => (
-            <h4 style={{ fontWeight: 300 }}>
-              Os campos destacados na aba{' '}
-              <span
-                onClick={() => {
-                  handlerClickAlertConfirm();
-                  changeCurrentTab(nameDetails);
-                }}
-                style={{ fontWeight: 700, cursor: 'pointer' }}
-              >
-                Detalhes{' '}
-              </span>
-              são de preenchimento obrigatório
-            </h4>
-          ),
-        });
-        return;
-      }
     }
-    if (stock.validate()) {
-      setAlert({
-        active: true,
-        component: (): JSX.Element => (
-          <h4 style={{ fontWeight: 300 }}>
-            Os campos destacados na aba{' '}
-            <span
-              onClick={() => {
-                handlerClickAlertConfirm();
-                changeCurrentTab(nameStock);
-              }}
-              style={{ fontWeight: 700, cursor: 'pointer' }}
-            >
-              Estoque/Variação{' '}
-            </span>
-            são de preenchimento obrigatório
-          </h4>
-        ),
-      });
-      return;
-    }
+    setAlert({ active: activeAlert });
+    // if (typeSelectProdut.value.id === '') {
+    //   isError = true;
+    //   overview.setData({
+    //     ...overview.getData(),
+    //     typeSelectProdut: {
+    //       ...overview.getData().typeSelectProdut,
+    //       error: { isError: true },
+    //     },
+    //   });
+    // }
+    // if (categoryCost.value.id === '') {
+    //   isError = true;
+    //   overview.setData({
+    //     ...overview.getData(),
+    //     categoryCost: {
+    //       ...overview.getData().categoryCost,
+    //       error: { isError: true },
+    //     },
+    //   });
+    // }
+    // if (isError) {
+    //   setAlert({
+    //     active: true,
+    //     message: 'Os campos destacados são de preenchimento obrigatório',
+    //   });
+    //   return;
+    // }
+    //
+    // if (
+    //   typeSelectProdut.value.name === SALE.name ||
+    //   typeSelectProdut.value.name === RE_SALE.name ||
+    //   typeSelectProdut.value.name === LOCATION.name
+    // ) {
+    //   if (typeSelectProdut.value.name !== LOCATION.name) {
+    //     if (priceComposition.validate()) {
+    //       setAlert({
+    //         active: true,
+    //         component: (): JSX.Element => (
+    //           <h4 style={{ fontWeight: 300 }}>
+    //             Os campos destacados na aba{' '}
+    //             <span
+    //               onClick={() => {
+    //                 handlerClickAlertConfirm();
+    //                 changeCurrentTab(namePriceComposition);
+    //               }}
+    //               style={{ fontWeight: 700, cursor: 'pointer' }}
+    //             >
+    //               Formaçao de preço{' '}
+    //             </span>
+    //             são de preenchimento obrigatório
+    //           </h4>
+    //         ),
+    //       });
+    //       return;
+    //     }
+    //   }
+    //   if (details.validate()) {
+    //     setAlert({
+    //       active: true,
+    //       component: (): JSX.Element => (
+    //         <h4 style={{ fontWeight: 300 }}>
+    //           Os campos destacados na aba{' '}
+    //           <span
+    //             onClick={() => {
+    //               handlerClickAlertConfirm();
+    //               changeCurrentTab(nameDetails);
+    //             }}
+    //             style={{ fontWeight: 700, cursor: 'pointer' }}
+    //           >
+    //             Detalhes{' '}
+    //           </span>
+    //           são de preenchimento obrigatório
+    //         </h4>
+    //       ),
+    //     });
+    //     return;
+    //   }
+    // }
+    // if (stock.validate()) {
+    //   setAlert({
+    //     active: true,
+    //     component: (): JSX.Element => (
+    //       <h4 style={{ fontWeight: 300 }}>
+    //         Os campos destacados na aba{' '}
+    //         <span
+    //           onClick={() => {
+    //             handlerClickAlertConfirm();
+    //             changeCurrentTab(nameStock);
+    //           }}
+    //           style={{ fontWeight: 700, cursor: 'pointer' }}
+    //         >
+    //           Estoque/Variação{' '}
+    //         </span>
+    //         são de preenchimento obrigatório
+    //       </h4>
+    //     ),
+    //   });
+    //   return;
+    // }
   }, [
     details.getData(),
     overview.getData(),
     stock.getData(),
     priceComposition.getData(),
+    composition.getData(),
+    links,
   ]);
 
   return (
@@ -444,7 +528,7 @@ export const DataOverview = ({
         isActive={alert.active}
         onlyConfirm
         message={alert.message}
-        RenderComponent={alert.component}
+        RenderComponent={renderComponentAlertWithLink}
         onClickConfirmButton={handlerClickAlertConfirm}
       />
       <Footer
