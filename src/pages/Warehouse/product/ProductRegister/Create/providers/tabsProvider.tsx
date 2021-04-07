@@ -62,35 +62,27 @@ type TypePriceCompositionProps = {
   dif: TypeValueAndError;
 };
 
-type FieldWithIdNameAndParentId = {
+type FieldWithIdName = {
   id: string;
   name: string;
-  parent_id: string | null;
 };
 
 type TypeHasVariation = {
-  unitMensured: TypeGenericValueWithError<FieldWithIdNameAndParentId>;
+  unitMensured: TypeGenericValueWithError<FieldWithIdName>;
   currentStock: TypeValueAndError;
   cost: TypeValueAndError;
   priceCost: TypeValueAndError;
   priceSale: TypeValueAndError;
-  variations: TypeGenericValueWithError<FieldWithIdNameAndParentId>[];
+  variations: TypeGenericValueWithError<FieldWithIdName>[];
 };
 
 type ResolverHasVariation = {
-  changeUnitMensured: (
-    unitMensured: FieldWithIdNameAndParentId,
-    index: number,
-  ) => void;
+  changeUnitMensured: (unitMensured: FieldWithIdName, index: number) => void;
   changeCurrentStock: (stock: string, index: number) => void;
   changeCost: (cost: string, index: number) => void;
   changePriceSale: (priceSale: string, index: number) => void;
   changeVariations: (variation: string, x: number, y: number) => void;
-  addVariations: (
-    variation: FieldWithIdNameAndParentId,
-    x: number,
-    y: number,
-  ) => void;
+  addVariations: (variation: FieldWithIdName, x: number, y: number) => void;
   removeVariations: (x: number, y: number) => void;
   addVariation: () => void;
   removeVariation: (index: number) => void;
@@ -208,7 +200,7 @@ const TabCreateProvider = ({
     {
       unitMensured: {
         error,
-        value: { id: '', name: '', parent_id: '' },
+        value: { id: '', name: '' },
       },
       priceCost: { error, value: '' },
       currentStock: {
@@ -217,7 +209,7 @@ const TabCreateProvider = ({
       },
       cost: { error, value: '' },
       priceSale: { error, value: '' },
-      variations: [{ error, value: { id: '', name: '', parent_id: '' } }],
+      variations: [{ error, value: { id: '', name: '' } }],
     },
   ];
 
@@ -471,7 +463,7 @@ const TabCreateProvider = ({
 
   const setDataVariation = (): ResolverHasVariation => {
     const changeUnitMensured = (
-      unitMensured: FieldWithIdNameAndParentId,
+      unitMensured: FieldWithIdName,
       index: number,
     ) => {
       variationState[index].unitMensured.value = unitMensured;
@@ -500,7 +492,7 @@ const TabCreateProvider = ({
     const changeVariations = (variation: string, x: number, y: number) => {};
 
     const addVariations = (
-      variation: FieldWithIdNameAndParentId,
+      variation: FieldWithIdName,
       x: number,
       y: number,
     ) => {};
