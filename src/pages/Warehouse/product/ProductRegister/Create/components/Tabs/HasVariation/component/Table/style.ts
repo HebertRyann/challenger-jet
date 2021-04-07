@@ -7,7 +7,8 @@ export const Container = styled.div`
   .actions {
     width: 60px;
   }
-  > hr {
+  .top {
+    margin-top: 18px;
   }
 `;
 
