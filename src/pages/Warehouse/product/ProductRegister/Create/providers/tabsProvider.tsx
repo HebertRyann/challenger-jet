@@ -283,7 +283,6 @@ const TabCreateProvider = ({
   ) => setPriceCompositionState(priceComposition);
 
   const validationAndSetErrorAllFieldsPriceComposition = useCallback(() => {
-    console.log(priceCompositionState);
     let isError = false;
     if (priceCompositionState.cost.value === '') {
       isError = true;
@@ -345,7 +344,6 @@ const TabCreateProvider = ({
       compositionState[index].nameProduct.value = name;
       compositionState[index].nameProduct.error.isError = false;
       setCompositionState([...compositionState]);
-      console.log(compositionState[index].nameProduct);
     };
 
     const changeInputAmount = (amount: string, index: number) => {
