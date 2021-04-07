@@ -57,7 +57,7 @@ export const HasVariation = ({
         </div>
       </Container>
       <div className="row">
-        <Table />
+        <Table unitMensuredList={unitMensureds}/>
       </div>
     </>
   );
