@@ -92,10 +92,14 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
           <tr>
             <th>Unidade de medidas</th>
             <th>Estoque atual</th>
+            <th colSpan={2}>Preço</th>
           </tr>
           <tr>
             <td>
               <NewSelect
+                style={{
+                  marginTop: '18px',
+                }}
                 error={unitMensureds.error}
                 onChange={event => {
                   const id = event.target.value.split('+')[0];
@@ -124,6 +128,9 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
             </td>
             <td>
               <NewInput
+                style={{
+                  marginTop: '18px',
+                }}
                 onChange={event => {
                   stock.setData({
                     ...stock.getData(),
@@ -138,6 +145,22 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                 className="form-control"
                 type="text"
               />
+            </td>
+            <td style={{ width: '150px' }}>
+              <tr>
+                <th>Custo</th>
+              </tr>
+              <tr>
+                <input className="form-control" type="text" />
+              </tr>
+            </td>
+            <td style={{ width: '150px' }}>
+              <tr>
+                <th>Venda</th>
+              </tr>
+              <tr>
+                <input disabled className="form-control" type="text" />
+              </tr>
             </td>
           </tr>
         </tbody>
