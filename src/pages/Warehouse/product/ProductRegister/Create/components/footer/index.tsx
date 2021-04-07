@@ -33,7 +33,11 @@ export const Footer = ({
         </button>
         <button
           onClick={onClickButtonNext}
-          className="btn dark btn-sm bold uppercase"
+          className={
+            onClickButtonNext !== undefined
+              ? 'btn dark btn-sm sbold uppercase'
+              : 'btn disabled dark btn-sm sbold uppercase'
+          }
         >
           Continuar
           <span
