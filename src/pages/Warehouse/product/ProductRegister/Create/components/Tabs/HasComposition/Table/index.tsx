@@ -4,6 +4,10 @@ import { Container, FooterStyled, IconRemove } from './style';
 import { NewInput } from '../../../../../../../../../components/NewInput';
 import { useTabCreate } from '../../../../providers/tabsProvider';
 import { Alert } from '../../../../../../../../../components/Alert';
+import { SEMI_FINISHED } from '../../DataOverview/products';
+import { useTabs } from '../../../../../../../../../hooks/tabs';
+import { nameHasVariation } from '../../HasVariation';
+import { nameStock } from '../../Stock';
 
 type Product = {
   name: string;
@@ -14,8 +18,9 @@ type Product = {
 
 export const Table = (): JSX.Element => {
   const [alert, setAlert] = useState(false);
-  const { composition } = useTabCreate();
-
+  const { composition, overview } = useTabCreate();
+  const { typeSelectProdut, hasVariation } = overview.getData();
+  const { changeCurrentTab } = useTabs();
   const products = composition.getData();
 
   const {
@@ -150,7 +155,18 @@ export const Table = (): JSX.Element => {
         </div>
       </FooterStyled>
       <div style={{ margin: '20px 0px 0 0' }}>
-        <Footer onSave={handleClickOnSaveButton} />
+        <Footer
+          onSave={handleClickOnSaveButton}
+          onClickButtonBack={() => {
+            if (typeSelectProdut.value.name === SEMI_FINISHED.name) {
+              if (hasVariation.value.hasVariation) {
+                changeCurrentTab(nameHasVariation);
+              } else {
+                changeCurrentTab(nameStock);
+              }
+            }
+          }}
+        />
       </div>
       <Alert
         isActive={alert}
