@@ -6,24 +6,37 @@ import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
 import { Alert } from '../../../../../../../../../../components/Alert';
 import { SALE, RE_SALE } from '../../../DataOverview/products';
+import { ResponseEntiryWithIdNameWithChildren } from '../../../../../services/api';
 
 type TypeUnitMensured = {
   id: string;
   name: string;
 };
 
-type TypeTableProps = {
-  unitMensuredList: TypeUnitMensured[];
+type TypeAtributes = {
+  id: string;
+  name: string;
+  parent_id: string | null;
+  childrenList: ResponseEntiryWithIdNameWithChildren[];
+  isChecked?: boolean;
 };
 
-export const Table = ({ unitMensuredList }: TypeTableProps): JSX.Element => {
+type TypeTableProps = {
+  unitMensuredList: TypeUnitMensured[];
+  atributes: TypeAtributes[];
+};
+
+export const Table = ({
+  unitMensuredList,
+  atributes,
+}: TypeTableProps): JSX.Element => {
   const [alert, setAlert] = useState(false);
   const { variation, overview } = useTabCreate();
   const { typeSelectProdut } = overview.getData();
   const variationList = variation.getData();
   const {
     changeCurrentStock,
-    changeCost,
+    changePriceCost,
     changePriceSale,
     changeUnitMensured,
     addVariation,
@@ -47,6 +60,9 @@ export const Table = ({ unitMensuredList }: TypeTableProps): JSX.Element => {
           <tr>
             <th>Unidade de medidas</th>
             <th>Estoque atual</th>
+            {atributes.map(
+              ({ name, parent_id }) => parent_id === null && <th>{name}</th>,
+            )}
             {typeSelectProdut.value.name === SALE.name ||
             typeSelectProdut.value.name === RE_SALE.name ? (
               <th colSpan={2}>Preço</th>
@@ -54,7 +70,7 @@ export const Table = ({ unitMensuredList }: TypeTableProps): JSX.Element => {
             <th>Ações</th>
           </tr>
           {variationList.map(
-            ({ unitMensured, currentStock, cost, priceSale }, index) => (
+            ({ unitMensured, currentStock, priceSale, priceCost }, index) => (
               <tr>
                 <td>
                   <NewSelect
@@ -66,6 +82,7 @@ export const Table = ({ unitMensuredList }: TypeTableProps): JSX.Element => {
                     }}
                     name="unitMensured"
                     className="form-control top"
+                    error={unitMensured.error}
                   >
                     {unitMensuredList.map(({ id, name }) => (
                       <option value={`${id}+${name}`}>{name}</option>
@@ -88,6 +105,24 @@ export const Table = ({ unitMensuredList }: TypeTableProps): JSX.Element => {
                     type="text"
                   />
                 </td>
+                <>
+                  {atributes.map(
+                    ({ parent_id, childrenList }, index) =>
+                      parent_id === null && (
+                        <td key={Math.random()}>
+                          <NewSelect
+                            className="form-control top"
+                            name="Selecione"
+                            id="Selecione"
+                          >
+                            {childrenList.map(({ name }) => (
+                              <option value={name}>{name}</option>
+                            ))}
+                          </NewSelect>
+                        </td>
+                      ),
+                  )}
+                </>
                 {typeSelectProdut.value.name === SALE.name ||
                 typeSelectProdut.value.name === RE_SALE.name ? (
                   <>
@@ -98,15 +133,15 @@ export const Table = ({ unitMensuredList }: TypeTableProps): JSX.Element => {
                       <tr>
                         <NewInput
                           name="cost"
-                          value={cost.value}
-                          error={cost.error}
+                          value={priceCost.value}
+                          error={priceCost.error}
                           placeholder="0.00"
                           onKeyPress={event => {
                             const regex = /^[0-9.]+$/;
                             if (!regex.test(event.key)) event.preventDefault();
                           }}
                           onChange={event =>
-                            changeCost(event.currentTarget.value, index)
+                            changePriceCost(event.currentTarget.value, index)
                           }
                           className="form-control"
                           type="text"
