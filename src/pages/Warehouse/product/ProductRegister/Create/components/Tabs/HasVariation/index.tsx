@@ -67,5 +67,5 @@ export const HasVariation = ({
   );
 };
 
-export const labelHasVariation = 'Estoque/Variação';
+export const labelHasVariation = 'Variação/Estoque';
 export const nameHasVariation = '@@tabs-has-variation';
