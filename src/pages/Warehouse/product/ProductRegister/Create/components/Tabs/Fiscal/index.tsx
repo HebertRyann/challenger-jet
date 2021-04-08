@@ -3,6 +3,7 @@ import { Container } from './style';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
 import { useTabs } from '../../../../../../../../hooks/tabs';
 import { makeTabsFiscal } from './tabs';
+import { useTabCreate } from '../../../providers/tabsProvider';
 import {
   TabHeaderContainerFiscal,
   TabNameFiscal,
@@ -23,6 +24,9 @@ export type TypeContentTabsFiscal = {
 export const Fiscal = (): JSX.Element => {
   const { loadTabs, addTab } = useTabs();
   const tabs = makeTabsFiscal();
+  const { fiscal } = useTabCreate();
+  const { ncm, cfop } = fiscal.getData();
+  const { changeNCM, changeCFOP } = fiscal.setData;
 
   useEffect(() => {
     tabs.map(tab => addTab(tab));
@@ -38,9 +42,15 @@ export const Fiscal = (): JSX.Element => {
         <div className="form-content col-md-6">
           <TooltipComponent label="NCM" message="Infome o peso em kg" />
           <input
+            onKeyPress={event => {
+              const regex = /^[0-9]+$/;
+              if (!regex.test(event.key)) event.preventDefault();
+            }}
+            onChange={event => changeNCM(event.currentTarget.value)}
             className="form-control"
             type="text"
             placeholder="Digíte o código"
+            value={ncm.value}
           />
         </div>
         <div className="form-content col-md-6">
@@ -51,6 +61,12 @@ export const Fiscal = (): JSX.Element => {
           <input
             className="form-control"
             type="text"
+            onKeyPress={event => {
+              const regex = /^[0-9]+$/;
+              if (!regex.test(event.key)) event.preventDefault();
+            }}
+            onChange={event => changeCFOP(event.currentTarget.value)}
+            value={cfop.value}
             placeholder="Digíte o código"
           />
         </div>
@@ -85,7 +101,7 @@ export const Fiscal = (): JSX.Element => {
         </div>
       </Container>
       <div style={{ margin: '20px 3px 0 0' }}>
-        <Footer onClickButtonNext={() => {}} />
+        <Footer onClickButtonNext={() => {}} onSave={() => fiscal.validate()} />
       </div>
     </>
   );
