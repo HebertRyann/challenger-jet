@@ -20,5 +20,5 @@ export const Stock = ({
   );
 };
 
-export const labelStock = 'Estoque/Variação';
+export const labelStock = 'Estoque';
 export const nameStock = '@@tabs-stock';
