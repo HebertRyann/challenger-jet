@@ -5,6 +5,39 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import {
+  RAW_MATERIAL,
+  SALE,
+  SEMI_FINISHED,
+  RE_SALE,
+  LOCATION,
+  CONSUMER,
+} from '../domain/products';
+import {
+  labelDataOverview,
+  nameDataOverview,
+} from '../components/Tabs/DataOverview';
+
+import { labelDetails, nameDetails } from '../components/Tabs/Details';
+
+import { labelFiscal, nameFiscal } from '../components/Tabs/Fiscal';
+
+import {
+  labelHasComposition,
+  nameHasComposition,
+} from '../components/Tabs/HasComposition';
+
+import {
+  labelHasVariation,
+  nameHasVariation,
+} from '../components/Tabs/HasVariation';
+
+import {
+  labelPriceComposition,
+  namePriceComposition,
+} from '../components/Tabs/PriceComposition';
+
+import { labelStock, nameStock } from '../components/Tabs/Stock';
 
 type EntityWithIdAndNameFieldAndParentId = {
   id: string;
@@ -25,6 +58,15 @@ type HasVariation = {
 type TypeGenericValueWithError<T> = {
   value: T;
   error: TypeError;
+};
+
+type TypeValidationResult = {
+  labelName: string;
+  linkName: string;
+};
+
+type TypeValitionResolve = {
+  validate: () => TypeValidationResult[];
 };
 
 type TypeDataOverViewProps = {
@@ -127,13 +169,49 @@ type TypeGetAndSetComposition<T> = {
   validate: () => boolean;
 };
 
+type ResolverFiscal = {
+  changeNCM: (ncm: string) => void;
+  changeCFOP: (cfop: string) => void;
+  changeIcmsTaxeIssue: (taxeIssue: FieldWithIdName) => void;
+  changeIcmsOrigem: (origem: FieldWithIdName) => void;
+  changeIpiTaxeIssue: (taxeIssue: FieldWithIdName) => void;
+  changePisTaxeIssue: (taxeIssue: FieldWithIdName) => void;
+  changeCofinsTaxeIssue: (taxeIssue: FieldWithIdName) => void;
+};
+
+type TypeFiscal = {
+  ncm: TypeValueAndError;
+  cfop: TypeValueAndError;
+  icms: {
+    taxesIssue: TypeGenericValueWithError<FieldWithIdName>;
+    origem: TypeGenericValueWithError<FieldWithIdName>;
+  };
+  ipi: {
+    taxesIssue: TypeGenericValueWithError<FieldWithIdName>;
+  };
+  pis: {
+    taxesIssue: TypeGenericValueWithError<FieldWithIdName>;
+  };
+  cofins: {
+    taxesIssue: TypeGenericValueWithError<FieldWithIdName>;
+  };
+};
+
+type TypeGetAndSetFiscal<T> = {
+  getData: () => T;
+  setData: ResolverFiscal;
+  validate: () => boolean;
+};
+
 interface TabCreateContext {
   overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps>;
   details: TypeGetAndSetAndValidateAba<TypeDetailsProps>;
   stock: TypeGetAndSetAndValidateAba<TypeStockProps>;
   priceComposition: TypeGetAndSetAndValidateAba<TypePriceCompositionProps>;
+  fiscal: TypeGetAndSetFiscal<TypeFiscal>;
   composition: TypeGetAndSetComposition<TypeProduct[]>;
   variation: TypeGetAndSetHasVariation<TypeHasVariation[]>;
+  validation: TypeValitionResolve;
 }
 
 const TabCreateContext = createContext<TabCreateContext>(
@@ -217,6 +295,18 @@ const TabCreateProvider = ({
     },
   ];
 
+  const initialStateFiscal: TypeFiscal = {
+    ncm: { error, value: '' },
+    cfop: { error, value: '' },
+    icms: {
+      taxesIssue: { error, value: { id: '', name: '' } },
+      origem: { error, value: { id: '', name: '' } },
+    },
+    ipi: { taxesIssue: { error, value: { id: '', name: '' } } },
+    pis: { taxesIssue: { error, value: { id: '', name: '' } } },
+    cofins: { taxesIssue: { error, value: { id: '', name: '' } } },
+  };
+
   const [overView, setOverView] = useState<TypeDataOverViewProps>(
     initialStateOverview,
   );
@@ -226,6 +316,10 @@ const TabCreateProvider = ({
     priceCompositionState,
     setPriceCompositionState,
   ] = useState<TypePriceCompositionProps>(initialStatePriceComposition);
+
+  const [fiscalState, setFiscalState] = useState<TypeFiscal>(
+    initialStateFiscal,
+  );
 
   const [compositionState, setCompositionState] = useState<TypeProduct[]>(
     initialStateComposition,
@@ -245,6 +339,26 @@ const TabCreateProvider = ({
 
   const validationAndSetErrorAllFieldsDataOverView = useCallback(() => {
     let isError = false;
+
+    if (overView.typeSelectProdut.value.id === '') {
+      isError = false;
+    }
+
+    if (overView.categoryCost.value.id === '') {
+      isError = false;
+    }
+
+    if (overView.subCategoryCost.value.id === '') {
+      isError = false;
+    }
+
+    if (overView.groupProduct.value.id === '') {
+      isError = false;
+    }
+
+    if (overView.nameProduct.value === '') {
+      isError = false;
+    }
 
     return isError;
   }, []);
@@ -553,8 +667,6 @@ const TabCreateProvider = ({
                 currentStock: { error: { isError: true }, value: '' },
               },
             ]);
-            console.log(variationState);
-
             isError = true;
           }
         },
@@ -562,18 +674,187 @@ const TabCreateProvider = ({
 
     setVariationState([...variationState]);
 
-    console.log(variationState);
-
     return isError;
   };
-  useEffect(() => {
-    console.log('Overview update');
-  }, [overView]);
 
   const variation: TypeGetAndSetHasVariation<TypeHasVariation[]> = {
     getData: getDataVariation,
     setData: setDataVariation(),
     validate: validationAndSetErrorAllFieldsVariation,
+  };
+
+  const getDataFiscal = (): TypeFiscal => fiscalState;
+
+  const setDataFiscal = (): ResolverFiscal => {
+    const changeNCM = (ncm: string) => {
+      fiscalState.ncm.value = ncm;
+      setFiscalState({ ...fiscalState });
+    };
+    const changeCFOP = (cfop: string) => {
+      fiscalState.cfop.value = cfop;
+      setFiscalState({ ...fiscalState });
+    };
+    const changeCofinsTaxeIssue = (taxeIssue: FieldWithIdName) => {
+      fiscalState.cofins.taxesIssue.value = taxeIssue;
+      setFiscalState({ ...fiscalState });
+    };
+    const changeIcmsOrigem = (origem: FieldWithIdName) => {
+      fiscalState.icms.origem.value = origem;
+      setFiscalState({ ...fiscalState });
+    };
+    const changeIcmsTaxeIssue = (taxeIssue: FieldWithIdName) => {
+      fiscalState.icms.taxesIssue.value = taxeIssue;
+      setFiscalState({ ...fiscalState });
+    };
+    const changeIpiTaxeIssue = (taxeIssue: FieldWithIdName) => {
+      fiscalState.ipi.taxesIssue.value = taxeIssue;
+      setFiscalState({ ...fiscalState });
+    };
+    const changePisTaxeIssue = (taxeIssue: FieldWithIdName) => {
+      fiscalState.pis.taxesIssue.value = taxeIssue;
+      setFiscalState({ ...fiscalState });
+    };
+
+    return {
+      changeCFOP,
+      changeCofinsTaxeIssue,
+      changeIcmsOrigem,
+      changeIcmsTaxeIssue,
+      changeIpiTaxeIssue,
+      changeNCM,
+      changePisTaxeIssue,
+    };
+  };
+
+  const validationAndSetErrorAllFieldsFiscal = () => {
+    let isError = false;
+
+    if (fiscalState.ncm.value === '') {
+      isError = true;
+    }
+
+    if (fiscalState.cfop.value === '') {
+      isError = true;
+    }
+
+    return isError;
+  };
+
+  const fiscal: TypeGetAndSetFiscal<TypeFiscal> = {
+    getData: getDataFiscal,
+    setData: setDataFiscal(),
+    validate: validationAndSetErrorAllFieldsFiscal,
+  };
+
+  const validation: TypeValitionResolve = {
+    validate: () => {
+      const resultList: TypeValidationResult[] = [];
+      const valueSelectedTypeProduct = overView.typeSelectProdut.value.name;
+      const hasVariation = overView.hasVariation.value.hasVariation;
+
+      const validateHasVariationOrStock = () => {
+        if (hasVariation) {
+          if (variation.validate()) {
+            resultList.push({
+              labelName: labelHasVariation,
+              linkName: nameHasVariation,
+            });
+            console.log('Há erros na aba variação');
+          }
+        } else {
+          if (stock.validate()) {
+            resultList.push({
+              labelName: labelStock,
+              linkName: nameStock,
+            });
+            console.log('Há erros na aba estoque');
+          }
+        }
+      };
+
+      const validateDataOverViewAndDetailsAndStockOrHasVariation = () => {
+        if (overview.validate()) {
+          resultList.push({
+            labelName: labelDataOverview,
+            linkName: nameDataOverview,
+          });
+          console.log('Há erros na aba dados');
+        }
+        if (details.validate()) {
+          resultList.push({ labelName: labelDetails, linkName: nameDetails });
+          console.log('Há erros na aba detalhes');
+        }
+        validateHasVariationOrStock();
+      };
+
+      const validateIsPriceFormationAndFiscal = () => {
+        if (priceComposition.validate()) {
+          resultList.push({
+            labelName: labelPriceComposition,
+            linkName: namePriceComposition,
+          });
+          console.log('Há erros na aba formação de preço');
+        }
+        if (fiscal.validate()) {
+          resultList.push({
+            labelName: labelPriceComposition,
+            linkName: namePriceComposition,
+          });
+          console.log('Há erros na aba fiscal');
+        }
+      };
+
+      if (valueSelectedTypeProduct === SALE.name) {
+        validateDataOverViewAndDetailsAndStockOrHasVariation();
+        validateIsPriceFormationAndFiscal();
+
+        if (composition.validate()) {
+          resultList.push({
+            labelName: labelHasComposition,
+            linkName: nameHasComposition,
+          });
+          console.log('Há erros na aba composição');
+        }
+      }
+      if (valueSelectedTypeProduct === SEMI_FINISHED.name) {
+        validateDataOverViewAndDetailsAndStockOrHasVariation();
+        if (composition.validate()) {
+          resultList.push({
+            labelName: labelHasComposition,
+            linkName: nameHasComposition,
+          });
+          console.log('Há erros na aba composição');
+        }
+      }
+      if (valueSelectedTypeProduct === RE_SALE.name) {
+        validateDataOverViewAndDetailsAndStockOrHasVariation();
+        validateIsPriceFormationAndFiscal();
+      }
+      if (
+        valueSelectedTypeProduct === LOCATION.name ||
+        valueSelectedTypeProduct === CONSUMER.name ||
+        valueSelectedTypeProduct === RAW_MATERIAL.name
+      ) {
+        validateDataOverViewAndDetailsAndStockOrHasVariation();
+      }
+      if (resultList.length === 0) {
+        console.log('Dados');
+        console.log(overView);
+        console.log('Detalhes');
+        console.log(detail);
+        console.log('Estoque');
+        console.log(stocks);
+        console.log('Variação');
+        console.log(variationState);
+        console.log('Formação de preço');
+        console.log(priceCompositionState);
+        console.log('Fiscal');
+        console.log(fiscalState);
+        console.log('Composição');
+        console.log(compositionState);
+      }
+      return resultList;
+    },
   };
 
   return (
@@ -583,8 +864,10 @@ const TabCreateProvider = ({
         details,
         stock,
         priceComposition,
+        fiscal,
         composition,
         variation,
+        validation: validation,
       }}
     >
       {children}
