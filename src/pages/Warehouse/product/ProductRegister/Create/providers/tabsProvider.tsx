@@ -1,4 +1,10 @@
-import React, { createContext, useCallback, useContext, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 type EntityWithIdAndNameFieldAndParentId = {
   id: string;
@@ -70,7 +76,6 @@ type FieldWithIdName = {
 type TypeHasVariation = {
   unitMensured: TypeGenericValueWithError<FieldWithIdName>;
   currentStock: TypeValueAndError;
-  cost: TypeValueAndError;
   priceCost: TypeValueAndError;
   priceSale: TypeValueAndError;
   variations: TypeGenericValueWithError<FieldWithIdName>[];
@@ -79,8 +84,8 @@ type TypeHasVariation = {
 type ResolverHasVariation = {
   changeUnitMensured: (unitMensured: FieldWithIdName, index: number) => void;
   changeCurrentStock: (stock: string, index: number) => void;
-  changeCost: (cost: string, index: number) => void;
   changePriceSale: (priceSale: string, index: number) => void;
+  changePriceCost: (priceCost: string, index: number) => void;
   changeVariations: (variation: string, x: number, y: number) => void;
   addVariations: (variation: FieldWithIdName, x: number, y: number) => void;
   removeVariations: (x: number, y: number) => void;
@@ -207,7 +212,6 @@ const TabCreateProvider = ({
         error,
         value: '',
       },
-      cost: { error, value: '' },
       priceSale: { error, value: '' },
       variations: [{ error, value: { id: '', name: '' } }],
     },
@@ -477,15 +481,15 @@ const TabCreateProvider = ({
       setVariationState([...variationState]);
     };
 
-    const changeCost = (cost: string, index: number) => {
-      variationState[index].cost.value = cost;
-      variationState[index].cost.error.isError = false;
-      setVariationState([...variationState]);
-    };
-
     const changePriceSale = (priceSale: string, index: number) => {
       variationState[index].priceSale.value = priceSale;
       variationState[index].priceSale.error.isError = false;
+      setVariationState([...variationState]);
+    };
+
+    const changePriceCost = (priceCost: string, index: number) => {
+      variationState[index].priceCost.value = priceCost;
+      variationState[index].priceCost.error.isError = false;
       setVariationState([...variationState]);
     };
 
@@ -517,8 +521,8 @@ const TabCreateProvider = ({
     return {
       changeUnitMensured,
       changeCurrentStock,
-      changeCost,
       changePriceSale,
+      changePriceCost,
       changeVariations,
       addVariations,
       removeVariations,
@@ -527,7 +531,44 @@ const TabCreateProvider = ({
     };
   };
 
-  const validationAndSetErrorAllFieldsVariation = () => false;
+  const validationAndSetErrorAllFieldsVariation = () => {
+    let isError = false;
+
+    variation
+      .getData()
+      .map(
+        (
+          { unitMensured, currentStock, priceSale, priceCost, variations },
+          index,
+        ) => {
+          if (currentStock.value === '') {
+            variationState[index].currentStock.error.isError = true;
+            setVariationState([
+              ...variationState,
+              {
+                priceCost,
+                priceSale,
+                unitMensured,
+                variations,
+                currentStock: { error: { isError: true }, value: '' },
+              },
+            ]);
+            console.log(variationState);
+
+            isError = true;
+          }
+        },
+      );
+
+    setVariationState([...variationState]);
+
+    console.log(variationState);
+
+    return isError;
+  };
+  useEffect(() => {
+    console.log('Overview update');
+  }, [overView]);
 
   const variation: TypeGetAndSetHasVariation<TypeHasVariation[]> = {
     getData: getDataVariation,
