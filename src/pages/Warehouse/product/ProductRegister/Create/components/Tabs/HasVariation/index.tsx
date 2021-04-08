@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { Container } from './styles';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../services/api';
 import { Table } from './component/Table';
+import { Footer } from '../../footer';
 
 type TypeAtributes = {
   id: string;
@@ -57,7 +58,10 @@ export const HasVariation = ({
         </div>
       </Container>
       <div className="row">
-        <Table unitMensuredList={unitMensureds}/>
+        <Table
+          unitMensuredList={unitMensureds}
+          atributes={atributesList.filter(({ isChecked }) => isChecked)}
+        />
       </div>
     </>
   );
