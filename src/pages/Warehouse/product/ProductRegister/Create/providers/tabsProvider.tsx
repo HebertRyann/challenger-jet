@@ -316,28 +316,51 @@ const TabCreateProvider = ({
     };
 
     const changeInputNameProduct = (name: string, index: number) => {
-      compositionState[index].nameProduct.value = name;
-      compositionState[index].nameProduct.error.isError = false;
-      setCompositionState([...compositionState]);
+      let tempState: TypeProduct[] = JSON.parse(
+        JSON.stringify(compositionState),
+      );
+      tempState.map(({ nameProduct }, key) => {
+        if (key === index) {
+          nameProduct.value = name;
+          nameProduct.error.isError = false;
+        }
+      });
+      setCompositionState([...tempState]);
     };
 
-    const changeInputAmount = (amount: string, index: number) => {
-      compositionState[index].amount.value = amount;
-      compositionState[index].amount.error.isError = false;
-      setCompositionState([...compositionState]);
+    const changeInputAmount = (newAmount: string, index: number) => {
+      let tempState: TypeProduct[] = JSON.parse(
+        JSON.stringify(compositionState),
+      );
+      tempState.map(({ cost, amount, subtotal }, key) => {
+        if (key === index) {
+          amount.value = newAmount;
+          amount.error.isError = false;
+          if (cost.value !== '') {
+            subtotal.error.isError = false;
+          }
+        }
+      });
+      setCompositionState([...tempState]);
     };
 
-    const changeInputCost = (cost: string, index: number) => {
-      compositionState[index].cost.value = cost;
-      compositionState[index].cost.error.isError = false;
-      setCompositionState([...compositionState]);
+    const changeInputCost = (newCost: string, index: number) => {
+      let tempState: TypeProduct[] = JSON.parse(
+        JSON.stringify(compositionState),
+      );
+      tempState.map(({ cost, amount, subtotal }, key) => {
+        if (key === index) {
+          cost.value = newCost;
+          cost.error.isError = false;
+          if (amount.value !== '') {
+            subtotal.error.isError = false;
+          }
+        }
+      });
+      setCompositionState([...tempState]);
     };
 
-    const changeInputSubTotal = (subtotal: string, index: number) => {
-      compositionState[index].subtotal.value = subtotal;
-      compositionState[index].subtotal.error.isError = false;
-      setCompositionState([...compositionState]);
-    };
+    const changeInputSubTotal = (subtotal: string, index: number) => {};
 
     return {
       addComposition,
