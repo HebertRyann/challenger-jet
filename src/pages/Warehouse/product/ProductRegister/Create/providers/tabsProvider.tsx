@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { createContext, useCallback, useContext, useState } from 'react';
 import {
   RAW_MATERIAL,
   SALE,
@@ -17,191 +11,49 @@ import {
   labelDataOverview,
   nameDataOverview,
 } from '../components/Tabs/DataOverview';
-
+import {
+  initialStateComposition,
+  initialStateDetails,
+  initialStateFiscal,
+  initialStateOverview,
+  initialStatePriceComposition,
+  initialStateStock,
+  intialStateHasVariation,
+} from './initialStates';
 import { labelDetails, nameDetails } from '../components/Tabs/Details';
-
 import { labelFiscal, nameFiscal } from '../components/Tabs/Fiscal';
-
 import {
   labelHasComposition,
   nameHasComposition,
 } from '../components/Tabs/HasComposition';
-
 import {
   labelHasVariation,
   nameHasVariation,
 } from '../components/Tabs/HasVariation';
-
 import {
   labelPriceComposition,
   namePriceComposition,
 } from '../components/Tabs/PriceComposition';
-
 import { labelStock, nameStock } from '../components/Tabs/Stock';
-
-type EntityWithIdAndNameFieldAndParentId = {
-  id: string;
-  name: string;
-  parent_id: string | null;
-};
-
-type EntityWithIdAndNameField = {
-  id: string;
-  name: string;
-};
-
-type HasVariation = {
-  hasVariation?: boolean;
-  name: string;
-};
-
-type TypeGenericValueWithError<T> = {
-  value: T;
-  error: TypeError;
-};
-
-type TypeValidationResult = {
-  labelName: string;
-  linkName: string;
-};
-
-type TypeValitionResolve = {
-  validate: () => TypeValidationResult[];
-};
-
-type TypeDataOverViewProps = {
-  typeSelectProdut: TypeGenericValueWithError<EntityWithIdAndNameFieldAndParentId>;
-  categoryCost: TypeGenericValueWithError<EntityWithIdAndNameFieldAndParentId>;
-  subCategoryCost: TypeGenericValueWithError<EntityWithIdAndNameFieldAndParentId>;
-  groupProduct: TypeGenericValueWithError<EntityWithIdAndNameFieldAndParentId>;
-  hasVariation: TypeGenericValueWithError<HasVariation>;
-  nameProduct: TypeGenericValueWithError<string>;
-};
-
-type TypeError = {
-  isError: boolean;
-  descriptionError?: string;
-};
-
-type TypeValueAndError = {
-  value: string;
-  error: TypeError;
-};
-
-type TypeDetailsProps = {
-  weight: TypeValueAndError;
-  width: TypeValueAndError;
-  height: TypeValueAndError;
-  length: TypeValueAndError;
-  descriptionAndDetails: TypeValueAndError;
-  technicalSpecification: TypeValueAndError;
-  wayOfUse: TypeValueAndError;
-};
-
-type TypeStockProps = {
-  unitMensured: TypeGenericValueWithError<EntityWithIdAndNameField>;
-  stockCurrent: TypeValueAndError;
-};
-
-type TypePriceCompositionProps = {
-  profit: TypeValueAndError;
-  ipi: TypeValueAndError;
-  cost: TypeValueAndError;
-  dif: TypeValueAndError;
-};
-
-type FieldWithIdName = {
-  id: string;
-  name: string;
-};
-
-type TypeHasVariation = {
-  unitMensured: TypeGenericValueWithError<FieldWithIdName>;
-  currentStock: TypeValueAndError;
-  priceCost: TypeValueAndError;
-  priceSale: TypeValueAndError;
-  variations: TypeGenericValueWithError<FieldWithIdName>[];
-};
-
-type ResolverHasVariation = {
-  changeUnitMensured: (unitMensured: FieldWithIdName, index: number) => void;
-  changeCurrentStock: (stock: string, index: number) => void;
-  changePriceSale: (priceSale: string, index: number) => void;
-  changePriceCost: (priceCost: string, index: number) => void;
-  changeVariations: (variation: string, x: number, y: number) => void;
-  addVariations: (variation: FieldWithIdName, x: number, y: number) => void;
-  removeVariations: (x: number, y: number) => void;
-  addVariation: () => void;
-  removeVariation: (index: number) => void;
-};
-
-type TypeGetAndSetHasVariation<T> = {
-  getData: () => T;
-  setData: ResolverHasVariation;
-  validate: () => boolean;
-};
-
-type TypeProduct = {
-  nameProduct: TypeValueAndError;
-  amount: TypeValueAndError;
-  cost: TypeValueAndError;
-  subtotal: TypeValueAndError;
-};
-
-type TypeGetAndSetAndValidateAba<T> = {
-  getData: () => T;
-  setData: (data: T) => void;
-  validate: () => boolean;
-};
-
-type ResolverComposition = {
-  changeInputNameProduct: (name: string, index: number) => void;
-  changeInputAmount: (amount: string, index: number) => void;
-  changeInputCost: (cost: string, index: number) => void;
-  changeInputSubTotal: (subtotal: string, index: number) => void;
-  addComposition: () => void;
-  removeComposition: (index: number) => void;
-};
-
-type TypeGetAndSetComposition<T> = {
-  getData: () => T;
-  setData: ResolverComposition;
-  validate: () => boolean;
-};
-
-type ResolverFiscal = {
-  changeNCM: (ncm: string) => void;
-  changeCFOP: (cfop: string) => void;
-  changeIcmsTaxeIssue: (taxeIssue: FieldWithIdName) => void;
-  changeIcmsOrigem: (origem: FieldWithIdName) => void;
-  changeIpiTaxeIssue: (taxeIssue: FieldWithIdName) => void;
-  changePisTaxeIssue: (taxeIssue: FieldWithIdName) => void;
-  changeCofinsTaxeIssue: (taxeIssue: FieldWithIdName) => void;
-};
-
-type TypeFiscal = {
-  ncm: TypeValueAndError;
-  cfop: TypeValueAndError;
-  icms: {
-    taxesIssue: TypeGenericValueWithError<FieldWithIdName>;
-    origem: TypeGenericValueWithError<FieldWithIdName>;
-  };
-  ipi: {
-    taxesIssue: TypeGenericValueWithError<FieldWithIdName>;
-  };
-  pis: {
-    taxesIssue: TypeGenericValueWithError<FieldWithIdName>;
-  };
-  cofins: {
-    taxesIssue: TypeGenericValueWithError<FieldWithIdName>;
-  };
-};
-
-type TypeGetAndSetFiscal<T> = {
-  getData: () => T;
-  setData: ResolverFiscal;
-  validate: () => boolean;
-};
+import {
+  TypeDataOverViewProps,
+  TypeDetailsProps,
+  TypeFiscal,
+  TypeGetAndSetAndValidateAba,
+  TypeGetAndSetComposition,
+  TypeGetAndSetFiscal,
+  TypePriceCompositionProps,
+  TypeStockProps,
+  TypeProduct,
+  TypeHasVariation,
+  TypeGetAndSetHasVariation,
+  TypeValitionResolve,
+  ResolverComposition,
+  ResolverHasVariation,
+  FieldWithIdName,
+  ResolverFiscal,
+  TypeValidationResult,
+} from './domain.types';
 
 interface TabCreateContext {
   overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps>;
@@ -223,90 +75,6 @@ const TabCreateProvider = ({
 }: {
   children: JSX.Element;
 }): JSX.Element => {
-  const error: TypeError = {
-    isError: false,
-    descriptionError: '',
-  };
-  const initialStateIdAndNameFieild: TypeGenericValueWithError<EntityWithIdAndNameFieldAndParentId> = {
-    error,
-    value: {
-      id: '',
-      name: '',
-      parent_id: null,
-    },
-  };
-
-  const initialStateOverview: TypeDataOverViewProps = {
-    categoryCost: initialStateIdAndNameFieild,
-    subCategoryCost: initialStateIdAndNameFieild,
-    groupProduct: initialStateIdAndNameFieild,
-    typeSelectProdut: initialStateIdAndNameFieild,
-    hasVariation: {
-      error,
-      value: { name: '', hasVariation: false },
-    },
-    nameProduct: { error, value: '' },
-  };
-
-  const initialStateDetails: TypeDetailsProps = {
-    descriptionAndDetails: { value: '', error },
-    height: { value: '', error },
-    length: { value: '', error },
-    technicalSpecification: { value: '', error },
-    wayOfUse: { value: '', error },
-    weight: { value: '', error: { isError: false } },
-    width: { value: '', error: { isError: false } },
-  };
-
-  const initialStateStock: TypeStockProps = {
-    stockCurrent: { value: '', error },
-    unitMensured: { value: { id: '', name: '' }, error },
-  };
-
-  const initialStateComposition: TypeProduct[] = [
-    {
-      amount: { error, value: '' },
-      cost: { error, value: '' },
-      nameProduct: { error, value: '' },
-      subtotal: { error, value: '' },
-    },
-  ];
-
-  const initialStatePriceComposition: TypePriceCompositionProps = {
-    cost: { error, value: '' },
-    dif: { error, value: '' },
-    ipi: { error, value: '' },
-    profit: { error, value: '' },
-  };
-
-  const intialStateHasVariation: TypeHasVariation[] = [
-    {
-      unitMensured: {
-        error,
-        value: { id: '', name: '' },
-      },
-      priceCost: { error, value: '' },
-      currentStock: {
-        error,
-        value: '',
-      },
-      priceSale: { error, value: '' },
-      variations: [{ error, value: { id: '', name: '' } }],
-    },
-  ];
-
-  const initialStateFiscal: TypeFiscal = {
-    ncm: { error, value: '' },
-    cfop: { error, value: '' },
-    icms: {
-      taxesIssue: { error, value: { id: '', name: '' } },
-      origem: { error, value: { id: '', name: '' } },
-    },
-    ipi: { taxesIssue: { error, value: { id: '', name: '' } } },
-    pis: { taxesIssue: { error, value: { id: '', name: '' } } },
-    cofins: { taxesIssue: { error, value: { id: '', name: '' } } },
-  };
-
   const [overView, setOverView] = useState<TypeDataOverViewProps>(
     initialStateOverview,
   );
@@ -372,38 +140,58 @@ const TabCreateProvider = ({
 
     if (detail.weight.value === '') {
       isError = true;
-      detail.weight.error.isError = true;
-      setDetail({ ...detail });
+      setDetail(old => ({
+        ...old,
+        weight: { ...old.weight, error: { isError: true } },
+      }));
     }
     if (detail.width.value === '') {
       isError = true;
-      detail.width.error.isError = true;
-      setDetail({ ...detail });
+      setDetail(old => ({
+        ...old,
+        width: { ...old.width, error: { isError: true } },
+      }));
     }
     if (detail.height.value === '') {
       isError = true;
-      detail.height.error.isError = true;
-      setDetail({ ...detail });
+      setDetail(old => ({
+        ...old,
+        height: { ...old.height, error: { isError: true } },
+      }));
     }
     if (detail.length.value === '') {
       isError = true;
-      detail.length.error.isError = true;
-      setDetail({ ...detail });
+      setDetail(old => ({
+        ...old,
+        length: { ...old.length, error: { isError: true } },
+      }));
     }
     if (detail.descriptionAndDetails.value === '') {
       isError = true;
-      detail.descriptionAndDetails.error.isError = true;
-      setDetail({ ...detail });
+      setDetail(old => ({
+        ...old,
+        descriptionAndDetails: {
+          ...old.descriptionAndDetails,
+          error: { isError: true },
+        },
+      }));
     }
     if (detail.technicalSpecification.value === '') {
       isError = true;
-      detail.technicalSpecification.error.isError = true;
-      setDetail({ ...detail });
+      setDetail(old => ({
+        ...old,
+        technicalSpecification: {
+          ...old.technicalSpecification,
+          error: { isError: true },
+        },
+      }));
     }
     if (detail.wayOfUse.value === '') {
       isError = true;
-      detail.wayOfUse.error.isError = true;
-      setDetail({ ...detail });
+      setDetail(old => ({
+        ...old,
+        wayOfUse: { ...old.wayOfUse, error: { isError: true } },
+      }));
     }
     return isError;
   }, [detail]);
@@ -423,7 +211,7 @@ const TabCreateProvider = ({
 
   const getStock = (): TypeStockProps => stocks;
 
-  const validationAndSetErrorAllFieldsStock = () => {
+  const validationAndSetErrorAllFieldsStock = useCallback(() => {
     let isError = false;
     if (stocks.stockCurrent.value === '') {
       isError = true;
@@ -439,8 +227,22 @@ const TabCreateProvider = ({
         unitMensured: { ...old.unitMensured, error: { isError: true } },
       }));
     }
+
+    if (
+      overView.typeSelectProdut.value.name === SALE.name ||
+      overView.typeSelectProdut.value.name === RE_SALE.name
+    ) {
+      if (stocks.priceCost?.value === '') {
+        isError = true;
+        setStocks(old => ({
+          ...old,
+          priceCost: { ...old?.priceCost, error: { isError: true } },
+        }));
+      }
+    }
+
     return isError;
-  };
+  }, [stocks, overView.typeSelectProdut]);
 
   const stock: TypeGetAndSetAndValidateAba<TypeStockProps> = {
     setData: setStock,
@@ -547,9 +349,13 @@ const TabCreateProvider = ({
     };
   };
 
-  const validationAndSetErrorAllFieldsComposition = () => {
+  const validationAndSetErrorAllFieldsComposition = useCallback(() => {
     let isError = false;
-    composition.getData().map(({ amount, cost, nameProduct, subtotal }) => {
+    const tempState: TypeProduct[] = JSON.parse(
+      JSON.stringify(compositionState),
+    );
+
+    tempState.map(({ amount, cost, nameProduct, subtotal }, index) => {
       if (amount.value === '') {
         isError = true;
         amount.error.isError = true;
@@ -567,9 +373,9 @@ const TabCreateProvider = ({
         subtotal.error.isError = true;
       }
     });
-    setCompositionState([...compositionState]);
+    setCompositionState(tempState);
     return isError;
-  };
+  }, [compositionState]);
 
   const composition: TypeGetAndSetComposition<TypeProduct[]> = {
     getData: getDataComposition,
@@ -581,11 +387,11 @@ const TabCreateProvider = ({
 
   const setDataVariation = (): ResolverHasVariation => {
     const changeUnitMensured = (
-      unitMensured: FieldWithIdName,
+      newUnitMensured: FieldWithIdName,
       index: number,
     ) => {
-      variationState[index].unitMensured.value = unitMensured;
-      variationState[index].currentStock.error.isError = false;
+      variationState[index].unitMensured.value = newUnitMensured;
+      variationState[index].unitMensured.error.isError = false;
       setVariationState([...variationState]);
     };
 
@@ -645,37 +451,23 @@ const TabCreateProvider = ({
     };
   };
 
-  const validationAndSetErrorAllFieldsVariation = () => {
+  const validationAndSetErrorAllFieldsVariation = useCallback(() => {
     let isError = false;
+    const tempState: TypeHasVariation[] = JSON.parse(
+      JSON.stringify(variationState),
+    );
 
-    variation
-      .getData()
-      .map(
-        (
-          { unitMensured, currentStock, priceSale, priceCost, variations },
-          index,
-        ) => {
-          if (currentStock.value === '') {
-            variationState[index].currentStock.error.isError = true;
-            setVariationState([
-              ...variationState,
-              {
-                priceCost,
-                priceSale,
-                unitMensured,
-                variations,
-                currentStock: { error: { isError: true }, value: '' },
-              },
-            ]);
-            isError = true;
-          }
-        },
-      );
+    tempState.map(({ unitMensured }) => {
+      isError = true;
+      if (unitMensured.value.id === '') {
+        unitMensured.error.isError = true;
+      }
+    });
 
-    setVariationState([...variationState]);
+    setVariationState(tempState);
 
     return isError;
-  };
+  }, [variationState]);
 
   const variation: TypeGetAndSetHasVariation<TypeHasVariation[]> = {
     getData: getDataVariation,
@@ -747,7 +539,7 @@ const TabCreateProvider = ({
   };
 
   const validation: TypeValitionResolve = {
-    validate: () => {
+    validate: useCallback(() => {
       const resultList: TypeValidationResult[] = [];
       const valueSelectedTypeProduct = overView.typeSelectProdut.value.name;
       const hasVariation = overView.hasVariation.value.hasVariation;
@@ -853,8 +645,17 @@ const TabCreateProvider = ({
         console.log('Composição');
         console.log(compositionState);
       }
+
       return resultList;
-    },
+    }, [
+      overView,
+      detail,
+      stocks,
+      priceCompositionState,
+      fiscalState,
+      compositionState,
+      variationState,
+    ]),
   };
 
   return (
