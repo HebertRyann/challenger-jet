@@ -97,9 +97,8 @@ const TabCreateProvider = ({
     intialStateHasVariation,
   );
 
-  const setDataOverView = (newoverView: TypeDataOverViewProps) => {
-    setOverView(newoverView);
-  };
+  const setDataOverView = (newOverView: TypeDataOverViewProps) =>
+    setOverView(newOverView);
 
   const getDataOverView = (): TypeDataOverViewProps => {
     return overView;
@@ -109,27 +108,58 @@ const TabCreateProvider = ({
     let isError = false;
 
     if (overView.typeSelectProdut.value.id === '') {
-      isError = false;
+      isError = true;
+      setOverView(old => ({
+        ...old,
+        typeSelectProdut: {
+          error: { isError: true },
+          value: old.typeSelectProdut.value,
+        },
+      }));
     }
-
     if (overView.categoryCost.value.id === '') {
-      isError = false;
+      isError = true;
+      setOverView(old => ({
+        ...old,
+        categoryCost: {
+          error: { isError: true },
+          value: old.categoryCost.value,
+        },
+      }));
     }
-
     if (overView.subCategoryCost.value.id === '') {
-      isError = false;
+      isError = true;
+      setOverView(old => ({
+        ...old,
+        subCategoryCost: {
+          error: { isError: true },
+          value: old.subCategoryCost.value,
+        },
+      }));
     }
-
     if (overView.groupProduct.value.id === '') {
-      isError = false;
+      isError = true;
+      setOverView(old => ({
+        ...old,
+        groupProduct: {
+          error: { isError: true },
+          value: old.groupProduct.value,
+        },
+      }));
     }
-
     if (overView.nameProduct.value === '') {
-      isError = false;
+      isError = true;
+      setOverView(old => ({
+        ...old,
+        nameProduct: {
+          error: { isError: true },
+          value: old.nameProduct.value,
+        },
+      }));
     }
 
     return isError;
-  }, []);
+  }, [overView]);
 
   const setDetails = (details: TypeDetailsProps) => setDetail(details);
 
@@ -625,6 +655,18 @@ const TabCreateProvider = ({
       const resultList: TypeValidationResult[] = [];
       const valueSelectedTypeProduct = overView.typeSelectProdut.value.name;
       const hasVariation = overView.hasVariation.value.hasVariation;
+
+      if (overView.typeSelectProdut.value.id === '') {
+        setOverView(old => ({
+          ...old,
+          typeSelectProdut: {
+            ...old.typeSelectProdut,
+            error: {
+              isError: true,
+            },
+          },
+        }));
+      }
 
       const validateHasVariationOrStock = () => {
         if (hasVariation) {
