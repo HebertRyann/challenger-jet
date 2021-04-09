@@ -1,12 +1,18 @@
+export type TypeGetAndSetAndValidateAba<T> = {
+  getData: () => T;
+  setData: (data: T) => void;
+  validate: () => boolean;
+};
+
+export type FieldWithIdName = {
+  id: string;
+  name: string;
+};
+
 export type EntityWithIdAndNameFieldAndParentId = {
   id: string;
   name: string;
   parent_id: string | null;
-};
-
-export type EntityWithIdAndNameField = {
-  id: string;
-  name: string;
 };
 
 export type TypeErroProps = {
@@ -33,10 +39,10 @@ export type TypeValitionResolve = {
 };
 
 export type TypeDataOverViewProps = {
-  typeSelectProdut: TypeGenericValueWithError<EntityWithIdAndNameFieldAndParentId>;
-  categoryCost: TypeGenericValueWithError<EntityWithIdAndNameFieldAndParentId>;
-  subCategoryCost: TypeGenericValueWithError<EntityWithIdAndNameFieldAndParentId>;
-  groupProduct: TypeGenericValueWithError<EntityWithIdAndNameFieldAndParentId>;
+  typeSelectProdut: TypeGenericValueWithError<FieldWithIdName>;
+  categoryCost: TypeGenericValueWithError<FieldWithIdName>;
+  subCategoryCost: TypeGenericValueWithError<FieldWithIdName>;
+  groupProduct: TypeGenericValueWithError<FieldWithIdName>;
   hasVariation: TypeGenericValueWithError<HasVariation>;
   nameProduct: TypeGenericValueWithError<string>;
 };
@@ -57,7 +63,7 @@ export type TypeDetailsProps = {
 };
 
 export type TypeStockProps = {
-  unitMensured: TypeGenericValueWithError<EntityWithIdAndNameField>;
+  unitMensured: TypeGenericValueWithError<FieldWithIdName>;
   stockCurrent: TypeValueAndError;
   priceCost: TypeValueAndError;
   priceSale: TypeValueAndError;
@@ -70,11 +76,6 @@ export type TypePriceCompositionProps = {
   dif: TypeValueAndError;
 };
 
-export type FieldWithIdName = {
-  id: string;
-  name: string;
-};
-
 export type TypeHasVariation = {
   unitMensured: TypeGenericValueWithError<FieldWithIdName>;
   currentStock: TypeValueAndError;
@@ -83,6 +84,22 @@ export type TypeHasVariation = {
   variations: TypeGenericValueWithError<FieldWithIdName>[];
 };
 
+// DATAOVERVIEW
+export type ResolverDataOverView = {
+  changeTypeProduct: (typeProduct: FieldWithIdName) => void;
+  changeCategoryCost: (categoryCost: FieldWithIdName) => void;
+  changeSubCategoryCost: (subCategoryCost: FieldWithIdName) => void;
+  changeGroupProduct: (groupProduct: FieldWithIdName) => void;
+  changeNameProduct: (nameProduct: string) => void;
+  changeHasVariation: (hasVariation: HasVariation) => void;
+};
+
+export type TypeGetAndSetDataOverView<T> = {
+  getData: () => T;
+  setData: ResolverDataOverView;
+  validate: () => boolean;
+};
+// VARIATION
 export type ResolverHasVariation = {
   changeUnitMensured: (unitMensured: FieldWithIdName, index: number) => void;
   changeCurrentStock: (stock: string, index: number) => void;
@@ -107,13 +124,7 @@ export type TypeProduct = {
   cost: TypeValueAndError;
   subtotal: TypeValueAndError;
 };
-
-export type TypeGetAndSetAndValidateAba<T> = {
-  getData: () => T;
-  setData: (data: T) => void;
-  validate: () => boolean;
-};
-
+// COMPOSITION
 export type ResolverComposition = {
   changeInputNameProduct: (name: string, index: number) => void;
   changeInputAmount: (amount: string, index: number) => void;
@@ -128,7 +139,7 @@ export type TypeGetAndSetComposition<T> = {
   setData: ResolverComposition;
   validate: () => boolean;
 };
-
+// FISCAL
 export type ResolverFiscal = {
   changeNCM: (ncm: string) => void;
   changeCFOP: (cfop: string) => void;
