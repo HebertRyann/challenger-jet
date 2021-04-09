@@ -93,12 +93,15 @@ export const DataOverview = ({
   >([initialState]);
 
   const handlerChangeCategoryCost = useCallback(
-    ({ id, name, parent_id }: TypeEntityWithIdAndName) => {
+    ({ id, name }: TypeEntityWithIdAndName) => {
       overview.setData({
         ...overview.getData(),
         categoryCost: {
+          value: {
+            id,
+            name,
+          },
           error: { isError: false },
-          value: { id, name, parent_id },
         },
       });
       const childrens = categoryFinances.filter(
@@ -106,7 +109,7 @@ export const DataOverview = ({
       );
       setSubCategoryFinanceData(childrens);
     },
-    [subCategoryFinanceData, overview.getData()],
+    [subCategoryFinanceData, categoryCost],
   );
 
   const handlerHasVariation = useCallback(
@@ -144,7 +147,6 @@ export const DataOverview = ({
           value: {
             id: value.id.toString(),
             name: value.name,
-            parent_id: null,
           },
           error: { isError: false },
         },
@@ -216,17 +218,6 @@ export const DataOverview = ({
     [links],
   );
 
-  const handlerClickSaveAba = useCallback(() => {
-    validation.validate();
-  }, [
-    details.getData(),
-    overview.getData(),
-    stock.getData(),
-    priceComposition.getData(),
-    composition.getData(),
-    links,
-  ]);
-
   return (
     <>
       <div className="row">
@@ -286,7 +277,6 @@ export const DataOverview = ({
               const split = event.target.value.split('+');
               const id = split[0];
               const name = split[1];
-              const parent_id = split[2];
               overview.setData({
                 ...overview.getData(),
                 subCategoryCost: {
@@ -294,7 +284,6 @@ export const DataOverview = ({
                   value: {
                     id,
                     name,
-                    parent_id,
                   },
                 },
               });
@@ -325,7 +314,6 @@ export const DataOverview = ({
                   value: {
                     id,
                     name,
-                    parent_id: null,
                   },
                 },
               });
@@ -391,7 +379,7 @@ export const DataOverview = ({
       />
       <Footer
         onClickButtonNext={handlerClickNextAba}
-        onSave={handlerClickSaveAba}
+        onSave={() => validation.validate()}
       />
     </>
   );
