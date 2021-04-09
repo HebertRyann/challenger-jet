@@ -24,8 +24,14 @@ export const Details = (): JSX.Element => {
     message: '',
   });
 
-  const { details, overview, stock } = useTabCreate();
-  const { typeSelectProdut } = overview.getData();
+  const {
+    details,
+    overview,
+    stock,
+    priceComposition,
+    composition,
+    validation,
+  } = useTabCreate();
   const {
     weight,
     width,
@@ -39,64 +45,6 @@ export const Details = (): JSX.Element => {
   const handlerClickAlertConfirm = useCallback(() => {
     setAlert({ ...alert, active: false });
   }, [alert]);
-
-  const handlerClickNextButton = useCallback(() => {
-    if (
-      typeSelectProdut.value.name === SALE.name ||
-      typeSelectProdut.value.name === RE_SALE.name ||
-      typeSelectProdut.value.name === LOCATION.name
-    ) {
-      if (details.validate()) {
-        setAlert({
-          active: true,
-          message: 'Os campos destacados são de preenchimento obrigatório',
-        });
-        return;
-      }
-    }
-    if (overview.validate()) {
-      setAlert({
-        active: true,
-        component: (): JSX.Element => (
-          <h4 style={{ fontWeight: 300 }}>
-            Os campos destacados na aba{' '}
-            <span
-              onClick={() => {
-                handlerClickAlertConfirm();
-                changeCurrentTab(nameDataOverview);
-              }}
-              style={{ fontWeight: 700, cursor: 'pointer' }}
-            >
-              Dados{' '}
-            </span>
-            são de preenchimento obrigatório
-          </h4>
-        ),
-      });
-      return;
-    }
-    if (stock.validate()) {
-      setAlert({
-        active: true,
-        component: (): JSX.Element => (
-          <h4 style={{ fontWeight: 300 }}>
-            Os campos destacados na aba{' '}
-            <span
-              onClick={() => {
-                handlerClickAlertConfirm();
-                changeCurrentTab(nameStock);
-              }}
-              style={{ fontWeight: 700, cursor: 'pointer' }}
-            >
-              Estoque/Variação{' '}
-            </span>
-            são de preenchimento obrigatório
-          </h4>
-        ),
-      });
-      return;
-    }
-  }, [details.getData(), overview.getData(), stock.getData()]);
 
   return (
     <Container>
@@ -248,7 +196,7 @@ export const Details = (): JSX.Element => {
           )
         }
         onClickButtonBack={() => changeCurrentTab(nameDataOverview)}
-        onSave={handlerClickNextButton}
+        onSave={() => validation.validate()}
       />
       <Alert
         isActive={alert.active}
