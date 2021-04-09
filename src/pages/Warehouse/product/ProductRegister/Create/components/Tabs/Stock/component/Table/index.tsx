@@ -24,39 +24,8 @@ type TypeTableProps = {
 export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
   const [alert, setAlert] = useState(false);
   const { changeCurrentTab } = useTabs();
-  const { overview } = useTabCreate();
+  const { overview, validation } = useTabCreate();
   const { typeSelectProdut } = overview.getData();
-
-  const [
-    selectUnitMensured,
-    setSelectUnitMensured,
-  ] = useState<TypeUnitMensured>({ id: '', name: '' });
-
-  const [stocks, setStocks] = useState('');
-
-  const handlerChangeSelectUnitMensured = useCallback(
-    (currentSelectedUnitMensured: TypeUnitMensured) => {
-      setSelectUnitMensured(currentSelectedUnitMensured);
-    },
-    [unitMensured],
-  );
-
-  const handlerClickButtonNextTab = useCallback(() => {
-    let isError = false;
-
-    if (selectUnitMensured.id === '') {
-      isError = true;
-    }
-
-    if (stocks === '') {
-      isError = true;
-    }
-
-    if (!isError) {
-    } else {
-      setAlert(true);
-    }
-  }, [unitMensured, stocks]);
 
   const handlerClickAlertConfirm = useCallback(() => {
     setAlert(false);
@@ -65,10 +34,6 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
   const { stock } = useTabCreate();
   const { stockCurrent, priceCost, priceSale } = stock.getData();
   const unitMensureds = stock.getData().unitMensured;
-
-  const validate = () => {
-    stock.validate();
-  };
 
   return (
     <Container className="table-responsive">
@@ -100,7 +65,6 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                         value: { id, name },
                       },
                     });
-                    handlerChangeSelectUnitMensured({ id, name });
                   }
                 }}
                 className="select form-control"
@@ -188,8 +152,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
       </table>
       <Footer
         onClickButtonBack={() => changeCurrentTab(nameDetails)}
-        onSave={validate}
-        onClickButtonNext={handlerClickButtonNextTab}
+        onSave={() => validation.validate()}
       />
       <Alert
         isActive={alert}
