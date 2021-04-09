@@ -58,14 +58,7 @@ export const DataOverview = ({
     changeCurrentTab,
     changeCurrentTabForNext,
   } = useTabs();
-  const {
-    overview,
-    details,
-    stock,
-    priceComposition,
-    composition,
-    validation,
-  } = useTabCreate();
+  const { overview, validation, save } = useTabCreate();
   const {
     typeSelectProdut,
     categoryCost,
@@ -120,7 +113,7 @@ export const DataOverview = ({
           ...overview.getData(),
           hasVariation: {
             error: { isError: false },
-            value: { name, hasVariation: active },
+            value: { name, hasVariation: true },
           },
         });
         disableTab(nameStock);
@@ -131,7 +124,7 @@ export const DataOverview = ({
           ...overview.getData(),
           hasVariation: {
             error: { isError: false },
-            value: { name, hasVariation: active },
+            value: { name, hasVariation: false },
           },
         });
       }
@@ -217,6 +210,27 @@ export const DataOverview = ({
     ),
     [links],
   );
+
+  const handlerClickOnSaveButton = async () => {
+    const tabsErrorList = validation.validate();
+    setLinks([]);
+    tabsErrorList.map(({ labelName, linkName }) => {
+      setLinks(old => {
+        return [
+          ...old,
+          {
+            link: linkName,
+            name: labelName,
+          },
+        ];
+      });
+    });
+    if (tabsErrorList.length !== 0) {
+      setAlert({ active: true });
+      return;
+    }
+    console.log(await save());
+  };
 
   return (
     <>
@@ -379,7 +393,7 @@ export const DataOverview = ({
       />
       <Footer
         onClickButtonNext={handlerClickNextAba}
-        onSave={() => validation.validate()}
+        onSave={handlerClickOnSaveButton}
       />
     </>
   );
