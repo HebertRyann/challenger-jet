@@ -413,28 +413,45 @@ const TabCreateProvider = ({
       newUnitMensured: FieldWithIdName,
       index: number,
     ) => {
-      variationState[index].unitMensured.value = newUnitMensured;
-      variationState[index].unitMensured.error.isError = false;
-      setVariationState([...variationState]);
+      let tempState: TypeHasVariation[] = JSON.parse(
+        JSON.stringify(variationState),
+      );
+      tempState.map(({ unitMensured }, key) => {
+        if (key === index) {
+          unitMensured.value = newUnitMensured;
+          unitMensured.error.isError = false;
+        }
+      });
+      setVariationState([...tempState]);
     };
 
-    const changeCurrentStock = (stock: string, index: number) => {
-      variationState[index].currentStock.value = stock;
-      variationState[index].currentStock.error.isError = false;
-      setVariationState([...variationState]);
+    const changeCurrentStock = (newCurrentStock: string, index: number) => {
+      let tempState: TypeHasVariation[] = JSON.parse(
+        JSON.stringify(variationState),
+      );
+      tempState.map(({ currentStock }, key) => {
+        if (key === index) {
+          currentStock.value = newCurrentStock;
+          currentStock.error.isError = false;
+        }
+      });
+      setVariationState([...tempState]);
     };
 
-    const changePriceSale = (priceSale: string, index: number) => {
-      variationState[index].priceSale.value = priceSale;
-      variationState[index].priceSale.error.isError = false;
-      setVariationState([...variationState]);
-    };
+    const changePriceSale = (priceSale: string, index: number) => {};
 
-    const changePriceCost = (priceCost: string, index: number) => {
-      variationState[index].priceCost.value = priceCost;
-      variationState[index].priceCost.error.isError = false;
-      variationState[index].priceSale.error.isError = false;
-      setVariationState([...variationState]);
+    const changePriceCost = (newPriceCost: string, index: number) => {
+      let tempState: TypeHasVariation[] = JSON.parse(
+        JSON.stringify(variationState),
+      );
+      tempState.map(({ priceCost, priceSale }, key) => {
+        if (key === index) {
+          priceCost.value = newPriceCost;
+          priceCost.error.isError = false;
+          priceSale.error.isError = false;
+        }
+      });
+      setVariationState([...tempState]);
     };
 
     const changeVariations = (variation: string, x: number, y: number) => {};
