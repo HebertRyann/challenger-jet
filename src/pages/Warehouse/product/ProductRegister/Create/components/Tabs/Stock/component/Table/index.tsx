@@ -10,6 +10,7 @@ import { useTabCreate } from '../../../../../providers/tabsProvider';
 import { Alert } from '../../../../../../../../../../components/Alert';
 import { nameDetails } from '../../../Details';
 import { useTabs } from '../../../../../../../../../../hooks/tabs';
+import { RE_SALE, SALE } from '../../../../../domain/products';
 
 type TypeUnitMensured = {
   id: string;
@@ -23,6 +24,8 @@ type TypeTableProps = {
 export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
   const [alert, setAlert] = useState(false);
   const { changeCurrentTab } = useTabs();
+  const { overview } = useTabCreate();
+  const { typeSelectProdut } = overview.getData();
 
   const [
     selectUnitMensured,
@@ -31,27 +34,11 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
 
   const [stocks, setStocks] = useState('');
 
-  const [errorUnitMensured, setErrorUnitMensured] = useState<TypeErrorInput>({
-    isError: false,
-  });
-  const [errorStock, setErrorStock] = useState<TypeErrorInput>({
-    isError: false,
-  });
-
   const handlerChangeSelectUnitMensured = useCallback(
     (currentSelectedUnitMensured: TypeUnitMensured) => {
-      setErrorUnitMensured({ isError: false });
       setSelectUnitMensured(currentSelectedUnitMensured);
     },
     [unitMensured],
-  );
-
-  const handlerChangeStock = useCallback(
-    (currentStock: string) => {
-      setErrorStock({ isError: false });
-      setStocks(currentStock);
-    },
-    [stocks],
   );
 
   const handlerClickButtonNextTab = useCallback(() => {
@@ -59,12 +46,10 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
 
     if (selectUnitMensured.id === '') {
       isError = true;
-      setErrorUnitMensured({ isError: true });
     }
 
     if (stocks === '') {
       isError = true;
-      setErrorStock({ isError: true });
     }
 
     if (!isError) {
@@ -78,7 +63,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
   }, [alert]);
 
   const { stock } = useTabCreate();
-  const { stockCurrent } = stock.getData();
+  const { stockCurrent, priceCost, priceSale } = stock.getData();
   const unitMensureds = stock.getData().unitMensured;
 
   const validate = () => {
@@ -92,7 +77,10 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
           <tr>
             <th>Unidade de medidas</th>
             <th>Estoque atual</th>
-            <th colSpan={2}>Preço</th>
+            {typeSelectProdut.value.name === SALE.name ||
+            typeSelectProdut.value.name === RE_SALE.name ? (
+              <th colSpan={2}>Preço</th>
+            ) : null}
           </tr>
           <tr>
             <td>
@@ -146,22 +134,55 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                 type="text"
               />
             </td>
-            <td style={{ width: '150px' }}>
-              <tr>
-                <th>Custo</th>
-              </tr>
-              <tr>
-                <input className="form-control" type="text" />
-              </tr>
-            </td>
-            <td style={{ width: '150px' }}>
-              <tr>
-                <th>Venda</th>
-              </tr>
-              <tr>
-                <input disabled className="form-control" type="text" />
-              </tr>
-            </td>
+            {typeSelectProdut.value.name === SALE.name ||
+            typeSelectProdut.value.name === RE_SALE.name ? (
+              <>
+                <td style={{ width: '150px' }}>
+                  <tr>
+                    <th>Custo</th>
+                  </tr>
+                  <tr>
+                    <NewInput
+                      name="cost"
+                      value={priceCost.value}
+                      error={priceCost.error}
+                      placeholder="0.00"
+                      onKeyPress={event => {
+                        const regex = /^[0-9.]+$/;
+                        if (!regex.test(event.key)) event.preventDefault();
+                      }}
+                      onChange={event => {
+                        stock.setData({
+                          ...stock.getData(),
+                          priceCost: {
+                            error: { isError: false },
+                            value: event.currentTarget.value,
+                          },
+                        });
+                      }}
+                      className="form-control"
+                      type="text"
+                    />
+                  </tr>
+                </td>
+                <td style={{ width: '150px' }}>
+                  <tr>
+                    <th>Venda</th>
+                  </tr>
+                  <tr>
+                    <NewInput
+                      name="priceSale"
+                      value={(Number(priceCost.value) * 1.5).toString()}
+                      disabled
+                      error={priceSale.error}
+                      placeholder="0.00"
+                      className="form-control"
+                      type="text"
+                    />
+                  </tr>
+                </td>
+              </>
+            ) : null}
           </tr>
         </tbody>
       </table>
