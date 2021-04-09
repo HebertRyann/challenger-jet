@@ -410,6 +410,7 @@ const TabCreateProvider = ({
     const changePriceCost = (priceCost: string, index: number) => {
       variationState[index].priceCost.value = priceCost;
       variationState[index].priceCost.error.isError = false;
+      variationState[index].priceSale.error.isError = false;
       setVariationState([...variationState]);
     };
 
@@ -457,17 +458,31 @@ const TabCreateProvider = ({
       JSON.stringify(variationState),
     );
 
-    tempState.map(({ unitMensured }) => {
-      isError = true;
+    tempState.map(({ unitMensured, currentStock, priceCost, priceSale }) => {
       if (unitMensured.value.id === '') {
+        isError = true;
         unitMensured.error.isError = true;
+      }
+      if (currentStock.value === '') {
+        isError = true;
+        currentStock.error.isError = true;
+      }
+      if (
+        overView.typeSelectProdut.value.name === SALE.name ||
+        overView.typeSelectProdut.value.name === RE_SALE.name
+      ) {
+        if (priceCost.value === '') {
+          isError = true;
+          priceCost.error.isError = true;
+          priceSale.error.isError = true;
+        }
       }
     });
 
     setVariationState(tempState);
 
     return isError;
-  }, [variationState]);
+  }, [variationState, overView.typeSelectProdut]);
 
   const variation: TypeGetAndSetHasVariation<TypeHasVariation[]> = {
     getData: getDataVariation,
