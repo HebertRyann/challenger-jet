@@ -10,6 +10,7 @@ import {
   TabPanelContainerFiscal,
 } from './style';
 import { Footer } from '../../footer';
+import { NewInput } from '../../../../../../../../components/NewInput';
 
 export const labelFiscal = 'Fiscal';
 export const nameFiscal = '@@tabs-fiscal';
@@ -41,7 +42,9 @@ export const Fiscal = (): JSX.Element => {
       <Container className="row">
         <div className="form-content col-md-6">
           <TooltipComponent label="NCM" message="Infome o peso em kg" />
-          <input
+          <NewInput
+            name="ncm"
+            error={ncm.error}
             onKeyPress={event => {
               const regex = /^[0-9]+$/;
               if (!regex.test(event.key)) event.preventDefault();
@@ -58,7 +61,9 @@ export const Fiscal = (): JSX.Element => {
             label="CFOP"
             message="Digíte um código ou descrição CEST"
           />
-          <input
+          <NewInput
+            error={cfop.error}
+            name="cfop"
             className="form-control"
             type="text"
             onKeyPress={event => {
