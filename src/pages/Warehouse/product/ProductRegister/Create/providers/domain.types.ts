@@ -173,3 +173,47 @@ export type TypeGetAndSetFiscal<T> = {
   setData: ResolverFiscal;
   validate: () => boolean;
 };
+
+export type ResultOnSaveProdut = {
+  status: {
+    code: number;
+    message: string;
+  };
+};
+
+type RequestWithId = {
+  id: string;
+};
+
+type DetailsProduct = {
+  weight: number;
+  width: number;
+  height: number;
+  length: number;
+  description_details: string;
+  technical_specification: string;
+  way_use: string;
+};
+
+export type TypeProductDataOverView = {
+  type: number;
+  category_cost_id: number;
+  subcategory_cost_id: number;
+  product_category_id: number;
+  name: string;
+  has_variation: boolean;
+  details: DetailsProduct;
+};
+
+export type TypeAtributes = {
+  key: number;
+  value: number;
+};
+
+export type TypeProductStock = {
+  unit_mensured_id: number;
+  current_stock: number;
+  price_sale: number;
+  price_cost: number;
+  abtributes: TypeAtributes[];
+};
