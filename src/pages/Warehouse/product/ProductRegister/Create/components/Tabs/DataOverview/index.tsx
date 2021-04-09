@@ -64,6 +64,7 @@ export const DataOverview = ({
     stock,
     priceComposition,
     composition,
+    validation,
   } = useTabCreate();
   const {
     typeSelectProdut,
@@ -216,50 +217,7 @@ export const DataOverview = ({
   );
 
   const handlerClickSaveAba = useCallback(() => {
-    let activeAlert = false;
-    if (
-      typeSelectProdut.value.name === SALE.name ||
-      typeSelectProdut.value.name === RE_SALE.name ||
-      typeSelectProdut.value.name === LOCATION.name
-    ) {
-      if (details.validate()) {
-        setLinks(oldValue => [
-          ...oldValue,
-          { link: nameDetails, name: labelDetails },
-        ]);
-        activeAlert = true;
-      }
-      if (stock.validate()) {
-        setLinks(oldValue => [
-          ...oldValue,
-          { link: nameStock, name: labelStock },
-        ]);
-        activeAlert = true;
-      }
-      if (
-        typeSelectProdut.value.name !== LOCATION.name &&
-        priceComposition.validate()
-      ) {
-        setLinks(oldValue => [
-          ...oldValue,
-          { link: namePriceComposition, name: labelPriceComposition },
-        ]);
-        activeAlert = true;
-      }
-      if (
-        typeSelectProdut.value.name === SALE.name ||
-        typeSelectProdut.value.name === SEMI_FINISHED.name
-      ) {
-        if (composition.validate()) {
-          setLinks(oldValue => [
-            ...oldValue,
-            { link: nameHasComposition, name: labelHasComposition },
-          ]);
-          activeAlert = true;
-        }
-      }
-    }
-    setAlert({ active: activeAlert });
+    validation.validate();
   }, [
     details.getData(),
     overview.getData(),
@@ -413,7 +371,6 @@ export const DataOverview = ({
               const active = split[0];
               const keyTab = split[1];
               const name = split[2];
-
               handlerHasVariation({ active: Boolean(active), keyTab, name });
             }}
           >
