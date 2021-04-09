@@ -37,7 +37,9 @@ export const Table = (): JSX.Element => {
   useEffect(() => {
     let soma = 0;
     for (let i = 0; i < products.length; i++) {
-      soma += Number(products[i].subtotal.value);
+      const subtotal =
+        Number(products[i].amount.value) * Number(products[i].cost.value);
+      soma += subtotal;
     }
     setTotal(soma);
   }, [products]);
@@ -97,7 +99,7 @@ export const Table = (): JSX.Element => {
               </td>
               <td>
                 <NewInput
-                  name="input"
+                  name="cost"
                   value={cost.value}
                   error={cost.error}
                   placeholder="0.00"
@@ -114,17 +116,11 @@ export const Table = (): JSX.Element => {
               </td>
               <td>
                 <NewInput
-                  name="input"
-                  value={subtotal.value}
+                  name="subtotal"
+                  disabled
+                  value={(Number(amount.value) * Number(cost.value)).toFixed(2)}
                   error={subtotal.error}
                   placeholder="0.00"
-                  onKeyPress={event => {
-                    const regex = /^[0-9.]+$/;
-                    if (!regex.test(event.key)) event.preventDefault();
-                  }}
-                  onChange={event =>
-                    changeInputSubTotal(event.currentTarget.value, index)
-                  }
                   className="form-control"
                   type="text"
                 />
