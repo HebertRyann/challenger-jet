@@ -147,7 +147,7 @@ export const Table = (): JSX.Element => {
         </button>
         <div>
           <h4>Total</h4>
-          <h6>{total}</h6>
+          <h6>{total.toFixed(2)}</h6>
         </div>
       </FooterStyled>
       <div style={{ margin: '20px 0px 0 0' }}>
