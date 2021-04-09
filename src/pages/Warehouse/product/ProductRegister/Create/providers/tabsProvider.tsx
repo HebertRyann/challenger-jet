@@ -53,6 +53,10 @@ import {
   FieldWithIdName,
   ResolverFiscal,
   TypeValidationResult,
+  ResultOnSaveProdut,
+  TypeProductDataOverView,
+  TypeProductStock,
+  TypeAtributes,
 } from './domain.types';
 
 interface TabCreateContext {
@@ -64,6 +68,7 @@ interface TabCreateContext {
   composition: TypeGetAndSetComposition<TypeProduct[]>;
   variation: TypeGetAndSetHasVariation<TypeHasVariation[]>;
   validation: TypeValitionResolve;
+  save: () => Promise<ResultOnSaveProdut>;
 }
 
 const TabCreateContext = createContext<TabCreateContext>(
@@ -408,7 +413,7 @@ const TabCreateProvider = ({
       JSON.stringify(compositionState),
     );
 
-    tempState.map(({ amount, cost, nameProduct, subtotal }, index) => {
+    tempState.map(({ amount, cost, nameProduct, subtotal }) => {
       if (amount.value === '') {
         isError = true;
         amount.error.isError = true;
@@ -657,15 +662,8 @@ const TabCreateProvider = ({
       const hasVariation = overView.hasVariation.value.hasVariation;
 
       if (overView.typeSelectProdut.value.id === '') {
-        setOverView(old => ({
-          ...old,
-          typeSelectProdut: {
-            ...old.typeSelectProdut,
-            error: {
-              isError: true,
-            },
-          },
-        }));
+        overview.validate();
+        return [{ labelName: labelDataOverview, linkName: nameDataOverview }];
       }
 
       const validateHasVariationOrStock = () => {
@@ -713,8 +711,8 @@ const TabCreateProvider = ({
         }
         if (fiscal.validate()) {
           resultList.push({
-            labelName: labelPriceComposition,
-            linkName: namePriceComposition,
+            labelName: labelFiscal,
+            linkName: nameFiscal,
           });
           console.log('Há erros na aba fiscal');
         }
@@ -753,22 +751,6 @@ const TabCreateProvider = ({
       ) {
         validateDataOverViewAndDetailsAndStockOrHasVariation();
       }
-      if (resultList.length === 0) {
-        console.log('Dados');
-        console.log(overView);
-        console.log('Detalhes');
-        console.log(detail);
-        console.log('Estoque');
-        console.log(stocks);
-        console.log('Variação');
-        console.log(variationState);
-        console.log('Formação de preço');
-        console.log(priceCompositionState);
-        console.log('Fiscal');
-        console.log(fiscalState);
-        console.log('Composição');
-        console.log(compositionState);
-      }
 
       return resultList;
     }, [
@@ -782,6 +764,98 @@ const TabCreateProvider = ({
     ]),
   };
 
+  const save = (): Promise<ResultOnSaveProdut> => {
+    const typeProduct = overView.typeSelectProdut.value.name;
+    const hasVariationActive = overView.hasVariation.value?.hasVariation;
+    const {
+      categoryCost,
+      groupProduct,
+      hasVariation,
+      nameProduct,
+      subCategoryCost,
+      typeSelectProdut,
+    } = overView;
+    const {
+      descriptionAndDetails,
+      height,
+      length,
+      technicalSpecification,
+      wayOfUse,
+      weight,
+      width,
+    } = detail;
+    const { priceCost, priceSale, stockCurrent, unitMensured } = stocks;
+    const variationList = variationState;
+    if (
+      typeProduct === RAW_MATERIAL.name ||
+      typeProduct === CONSUMER.name ||
+      LOCATION.name
+    ) {
+      const requestCreateProduct: TypeProductDataOverView = {
+        details: {
+          width: Number(width.value),
+          weight: Number(weight.value),
+          height: Number(height.value),
+          length: Number(length.value),
+          description_details: descriptionAndDetails.value,
+          technical_specification: technicalSpecification.value,
+          way_use: wayOfUse.value,
+        },
+        type: Number(typeSelectProdut.value.id),
+        category_cost_id: Number(categoryCost.value.id),
+        product_category_id: Number(groupProduct.value.id),
+        subcategory_cost_id: Number(subCategoryCost.value.id),
+        has_variation: !!hasVariation.value.hasVariation,
+
+        name: nameProduct.value,
+      };
+
+      const requestStockOrVariations: TypeProductStock[] = [];
+
+      if (hasVariationActive) {
+        variationList.map(
+          ({
+            currentStock,
+            priceCost,
+            priceSale,
+            unitMensured,
+            variations,
+          }) => {
+            const atributesList: TypeAtributes[] = [];
+            variations.map(({ value }) => {
+              atributesList.push({
+                key: Number(value.id),
+                value: Number(value.name),
+              });
+            });
+            requestStockOrVariations.push({
+              current_stock: Number(currentStock.value),
+              price_cost: Number(priceCost.value),
+              price_sale: Number(priceSale.value),
+              unit_mensured_id: Number(unitMensured.value.id),
+              abtributes: atributesList,
+            });
+          },
+        );
+      } else {
+        requestStockOrVariations.push({
+          price_cost: Number(priceCost.value),
+          price_sale: Number(priceSale.value),
+          unit_mensured_id: Number(unitMensured.value.id),
+          current_stock: Number(stockCurrent.value),
+          abtributes: [],
+        });
+      }
+
+      console.log(requestCreateProduct);
+      console.log(requestStockOrVariations);
+    }
+
+    return Promise.resolve({
+      status: { code: 200, message: 'Produto registrado' },
+    });
+  };
+
   return (
     <TabCreateContext.Provider
       value={{
@@ -793,6 +867,7 @@ const TabCreateProvider = ({
         composition,
         variation,
         validation: validation,
+        save,
       }}
     >
       {children}
