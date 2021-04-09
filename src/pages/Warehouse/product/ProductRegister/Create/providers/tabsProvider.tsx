@@ -386,13 +386,11 @@ const TabCreateProvider = ({
       if (cost.value === '') {
         isError = true;
         cost.error.isError = true;
+        subtotal.error.isError = true;
       }
       if (nameProduct.value === '') {
         isError = true;
         nameProduct.error.isError = true;
-      }
-      if (subtotal.value === '') {
-        isError = true;
         subtotal.error.isError = true;
       }
     });
@@ -533,32 +531,39 @@ const TabCreateProvider = ({
   const getDataFiscal = (): TypeFiscal => fiscalState;
 
   const setDataFiscal = (): ResolverFiscal => {
-    const changeNCM = (ncm: string) => {
-      fiscalState.ncm.value = ncm;
+    const changeNCM = (value: string) => {
+      fiscalState.ncm.value = value;
+      fiscalState.ncm.error.isError = false;
       setFiscalState({ ...fiscalState });
     };
-    const changeCFOP = (cfop: string) => {
-      fiscalState.cfop.value = cfop;
+    const changeCFOP = (value: string) => {
+      fiscalState.cfop.value = value;
+      fiscalState.cfop.error.isError = false;
       setFiscalState({ ...fiscalState });
     };
-    const changeCofinsTaxeIssue = (taxeIssue: FieldWithIdName) => {
-      fiscalState.cofins.taxesIssue.value = taxeIssue;
+    const changeCofinsTaxeIssue = (value: FieldWithIdName) => {
+      fiscalState.cofins.taxesIssue.value = value;
+      fiscalState.cofins.taxesIssue.error.isError = false;
       setFiscalState({ ...fiscalState });
     };
-    const changeIcmsOrigem = (origem: FieldWithIdName) => {
-      fiscalState.icms.origem.value = origem;
+    const changeIcmsOrigem = (value: FieldWithIdName) => {
+      fiscalState.icms.origem.value = value;
+      fiscalState.icms.origem.error.isError = false;
       setFiscalState({ ...fiscalState });
     };
-    const changeIcmsTaxeIssue = (taxeIssue: FieldWithIdName) => {
-      fiscalState.icms.taxesIssue.value = taxeIssue;
+    const changeIcmsTaxeIssue = (value: FieldWithIdName) => {
+      fiscalState.icms.taxesIssue.value = value;
+      fiscalState.icms.taxesIssue.error.isError = false;
       setFiscalState({ ...fiscalState });
     };
-    const changeIpiTaxeIssue = (taxeIssue: FieldWithIdName) => {
-      fiscalState.ipi.taxesIssue.value = taxeIssue;
+    const changeIpiTaxeIssue = (value: FieldWithIdName) => {
+      fiscalState.ipi.taxesIssue.value = value;
+      fiscalState.ipi.taxesIssue.error.isError = false;
       setFiscalState({ ...fiscalState });
     };
-    const changePisTaxeIssue = (taxeIssue: FieldWithIdName) => {
-      fiscalState.pis.taxesIssue.value = taxeIssue;
+    const changePisTaxeIssue = (value: FieldWithIdName) => {
+      fiscalState.pis.taxesIssue.value = value;
+      fiscalState.pis.taxesIssue.error.isError = false;
       setFiscalState({ ...fiscalState });
     };
 
@@ -573,19 +578,41 @@ const TabCreateProvider = ({
     };
   };
 
-  const validationAndSetErrorAllFieldsFiscal = () => {
+  const validationAndSetErrorAllFieldsFiscal = useCallback(() => {
     let isError = false;
 
     if (fiscalState.ncm.value === '') {
       isError = true;
+      setFiscalState(old => ({
+        ...old,
+        ncm: { ...old.ncm, error: { isError: true } },
+      }));
     }
 
     if (fiscalState.cfop.value === '') {
       isError = true;
+      setFiscalState(old => ({
+        ...old,
+        cfop: { ...old.cfop, error: { isError: true } },
+      }));
+    }
+
+    if (fiscalState.cofins.taxesIssue.value.id === '') {
+      isError = true;
+      setFiscalState(old => ({
+        ...old,
+        cofins: {
+          ...old.cofins,
+          taxesIssue: {
+            ...old.cofins.taxesIssue,
+            error: { isError: true },
+          },
+        },
+      }));
     }
 
     return isError;
-  };
+  }, [fiscalState]);
 
   const fiscal: TypeGetAndSetFiscal<TypeFiscal> = {
     getData: getDataFiscal,
