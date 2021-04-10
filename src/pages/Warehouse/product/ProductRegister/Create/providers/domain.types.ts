@@ -181,9 +181,6 @@ export type ResultOnSaveProdut = {
   };
 };
 
-type RequestWithId = {
-  id: string;
-};
 
 type DetailsProduct = {
   weight: number;
@@ -216,4 +213,28 @@ export type TypeProductStock = {
   price_sale: number;
   price_cost: number;
   abtributes: TypeAtributes[];
+};
+
+export type PriceCompositionAndFiscal = {
+  price_composition: {
+    margin_profit: number;
+    ipi: number;
+    fixed_cost: number;
+    dif: number;
+  };
+  fiscal: {
+    ncm: number;
+    cfop: number;
+    icms_tax_situation: number;
+    icms_tax_origem: number;
+    ipi_tax_situation: number;
+    pis_tax_situation: number;
+    cofins_tax_situation: number;
+  };
+};
+
+export type CompositionRequest = {
+  name: string;
+  amount: number;
+  cost: number;
 };
