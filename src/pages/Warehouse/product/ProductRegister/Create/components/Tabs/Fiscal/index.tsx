@@ -46,7 +46,7 @@ export const Fiscal = (): JSX.Element => {
             name="ncm"
             error={ncm.error}
             onKeyPress={event => {
-              const regex = /^[0-9]+$/;
+              const regex = /^[0-9.]+$/;
               if (!regex.test(event.key)) event.preventDefault();
             }}
             onChange={event => changeNCM(event.currentTarget.value)}
@@ -67,7 +67,7 @@ export const Fiscal = (): JSX.Element => {
             className="form-control"
             type="text"
             onKeyPress={event => {
-              const regex = /^[0-9]+$/;
+              const regex = /^[0-9.]+$/;
               if (!regex.test(event.key)) event.preventDefault();
             }}
             onChange={event => changeCFOP(event.currentTarget.value)}
