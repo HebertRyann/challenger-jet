@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
+import { saveProduct } from '../services/api/saveProduct';
 import {
   RAW_MATERIAL,
   SALE,
@@ -57,6 +58,8 @@ import {
   TypeProductDataOverView,
   TypeProductStock,
   TypeAtributes,
+  PriceCompositionAndFiscal,
+  CompositionRequest,
 } from './domain.types';
 
 interface TabCreateContext {
@@ -761,12 +764,15 @@ const TabCreateProvider = ({
       fiscalState,
       compositionState,
       variationState,
+      overView.typeSelectProdut.value.id,
     ]),
   };
 
-  const save = (): Promise<ResultOnSaveProdut> => {
+  const save = async (): Promise<ResultOnSaveProdut> => {
     const typeProduct = overView.typeSelectProdut.value.name;
+
     const hasVariationActive = overView.hasVariation.value?.hasVariation;
+
     const {
       categoryCost,
       groupProduct,
@@ -786,12 +792,12 @@ const TabCreateProvider = ({
     } = detail;
     const { priceCost, priceSale, stockCurrent, unitMensured } = stocks;
     const variationList = variationState;
-    if (
-      typeProduct === RAW_MATERIAL.name ||
-      typeProduct === CONSUMER.name ||
-      LOCATION.name
-    ) {
-      const requestCreateProduct: TypeProductDataOverView = {
+
+    const createRequestWithOverViewDetailsStockOrVariation = (): {
+      overview_and_details: TypeProductDataOverView;
+      stock: TypeProductStock[];
+    } => {
+      const overview_and_details: TypeProductDataOverView = {
         details: {
           width: Number(width.value),
           weight: Number(weight.value),
@@ -810,7 +816,7 @@ const TabCreateProvider = ({
         name: nameProduct.value,
       };
 
-      const requestStockOrVariations: TypeProductStock[] = [];
+      const stock: TypeProductStock[] = [];
 
       if (hasVariationActive) {
         variationList.map(
@@ -828,7 +834,7 @@ const TabCreateProvider = ({
                 value: Number(value.name),
               });
             });
-            requestStockOrVariations.push({
+            stock.push({
               current_stock: Number(currentStock.value),
               price_cost: Number(priceCost.value),
               price_sale: Number(priceSale.value),
@@ -838,7 +844,7 @@ const TabCreateProvider = ({
           },
         );
       } else {
-        requestStockOrVariations.push({
+        stock.push({
           price_cost: Number(priceCost.value),
           price_sale: Number(priceSale.value),
           unit_mensured_id: Number(unitMensured.value.id),
@@ -846,14 +852,84 @@ const TabCreateProvider = ({
           abtributes: [],
         });
       }
+      return {
+        overview_and_details,
+        stock,
+      };
+    };
 
-      console.log(requestCreateProduct);
-      console.log(requestStockOrVariations);
+    const createRequestWithPriceCompositionAndFiscal = (): PriceCompositionAndFiscal => {
+      const { cfop, cofins, icms, ipi, ncm, pis } = fiscalState;
+      const { cost, dif, profit } = priceCompositionState;
+      const ipiPriceComposition = priceCompositionState.ipi;
+
+      const priceCompositionAndFiscal: PriceCompositionAndFiscal = {
+        price_composition: {
+          dif: Number(dif.value),
+          fixed_cost: Number(cost.value),
+          ipi: Number(ipiPriceComposition.value),
+          margin_profit: Number(profit.value),
+        },
+        fiscal: {
+          cfop: Number(cfop.value),
+          ncm: Number(ncm.value),
+          icms_tax_origem: Number(icms.origem.value.id),
+          icms_tax_situation: Number(icms.taxesIssue.value.id),
+          ipi_tax_situation: Number(ipi.taxesIssue.value.id),
+          pis_tax_situation: Number(pis.taxesIssue.value.id),
+          cofins_tax_situation: Number(cofins.taxesIssue.value.id),
+        },
+      };
+      return priceCompositionAndFiscal;
+    };
+
+    const createRequestWithComposition = (): CompositionRequest[] => {
+      const compositionRequest: CompositionRequest[] = [];
+      compositionState.map(({ amount, cost, nameProduct }) => {
+        compositionRequest.push({
+          amount: Number(amount.value),
+          cost: Number(cost.value),
+          name: nameProduct.value,
+        });
+      });
+      return compositionRequest;
+    };
+
+    if (typeProduct === SALE.name || typeProduct === RE_SALE.name) {
+      if (typeProduct === SALE.name) {
+        return await saveProduct({
+          details_overview: createRequestWithOverViewDetailsStockOrVariation()
+            .overview_and_details,
+          stock: createRequestWithOverViewDetailsStockOrVariation().stock,
+          price_composition_fiscal: createRequestWithPriceCompositionAndFiscal(),
+          composition: createRequestWithComposition(),
+        });
+      }
+      return await saveProduct({
+        details_overview: createRequestWithOverViewDetailsStockOrVariation()
+          .overview_and_details,
+        stock: createRequestWithOverViewDetailsStockOrVariation().stock,
+        price_composition_fiscal: createRequestWithPriceCompositionAndFiscal(),
+      });
     }
-
-    return Promise.resolve({
-      status: { code: 200, message: 'Produto registrado' },
-    });
+    if (typeProduct === SEMI_FINISHED.name) {
+      return await saveProduct({
+        details_overview: createRequestWithOverViewDetailsStockOrVariation()
+          .overview_and_details,
+        stock: createRequestWithOverViewDetailsStockOrVariation().stock,
+        composition: createRequestWithComposition(),
+      });
+    }
+    if (typeProduct !== '') {
+      return await saveProduct({
+        details_overview: createRequestWithOverViewDetailsStockOrVariation()
+          .overview_and_details,
+        stock: createRequestWithOverViewDetailsStockOrVariation().stock,
+      });
+    }
+    return {
+      status: { code: 501, message: 'Erro ao salvar registro' },
+    };
   };
 
   return (
