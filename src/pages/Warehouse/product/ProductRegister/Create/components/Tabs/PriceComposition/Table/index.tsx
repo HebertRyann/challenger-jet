@@ -28,7 +28,6 @@ export const Table = (): JSX.Element => {
   }, [alert]);
 
   const handlerOnClickButtonBack = useCallback(() => {
-    console.log(overview.getData().hasVariation);
     changeCurrentTab(
       overview.getData().hasVariation.value.hasVariation
         ? nameHasVariation
