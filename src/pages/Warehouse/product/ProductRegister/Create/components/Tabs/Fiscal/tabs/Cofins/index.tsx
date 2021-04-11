@@ -1,8 +1,7 @@
 import React from 'react';
-import { Select } from '../../../../../../../../../../components/Select';
 import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent';
-import { dataIcms, TypeICMS } from '../Icms/icms';
+import { dataIcms } from '../Icms/icms';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
 
 export const Confins = (): JSX.Element => {
