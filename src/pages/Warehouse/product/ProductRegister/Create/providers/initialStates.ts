@@ -71,6 +71,7 @@ export const initialStatePriceComposition: TypePriceCompositionProps = {
 
 export const intialStateHasVariation: TypeHasVariation[] = [
   {
+    key: Math.random(),
     unitMensured: {
       error,
       value: { id: '', name: '' },
@@ -81,7 +82,7 @@ export const intialStateHasVariation: TypeHasVariation[] = [
       value: '',
     },
     priceSale: { error, value: '' },
-    variations: [{ error, value: { id: '', name: '' } }],
+    atributes: [{ error: { isError: false }, value: { id: '', name: '' } }],
   },
 ];
 
