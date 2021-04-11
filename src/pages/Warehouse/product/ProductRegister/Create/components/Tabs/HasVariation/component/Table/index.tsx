@@ -26,10 +26,9 @@ type TypeTableProps = {
   atributes: TypeAtributes[];
 };
 
-export const Table = ({
-  unitMensuredList,
-  atributes,
-}: TypeTableProps): JSX.Element => {
+export const Table = (tableProps: TypeTableProps): JSX.Element => {
+  const { unitMensuredList } = tableProps;
+  const atributesList = tableProps.atributes;
   const [alert, setAlert] = useState(false);
   const { variation, overview } = useTabCreate();
   const { typeSelectProdut } = overview.getData();
@@ -39,6 +38,7 @@ export const Table = ({
     changePriceCost,
     changePriceSale,
     changeUnitMensured,
+    changeAtributes,
     addVariation,
     removeVariation,
   } = variation.setData;
@@ -60,7 +60,7 @@ export const Table = ({
           <tr>
             <th>Unidade de medidas</th>
             <th>Estoque atual</th>
-            {atributes.map(
+            {atributesList.map(
               ({ name, parent_id }) => parent_id === null && <th>{name}</th>,
             )}
             {typeSelectProdut.value.name === SALE.name ||
@@ -70,10 +70,14 @@ export const Table = ({
             <th>Ações</th>
           </tr>
           {variationList.map(
-            ({ unitMensured, currentStock, priceSale, priceCost }, index) => (
+            (
+              { unitMensured, currentStock, priceSale, priceCost, atributes },
+              index,
+            ) => (
               <tr>
                 <td>
                   <NewSelect
+                    isSelected={variationList[index]?.unitMensured?.value.name}
                     onChange={event => {
                       const split = event.target.value.split('+');
                       const id = split[0];
@@ -106,17 +110,42 @@ export const Table = ({
                   />
                 </td>
                 <>
-                  {atributes.map(
-                    ({ parent_id, childrenList }, index) =>
+                  {atributesList.map(
+                    ({ parent_id, childrenList }, indexAtribute) =>
                       parent_id === null && (
                         <td key={Math.random()}>
                           <NewSelect
                             className="form-control top"
                             name="Selecione"
                             id="Selecione"
+                            isSelected={atributes[indexAtribute]?.value.name}
+                            error={{
+                              isError:
+                                atributes[indexAtribute]?.error.isError ||
+                                false,
+                            }}
+                            onChange={event => {
+                              const split = event.target.value.split('+');
+                              const x = Number(split[0]);
+                              const y = Number(split[1]);
+                              const id = split[2];
+                              const name = split[3];
+                              changeAtributes(
+                                {
+                                  id,
+                                  name,
+                                },
+                                x,
+                                y,
+                              );
+                            }}
                           >
-                            {childrenList.map(({ name }) => (
-                              <option value={name}>{name}</option>
+                            {childrenList.map(({ name, id }) => (
+                              <option
+                                value={`${index}+${indexAtribute}+${id}+${name}`}
+                              >
+                                {name}
+                              </option>
                             ))}
                           </NewSelect>
                         </td>
@@ -188,7 +217,6 @@ export const Table = ({
       <button
         onClick={() => {
           addVariation();
-          console.log(variation.getData());
         }}
         className="btn dark btn-sm sbold uppercase"
       >
