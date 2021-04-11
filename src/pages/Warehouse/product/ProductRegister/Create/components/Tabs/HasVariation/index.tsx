@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Container } from './styles';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../services/api';
 import { Table } from './component/Table';
-import { Footer } from '../../footer';
+import { useTabCreate } from '../../../providers/tabsProvider';
 
 type TypeAtributes = {
   id: string;
@@ -26,6 +26,8 @@ export const HasVariation = ({
   unitMensureds,
   atributes,
 }: TypeHasVariationProps): JSX.Element => {
+  const { variation } = useTabCreate();
+  const { addAtributes, removeAtributes } = variation.setData;
   const [atributesList, setAtributesList] = useState<
     ResponseEntiryWithIdNameWithChildren[]
   >(atributes);
@@ -34,8 +36,14 @@ export const HasVariation = ({
     (index: number) => {
       atributesList[index].isChecked = !atributesList[index].isChecked;
       setAtributesList([...atributesList]);
+      removeAtributes();
+      atributesList
+        .filter(({ isChecked }) => isChecked)
+        .map(() => {
+          addAtributes();
+        });
     },
-    [atributesList],
+    [atributesList, variation.getData()],
   );
 
   return (
