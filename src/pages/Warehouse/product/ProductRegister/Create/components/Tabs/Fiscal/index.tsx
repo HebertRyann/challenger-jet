@@ -8,6 +8,7 @@ import {
   TabHeaderContainerFiscal,
   TabNameFiscal,
   TabPanelContainerFiscal,
+  RenderComponent,
 } from './style';
 import { Footer } from '../../footer';
 import { NewInput } from '../../../../../../../../components/NewInput';
@@ -22,21 +23,35 @@ export type TypeContentTabsFiscal = {
   Component: JSX.Element;
 };
 
+type TypeContentTabs = {
+  name: string;
+  label: string;
+  isEnable: boolean;
+  Component: JSX.Element;
+};
+
 export const Fiscal = (): JSX.Element => {
-  const { loadTabs, addTab } = useTabs();
-  const tabs = makeTabsFiscal();
+  const { loadTabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs();
   const { fiscal } = useTabCreate();
   const { ncm, cfop } = fiscal.getData();
   const { changeNCM, changeCFOP } = fiscal.setData;
+  const [tabs, setTabs] = useState<TypeContentTabs[]>([]);
 
   useEffect(() => {
     tabs.map(tab => addTab(tab));
   }, []);
 
+  useEffect(() => {
+    function load() {
+      const tabs = makeTabsFiscal();
+      tabs.map(tab => addTab(tab));
+      changeCurrentTab(tabs[0].name);
+      setTabs(loadTabs());
+    }
+    load();
+  }, []);
+
   const allTabsData = loadTabs();
-
-  const [currentTab, setCurrentTab] = useState(tabs[0].name);
-
   return (
     <>
       <Container className="row">
@@ -84,8 +99,8 @@ export const Fiscal = (): JSX.Element => {
                 isEnable && (
                   <TabNameFiscal
                     key={index}
-                    onClick={() => setCurrentTab(name)}
-                    isActive={name === currentTab}
+                    onClick={() => changeCurrentTab(name)}
+                    isActive={name === loadCurrentTab().key}
                   >
                     {label}
                   </TabNameFiscal>
@@ -94,13 +109,11 @@ export const Fiscal = (): JSX.Element => {
           </TabHeaderContainerFiscal>
           <TabPanelContainerFiscal>
             <hr />
-            {allTabsData.map(({ Component, name }, index) => {
-              if (name === currentTab) {
-                return <div key={index}>{Component}</div>;
-              } else {
-                return null;
-              }
-            })}
+            {tabs.map(({ Component, name }) => (
+              <RenderComponent isActive={name === loadCurrentTab().key}>
+                {Component}
+              </RenderComponent>
+            ))}
             <hr />
           </TabPanelContainerFiscal>
         </div>

@@ -63,3 +63,13 @@ export const TabPanelContainerFiscal = styled.div`
     margin-bottom: 20px;
   }
 `;
+
+
+export const RenderComponent = styled.div<{ isActive: boolean }>`
+  display: none;
+  ${({ isActive }) =>
+    isActive &&
+    css`
+      display: block;
+    `};
+`;
