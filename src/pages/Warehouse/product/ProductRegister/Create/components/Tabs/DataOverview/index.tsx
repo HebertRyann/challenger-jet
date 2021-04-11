@@ -102,7 +102,7 @@ export const DataOverview = ({
       );
       setSubCategoryFinanceData(childrens);
     },
-    [subCategoryFinanceData, categoryCost],
+    [subCategoryFinanceData, categoryCost, overview.getData()],
   );
 
   const handlerHasVariation = useCallback(
