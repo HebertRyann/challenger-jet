@@ -490,41 +490,77 @@ const TabCreateProvider = ({
       setVariationState([...tempState]);
     };
 
-    const changeVariations = (variation: string, x: number, y: number) => {};
-
-    const addVariations = (
-      variation: FieldWithIdName,
-      x: number,
-      y: number,
-    ) => {};
-    const removeVariations = (x: number, y: number) => {};
-
     const removeVariation = (index: number) => {
       const variationWithOutIndex = variationState[index];
-      const result = variationState.filter(
-        variation => variation !== variationWithOutIndex,
-      );
-      if (result.length === 0) {
-        setVariationState(intialStateHasVariation);
-      } else {
-        setVariationState([...result]);
+      const indexRemove = variationState.indexOf(variationWithOutIndex);
+      if (indexRemove >= 0) {
+        variationState.splice(indexRemove, 1);
+        console.log(variationState.length);
+        if (variationState.length === 0) {
+          setVariationState(intialStateHasVariation);
+        } else {
+          setVariationState([...variationState]);
+        }
       }
     };
 
     const addVariation = () => {
-      setVariationState([...variationState, intialStateHasVariation[0]]);
+      setVariationState([
+        ...variationState,
+        { ...intialStateHasVariation[0], key: Math.random() },
+      ]);
+    };
+
+    const addAtributes = () => {
+      let tempState: TypeHasVariation[] = JSON.parse(
+        JSON.stringify(variationState),
+      );
+      tempState.map((_, index) => {
+        tempState[index].atributes.push({
+          error: { isError: false },
+          value: { id: '', name: '' },
+        });
+      });
+      setVariationState([...tempState]);
+    };
+
+    const removeAtributes = () => {
+      let tempState: TypeHasVariation[] = JSON.parse(
+        JSON.stringify(variationState),
+      );
+      tempState.map((_, index) => {
+        tempState[index].atributes = [
+          { error: { isError: false }, value: { id: '', name: '' } },
+        ];
+      });
+      setVariationState([...tempState]);
+    };
+
+    const changeAtributes = (
+      atribute: FieldWithIdName,
+      x: number,
+      y: number,
+    ) => {
+      let tempState: TypeHasVariation[] = JSON.parse(
+        JSON.stringify(variationState),
+      );
+      if (tempState[x].atributes[y]) {
+        tempState[x].atributes[y].error.isError = false;
+        tempState[x].atributes[y].value = atribute;
+        setVariationState([...tempState]);
+      }
     };
 
     return {
-      changeUnitMensured,
-      changeCurrentStock,
-      changePriceSale,
-      changePriceCost,
-      changeVariations,
-      addVariations,
-      removeVariations,
-      removeVariation,
+      addAtributes,
+      removeAtributes,
+      changeAtributes,
       addVariation,
+      removeVariation,
+      changeCurrentStock,
+      changePriceCost,
+      changePriceSale,
+      changeUnitMensured,
     };
   };
 
@@ -534,26 +570,35 @@ const TabCreateProvider = ({
       JSON.stringify(variationState),
     );
 
-    tempState.map(({ unitMensured, currentStock, priceCost, priceSale }) => {
-      if (unitMensured.value.id === '') {
-        isError = true;
-        unitMensured.error.isError = true;
-      }
-      if (currentStock.value === '') {
-        isError = true;
-        currentStock.error.isError = true;
-      }
-      if (
-        overView.typeSelectProdut.value.name === SALE.name ||
-        overView.typeSelectProdut.value.name === RE_SALE.name
-      ) {
-        if (priceCost.value === '') {
+    tempState.map(
+      ({ unitMensured, currentStock, priceCost, priceSale, atributes }) => {
+        if (unitMensured.value.id === '') {
           isError = true;
-          priceCost.error.isError = true;
-          priceSale.error.isError = true;
+          unitMensured.error.isError = true;
         }
-      }
-    });
+        if (currentStock.value === '') {
+          isError = true;
+          currentStock.error.isError = true;
+        }
+        if (
+          overView.typeSelectProdut.value.name === SALE.name ||
+          overView.typeSelectProdut.value.name === RE_SALE.name
+        ) {
+          if (priceCost.value === '') {
+            isError = true;
+            priceCost.error.isError = true;
+            priceSale.error.isError = true;
+          }
+        }
+        if (atributes.length > 0) {
+          atributes.map(({ value }, index) => {
+            if (value.id === '') {
+              atributes[index].error.isError = true;
+            }
+          });
+        }
+      },
+    );
 
     setVariationState(tempState);
 
@@ -635,6 +680,62 @@ const TabCreateProvider = ({
       }));
     }
 
+    if (fiscalState.icms.taxesIssue.value.id === '') {
+      isError = true;
+      setFiscalState(old => ({
+        ...old,
+        icms: {
+          ...old.icms,
+          taxesIssue: {
+            ...old.icms.taxesIssue,
+            error: { isError: true },
+          },
+        },
+      }));
+    }
+
+    if (fiscalState.icms.origem.value.id === '') {
+      isError = true;
+      setFiscalState(old => ({
+        ...old,
+        icms: {
+          ...old.icms,
+          origem: {
+            ...old.icms.origem,
+            error: { isError: true },
+          },
+        },
+      }));
+    }
+
+    if (fiscalState.ipi.taxesIssue.value.id === '') {
+      isError = true;
+      setFiscalState(old => ({
+        ...old,
+        ipi: {
+          ...old.ipi,
+          taxesIssue: {
+            ...old.ipi.taxesIssue,
+            error: { isError: true },
+          },
+        },
+      }));
+    }
+
+    if (fiscalState.pis.taxesIssue.value.id === '') {
+      isError = true;
+      setFiscalState(old => ({
+        ...old,
+        pis: {
+          ...old.pis,
+          taxesIssue: {
+            ...old.pis.taxesIssue,
+            error: { isError: true },
+          },
+        },
+      }));
+    }
+
     if (fiscalState.cofins.taxesIssue.value.id === '') {
       isError = true;
       setFiscalState(old => ({
@@ -676,7 +777,6 @@ const TabCreateProvider = ({
               labelName: labelHasVariation,
               linkName: nameHasVariation,
             });
-            console.log('Há erros na aba variação');
           }
         } else {
           if (stock.validate()) {
@@ -684,7 +784,6 @@ const TabCreateProvider = ({
               labelName: labelStock,
               linkName: nameStock,
             });
-            console.log('Há erros na aba estoque');
           }
         }
       };
@@ -695,11 +794,9 @@ const TabCreateProvider = ({
             labelName: labelDataOverview,
             linkName: nameDataOverview,
           });
-          console.log('Há erros na aba dados');
         }
         if (details.validate()) {
           resultList.push({ labelName: labelDetails, linkName: nameDetails });
-          console.log('Há erros na aba detalhes');
         }
         validateHasVariationOrStock();
       };
@@ -710,14 +807,12 @@ const TabCreateProvider = ({
             labelName: labelPriceComposition,
             linkName: namePriceComposition,
           });
-          console.log('Há erros na aba formação de preço');
         }
         if (fiscal.validate()) {
           resultList.push({
             labelName: labelFiscal,
             linkName: nameFiscal,
           });
-          console.log('Há erros na aba fiscal');
         }
       };
 
@@ -730,7 +825,6 @@ const TabCreateProvider = ({
             labelName: labelHasComposition,
             linkName: nameHasComposition,
           });
-          console.log('Há erros na aba composição');
         }
       }
       if (valueSelectedTypeProduct === SEMI_FINISHED.name) {
@@ -740,7 +834,6 @@ const TabCreateProvider = ({
             labelName: labelHasComposition,
             linkName: nameHasComposition,
           });
-          console.log('Há erros na aba composição');
         }
       }
       if (valueSelectedTypeProduct === RE_SALE.name) {
@@ -820,15 +913,9 @@ const TabCreateProvider = ({
 
       if (hasVariationActive) {
         variationList.map(
-          ({
-            currentStock,
-            priceCost,
-            priceSale,
-            unitMensured,
-            variations,
-          }) => {
+          ({ currentStock, priceCost, priceSale, unitMensured, atributes }) => {
             const atributesList: TypeAtributes[] = [];
-            variations.map(({ value }) => {
+            atributes.map(({ value }) => {
               atributesList.push({
                 key: Number(value.id),
                 value: Number(value.name),
