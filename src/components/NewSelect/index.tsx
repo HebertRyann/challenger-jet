@@ -10,11 +10,13 @@ export interface TypeNewSelectProps
   extends SelectHTMLAttributes<HTMLSelectElement> {
   error?: TypeErrorSelect;
   children?: JSX.Element[];
+  isSelected?: string;
 }
 
 export const NewSelect = ({
   children,
   error,
+  isSelected,
   ...props
 }: TypeNewSelectProps): JSX.Element => {
   return (
@@ -26,7 +28,7 @@ export const NewSelect = ({
           disabled
           selected
         >
-          selecione
+          {isSelected || 'selecione'}
         </option>
         {children}
       </select>
