@@ -76,12 +76,18 @@ export type TypePriceCompositionProps = {
   dif: TypeValueAndError;
 };
 
+export type AtributesList = {
+  id: string;
+  value: string;
+};
+
 export type TypeHasVariation = {
+  key: number;
   unitMensured: TypeGenericValueWithError<FieldWithIdName>;
   currentStock: TypeValueAndError;
   priceCost: TypeValueAndError;
   priceSale: TypeValueAndError;
-  variations: TypeGenericValueWithError<FieldWithIdName>[];
+  atributes: TypeGenericValueWithError<FieldWithIdName>[];
 };
 
 // DATAOVERVIEW
@@ -105,9 +111,9 @@ export type ResolverHasVariation = {
   changeCurrentStock: (stock: string, index: number) => void;
   changePriceSale: (priceSale: string, index: number) => void;
   changePriceCost: (priceCost: string, index: number) => void;
-  changeVariations: (variation: string, x: number, y: number) => void;
-  addVariations: (variation: FieldWithIdName, x: number, y: number) => void;
-  removeVariations: (x: number, y: number) => void;
+  changeAtributes: (variation: FieldWithIdName, x: number, y: number) => void;
+  addAtributes: () => void;
+  removeAtributes: () => void;
   addVariation: () => void;
   removeVariation: (index: number) => void;
 };
@@ -180,7 +186,6 @@ export type ResultOnSaveProdut = {
     message: string;
   };
 };
-
 
 type DetailsProduct = {
   weight: number;
