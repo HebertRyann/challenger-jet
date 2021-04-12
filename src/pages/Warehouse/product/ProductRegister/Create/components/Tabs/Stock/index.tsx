@@ -12,11 +12,9 @@ export const Stock = ({
   unitMensureds,
 }: TypeHasVariationProps): JSX.Element => {
   return (
-    <>
-      <div className="row">
-        <Table unitMensured={unitMensureds} />
-      </div>
-    </>
+    <div className="row">
+      <Table unitMensured={unitMensureds} />
+    </div>
   );
 };
 
