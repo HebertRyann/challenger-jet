@@ -7,14 +7,9 @@ import { Alert } from '../../../../../../../../components/Alert';
 import { numericMask } from '../../../../../../../../utlis/mask';
 import { useTabCreate } from '../../../providers/tabsProvider';
 import { useTabs } from '../../../../../../../../hooks/tabs';
-import { nameDataOverview } from '../DataOverview';
-import { nameStock } from '../Stock';
-import { nameHasVariation } from '../HasVariation';
-import { LOCATION, SALE } from '../DataOverview/products';
-import { RE_SALE } from '../Fiscal/tabs/Icms/icms';
 
 export const Details = (): JSX.Element => {
-  const { changeCurrentTab } = useTabs();
+  const { changeCurrentTabForPrevious, changeCurrentTabForNext } = useTabs();
   const [alert, setAlert] = useState<{
     active: boolean;
     message?: string;
@@ -24,14 +19,8 @@ export const Details = (): JSX.Element => {
     message: '',
   });
 
-  const {
-    details,
-    overview,
-    stock,
-    priceComposition,
-    composition,
-    validation,
-  } = useTabCreate();
+  const { details, validation } = useTabCreate();
+
   const {
     weight,
     width,
@@ -188,14 +177,8 @@ export const Details = (): JSX.Element => {
         </div>
       </div>
       <Footer
-        onClickButtonNext={() =>
-          changeCurrentTab(
-            overview.getData().hasVariation.value.hasVariation
-              ? nameHasVariation
-              : nameStock,
-          )
-        }
-        onClickButtonBack={() => changeCurrentTab(nameDataOverview)}
+        onClickButtonNext={() => changeCurrentTabForNext(nameDetails)}
+        onClickButtonBack={() => changeCurrentTabForPrevious(nameDetails)}
         onSave={() => validation.validate()}
       />
       <Alert
