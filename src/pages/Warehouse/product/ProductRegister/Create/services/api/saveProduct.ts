@@ -16,6 +16,7 @@ type SaveProductParams = {
 export const saveProduct = async (
   params: SaveProductParams,
 ): Promise<ResultOnSaveProdut> => {
+  console.log(params);
   const { status } = await api.post('/product', { params });
   if (status !== 201) {
     return {
