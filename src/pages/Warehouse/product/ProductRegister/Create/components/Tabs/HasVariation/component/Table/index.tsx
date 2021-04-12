@@ -7,6 +7,8 @@ import { useTabCreate } from '../../../../../providers/tabsProvider';
 import { Alert } from '../../../../../../../../../../components/Alert';
 import { SALE, RE_SALE } from '../../../DataOverview/products';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../../../services/api';
+import { useTabs } from '../../../../../../../../../../hooks/tabs';
+import { nameHasVariation } from '../..';
 
 type TypeUnitMensured = {
   id: string;
@@ -29,6 +31,7 @@ type TypeTableProps = {
 export const Table = (tableProps: TypeTableProps): JSX.Element => {
   const { unitMensuredList } = tableProps;
   const atributesList = tableProps.atributes;
+  const { changeCurrentTabForNext, changeCurrentTabForPrevious } = useTabs();
   const [alert, setAlert] = useState(false);
   const { variation, overview } = useTabCreate();
   const { typeSelectProdut } = overview.getData();
@@ -111,7 +114,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                 </td>
                 <>
                   {atributesList.map(
-                    ({ parent_id, childrenList }, indexAtribute) =>
+                    ({ parent_id, childrenList, id }, indexAtribute) =>
                       parent_id === null && (
                         <td key={Math.random()}>
                           <NewSelect
@@ -130,21 +133,23 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                               const y = Number(split[1]);
                               const id = split[2];
                               const name = split[3];
+                              const keyParent = split[4];
                               changeAtributes(
                                 {
                                   id,
                                   name,
+                                  keyParent,
                                 },
                                 x,
                                 y,
                               );
                             }}
                           >
-                            {childrenList.map(({ name, id }) => (
+                            {childrenList.map(atributeChildren => (
                               <option
-                                value={`${index}+${indexAtribute}+${id}+${name}`}
+                                value={`${index}+${indexAtribute}+${atributeChildren.id}+${atributeChildren.name}+${id}`}
                               >
-                                {name}
+                                {atributeChildren.name}
                               </option>
                             ))}
                           </NewSelect>
@@ -229,7 +234,13 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
       </button>
 
       <div style={{ margin: '20px 0px 0 0' }}>
-        <Footer onSave={handleClickOnSaveButton} />
+        <Footer
+          onSave={handleClickOnSaveButton}
+          onClickButtonNext={() => changeCurrentTabForNext(nameHasVariation)}
+          onClickButtonBack={() =>
+            changeCurrentTabForPrevious(nameHasVariation)
+          }
+        />
       </div>
       <Alert
         isActive={alert}
