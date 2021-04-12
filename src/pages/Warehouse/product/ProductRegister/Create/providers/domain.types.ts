@@ -131,7 +131,7 @@ export type TypeProduct = {
   cost: TypeValueAndError;
   subtotal: TypeValueAndError;
 };
-// COMPOSITION
+
 export type ResolverComposition = {
   changeInputNameProduct: (name: string, index: number) => void;
   changeInputAmount: (amount: string, index: number) => void;
@@ -146,7 +146,7 @@ export type TypeGetAndSetComposition<T> = {
   setData: ResolverComposition;
   validate: () => boolean;
 };
-// FISCAL
+
 export type ResolverFiscal = {
   changeNCM: (ncm: string) => void;
   changeCFOP: (cfop: string) => void;
@@ -199,7 +199,7 @@ type DetailsProduct = {
 };
 
 export type TypeProductDataOverView = {
-  type: number;
+  type: string;
   category_cost_id: number;
   subcategory_cost_id: number;
   product_category_id: number;

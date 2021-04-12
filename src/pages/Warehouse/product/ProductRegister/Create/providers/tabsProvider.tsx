@@ -914,7 +914,7 @@ const TabCreateProvider = ({
           technical_specification: technicalSpecification.value,
           way_use: wayOfUse.value,
         },
-        type: Number(typeSelectProdut.value.id),
+        type: typeSelectProdut.value.name.toLowerCase().replace(' ', '-'),
         category_cost_id: Number(categoryCost.value.id),
         product_category_id: Number(groupProduct.value.id),
         subcategory_cost_id: Number(subCategoryCost.value.id),

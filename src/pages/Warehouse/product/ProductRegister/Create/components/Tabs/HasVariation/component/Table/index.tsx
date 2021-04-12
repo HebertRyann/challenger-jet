@@ -65,17 +65,69 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
       <table className="table table-bordered margin-bottom-0">
         <tbody>
           <tr>
-            <th rowSpan={isTypeSaleOrResale() ? 2 : 1}>Unidade de medidas</th>
-            <th rowSpan={isTypeSaleOrResale() ? 2 : 1}>Estoque atual</th>
+            <th
+              style={
+                isTypeSaleOrResale()
+                  ? {
+                      position: 'relative',
+                      lineHeight: '50px',
+                    }
+                  : {}
+              }
+              rowSpan={isTypeSaleOrResale() ? 2 : 1}
+            >
+              Unidade de medidas
+            </th>
+
             {atributesList.map(
-              ({ name, parent_id }) => parent_id === null && <th>{name}</th>,
+              ({ name, parent_id }) =>
+                parent_id === null && (
+                  <th
+                    style={
+                      isTypeSaleOrResale()
+                        ? {
+                            position: 'relative',
+                            lineHeight: '50px',
+                          }
+                        : {}
+                    }
+                    rowSpan={isTypeSaleOrResale() ? 2 : 1}
+                  >
+                    {name}
+                  </th>
+                ),
             )}
+            <th
+              style={
+                isTypeSaleOrResale()
+                  ? {
+                      position: 'relative',
+                      lineHeight: '50px',
+                    }
+                  : {}
+              }
+              rowSpan={isTypeSaleOrResale() ? 2 : 1}
+            >
+              Estoque atual
+            </th>
             {isTypeSaleOrResale() ? (
               <th align="center" style={{ textAlign: 'center' }} colSpan={2}>
                 Preço
               </th>
             ) : null}
-            <th rowSpan={isTypeSaleOrResale() ? 2 : 1}>Ações</th>
+            <th
+              style={
+                isTypeSaleOrResale()
+                  ? {
+                      position: 'relative',
+                      lineHeight: '50px',
+                    }
+                  : {}
+              }
+              rowSpan={isTypeSaleOrResale() ? 2 : 1}
+            >
+              Ações
+            </th>
           </tr>
           {isTypeSaleOrResale() && (
             <tr>
@@ -106,22 +158,6 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                       <option value={`${id}+${name}`}>{name}</option>
                     ))}
                   </NewSelect>
-                </td>
-                <td>
-                  <NewInput
-                    name="currentStock"
-                    value={currentStock.value}
-                    error={currentStock.error}
-                    onKeyPress={event => {
-                      const regex = /^[0-9]+$/;
-                      if (!regex.test(event.key)) event.preventDefault();
-                    }}
-                    onChange={event =>
-                      changeCurrentStock(event.currentTarget.value, index)
-                    }
-                    className="form-control"
-                    type="text"
-                  />
                 </td>
                 <>
                   {atributesList.map(
@@ -167,6 +203,22 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                         </td>
                       ),
                   )}
+                  <td>
+                    <NewInput
+                      name="currentStock"
+                      value={currentStock.value}
+                      error={currentStock.error}
+                      onKeyPress={event => {
+                        const regex = /^[0-9]+$/;
+                        if (!regex.test(event.key)) event.preventDefault();
+                      }}
+                      onChange={event =>
+                        changeCurrentStock(event.currentTarget.value, index)
+                      }
+                      className="form-control"
+                      type="text"
+                    />
+                  </td>
                 </>
                 {isTypeSaleOrResale() && (
                   <>

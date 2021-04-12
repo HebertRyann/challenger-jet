@@ -36,24 +36,57 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
   const { stockCurrent, priceCost, priceSale } = stock.getData();
   const unitMensureds = stock.getData().unitMensured;
 
+  const isTypeSaleOrResale = (): boolean =>
+    typeSelectProdut.value.name === SALE.name ||
+    typeSelectProdut.value.name === RE_SALE.name;
+
   return (
     <Container className="table-responsive">
       <table className="table table-bordered margin-bottom-0">
         <tbody>
           <tr>
-            <th>Unidade de medidas</th>
-            <th>Estoque atual</th>
+            <th
+              style={
+                isTypeSaleOrResale()
+                  ? {
+                      position: 'relative',
+                      lineHeight: '50px',
+                    }
+                  : {}
+              }
+              rowSpan={isTypeSaleOrResale() ? 2 : 1}
+            >
+              Unidade de medidas
+            </th>
+            <th
+              style={
+                isTypeSaleOrResale()
+                  ? {
+                      position: 'relative',
+                      lineHeight: '50px',
+                    }
+                  : {}
+              }
+              rowSpan={isTypeSaleOrResale() ? 2 : 1}
+            >
+              Estoque atual
+            </th>
             {typeSelectProdut.value.name === SALE.name ||
             typeSelectProdut.value.name === RE_SALE.name ? (
-              <th colSpan={2}>Preço</th>
+              <th style={{ textAlign: 'center' }} colSpan={2}>
+                Preço
+              </th>
             ) : null}
           </tr>
+          {isTypeSaleOrResale() && (
+            <tr>
+              <th>Custo</th>
+              <th>Venda</th>
+            </tr>
+          )}
           <tr>
             <td>
               <NewSelect
-                style={{
-                  marginTop: '18px',
-                }}
                 error={unitMensureds.error}
                 onChange={event => {
                   const id = event.target.value.split('+')[0];
@@ -81,9 +114,6 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
             </td>
             <td>
               <NewInput
-                style={{
-                  marginTop: '18px',
-                }}
                 onChange={event => {
                   stock.setData({
                     ...stock.getData(),
@@ -103,9 +133,6 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
             typeSelectProdut.value.name === RE_SALE.name ? (
               <>
                 <td style={{ width: '150px' }}>
-                  <tr>
-                    <th>Custo</th>
-                  </tr>
                   <tr>
                     <NewInput
                       name="cost"
@@ -132,12 +159,9 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                 </td>
                 <td style={{ width: '150px' }}>
                   <tr>
-                    <th>Venda</th>
-                  </tr>
-                  <tr>
                     <NewInput
                       name="priceSale"
-                      value={(Number(priceCost.value) * 1.5).toString()}
+                      value={Number(priceCost.value).toString()}
                       disabled
                       error={priceSale.error}
                       placeholder="0.00"

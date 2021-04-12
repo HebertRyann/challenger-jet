@@ -165,6 +165,8 @@ export const DataOverview = ({
     [
       typeSelectProdut,
       groupProduct,
+      subCategoryCost,
+      categoryCost,
       nameProduct,
       overview.getData().hasVariation,
     ],
