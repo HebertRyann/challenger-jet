@@ -4,11 +4,8 @@ import { TooltipComponent } from '../../../../../../../../components/TooltipComp
 import { nameHasVariation } from '../HasVariation';
 import { nameFiscal } from '../Fiscal';
 import { useTabs } from '../../../../../../../../hooks/tabs';
-import { labelHasComposition, nameHasComposition } from '../HasComposition';
-import {
-  labelPriceComposition,
-  namePriceComposition,
-} from '../PriceComposition';
+import { nameHasComposition } from '../HasComposition';
+import { namePriceComposition } from '../PriceComposition';
 import { NewInput } from '../../../../../../../../components/NewInput';
 import { Alert } from '../../../../../../../../components/Alert';
 import {
@@ -17,9 +14,8 @@ import {
   SALE,
   SEMI_FINISHED,
   RE_SALE,
-  LOCATION,
 } from './products';
-import { labelStock, nameStock } from '../Stock';
+import { nameStock } from '../Stock';
 import { Footer } from '../../footer';
 import { NewSelect } from '../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../providers/tabsProvider';
@@ -102,11 +98,16 @@ export const DataOverview = ({
       );
       setSubCategoryFinanceData(childrens);
     },
-    [subCategoryFinanceData, categoryCost, overview.getData()],
+    [
+      subCategoryFinanceData,
+      categoryCost,
+      overview.getData().typeSelectProdut,
+      overview.getData().hasVariation,
+    ],
   );
 
   const handlerHasVariation = useCallback(
-    ({ active, keyTab, name }: TypeTabNameEnableOrDisable) => {
+    ({ keyTab, name }: TypeTabNameEnableOrDisable) => {
       if (name.toLowerCase() === 'sim') {
         activeTab(keyTab);
         overview.setData({
@@ -237,7 +238,7 @@ export const DataOverview = ({
       <div className="row">
         <div className="form-content col-md-3">
           <TooltipComponent
-            label="Tipo de produto"
+            label="Tipo do produto"
             message="Selecione o tipo do produto"
           />
           <NewSelect
@@ -258,7 +259,57 @@ export const DataOverview = ({
         </div>
         <div className="form-content col-md-3">
           <TooltipComponent
-            label="Categoria custo"
+            label="Grupo do produto"
+            message="Selecione Categoria custo"
+          />
+          <NewSelect
+            error={groupProduct.error}
+            onChange={event => {
+              const split = event.target.value.split('+');
+              const id = split[0];
+              const name = split[1];
+              overview.setData({
+                ...overview.getData(),
+                groupProduct: {
+                  error: { isError: false },
+                  value: {
+                    id,
+                    name,
+                  },
+                },
+              });
+            }}
+          >
+            {categoryProducts.map(({ id, name }) => (
+              <option key={id} value={id + '+' + name}>
+                {name}
+              </option>
+            ))}
+          </NewSelect>
+        </div>
+        <div className="form-content col-md-6">
+          <TooltipComponent
+            label="Nome do produto"
+            message="Selecione o tipo do produto"
+          />
+          <NewInput
+            error={nameProduct.error}
+            onChange={event => {
+              overview.setData({
+                ...overview.getData(),
+                nameProduct: {
+                  error: { isError: false },
+                  value: event.target.value,
+                },
+              });
+            }}
+            value={nameProduct.value}
+            name="category"
+          />
+        </div>
+        <Container className="form-content col-md-3">
+          <TooltipComponent
+            label="Categoria de custo"
             message="Selecione o tipo do produto"
           />
           <NewSelect
@@ -278,8 +329,8 @@ export const DataOverview = ({
                 </option>
               ))}
           </NewSelect>
-        </div>
-        <div className="form-content col-md-3">
+        </Container>
+        <Container className="form-content col-md-3">
           <TooltipComponent
             label="Subcategoria custo"
             message="Selecione o tipo do produto"
@@ -309,60 +360,8 @@ export const DataOverview = ({
               </option>
             ))}
           </NewSelect>
-        </div>
-        <div className="form-content col-md-3">
-          <TooltipComponent
-            label="Grupo produto"
-            message="Selecione Categoria custo"
-          />
-          <NewSelect
-            error={groupProduct.error}
-            onChange={event => {
-              const split = event.target.value.split('+');
-              const id = split[0];
-              const name = split[1];
-              overview.setData({
-                ...overview.getData(),
-                groupProduct: {
-                  error: { isError: false },
-                  value: {
-                    id,
-                    name,
-                  },
-                },
-              });
-            }}
-          >
-            {categoryProducts.map(({ id, name }) => (
-              <option key={id} value={id + '+' + name}>
-                {name}
-              </option>
-            ))}
-          </NewSelect>
-        </div>
-      </div>
-      <Container className="row">
-        <div className="form-content col-md-6">
-          <TooltipComponent
-            label="Nome do produto"
-            message="Selecione o tipo do produto"
-          />
-          <NewInput
-            error={nameProduct.error}
-            onChange={event => {
-              overview.setData({
-                ...overview.getData(),
-                nameProduct: {
-                  error: { isError: false },
-                  value: event.target.value,
-                },
-              });
-            }}
-            value={nameProduct.value}
-            name="category"
-          />
-        </div>
-        <div className="form-content col-md-3">
+        </Container>
+        <Container className="form-content col-md-3">
           <TooltipComponent
             label="Possui variação?"
             message="Selecione o tipo do produto"
@@ -382,8 +381,8 @@ export const DataOverview = ({
               </option>
             ))}
           </NewSelect>
-        </div>
-      </Container>
+        </Container>
+      </div>
       <Alert
         isActive={alert.active}
         onlyConfirm
