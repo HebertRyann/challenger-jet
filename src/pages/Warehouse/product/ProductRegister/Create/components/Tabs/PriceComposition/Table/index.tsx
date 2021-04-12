@@ -7,12 +7,11 @@ import { useTabCreate } from '../../../../providers/tabsProvider';
 import { Footer } from '../../../footer';
 import { Alert } from '../../../../../../../../../components/Alert';
 import { useTabs } from '../../../../../../../../../hooks/tabs';
-import { nameStock } from '../../Stock';
-import { nameHasVariation } from '../../HasVariation';
+import { namePriceComposition } from '..';
 
 export const Table = (): JSX.Element => {
-  const { changeCurrentTab } = useTabs();
-  const { priceComposition, overview } = useTabCreate();
+  const { changeCurrentTabForNext, changeCurrentTabForPrevious } = useTabs();
+  const { priceComposition } = useTabCreate();
   const { cost, dif, ipi, profit } = priceComposition.getData();
   const [alert, setAlert] = useState<{
     active: boolean;
@@ -26,14 +25,6 @@ export const Table = (): JSX.Element => {
   const handlerClickAlertConfirm = useCallback(() => {
     setAlert({ active: false });
   }, [alert]);
-
-  const handlerOnClickButtonBack = useCallback(() => {
-    changeCurrentTab(
-      overview.getData().hasVariation.value.hasVariation
-        ? nameHasVariation
-        : nameStock,
-    );
-  }, [overview.getData().hasVariation]);
 
   return (
     <>
@@ -121,7 +112,12 @@ export const Table = (): JSX.Element => {
       </div>
       <div style={{ marginTop: '20px' }}>
         <Footer
-          onClickButtonBack={handlerOnClickButtonBack}
+          onClickButtonNext={() =>
+            changeCurrentTabForNext(namePriceComposition)
+          }
+          onClickButtonBack={() =>
+            changeCurrentTabForPrevious(namePriceComposition)
+          }
           onSave={handlerClickOnSave}
         />
       </div>
