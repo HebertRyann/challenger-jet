@@ -31,15 +31,18 @@ type TypeContentTabs = {
 };
 
 export const Fiscal = (): JSX.Element => {
-  const { loadTabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs();
+  const {
+    loadTabs,
+    addTab,
+    loadCurrentTab,
+    changeCurrentTab,
+    changeCurrentTabForNext,
+    changeCurrentTabForPrevious,
+  } = useTabs();
   const { fiscal } = useTabCreate();
   const { ncm, cfop } = fiscal.getData();
   const { changeNCM, changeCFOP } = fiscal.setData;
   const [tabs, setTabs] = useState<TypeContentTabs[]>([]);
-
-  useEffect(() => {
-    tabs.map(tab => addTab(tab));
-  }, []);
 
   useEffect(() => {
     function load() {
@@ -119,7 +122,11 @@ export const Fiscal = (): JSX.Element => {
         </div>
       </Container>
       <div style={{ margin: '20px 3px 0 0' }}>
-        <Footer onClickButtonNext={() => {}} onSave={() => fiscal.validate()} />
+        <Footer
+          onClickButtonNext={() => changeCurrentTabForNext(nameFiscal)}
+          onClickButtonBack={() => changeCurrentTabForPrevious(nameFiscal)}
+          onSave={() => fiscal.validate()}
+        />
       </div>
     </>
   );
