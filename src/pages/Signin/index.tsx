@@ -1,9 +1,8 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
-
 import { useAuth } from '../../hooks/auth';
 import { useToast } from '../../hooks/toast';
 import getValidationErros from '../../utlis/getValidationErros';
@@ -72,7 +71,7 @@ const SignUp: React.FC = () => {
             <h3 className="form-title font-dark">Autenticação</h3>
             <div className="form-group">
               <Input
-                className="form-control form-control-solid placeholder-no-fix"
+                className="form-control form-control-solid placeholder-no-fix input"
                 type="text"
                 autoComplete="off"
                 placeholder="Usuário"
