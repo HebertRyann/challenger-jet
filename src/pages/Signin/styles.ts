@@ -3,6 +3,14 @@ import styled from 'styled-components';
 export const Contanier = styled.div`
   display: flex;
   justify-content: center;
+
+  .placeholder-no-fix {
+    text-transform: none;
+    border: 1px solid #ddd !important;
+    ::placeholder {
+      text-transform: capitalize !important;
+    }
+  }
 `;
 
 export const Content = styled.div`
