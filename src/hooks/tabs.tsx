@@ -20,8 +20,7 @@ type TypeTabsContext = {
   changeCurrentTab: (keyTab: string) => void;
   changeCurrentTabForNext: (keyTab: string) => void;
   loadCurrentTab: () => TypeCurrentTab;
-  hasNextTab: (keyTab: string) => boolean;
-  hasPreviousTab: (keyTab: string) => boolean;
+  changeCurrentTabForPrevious: (keyTab: string) => void;
 };
 
 type TypeTabsProvider = {
@@ -99,28 +98,45 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
 
   const changeCurrentTabForNext = useCallback(
     (keyTab: string) => {
-      const result = tabs.filter(({ name }) => name === keyTab);
-      if (result) {
-        const indexTab = tabs.indexOf(result[0]);
-        const exitsNext = tabs[indexTab + 1];
-        if (exitsNext.isEnable) {
-          setCurrentTab({ key: exitsNext.name });
+      if (keyTab) {
+        const index = tabs
+          .filter(({ isEnable }) => isEnable)
+          .findIndex(({ name }) => name === keyTab);
+        const nextTab = tabs
+          .filter(({ isEnable }) => isEnable)
+          .find((tab, nextIndex) => {
+            return nextIndex === index + 1 ? tab : null;
+          });
+        if (nextTab) {
+          setCurrentTab({ key: nextTab.name });
         }
-        return;
       }
     },
-    [currentTab],
+    [currentTab, tabs],
   );
 
-  const hasNextTab = useCallback((keyTab: string) => false, []);
-
-  const hasPreviousTab = useCallback((keyTab: string) => false, []);
+  const changeCurrentTabForPrevious = useCallback(
+    (keyTab: string) => {
+      if (keyTab) {
+        const index = tabs
+          .filter(({ isEnable }) => isEnable)
+          .findIndex(({ name }) => name === keyTab);
+        const nextTab = tabs
+          .filter(({ isEnable }) => isEnable)
+          .find((tab, nextIndex) => {
+            return nextIndex === index - 1 ? tab : null;
+          });
+        if (nextTab) {
+          setCurrentTab({ key: nextTab.name });
+        }
+      }
+    },
+    [currentTab, tabs],
+  );
 
   return (
     <TabsContext.Provider
       value={{
-        hasNextTab,
-        hasPreviousTab,
         addTab,
         removeTab,
         loadTabs,
@@ -128,6 +144,7 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
         disableTab,
         changeCurrentTab,
         loadCurrentTab,
+        changeCurrentTabForPrevious,
         changeCurrentTabForNext,
       }}
     >
