@@ -16,17 +16,17 @@ type SaveProductParams = {
 export const saveProduct = async (
   params: SaveProductParams,
 ): Promise<ResultOnSaveProdut> => {
-  console.log(params);
-  const { status } = await api.post('/product', { params });
+  const { status, data } = await api.post('/product', { params });
   if (status !== 201) {
     return {
       status: { code: status, message: 'Erro ao cadastrar o produto' },
     };
   }
+
   return {
     status: {
-      code: 201,
-      message: 'Produto cadastrado com sucesso',
+      code: data.code,
+      message: data.message,
     },
   };
 };
