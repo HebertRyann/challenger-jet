@@ -8,14 +8,14 @@ export const RAW_MATERIAL: TypeProduct = {
   name: 'Materia prima',
 };
 
-export const SEMI_FINISHED: TypeProduct = {
-  id: 2,
-  name: 'Semi acabado',
-};
-
 export const SALE: TypeProduct = {
   id: 3,
   name: 'Venda',
+};
+
+export const SEMI_FINISHED: TypeProduct = {
+  id: 2,
+  name: 'Semi acabado',
 };
 
 export const RE_SALE: TypeProduct = {

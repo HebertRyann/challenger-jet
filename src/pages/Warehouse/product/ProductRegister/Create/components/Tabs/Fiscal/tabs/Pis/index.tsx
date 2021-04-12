@@ -24,9 +24,9 @@ export const Pis = (): JSX.Element => {
           }}
           error={pis.taxesIssue.error}
         >
-          {dataIcms.map(({ id, name }) => (
+          {/* {dataIcms.map(({ id, name }) => (
             <option value={`${id}+${name}`}>{name}</option>
-          ))}
+          ))} */}
         </NewSelect>
       </div>
     </div>

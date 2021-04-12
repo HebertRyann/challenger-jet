@@ -25,9 +25,9 @@ export const Confins = (): JSX.Element => {
           }}
           error={cofins.taxesIssue.error}
         >
-          {dataIcms.map(({ id, name }) => (
+          {/* {dataIcms.map(({ id, name }) => (
             <option value={`${id}+${name}`}>{name}</option>
-          ))}
+          ))} */}
         </NewSelect>
       </div>
     </div>

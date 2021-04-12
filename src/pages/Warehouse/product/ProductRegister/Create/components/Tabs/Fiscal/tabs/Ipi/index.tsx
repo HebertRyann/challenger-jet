@@ -24,9 +24,9 @@ export const Ipi = (): JSX.Element => {
           }}
           error={ipi.taxesIssue.error}
         >
-          {dataIcms.map(({ id, name }) => (
+          {/* {dataIcms.map(({ id, name }) => (
             <option value={`${id}+${name}`}>{name}</option>
-          ))}
+          ))} */}
         </NewSelect>
       </div>
     </div>

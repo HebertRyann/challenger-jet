@@ -479,6 +479,22 @@ const TabCreateProvider = ({
     setVariationState([...variationState, tempAtrbutes]);
   }, [variationState]);
 
+  const removeVariation = useCallback(
+    (index: number) => {
+      const variationWithOutIndex = variationState[index];
+      const indexRemove = variationState.indexOf(variationWithOutIndex);
+      if (indexRemove >= 0) {
+        variationState.splice(indexRemove, 1);
+        if (variationState.length === 0) {
+          setVariationState(intialStateHasVariation);
+        } else {
+          setVariationState([...variationState]);
+        }
+      }
+    },
+    [variationState],
+  );
+
   const setDataVariation = (): ResolverHasVariation => {
     const changeUnitMensured = (
       newUnitMensured: FieldWithIdName,
@@ -523,19 +539,6 @@ const TabCreateProvider = ({
         }
       });
       setVariationState([...tempState]);
-    };
-
-    const removeVariation = (index: number) => {
-      const variationWithOutIndex = variationState[index];
-      const indexRemove = variationState.indexOf(variationWithOutIndex);
-      if (indexRemove >= 0) {
-        variationState.splice(indexRemove, 1);
-        if (variationState.length === 0) {
-          setVariationState(intialStateHasVariation);
-        } else {
-          setVariationState([...variationState]);
-        }
-      }
     };
 
     const addAtributes = () => {

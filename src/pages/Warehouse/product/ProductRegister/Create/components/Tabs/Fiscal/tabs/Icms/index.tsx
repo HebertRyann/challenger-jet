@@ -26,9 +26,9 @@ export const Icms = (): JSX.Element => {
           }}
           error={icms.taxesIssue.error}
         >
-          {dataIcms.map(({ id, name }) => (
+          {/* {dataIcms.map(({ id, name }) => (
             <option value={`${id}+${name}`}>{name}</option>
-          ))}
+          ))} */}
         </NewSelect>
       </div>
       <div className="form-content col-md-6">
@@ -42,9 +42,9 @@ export const Icms = (): JSX.Element => {
           }}
           error={icms.origem.error}
         >
-          {dataIcms.map(({ id, name }) => (
+          {/* {dataIcms.map(({ id, name }) => (
             <option value={`${id}+${name}`}>{name}</option>
-          ))}
+          ))} */}
         </NewSelect>
       </div>
     </div>
