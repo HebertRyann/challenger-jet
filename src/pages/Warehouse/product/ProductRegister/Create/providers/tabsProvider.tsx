@@ -60,6 +60,8 @@ import {
   TypeAtributes,
   PriceCompositionAndFiscal,
   CompositionRequest,
+  AtributesList,
+  TypeGenericValueWithError,
 } from './domain.types';
 
 interface TabCreateContext {
@@ -444,6 +446,39 @@ const TabCreateProvider = ({
 
   const getDataVariation = (): TypeHasVariation[] => variationState;
 
+  const changeAtributes = useCallback(
+    (atribute: AtributesList, x: number, y: number) => {
+      let tempState: TypeHasVariation[] = JSON.parse(
+        JSON.stringify(variationState),
+      );
+      if (tempState[x].atributes[y]) {
+        tempState[x].atributes[y].error.isError = false;
+        tempState[x].atributes[y].value = atribute;
+        setVariationState([...tempState]);
+      }
+    },
+    [variationState],
+  );
+
+  const addVariation = useCallback(() => {
+    const temp: TypeGenericValueWithError<AtributesList>[] = [];
+
+    for (let index = 0; index < variationState[0].atributes.length; index++) {
+      temp.push({
+        error: { isError: false },
+        value: {
+          id: '',
+          keyParent: '',
+          name: '',
+        },
+      });
+    }
+
+    const tempAtrbutes = intialStateHasVariation[0];
+    tempAtrbutes.atributes = temp;
+    setVariationState([...variationState, tempAtrbutes]);
+  }, [variationState]);
+
   const setDataVariation = (): ResolverHasVariation => {
     const changeUnitMensured = (
       newUnitMensured: FieldWithIdName,
@@ -495,20 +530,12 @@ const TabCreateProvider = ({
       const indexRemove = variationState.indexOf(variationWithOutIndex);
       if (indexRemove >= 0) {
         variationState.splice(indexRemove, 1);
-        console.log(variationState.length);
         if (variationState.length === 0) {
           setVariationState(intialStateHasVariation);
         } else {
           setVariationState([...variationState]);
         }
       }
-    };
-
-    const addVariation = () => {
-      setVariationState([
-        ...variationState,
-        { ...intialStateHasVariation[0], key: Math.random() },
-      ]);
     };
 
     const addAtributes = () => {
@@ -518,7 +545,7 @@ const TabCreateProvider = ({
       tempState.map((_, index) => {
         tempState[index].atributes.push({
           error: { isError: false },
-          value: { id: '', name: '' },
+          value: { id: '', name: '', keyParent: '' },
         });
       });
       setVariationState([...tempState]);
@@ -530,25 +557,13 @@ const TabCreateProvider = ({
       );
       tempState.map((_, index) => {
         tempState[index].atributes = [
-          { error: { isError: false }, value: { id: '', name: '' } },
+          {
+            error: { isError: false },
+            value: { id: '', name: '', keyParent: '' },
+          },
         ];
       });
       setVariationState([...tempState]);
-    };
-
-    const changeAtributes = (
-      atribute: FieldWithIdName,
-      x: number,
-      y: number,
-    ) => {
-      let tempState: TypeHasVariation[] = JSON.parse(
-        JSON.stringify(variationState),
-      );
-      if (tempState[x].atributes[y]) {
-        tempState[x].atributes[y].error.isError = false;
-        tempState[x].atributes[y].value = atribute;
-        setVariationState([...tempState]);
-      }
     };
 
     return {
@@ -858,14 +873,13 @@ const TabCreateProvider = ({
       compositionState,
       variationState,
       overView.typeSelectProdut.value.id,
+      overView.hasVariation,
     ]),
   };
 
   const save = async (): Promise<ResultOnSaveProdut> => {
     const typeProduct = overView.typeSelectProdut.value.name;
-
     const hasVariationActive = overView.hasVariation.value?.hasVariation;
-
     const {
       categoryCost,
       groupProduct,
@@ -915,12 +929,14 @@ const TabCreateProvider = ({
         variationList.map(
           ({ currentStock, priceCost, priceSale, unitMensured, atributes }) => {
             const atributesList: TypeAtributes[] = [];
-            atributes.map(({ value }) => {
-              atributesList.push({
-                key: Number(value.id),
-                value: Number(value.name),
+            atributes
+              .filter(({ value }) => value.id !== '')
+              .map(({ value }) => {
+                atributesList.push({
+                  key: Number(value.keyParent),
+                  value: Number(value.id),
+                });
               });
-            });
             stock.push({
               current_stock: Number(currentStock.value),
               price_cost: Number(priceCost.value),
