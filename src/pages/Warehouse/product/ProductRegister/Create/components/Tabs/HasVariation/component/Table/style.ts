@@ -7,9 +7,6 @@ export const Container = styled.div`
   .actions {
     width: 60px;
   }
-  .top {
-    margin-top: 18px;
-  }
 `;
 
 export const IconRemove = styled(FaTrashAlt).attrs(() => ({

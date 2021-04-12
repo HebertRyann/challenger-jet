@@ -56,22 +56,33 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
     setAlert(false);
   }, [alert]);
 
+  const isTypeSaleOrResale = (): boolean =>
+    typeSelectProdut.value.name === SALE.name ||
+    typeSelectProdut.value.name === RE_SALE.name;
+
   return (
     <Container className="table-responsive">
       <table className="table table-bordered margin-bottom-0">
         <tbody>
           <tr>
-            <th>Unidade de medidas</th>
-            <th>Estoque atual</th>
+            <th rowSpan={isTypeSaleOrResale() ? 2 : 1}>Unidade de medidas</th>
+            <th rowSpan={isTypeSaleOrResale() ? 2 : 1}>Estoque atual</th>
             {atributesList.map(
               ({ name, parent_id }) => parent_id === null && <th>{name}</th>,
             )}
-            {typeSelectProdut.value.name === SALE.name ||
-            typeSelectProdut.value.name === RE_SALE.name ? (
-              <th colSpan={2}>Preço</th>
+            {isTypeSaleOrResale() ? (
+              <th align="center" style={{ textAlign: 'center' }} colSpan={2}>
+                Preço
+              </th>
             ) : null}
-            <th>Ações</th>
+            <th rowSpan={isTypeSaleOrResale() ? 2 : 1}>Ações</th>
           </tr>
+          {isTypeSaleOrResale() && (
+            <tr>
+              <th>Custo</th>
+              <th>Venda</th>
+            </tr>
+          )}
           {variationList.map(
             (
               { unitMensured, currentStock, priceSale, priceCost, atributes },
@@ -88,7 +99,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                       changeUnitMensured({ id, name }, index);
                     }}
                     name="unitMensured"
-                    className="form-control top"
+                    className="form-control"
                     error={unitMensured.error}
                   >
                     {unitMensuredList.map(({ id, name }) => (
@@ -108,7 +119,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                     onChange={event =>
                       changeCurrentStock(event.currentTarget.value, index)
                     }
-                    className="form-control top"
+                    className="form-control"
                     type="text"
                   />
                 </td>
@@ -118,7 +129,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                       parent_id === null && (
                         <td key={Math.random()}>
                           <NewSelect
-                            className="form-control top"
+                            className="form-control"
                             name="Selecione"
                             id="Selecione"
                             isSelected={atributes[indexAtribute]?.value.name}
@@ -157,13 +168,9 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                       ),
                   )}
                 </>
-                {typeSelectProdut.value.name === SALE.name ||
-                typeSelectProdut.value.name === RE_SALE.name ? (
+                {isTypeSaleOrResale() && (
                   <>
                     <td style={{ width: '150px' }}>
-                      <tr>
-                        <th>Custo</th>
-                      </tr>
                       <tr>
                         <NewInput
                           name="cost"
@@ -184,9 +191,6 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                     </td>
                     <td style={{ width: '150px' }}>
                       <tr>
-                        <th>Venda</th>
-                      </tr>
-                      <tr>
                         <NewInput
                           name="priceSale"
                           disabled
@@ -206,7 +210,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                       </tr>
                     </td>
                   </>
-                ) : null}
+                )}
                 <td className="actions">
                   <IconRemove
                     className="top"
