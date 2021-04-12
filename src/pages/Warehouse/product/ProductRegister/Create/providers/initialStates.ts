@@ -82,7 +82,9 @@ export const intialStateHasVariation: TypeHasVariation[] = [
       value: '',
     },
     priceSale: { error, value: '' },
-    atributes: [{ error: { isError: false }, value: { id: '', name: '' } }],
+    atributes: [
+      { error: { isError: false }, value: { id: '', name: '', keyParent: '' } },
+    ],
   },
 ];
 
