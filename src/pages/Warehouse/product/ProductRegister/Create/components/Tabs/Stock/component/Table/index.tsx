@@ -11,6 +11,7 @@ import { Alert } from '../../../../../../../../../../components/Alert';
 import { nameDetails } from '../../../Details';
 import { useTabs } from '../../../../../../../../../../hooks/tabs';
 import { RE_SALE, SALE } from '../../../../../domain/products';
+import { nameStock } from '../..';
 
 type TypeUnitMensured = {
   id: string;
@@ -23,7 +24,7 @@ type TypeTableProps = {
 
 export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
   const [alert, setAlert] = useState(false);
-  const { changeCurrentTab } = useTabs();
+  const { changeCurrentTabForNext, changeCurrentTabForPrevious } = useTabs();
   const { overview, validation } = useTabCreate();
   const { typeSelectProdut } = overview.getData();
 
@@ -151,7 +152,8 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
         </tbody>
       </table>
       <Footer
-        onClickButtonBack={() => changeCurrentTab(nameDetails)}
+        onClickButtonNext={() => changeCurrentTabForNext(nameStock)}
+        onClickButtonBack={() => changeCurrentTabForPrevious(nameStock)}
         onSave={() => validation.validate()}
       />
       <Alert
