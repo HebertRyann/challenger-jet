@@ -78,7 +78,8 @@ export type TypePriceCompositionProps = {
 
 export type AtributesList = {
   id: string;
-  value: string;
+  name: string;
+  keyParent: string;
 };
 
 export type TypeHasVariation = {
@@ -87,7 +88,7 @@ export type TypeHasVariation = {
   currentStock: TypeValueAndError;
   priceCost: TypeValueAndError;
   priceSale: TypeValueAndError;
-  atributes: TypeGenericValueWithError<FieldWithIdName>[];
+  atributes: TypeGenericValueWithError<AtributesList>[];
 };
 
 // DATAOVERVIEW
@@ -111,7 +112,7 @@ export type ResolverHasVariation = {
   changeCurrentStock: (stock: string, index: number) => void;
   changePriceSale: (priceSale: string, index: number) => void;
   changePriceCost: (priceCost: string, index: number) => void;
-  changeAtributes: (variation: FieldWithIdName, x: number, y: number) => void;
+  changeAtributes: (variation: AtributesList, x: number, y: number) => void;
   addAtributes: () => void;
   removeAtributes: () => void;
   addVariation: () => void;
