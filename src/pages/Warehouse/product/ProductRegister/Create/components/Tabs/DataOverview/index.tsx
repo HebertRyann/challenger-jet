@@ -98,12 +98,7 @@ export const DataOverview = ({
       );
       setSubCategoryFinanceData(childrens);
     },
-    [
-      subCategoryFinanceData,
-      categoryCost,
-      overview.getData().typeSelectProdut,
-      overview.getData().hasVariation,
-    ],
+    [subCategoryFinanceData, categoryCost, overview.getData()],
   );
 
   const handlerHasVariation = useCallback(
@@ -167,7 +162,12 @@ export const DataOverview = ({
       disableTab(nameFiscal);
       disableTab(namePriceComposition);
     },
-    [typeSelectProdut, groupProduct, nameProduct],
+    [
+      typeSelectProdut,
+      groupProduct,
+      nameProduct,
+      overview.getData().hasVariation,
+    ],
   );
 
   const handlerClickNextAba = useCallback(() => {
