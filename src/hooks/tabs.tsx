@@ -89,10 +89,8 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
     }
   };
 
-  const changeCurrentTab = useCallback(
-    (keyTab: string): void => setCurrentTab({ key: keyTab }),
-    [currentTab],
-  );
+  const changeCurrentTab = (keyTab: string): void =>
+    setCurrentTab({ key: keyTab });
 
   const loadCurrentTab = (): TypeCurrentTab => currentTab;
 
@@ -112,7 +110,7 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
         }
       }
     },
-    [currentTab, tabs],
+    [tabs],
   );
 
   const changeCurrentTabForPrevious = useCallback(
@@ -131,7 +129,7 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
         }
       }
     },
-    [currentTab, tabs],
+    [tabs],
   );
 
   return (
