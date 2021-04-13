@@ -63,7 +63,7 @@ import {
   AtributesList,
   TypeGenericValueWithError,
 } from './domain.types';
-
+import { convertValueWithMaskInNumber } from '../../../../../../utlis/mask';
 interface TabCreateContext {
   overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps>;
   details: TypeGetAndSetAndValidateAba<TypeDetailsProps>;
@@ -909,18 +909,22 @@ const TabCreateProvider = ({
     } => {
       const overview_and_details: TypeProductDataOverView = {
         details: {
-          width: Number(width.value),
-          weight: Number(weight.value),
-          height: Number(height.value),
-          length: Number(length.value),
+          width: convertValueWithMaskInNumber(width.value),
+          weight: convertValueWithMaskInNumber(weight.value),
+          height: convertValueWithMaskInNumber(height.value),
+          length: convertValueWithMaskInNumber(length.value),
           description_details: descriptionAndDetails.value,
           technical_specification: technicalSpecification.value,
           way_use: wayOfUse.value,
         },
         type: typeSelectProdut.value.name.toLowerCase().replace(' ', '-'),
-        category_cost_id: Number(categoryCost.value.id),
-        product_category_id: Number(groupProduct.value.id),
-        subcategory_cost_id: Number(subCategoryCost.value.id),
+        category_cost_id: convertValueWithMaskInNumber(categoryCost.value.id),
+        product_category_id: convertValueWithMaskInNumber(
+          groupProduct.value.id,
+        ),
+        subcategory_cost_id: convertValueWithMaskInNumber(
+          subCategoryCost.value.id,
+        ),
         has_variation: !!hasVariation.value.hasVariation,
 
         name: nameProduct.value,
@@ -936,25 +940,27 @@ const TabCreateProvider = ({
               .filter(({ value }) => value.id !== '')
               .map(({ value }) => {
                 atributesList.push({
-                  key: Number(value.keyParent),
-                  value: Number(value.id),
+                  key: convertValueWithMaskInNumber(value.keyParent),
+                  value: convertValueWithMaskInNumber(value.id),
                 });
               });
             stock.push({
-              current_stock: Number(currentStock.value),
-              price_cost: Number(priceCost.value),
-              price_sale: Number(priceSale.value),
-              unit_mensured_id: Number(unitMensured.value.id),
+              current_stock: convertValueWithMaskInNumber(currentStock.value),
+              price_cost: convertValueWithMaskInNumber(priceCost.value),
+              price_sale: convertValueWithMaskInNumber(priceSale.value),
+              unit_mensured_id: convertValueWithMaskInNumber(
+                unitMensured.value.id,
+              ),
               abtributes: atributesList,
             });
           },
         );
       } else {
         stock.push({
-          price_cost: Number(priceCost.value),
-          price_sale: Number(priceSale.value),
-          unit_mensured_id: Number(unitMensured.value.id),
-          current_stock: Number(stockCurrent.value),
+          price_cost: convertValueWithMaskInNumber(priceCost.value),
+          price_sale: convertValueWithMaskInNumber(priceSale.value),
+          unit_mensured_id: convertValueWithMaskInNumber(unitMensured.value.id),
+          current_stock: convertValueWithMaskInNumber(stockCurrent.value),
           abtributes: [],
         });
       }
@@ -971,19 +977,27 @@ const TabCreateProvider = ({
 
       const priceCompositionAndFiscal: PriceCompositionAndFiscal = {
         price_composition: {
-          dif: Number(dif.value),
-          fixed_cost: Number(cost.value),
-          ipi: Number(ipiPriceComposition.value),
-          margin_profit: Number(profit.value),
+          dif: convertValueWithMaskInNumber(dif.value),
+          fixed_cost: convertValueWithMaskInNumber(cost.value),
+          ipi: convertValueWithMaskInNumber(ipiPriceComposition.value),
+          margin_profit: convertValueWithMaskInNumber(profit.value),
         },
         fiscal: {
-          cfop: Number(cfop.value),
-          ncm: Number(ncm.value),
-          icms_tax_origem: Number(icms.origem.value.id),
-          icms_tax_situation: Number(icms.taxesIssue.value.id),
-          ipi_tax_situation: Number(ipi.taxesIssue.value.id),
-          pis_tax_situation: Number(pis.taxesIssue.value.id),
-          cofins_tax_situation: Number(cofins.taxesIssue.value.id),
+          cfop: convertValueWithMaskInNumber(cfop.value),
+          ncm: convertValueWithMaskInNumber(ncm.value),
+          icms_tax_origem: convertValueWithMaskInNumber(icms.origem.value.id),
+          icms_tax_situation: convertValueWithMaskInNumber(
+            icms.taxesIssue.value.id,
+          ),
+          ipi_tax_situation: convertValueWithMaskInNumber(
+            ipi.taxesIssue.value.id,
+          ),
+          pis_tax_situation: convertValueWithMaskInNumber(
+            pis.taxesIssue.value.id,
+          ),
+          cofins_tax_situation: convertValueWithMaskInNumber(
+            cofins.taxesIssue.value.id,
+          ),
         },
       };
       return priceCompositionAndFiscal;
@@ -993,8 +1007,8 @@ const TabCreateProvider = ({
       const compositionRequest: CompositionRequest[] = [];
       compositionState.map(({ amount, cost, nameProduct }) => {
         compositionRequest.push({
-          amount: Number(amount.value),
-          cost: Number(cost.value),
+          amount: convertValueWithMaskInNumber(amount.value),
+          cost: convertValueWithMaskInNumber(cost.value),
           name: nameProduct.value,
         });
       });
