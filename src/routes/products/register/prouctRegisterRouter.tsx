@@ -7,24 +7,19 @@ import Route from '../../Route';
 
 export const ProductRegisterRouter = (): JSX.Element => (
   <>
+    <Route path="/products" exact component={ProductRegisterList} isPrivate />
     <Route
-      path="/productRegister"
-      exact
-      component={ProductRegisterList}
-      isPrivate
-    />
-    <Route
-      path="/productRegister/create"
+      path="/products/create"
       component={ProductRegisterCreate}
       isPrivate
     />
     <Route
-      path="/productRegister/view/:id"
+      path="/products/view/:id"
       component={ProductRegisterView}
       isPrivate
     />
     <Route
-      path="/productRegister/update/:id"
+      path="/products/update/:id"
       component={ProductRegisterUpdate}
       isPrivate
     />
