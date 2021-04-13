@@ -19,6 +19,7 @@ import { nameStock } from '../Stock';
 import { Footer } from '../../footer';
 import { NewSelect } from '../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../providers/tabsProvider';
+import { useToast } from '../../../../../../../../hooks/toast';
 
 export type TypeTabNameEnableOrDisable = {
   keyTab: string;
@@ -48,6 +49,7 @@ export const DataOverview = ({
   categoryFinances: TypeEntityWithIdAndName[];
   categoryProducts: TypeEntityWithIdAndName[];
 }): JSX.Element => {
+  const { addToast } = useToast();
   const {
     activeTab,
     disableTab,
@@ -232,7 +234,22 @@ export const DataOverview = ({
       setAlert({ active: true });
       return;
     }
-    console.log(await save());
+
+    const { code } = await save();
+
+    if (code === 200) {
+      addToast({
+        type: 'success',
+        title: 'Produto adicionado',
+        description: 'Produto salvo com sucesso',
+      });
+    } else {
+      addToast({
+        type: 'error',
+        title: 'Erro ao salvar o produto',
+        description: 'Não foi possivel salvar o produto',
+      });
+    }
   };
 
   return (
