@@ -182,9 +182,11 @@ export type TypeGetAndSetFiscal<T> = {
 };
 
 export type ResultOnSaveProdut = {
-  status: {
-    code: number;
-    message: string;
+  code: number;
+  data?: {
+    id: number;
+    name: string;
+    type: string;
   };
 };
 
@@ -218,7 +220,7 @@ export type TypeProductStock = {
   current_stock: number;
   price_sale: number;
   price_cost: number;
-  abtributes: TypeAtributes[];
+  atributes: TypeAtributes[];
 };
 
 export type PriceCompositionAndFiscal = {
