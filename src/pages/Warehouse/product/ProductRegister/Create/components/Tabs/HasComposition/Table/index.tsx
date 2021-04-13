@@ -75,10 +75,7 @@ export const Table = (): JSX.Element => {
                   value={amount.value}
                   error={amount.error}
                   placeholder="0"
-                  onKeyPress={event => {
-                    const regex = /^[0-9]+$/;
-                    if (!regex.test(event.key)) event.preventDefault();
-                  }}
+                  isNumber
                   onChange={event =>
                     changeInputAmount(event.currentTarget.value, index)
                   }
@@ -92,10 +89,7 @@ export const Table = (): JSX.Element => {
                   value={cost.value}
                   error={cost.error}
                   placeholder="0.00"
-                  onKeyPress={event => {
-                    const regex = /^[0-9.]+$/;
-                    if (!regex.test(event.key)) event.preventDefault();
-                  }}
+                  isNumber
                   onChange={event =>
                     changeInputCost(event.currentTarget.value, index)
                   }

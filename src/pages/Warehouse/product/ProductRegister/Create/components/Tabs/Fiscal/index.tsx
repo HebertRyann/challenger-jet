@@ -61,12 +61,9 @@ export const Fiscal = (): JSX.Element => {
         <div className="form-content col-md-6">
           <TooltipComponent label="NCM" message="Infome o peso em kg" />
           <NewInput
+            isNumber
             name="ncm"
             error={ncm.error}
-            onKeyPress={event => {
-              const regex = /^[0-9.]+$/;
-              if (!regex.test(event.key)) event.preventDefault();
-            }}
             onChange={event => changeNCM(event.currentTarget.value)}
             className="form-control"
             type="text"
@@ -84,10 +81,7 @@ export const Fiscal = (): JSX.Element => {
             name="cfop"
             className="form-control"
             type="text"
-            onKeyPress={event => {
-              const regex = /^[0-9.]+$/;
-              if (!regex.test(event.key)) event.preventDefault();
-            }}
+            isNumber
             onChange={event => changeCFOP(event.currentTarget.value)}
             value={cfop.value}
             placeholder="Digíte o código"

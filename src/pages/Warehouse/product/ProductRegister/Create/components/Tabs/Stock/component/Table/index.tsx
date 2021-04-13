@@ -114,6 +114,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
             </td>
             <td>
               <NewInput
+                isNumber
                 onChange={event => {
                   stock.setData({
                     ...stock.getData(),
@@ -135,14 +136,11 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                 <td style={{ width: '150px' }}>
                   <tr>
                     <NewInput
+                      isNumber
                       name="cost"
                       value={priceCost.value}
                       error={priceCost.error}
                       placeholder="0.00"
-                      onKeyPress={event => {
-                        const regex = /^[0-9.]+$/;
-                        if (!regex.test(event.key)) event.preventDefault();
-                      }}
                       onChange={event => {
                         stock.setData({
                           ...stock.getData(),
@@ -160,6 +158,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                 <td style={{ width: '150px' }}>
                   <tr>
                     <NewInput
+                      isNumber
                       name="priceSale"
                       value={Number(priceCost.value).toString()}
                       disabled

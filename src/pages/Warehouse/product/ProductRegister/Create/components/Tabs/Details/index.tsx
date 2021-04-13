@@ -41,6 +41,7 @@ export const Details = (): JSX.Element => {
         <div className="form-content col-md-3">
           <TooltipComponent label="Peso (kg)" message="Infome o peso em kg" />
           <NewInput
+            isNumber
             value={numericMask(weight.value)}
             onChange={e =>
               details.setData({
@@ -61,6 +62,7 @@ export const Details = (): JSX.Element => {
             message="Informe a largura em metros"
           />
           <NewInput
+            isNumber
             value={numericMask(width.value)}
             onChange={e =>
               details.setData({
@@ -81,6 +83,7 @@ export const Details = (): JSX.Element => {
             message="Informe a altura em metros"
           />
           <NewInput
+            isNumber
             value={numericMask(height.value)}
             onChange={e =>
               details.setData({
@@ -101,6 +104,7 @@ export const Details = (): JSX.Element => {
             message="Informe a comprimento em metros"
           />
           <NewInput
+            isNumber
             value={numericMask(length.value)}
             onChange={e =>
               details.setData({
