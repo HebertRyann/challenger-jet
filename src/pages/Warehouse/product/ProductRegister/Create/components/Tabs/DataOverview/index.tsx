@@ -19,7 +19,7 @@ import { nameStock } from '../Stock';
 import { Footer } from '../../footer';
 import { NewSelect } from '../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../providers/tabsProvider';
-import { labelDetails, nameDetails } from '../Details';
+
 export type TypeTabNameEnableOrDisable = {
   keyTab: string;
   name: string;
