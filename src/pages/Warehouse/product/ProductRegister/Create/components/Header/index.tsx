@@ -3,7 +3,7 @@ import React from 'react';
 export const HeaderCreateProduct = (): JSX.Element => {
   return (
     <div className="portlet-title">
-      <div className="caption">Adicionar edit</div>
+      <div className="caption">Adicionar</div>
 
       <div className="tools">
         <div

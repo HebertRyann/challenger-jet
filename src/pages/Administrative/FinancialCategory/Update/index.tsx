@@ -29,7 +29,6 @@ const ProductAtributeUpdate = (): JSX.Element => {
       setCategoryItem({ id: data.id, name: data.name });
       disableLoading();
     }
-
     loadData();
   }, []);
   return (

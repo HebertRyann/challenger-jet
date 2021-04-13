@@ -13,10 +13,6 @@ export const breadcrumbCreate: TypeBreadcrumb[] = [
     name: 'Produtos',
   },
   {
-    name: nameActionPageMain.name,
-    to: nameActionPageMain.to,
-  },
-  {
     name: nameActions.create.name,
   },
 ];

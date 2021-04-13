@@ -13,10 +13,10 @@ type PortletTitleCrudType = {
 
 const nameEntity = 'FinancialCategory';
 const nameSource = 'FinancialCategories';
-const namePageTitle = 'Lista de categoria';
+const namePageTitle = 'Categorias financeira';
 
 const nameActionPageMain: TypeActionNameWithTo = {
-  name: 'Lista de categoria',
+  name: 'Categorias financeira',
   to: '/financialCategories',
   icon: '',
 };
@@ -28,12 +28,12 @@ const nameActions: PortletTitleCrudType = {
     icon: 'fa fa-plus',
   },
   read: {
-    name: 'Listagem',
+    name: 'Visualizar',
     to: '/financialCategories/',
     icon: 'fa fa-list',
   },
   update: {
-    name: 'Atualizar',
+    name: 'Editar',
     to: '/financialCategories/update/',
     icon: 'fa fa-edit',
   },

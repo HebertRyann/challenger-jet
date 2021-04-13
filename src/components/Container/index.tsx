@@ -60,7 +60,13 @@ const Container: React.FC<ContainerProps> = ({
   };
 
   return (
-    <div {...props} className="page-content-wrapper">
+    <div
+      {...props}
+      style={{
+        margin: '0 -40px',
+      }}
+      className="page-content-wrapper"
+    >
       <Loading isActive={loading} />
       <div className="page-head">
         <div className="container-fluid">

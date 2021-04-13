@@ -13,10 +13,10 @@ type PortletTitleCrudType = {
 
 const nameEntity = 'ProductUnitMeasured';
 const nameSource = 'productUnitMeasured';
-const namePageTitle = 'Unidades de medidas dos produtos';
+const namePageTitle = 'Unidades de medida';
 
 const nameActionPageMain: TypeActionNameWithTo = {
-  name: 'Unidades de medidas',
+  name: 'Unidades de medida',
   to: '/productUnitMeasured',
   icon: '',
 };
@@ -28,12 +28,12 @@ const nameActions: PortletTitleCrudType = {
     icon: 'fa fa-plus',
   },
   read: {
-    name: 'Listagem',
+    name: 'Visualizar',
     to: '/productUnitMeasured/',
     icon: 'fa fa-list',
   },
   update: {
-    name: 'Atualizar',
+    name: 'Editar',
     to: '/productUnitMeasured/update/',
     icon: 'fa fa-edit',
   },

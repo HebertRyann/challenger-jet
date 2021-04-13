@@ -13,7 +13,7 @@ type PortletTitleCrudType = {
 
 const nameEntity = 'ProductCategory';
 const nameSource = 'productCategories';
-const namePageTitle = 'Grupo de produtos';
+const namePageTitle = 'Grupos de produto';
 
 const nameActionPageMain: TypeActionNameWithTo = {
   name: 'Grupo',
@@ -28,7 +28,7 @@ const nameActions: PortletTitleCrudType = {
     icon: 'fa fa-plus',
   },
   read: {
-    name: 'Listagem',
+    name: 'Visualizar',
     to: '/productCategories/',
     icon: 'fa fa-list',
   },

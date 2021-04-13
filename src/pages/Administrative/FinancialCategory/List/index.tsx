@@ -14,7 +14,7 @@ import { toolsList } from '../domain/tools';
 const ProductAtributesList = (): JSX.Element => (
   <Container
     pageTitle={namePageTitle}
-    portletTitle={nameActions.read.name}
+    portletTitle={'Listagem'}
     breadcrumb={breadcrumbList}
     tools={[toolsList]}
   >

@@ -10,7 +10,7 @@ export const breadcrumbView: TypeBreadcrumb[] = [
     name: 'Almoxarifado',
   },
   {
-    name: 'Produtos',
+    name: 'Cadastros',
   },
   {
     name: nameActionPageMain.name,
