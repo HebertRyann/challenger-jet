@@ -9,9 +9,6 @@ import { TabsProvider } from '../../../../../hooks/tabs';
 const Create = (): JSX.Element => {
   return (
     <Container
-      style={{
-        margin: '0 -40px',
-      }}
       Content={() => (
         <TabsProvider>
           <Content />
