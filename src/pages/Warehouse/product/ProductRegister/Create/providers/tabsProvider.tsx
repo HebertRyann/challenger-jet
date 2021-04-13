@@ -918,13 +918,9 @@ const TabCreateProvider = ({
           way_use: wayOfUse.value,
         },
         type: typeSelectProdut.value.name.toLowerCase().replace(' ', '-'),
-        category_cost_id: convertValueWithMaskInNumber(categoryCost.value.id),
-        product_category_id: convertValueWithMaskInNumber(
-          groupProduct.value.id,
-        ),
-        subcategory_cost_id: convertValueWithMaskInNumber(
-          subCategoryCost.value.id,
-        ),
+        category_cost_id: parseInt(categoryCost.value.id),
+        product_category_id: parseInt(groupProduct.value.id),
+        subcategory_cost_id: parseInt(subCategoryCost.value.id),
         has_variation: !!hasVariation.value.hasVariation,
 
         name: nameProduct.value,
@@ -945,13 +941,11 @@ const TabCreateProvider = ({
                 });
               });
             stock.push({
-              current_stock: convertValueWithMaskInNumber(currentStock.value),
+              current_stock: parseInt(currentStock.value),
               price_cost: convertValueWithMaskInNumber(priceCost.value),
               price_sale: convertValueWithMaskInNumber(priceSale.value),
-              unit_mensured_id: convertValueWithMaskInNumber(
-                unitMensured.value.id,
-              ),
-              abtributes: atributesList,
+              unit_mensured_id: parseInt(unitMensured.value.id),
+              atributes: atributesList,
             });
           },
         );
@@ -959,9 +953,9 @@ const TabCreateProvider = ({
         stock.push({
           price_cost: convertValueWithMaskInNumber(priceCost.value),
           price_sale: convertValueWithMaskInNumber(priceSale.value),
-          unit_mensured_id: convertValueWithMaskInNumber(unitMensured.value.id),
-          current_stock: convertValueWithMaskInNumber(stockCurrent.value),
-          abtributes: [],
+          unit_mensured_id: parseInt(unitMensured.value.id),
+          current_stock: parseInt(stockCurrent.value),
+          atributes: [],
         });
       }
       return {
@@ -1048,7 +1042,7 @@ const TabCreateProvider = ({
       });
     }
     return {
-      status: { code: 501, message: 'Erro ao salvar registro' },
+      code: 500,
     };
   };
 
