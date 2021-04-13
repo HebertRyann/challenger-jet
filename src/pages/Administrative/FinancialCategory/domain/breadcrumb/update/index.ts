@@ -14,6 +14,6 @@ export const breadcrumbUpdate: TypeBreadcrumb[] = [
     to: nameActionPageMain.to,
   },
   {
-    name: nameActions.read.name,
+    name: nameActions.update.name,
   },
 ];
