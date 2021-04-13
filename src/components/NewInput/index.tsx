@@ -1,9 +1,4 @@
-import React, {
-  InputHTMLAttributes,
-  useCallback,
-  useState,
-  useEffect,
-} from 'react';
+import React, { InputHTMLAttributes, useState, useEffect } from 'react';
 import { Container } from './styles';
 
 export type TypeErrorInput = {
@@ -15,11 +10,13 @@ export interface TypeNewInputProps
   extends InputHTMLAttributes<HTMLInputElement> {
   error?: TypeErrorInput;
   name: string;
+  isNumber?: boolean;
 }
 
 export const NewInput = ({
   name,
   error,
+  isNumber,
   ...props
 }: TypeNewInputProps): JSX.Element => {
   const [currentError, setCurrentError] = useState<TypeErrorInput>(
@@ -37,6 +34,12 @@ export const NewInput = ({
         name={name}
         type="text"
         className="form-control"
+        onKeyPress={event => {
+          if (isNumber) {
+            const regex = /^[0-9]+$/;
+            if (!regex.test(event.key)) event.preventDefault();
+          }
+        }}
         {...props}
       />
       {currentError.descriptionError && (
