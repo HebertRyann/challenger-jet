@@ -11,3 +11,7 @@ export function numericMask(value: string) {
   newvalue = newvalue.replace(/^(0)(\d)/g, '$2');
   return newvalue;
 }
+
+export function convertValueWithMaskInNumber(value: string): number {
+  return +value.replace(/\D/g, '').replace(/(\d{2})$/, '.$1');
+}
