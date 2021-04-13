@@ -10,7 +10,7 @@ export const Loading = ({ isActive }: PropsLoading): JSX.Element => {
   return (
     <Container isActive={isActive}>
       <div>
-        <img src={loadingSvg} />
+        <img alt="image-loading" src={loadingSvg} />
         <p>Carregando</p>
       </div>
     </Container>
