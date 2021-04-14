@@ -35,8 +35,8 @@ export const CONSUMER: TypeProduct = {
 
 export const typeProducts: TypeProduct[] = [
   RAW_MATERIAL,
-  SALE,
   SEMI_FINISHED,
+  SALE,
   RE_SALE,
   LOCATION,
   CONSUMER,
