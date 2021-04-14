@@ -7,6 +7,14 @@ import { Alert } from '../../../../../../../../../components/Alert';
 import { useTabs } from '../../../../../../../../../hooks/tabs';
 import { loadProductByType } from '../../../../services/api/loadProductByType';
 import { nameHasComposition } from '..';
+import {
+  CONSUMER,
+  RE_SALE,
+  SALE,
+  SEMI_FINISHED,
+} from '../../../../domain/products';
+import { RAW_MATERIAL } from '../../../../domain/products';
+import { useLoading } from '../../../../../../../../../hooks/loading';
 
 type ProductByTypeSelected = {
   id: string;
@@ -14,10 +22,16 @@ type ProductByTypeSelected = {
 };
 
 export const Table = (): JSX.Element => {
+  const { activeLoading, disableLoading } = useLoading();
   const [alert, setAlert] = useState(false);
   const [productListByTypeSelected, setProductListByTypeSelected] = useState<
     ProductByTypeSelected[]
   >([]);
+  const [
+    productListByTypeSelectedSearch,
+    setProductListByTypeSelectedSearch,
+  ] = useState<ProductByTypeSelected[]>([]);
+
   const { composition, overview } = useTabCreate();
   const {
     changeCurrentTabForNext,
@@ -52,25 +66,67 @@ export const Table = (): JSX.Element => {
     }
   };
 
-  const handlerClickAlertConfirm = useCallback(() => {
-    setAlert(false);
-  }, [alert]);
+  const formatProductName = (product: string): string =>
+    product.replace(' ', '-').toLowerCase();
 
   useEffect(() => {
     (async () => {
       if (loadCurrentTab().key === nameHasComposition) {
-        const products = await loadProductByType(
-          typeSelectProdut.value.name.replace(' ', '-').toLowerCase(),
-        );
-        setProductListByTypeSelected(products);
+        if (typeSelectProdut.value.name === SEMI_FINISHED.name) {
+          activeLoading();
+          const productsTypeRawMaterial = await loadProductByType(
+            RAW_MATERIAL.format(RAW_MATERIAL),
+          );
+          const productsTypeConsumer = await loadProductByType(
+            CONSUMER.format(CONSUMER),
+          );
+          setProductListByTypeSelected([
+            ...productsTypeRawMaterial,
+            ...productsTypeConsumer,
+          ]);
+          setProductListByTypeSelectedSearch(productListByTypeSelected);
+          disableLoading();
+          return;
+        }
+        if (
+          formatProductName(typeSelectProdut.value.name) === SALE.format(SALE)
+        ) {
+          activeLoading();
+          const productsTypeReSale = await loadProductByType(
+            RAW_MATERIAL.format(RE_SALE),
+          );
+          setProductListByTypeSelected(productsTypeReSale);
+          setProductListByTypeSelectedSearch(productListByTypeSelected);
+          disableLoading();
+        }
       }
     })();
   }, [typeSelectProdut.value, loadCurrentTab().key]);
 
-  const handlerChangeNameProduct = (value: string, index: number) => {
-    changeInputNameProduct(value, index);
-    console.log(productListByTypeSelected);
-  };
+  const handlerClickAlertConfirm = useCallback(() => {
+    setAlert(false);
+  }, [alert]);
+
+  const handlerChangeNameProduct = useCallback(
+    (value: string, index: number) => {
+      changeInputNameProduct(value, index);
+      const matchList = productListByTypeSelected.filter(({ id, name }) => {
+        const regex = new RegExp(`^${value}`, 'gi');
+
+        return name.match(regex);
+      });
+      if (value === '') {
+        setProductListByTypeSelectedSearch([]);
+      }
+
+      if (matchList.length > 0) {
+        setProductListByTypeSelectedSearch(matchList);
+      } else {
+        setProductListByTypeSelectedSearch(productListByTypeSelected);
+      }
+    },
+    [productListByTypeSelected, productListByTypeSelectedSearch],
+  );
 
   return (
     <Container className="table-responsive">
@@ -87,6 +143,7 @@ export const Table = (): JSX.Element => {
             <tr>
               <td>
                 <NewInput
+                  search
                   name="nameProduct"
                   placeholder="Informe o nome do produto"
                   className="form-control"
@@ -96,6 +153,16 @@ export const Table = (): JSX.Element => {
                   onChange={event =>
                     handlerChangeNameProduct(event.target.value, index)
                   }
+                  data={
+                    nameProduct.value !== ''
+                      ? productListByTypeSelectedSearch
+                      : []
+                  }
+                  onClickSearchRow={(select: string) => {
+                    if (select) {
+                      changeInputNameProduct(select, index);
+                    }
+                  }}
                 />
               </td>
               <td>
