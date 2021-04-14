@@ -5,14 +5,27 @@ import { NewInput } from '../../../../../../../../../components/NewInput';
 import { useTabCreate } from '../../../../providers/tabsProvider';
 import { Alert } from '../../../../../../../../../components/Alert';
 import { useTabs } from '../../../../../../../../../hooks/tabs';
+import { loadProductByType } from '../../../../services/api/loadProductByType';
 import { nameHasComposition } from '..';
+
+type ProductByTypeSelected = {
+  id: string;
+  name: string;
+};
 
 export const Table = (): JSX.Element => {
   const [alert, setAlert] = useState(false);
-  const { composition } = useTabCreate();
-  const { changeCurrentTabForNext, changeCurrentTabForPrevious } = useTabs();
+  const [productListByTypeSelected, setProductListByTypeSelected] = useState<
+    ProductByTypeSelected[]
+  >([]);
+  const { composition, overview } = useTabCreate();
+  const {
+    changeCurrentTabForNext,
+    changeCurrentTabForPrevious,
+    loadCurrentTab,
+  } = useTabs();
   const products = composition.getData();
-
+  const { typeSelectProdut } = overview.getData();
   const {
     removeComposition,
     addComposition,
@@ -43,6 +56,22 @@ export const Table = (): JSX.Element => {
     setAlert(false);
   }, [alert]);
 
+  useEffect(() => {
+    (async () => {
+      if (loadCurrentTab().key === nameHasComposition) {
+        const products = await loadProductByType(
+          typeSelectProdut.value.name.replace(' ', '-').toLowerCase(),
+        );
+        setProductListByTypeSelected(products);
+      }
+    })();
+  }, [typeSelectProdut.value, loadCurrentTab().key]);
+
+  const handlerChangeNameProduct = (value: string, index: number) => {
+    changeInputNameProduct(value, index);
+    console.log(productListByTypeSelected);
+  };
+
   return (
     <Container className="table-responsive">
       <table className="table table-bordered margin-bottom-0">
@@ -65,7 +94,7 @@ export const Table = (): JSX.Element => {
                   value={nameProduct.value}
                   error={nameProduct.error}
                   onChange={event =>
-                    changeInputNameProduct(event.currentTarget.value, index)
+                    handlerChangeNameProduct(event.target.value, index)
                   }
                 />
               </td>
