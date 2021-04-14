@@ -5,7 +5,7 @@ import { NewInput } from '../../../../../../../../../../components/NewInput';
 import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
 import { Alert } from '../../../../../../../../../../components/Alert';
-import { SALE, RE_SALE } from '../../../DataOverview/products';
+import { SALE, RE_SALE } from '../../../../../domain/products';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../../../services/api';
 import { useTabs } from '../../../../../../../../../../hooks/tabs';
 import { nameHasVariation } from '../..';

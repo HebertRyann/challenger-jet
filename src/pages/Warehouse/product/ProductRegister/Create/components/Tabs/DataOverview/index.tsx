@@ -14,7 +14,7 @@ import {
   SALE,
   SEMI_FINISHED,
   RE_SALE,
-} from './products';
+} from '../../../domain/products';
 import { nameStock } from '../Stock';
 import { Footer } from '../../footer';
 import { NewSelect } from '../../../../../../../../components/NewSelect';
@@ -63,6 +63,7 @@ export const DataOverview = ({
     subCategoryCost,
     groupProduct,
     nameProduct,
+    hasVariation,
   } = overview.getData();
   const [alert, setAlert] = useState<{
     active: boolean;
@@ -386,6 +387,7 @@ export const DataOverview = ({
             message="Selecione o tipo do produto"
           />
           <NewSelect
+            error={hasVariation.error}
             onChange={event => {
               const split = event.target.value.split('+');
               const active = split[0];
