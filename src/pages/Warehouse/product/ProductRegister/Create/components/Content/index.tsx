@@ -12,6 +12,7 @@ import { useTabs } from '../../../../../../../hooks/tabs';
 import { makeTabs } from './tabs';
 import { useLoading } from '../../../../../../../hooks/loading';
 import { TabCreateProvider } from '../../providers/tabsProvider';
+import { ToolsContainerProps } from '../../../../../../../components/Container';
 
 export type TypeContentTabs = {
   name: string;
@@ -20,7 +21,11 @@ export type TypeContentTabs = {
   Component: JSX.Element;
 };
 
-export const Content = (): JSX.Element => {
+type TypeContentProps = {
+  tools: ToolsContainerProps[];
+};
+
+export const Content = ({ tools }: TypeContentProps): JSX.Element => {
   const { loadTabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs();
   const { activeLoading, disableLoading } = useLoading();
   const [tabs, setTabs] = useState<TypeContentTabs[]>([]);
@@ -39,7 +44,7 @@ export const Content = (): JSX.Element => {
 
   return (
     <>
-      <HeaderCreateProduct />
+      <HeaderCreateProduct tools={tools} />
       <Container>
         <ContentItem>
           <TabHeaderContainer>
