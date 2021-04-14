@@ -12,6 +12,7 @@ import {
   RE_SALE,
   SALE,
   SEMI_FINISHED,
+  formatProductTypeToLowerCase,
 } from '../../../../domain/products';
 import { RAW_MATERIAL } from '../../../../domain/products';
 import { useLoading } from '../../../../../../../../../hooks/loading';
@@ -75,10 +76,10 @@ export const Table = (): JSX.Element => {
         if (typeSelectProdut.value.name === SEMI_FINISHED.name) {
           activeLoading();
           const productsTypeRawMaterial = await loadProductByType(
-            RAW_MATERIAL.format(RAW_MATERIAL),
+            formatProductTypeToLowerCase(RAW_MATERIAL),
           );
           const productsTypeConsumer = await loadProductByType(
-            CONSUMER.format(CONSUMER),
+            formatProductTypeToLowerCase(CONSUMER),
           );
           setProductListByTypeSelected([
             ...productsTypeRawMaterial,
@@ -89,11 +90,12 @@ export const Table = (): JSX.Element => {
           return;
         }
         if (
-          formatProductName(typeSelectProdut.value.name) === SALE.format(SALE)
+          formatProductName(typeSelectProdut.value.name) ===
+          formatProductTypeToLowerCase(SALE)
         ) {
           activeLoading();
           const productsTypeReSale = await loadProductByType(
-            RAW_MATERIAL.format(RE_SALE),
+            formatProductTypeToLowerCase(RE_SALE),
           );
           setProductListByTypeSelected(productsTypeReSale);
           setProductListByTypeSelectedSearch(productListByTypeSelected);
