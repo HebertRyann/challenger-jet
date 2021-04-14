@@ -2,6 +2,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import styled from 'styled-components';
 
 export const Container = styled.div`
+  overflow-y: hidden;
   padding: 5px 20px 10px 20px;
   margin: 0;
   .actions {
