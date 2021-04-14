@@ -269,13 +269,11 @@ export const DataOverview = ({
               handlerSelectTypeProduct({ id: Number(id), name });
             }}
           >
-            {typeProducts
-              .sort(({ id }) => id + id)
-              .map(({ id, name }) => (
-                <option key={id} value={id + '+' + name}>
-                  {name}
-                </option>
-              ))}
+            {typeProducts.map(({ id, name }) => (
+              <option key={id} value={id + '+' + name}>
+                {name}
+              </option>
+            ))}
           </NewSelect>
         </div>
         <div className="form-content col-md-3">
