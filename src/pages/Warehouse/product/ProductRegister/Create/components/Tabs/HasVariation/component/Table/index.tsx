@@ -44,6 +44,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
     changeAtributes,
     addVariation,
     removeVariation,
+    changeCurrentReplacementPoint,
   } = variation.setData;
 
   const handleClickOnSaveButton = () => {
@@ -110,6 +111,19 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
             >
               Estoque atual
             </th>
+            <th
+              style={
+                isTypeSaleOrResale()
+                  ? {
+                      position: 'relative',
+                      lineHeight: '50px',
+                    }
+                  : {}
+              }
+              rowSpan={isTypeSaleOrResale() ? 2 : 1}
+            >
+              Ponto de reposição
+            </th>
             {isTypeSaleOrResale() ? (
               <th align="center" style={{ textAlign: 'center' }} colSpan={2}>
                 Preço
@@ -137,7 +151,14 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
           )}
           {variationList.map(
             (
-              { unitMensured, currentStock, priceSale, priceCost, atributes },
+              {
+                unitMensured,
+                currentStock,
+                priceSale,
+                priceCost,
+                atributes,
+                replacementPoint,
+              },
               index,
             ) => (
               <tr>
@@ -208,12 +229,25 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                       name="currentStock"
                       value={currentStock.value}
                       error={currentStock.error}
-                      onKeyPress={event => {
-                        const regex = /^[0-9]+$/;
-                        if (!regex.test(event.key)) event.preventDefault();
-                      }}
+                      isNumber
                       onChange={event =>
                         changeCurrentStock(event.currentTarget.value, index)
+                      }
+                      className="form-control"
+                      type="text"
+                    />
+                  </td>
+                  <td>
+                    <NewInput
+                      name="replacementPoint"
+                      value={replacementPoint.value}
+                      error={replacementPoint.error}
+                      isNumber
+                      onChange={event =>
+                        changeCurrentReplacementPoint(
+                          event.currentTarget.value,
+                          index,
+                        )
                       }
                       className="form-control"
                       type="text"

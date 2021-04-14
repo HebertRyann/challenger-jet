@@ -267,6 +267,13 @@ const TabCreateProvider = ({
         unitMensured: { ...old.unitMensured, error: { isError: true } },
       }));
     }
+    if (stocks.replacementPoint.value === '') {
+      isError = true;
+      setStocks(old => ({
+        ...old,
+        replacementPoint: { ...old.replacementPoint, error: { isError: true } },
+      }));
+    }
 
     if (
       overView.typeSelectProdut.value.name === SALE.name ||
@@ -525,7 +532,18 @@ const TabCreateProvider = ({
       setVariationState([...tempState]);
     };
 
-    const changePriceSale = (priceSale: string, index: number) => {};
+    const changePriceSale = (newReplacement: string, index: number) => {
+      let tempState: TypeHasVariation[] = JSON.parse(
+        JSON.stringify(variationState),
+      );
+      tempState.map(({ replacementPoint }, key) => {
+        if (key === index) {
+          replacementPoint.value = newReplacement;
+          replacementPoint.error.isError = false;
+        }
+      });
+      setVariationState([...tempState]);
+    };
 
     const changePriceCost = (newPriceCost: string, index: number) => {
       let tempState: TypeHasVariation[] = JSON.parse(
@@ -536,6 +554,22 @@ const TabCreateProvider = ({
           priceCost.value = newPriceCost;
           priceCost.error.isError = false;
           priceSale.error.isError = false;
+        }
+      });
+      setVariationState([...tempState]);
+    };
+
+    const changeCurrentReplacementPoint = (
+      newReplacementPoint: string,
+      index: number,
+    ) => {
+      let tempState: TypeHasVariation[] = JSON.parse(
+        JSON.stringify(variationState),
+      );
+      tempState.map(({ replacementPoint }, key) => {
+        if (key === index) {
+          replacementPoint.value = newReplacementPoint;
+          replacementPoint.error.isError = false;
         }
       });
       setVariationState([...tempState]);
@@ -575,6 +609,7 @@ const TabCreateProvider = ({
       changeAtributes,
       addVariation,
       removeVariation,
+      changeCurrentReplacementPoint,
       changeCurrentStock,
       changePriceCost,
       changePriceSale,
@@ -589,7 +624,14 @@ const TabCreateProvider = ({
     );
 
     tempState.map(
-      ({ unitMensured, currentStock, priceCost, priceSale, atributes }) => {
+      ({
+        unitMensured,
+        currentStock,
+        priceCost,
+        priceSale,
+        atributes,
+        replacementPoint,
+      }) => {
         if (unitMensured.value.id === '') {
           isError = true;
           unitMensured.error.isError = true;
@@ -614,6 +656,10 @@ const TabCreateProvider = ({
               atributes[index].error.isError = true;
             }
           });
+        }
+        if (replacementPoint.value === '') {
+          isError = true;
+          replacementPoint.error.isError = true;
         }
       },
     );
@@ -900,7 +946,13 @@ const TabCreateProvider = ({
       weight,
       width,
     } = detail;
-    const { priceCost, priceSale, stockCurrent, unitMensured } = stocks;
+    const {
+      priceCost,
+      priceSale,
+      stockCurrent,
+      unitMensured,
+      replacementPoint,
+    } = stocks;
     const variationList = variationState;
 
     const createRequestWithOverViewDetailsStockOrVariation = (): {
@@ -930,7 +982,14 @@ const TabCreateProvider = ({
 
       if (hasVariationActive) {
         variationList.map(
-          ({ currentStock, priceCost, priceSale, unitMensured, atributes }) => {
+          ({
+            currentStock,
+            priceCost,
+            priceSale,
+            unitMensured,
+            atributes,
+            replacementPoint,
+          }) => {
             const atributesList: TypeAtributes[] = [];
             atributes
               .filter(({ value }) => value.id !== '')
@@ -941,6 +1000,7 @@ const TabCreateProvider = ({
                 });
               });
             stock.push({
+              replacement_point: parseFloat(replacementPoint.value),
               current_stock: parseInt(currentStock.value),
               price_cost: convertValueWithMaskInNumber(priceCost.value),
               price_sale: convertValueWithMaskInNumber(priceSale.value),
@@ -951,6 +1011,7 @@ const TabCreateProvider = ({
         );
       } else {
         stock.push({
+          replacement_point: parseFloat(replacementPoint.value),
           price_cost: convertValueWithMaskInNumber(priceCost.value),
           price_sale: convertValueWithMaskInNumber(priceSale.value),
           unit_mensured_id: parseInt(unitMensured.value.id),

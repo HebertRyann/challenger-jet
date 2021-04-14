@@ -33,7 +33,12 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
   }, [alert]);
 
   const { stock } = useTabCreate();
-  const { stockCurrent, priceCost, priceSale } = stock.getData();
+  const {
+    stockCurrent,
+    priceCost,
+    priceSale,
+    replacementPoint,
+  } = stock.getData();
   const unitMensureds = stock.getData().unitMensured;
 
   const isTypeSaleOrResale = (): boolean =>
@@ -70,6 +75,19 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
               rowSpan={isTypeSaleOrResale() ? 2 : 1}
             >
               Estoque atual
+            </th>
+            <th
+              style={
+                isTypeSaleOrResale()
+                  ? {
+                      position: 'relative',
+                      lineHeight: '50px',
+                    }
+                  : {}
+              }
+              rowSpan={isTypeSaleOrResale() ? 2 : 1}
+            >
+              Ponto de reposição
             </th>
             {typeSelectProdut.value.name === SALE.name ||
             typeSelectProdut.value.name === RE_SALE.name ? (
@@ -126,6 +144,25 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                 }}
                 error={stockCurrent.error}
                 name="stock"
+                className="form-control"
+                type="text"
+              />
+            </td>
+            <td>
+              <NewInput
+                isNumber
+                onChange={event => {
+                  stock.setData({
+                    ...stock.getData(),
+                    replacementPoint: {
+                      error: { isError: false },
+                      value: event.currentTarget.value,
+                    },
+                  });
+                }}
+                error={replacementPoint.error}
+                value={replacementPoint.value}
+                name="replacementPoint"
                 className="form-control"
                 type="text"
               />
