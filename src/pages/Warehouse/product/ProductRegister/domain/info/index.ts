@@ -11,8 +11,8 @@ type PortletTitleCrudType = {
   delete: TypeActionNameWithTo;
 };
 
-const nameEntity = 'ProductAttribute';
-const nameSource = 'Product';
+const nameEntity = 'Product';
+const nameSource = 'products';
 const namePageTitle = 'Produtos';
 
 const nameActionPageMain: TypeActionNameWithTo = {
