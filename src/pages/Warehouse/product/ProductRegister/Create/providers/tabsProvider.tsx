@@ -168,6 +168,17 @@ const TabCreateProvider = ({
       }));
     }
 
+    if (overView.hasVariation.value.name === '') {
+      isError = true;
+      setOverView(old => ({
+        ...old,
+        hasVariation: {
+          error: { isError: true },
+          value: old.hasVariation.value,
+        },
+      }));
+    }
+
     return isError;
   }, [overView]);
 
