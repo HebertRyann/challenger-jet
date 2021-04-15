@@ -13,18 +13,6 @@ export const Table = (): JSX.Element => {
   const { changeCurrentTabForNext, changeCurrentTabForPrevious } = useTabs();
   const { priceComposition } = useTabCreate();
   const { cost, dif, ipi, profit } = priceComposition.getData();
-  const [alert, setAlert] = useState<{
-    active: boolean;
-    component?: () => JSX.Element;
-  }>({ active: false });
-
-  const handlerClickOnSave = () => {
-    priceComposition.validate();
-  };
-
-  const handlerClickAlertConfirm = useCallback(() => {
-    setAlert({ active: false });
-  }, [alert]);
 
   return (
     <>
@@ -110,23 +98,7 @@ export const Table = (): JSX.Element => {
           />
         </ContainerInput>
       </div>
-      <div style={{ marginTop: '20px' }}>
-        <Footer
-          onClickButtonNext={() =>
-            changeCurrentTabForNext(namePriceComposition)
-          }
-          onClickButtonBack={() =>
-            changeCurrentTabForPrevious(namePriceComposition)
-          }
-          onSave={handlerClickOnSave}
-        />
-      </div>
-      <Alert
-        isActive={alert.active}
-        onlyConfirm
-        message="Os campos destacados são de preenchimento obrigatório"
-        onClickConfirmButton={handlerClickAlertConfirm}
-      />
+
     </>
   );
 };
