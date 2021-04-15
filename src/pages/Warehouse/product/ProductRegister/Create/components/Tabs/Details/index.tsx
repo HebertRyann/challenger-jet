@@ -1,25 +1,16 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
-import { Footer } from '../../footer';
 import { Container, TextArea } from './style';
 import { NewInput } from '../../../../../../../../components/NewInput';
-import { Alert } from '../../../../../../../../components/Alert';
-import { numericMask } from '../../../../../../../../utlis/mask';
+import {
+  genericMaskWithTwoZero,
+  numericMask,
+  weightMask,
+} from '../../../../../../../../utlis/mask';
 import { useTabCreate } from '../../../providers/tabsProvider';
-import { useTabs } from '../../../../../../../../hooks/tabs';
 
 export const Details = (): JSX.Element => {
-  const { changeCurrentTabForPrevious, changeCurrentTabForNext } = useTabs();
-  const [alert, setAlert] = useState<{
-    active: boolean;
-    message?: string;
-    component?: () => JSX.Element;
-  }>({
-    active: false,
-    message: '',
-  });
-
-  const { details, validation } = useTabCreate();
+  const { details } = useTabCreate();
 
   const {
     weight,
@@ -38,7 +29,7 @@ export const Details = (): JSX.Element => {
           <TooltipComponent label="Peso (kg)" message="Infome o peso em kg" />
           <NewInput
             isNumber
-            value={numericMask(weight.value)}
+            value={weightMask(weight.value)}
             onChange={e =>
               details.setData({
                 ...details.getData(),
@@ -49,7 +40,8 @@ export const Details = (): JSX.Element => {
             name="peso"
             className="form-control"
             type="text"
-            placeholder="0,00"
+            maxLength={12}
+            placeholder="0,000"
           />
         </div>
         <div className="form-content col-md-3">
@@ -59,7 +51,8 @@ export const Details = (): JSX.Element => {
           />
           <NewInput
             isNumber
-            value={numericMask(width.value)}
+            maxLength={12}
+            value={genericMaskWithTwoZero(width.value)}
             onChange={e =>
               details.setData({
                 ...details.getData(),
@@ -80,7 +73,8 @@ export const Details = (): JSX.Element => {
           />
           <NewInput
             isNumber
-            value={numericMask(height.value)}
+            maxLength={12}
+            value={genericMaskWithTwoZero(height.value)}
             onChange={e =>
               details.setData({
                 ...details.getData(),
@@ -101,7 +95,8 @@ export const Details = (): JSX.Element => {
           />
           <NewInput
             isNumber
-            value={numericMask(length.value)}
+            maxLength={12}
+            value={genericMaskWithTwoZero(length.value)}
             onChange={e =>
               details.setData({
                 ...details.getData(),
