@@ -20,11 +20,17 @@ import { Footer } from '../../footer';
 import { NewSelect } from '../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../providers/tabsProvider';
 import { useToast } from '../../../../../../../../hooks/toast';
+import { AlertContent } from '../../Content/AlertContent';
 
 export type TypeTabNameEnableOrDisable = {
   keyTab: string;
   name: string;
   active: boolean;
+};
+
+type Link = {
+  link: string;
+  name: string;
 };
 
 const dataHasVariation: TypeTabNameEnableOrDisable[] = [
@@ -175,83 +181,6 @@ export const DataOverview = ({
     ],
   );
 
-  const handlerClickNextAba = useCallback(() => {
-    changeCurrentTabForNext(nameDataOverview);
-  }, []);
-
-  type Link = {
-    link: string;
-    name: string;
-  };
-
-  const [links, setLinks] = useState<Link[]>([{ link: '', name: '' }]);
-
-  const handlerClickAlertConfirm = useCallback(() => {
-    setAlert({ active: false, message: '' });
-    setLinks([]);
-  }, [alert, links]);
-
-  const renderComponentAlertWithLink = useCallback(
-    (): JSX.Element => (
-      <h4 style={{ fontWeight: 300 }}>
-        Os campos destacados na aba(s){' '}
-        {links
-          .filter(({ link }) => link !== '')
-          .map(({ link, name }, index) => (
-            <>
-              <span
-                onClick={() => {
-                  handlerClickAlertConfirm();
-                  changeCurrentTab(link);
-                }}
-                style={{ fontWeight: 700, cursor: 'pointer' }}
-              >
-                {name}
-                {', '}
-              </span>
-            </>
-          ))}
-        são de preenchimento obrigatório
-      </h4>
-    ),
-    [links],
-  );
-
-  const handlerClickOnSaveButton = async () => {
-    const tabsErrorList = validation.validate();
-    setLinks([]);
-    tabsErrorList.map(({ labelName, linkName }) => {
-      setLinks(old => {
-        return [
-          ...old,
-          {
-            link: linkName,
-            name: labelName,
-          },
-        ];
-      });
-    });
-    if (tabsErrorList.length !== 0) {
-      setAlert({ active: true });
-      return;
-    }
-
-    const { code } = await save();
-
-    if (code === 200) {
-      addToast({
-        type: 'success',
-        title: 'Produto adicionado',
-        description: 'Produto salvo com sucesso',
-      });
-    } else {
-      addToast({
-        type: 'error',
-        title: 'Erro ao salvar o produto',
-        description: 'Não foi possivel salvar o produto',
-      });
-    }
-  };
 
   return (
     <>
@@ -404,17 +333,6 @@ export const DataOverview = ({
           </NewSelect>
         </Container>
       </div>
-      <Alert
-        isActive={alert.active}
-        onlyConfirm
-        message={alert.message}
-        RenderComponent={renderComponentAlertWithLink}
-        onClickConfirmButton={handlerClickAlertConfirm}
-      />
-      <Footer
-        onClickButtonNext={handlerClickNextAba}
-        onSave={handlerClickOnSaveButton}
-      />
     </>
   );
 };
