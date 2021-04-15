@@ -18,9 +18,9 @@ type TypeTabsContext = {
   activeTab: (keyTab: string) => void;
   disableTab: (keyTab: string) => void;
   changeCurrentTab: (keyTab: string) => void;
-  changeCurrentTabForNext: (keyTab: string) => void;
+  changeCurrentTabForNext: () => void;
   loadCurrentTab: () => TypeCurrentTab;
-  changeCurrentTabForPrevious: (keyTab: string) => void;
+  changeCurrentTabForPrevious: () => void;
 };
 
 type TypeTabsProvider = {
@@ -94,43 +94,38 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
 
   const loadCurrentTab = (): TypeCurrentTab => currentTab;
 
-  const changeCurrentTabForNext = useCallback(
-    (keyTab: string) => {
-      if (keyTab) {
-        const index = tabs
-          .filter(({ isEnable }) => isEnable)
-          .findIndex(({ name }) => name === keyTab);
-        const nextTab = tabs
-          .filter(({ isEnable }) => isEnable)
-          .find((tab, nextIndex) => {
-            return nextIndex === index + 1 ? tab : null;
-          });
-        if (nextTab) {
-          setCurrentTab({ key: nextTab.name });
-        }
+  const changeCurrentTabForNext = () => {
+    console.log(loadCurrentTab().key);
+    if (loadCurrentTab().key) {
+      const index = tabs
+        .filter(({ isEnable }) => isEnable)
+        .findIndex(({ name }) => name === loadCurrentTab().key);
+      const nextTab = tabs
+        .filter(({ isEnable }) => isEnable)
+        .find((tab, nextIndex) => {
+          return nextIndex === index + 1 ? tab : null;
+        });
+      if (nextTab) {
+        setCurrentTab({ key: nextTab.name });
       }
-    },
-    [tabs],
-  );
+    }
+  };
 
-  const changeCurrentTabForPrevious = useCallback(
-    (keyTab: string) => {
-      if (keyTab) {
-        const index = tabs
-          .filter(({ isEnable }) => isEnable)
-          .findIndex(({ name }) => name === keyTab);
-        const nextTab = tabs
-          .filter(({ isEnable }) => isEnable)
-          .find((tab, nextIndex) => {
-            return nextIndex === index - 1 ? tab : null;
-          });
-        if (nextTab) {
-          setCurrentTab({ key: nextTab.name });
-        }
+  const changeCurrentTabForPrevious = () => {
+    if (loadCurrentTab().key) {
+      const index = tabs
+        .filter(({ isEnable }) => isEnable)
+        .findIndex(({ name }) => name === loadCurrentTab().key);
+      const nextTab = tabs
+        .filter(({ isEnable }) => isEnable)
+        .find((tab, nextIndex) => {
+          return nextIndex === index - 1 ? tab : null;
+        });
+      if (nextTab) {
+        setCurrentTab({ key: nextTab.name });
       }
-    },
-    [tabs],
-  );
+    }
+  };
 
   return (
     <TabsContext.Provider
