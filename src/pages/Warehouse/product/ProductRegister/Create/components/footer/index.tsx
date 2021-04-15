@@ -47,7 +47,7 @@ export const Footer = ({
           />
         </button>
       </Container>
-      <hr />
+      <hr style={{ marginTop: '25px' }} />
       <ContainerFooter>
         <button onClick={onSave} className="btn dark btn-sm bold uppercase">
           salvar
