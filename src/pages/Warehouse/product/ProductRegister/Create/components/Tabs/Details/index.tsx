@@ -31,10 +31,6 @@ export const Details = (): JSX.Element => {
     wayOfUse,
   } = details.getData();
 
-  const handlerClickAlertConfirm = useCallback(() => {
-    setAlert({ ...alert, active: false });
-  }, [alert]);
-
   return (
     <Container>
       <div className="row">
@@ -180,18 +176,6 @@ export const Details = (): JSX.Element => {
           </div>
         </div>
       </div>
-      <Footer
-        onClickButtonNext={() => changeCurrentTabForNext(nameDetails)}
-        onClickButtonBack={() => changeCurrentTabForPrevious(nameDetails)}
-        onSave={() => validation.validate()}
-      />
-      <Alert
-        isActive={alert.active}
-        onlyConfirm
-        message={alert.message}
-        RenderComponent={alert.component}
-        onClickConfirmButton={handlerClickAlertConfirm}
-      />
     </Container>
   );
 };
