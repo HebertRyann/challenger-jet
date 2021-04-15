@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container } from './style';
+import { Container, InconClose } from './style';
 
 type AlertProps = {
   message?: string;
@@ -22,6 +22,11 @@ export const Alert = ({
   return (
     <Container isActive={isActive}>
       <main>
+        <InconClose
+          onClick={() => {
+            if (onClickCancellButton) onClickCancellButton();
+          }}
+        />
         <h4>Atenção</h4>
         <hr />
         {RenderComponent && <RenderComponent />}
