@@ -63,7 +63,7 @@ import {
   AtributesList,
   TypeGenericValueWithError,
 } from './domain.types';
-import { convertValueWithMaskInNumber } from '../../../../../../utlis/mask';
+import { convertValueMaskInNumber, convertValueWithMaskInNumber } from '../../../../../../utlis/mask';
 interface TabCreateContext {
   overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps>;
   details: TypeGetAndSetAndValidateAba<TypeDetailsProps>;
@@ -973,7 +973,7 @@ const TabCreateProvider = ({
       const overview_and_details: TypeProductDataOverView = {
         details: {
           width: convertValueWithMaskInNumber(width.value),
-          weight: convertValueWithMaskInNumber(weight.value),
+          weight: convertValueMaskInNumber(weight.value),
           height: convertValueWithMaskInNumber(height.value),
           length: convertValueWithMaskInNumber(length.value),
           description_details: descriptionAndDetails.value,
