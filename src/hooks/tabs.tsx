@@ -95,7 +95,6 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
   const loadCurrentTab = (): TypeCurrentTab => currentTab;
 
   const changeCurrentTabForNext = () => {
-    console.log(loadCurrentTab().key);
     if (loadCurrentTab().key) {
       const index = tabs
         .filter(({ isEnable }) => isEnable)
