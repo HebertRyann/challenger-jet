@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { HeaderCreateProduct } from '../Header';
 import {
   Container,
@@ -11,8 +11,12 @@ import {
 import { useTabs } from '../../../../../../../hooks/tabs';
 import { makeTabs } from './tabs';
 import { useLoading } from '../../../../../../../hooks/loading';
-import { TabCreateProvider } from '../../providers/tabsProvider';
+import { TabCreateProvider, useTabCreate } from '../../providers/tabsProvider';
 import { ToolsContainerProps } from '../../../../../../../components/Container';
+import { useToast } from '../../../../../../../hooks/toast';
+import { Alert } from '../../../../../../../components/Alert';
+import { AlertContent } from './AlertContent';
+import { Footer } from '../footer';
 
 export type TypeContentTabs = {
   name: string;
@@ -25,10 +29,36 @@ type TypeContentProps = {
   tools: ToolsContainerProps[];
 };
 
+type Link = {
+  link: string;
+  name: string;
+};
+
 export const Content = ({ tools }: TypeContentProps): JSX.Element => {
-  const { loadTabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs();
   const { activeLoading, disableLoading } = useLoading();
   const [tabs, setTabs] = useState<TypeContentTabs[]>([]);
+  const { addToast } = useToast();
+  const [links, setLinks] = useState<Link[]>([{ link: '', name: '' }]);
+  const [alert, setAlert] = useState<{
+    active: boolean;
+    message?: string;
+    component?: () => JSX.Element;
+  }>({
+    active: false,
+    message: '',
+  });
+
+  const {
+    activeTab,
+    disableTab,
+    loadTabs,
+    addTab,
+    loadCurrentTab,
+    changeCurrentTabForNext,
+    changeCurrentTabForPrevious,
+    changeCurrentTab,
+  } = useTabs();
+  const { overview, validation, save } = useTabCreate();
 
   useEffect(() => {
     async function load() {
@@ -41,6 +71,47 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
     }
     load();
   }, []);
+
+  const handlerClickAlertConfirm = useCallback(() => {
+    setAlert({ active: false, message: '' });
+    setLinks([]);
+  }, [alert, links]);
+
+  const handlerClickOnSaveButton = async () => {
+    const tabsErrorList = validation.validate();
+    setLinks([]);
+    tabsErrorList.map(({ labelName, linkName }) => {
+      setLinks(old => {
+        return [
+          ...old,
+          {
+            link: linkName,
+            name: labelName,
+          },
+        ];
+      });
+    });
+    if (tabsErrorList.length !== 0) {
+      setAlert({ active: true });
+      return;
+    }
+
+    const { code } = await save();
+
+    if (code === 200) {
+      addToast({
+        type: 'success',
+        title: 'Produto adicionado',
+        description: 'Produto salvo com sucesso',
+      });
+    } else {
+      addToast({
+        type: 'error',
+        title: 'Erro ao salvar o produto',
+        description: 'Não foi possivel salvar o produto',
+      });
+    }
+  };
 
   return (
     <>
@@ -63,17 +134,33 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
           </TabHeaderContainer>
           <TabPanelContainer>
             <hr />
-            <TabCreateProvider>
-              <>
-                {tabs.map(({ Component, name }) => (
-                  <RenderComponent isActive={name === loadCurrentTab().key}>
-                    {Component}
-                  </RenderComponent>
-                ))}
-              </>
-            </TabCreateProvider>
+            <>
+              {tabs.map(({ Component, name }) => (
+                <RenderComponent isActive={name === loadCurrentTab().key}>
+                  {Component}
+                </RenderComponent>
+              ))}
+            </>
           </TabPanelContainer>
         </ContentItem>
+        <Alert
+          isActive={alert.active}
+          onlyConfirm
+          message={alert.message}
+          RenderComponent={() => (
+            <AlertContent
+              onClickItem={handlerClickAlertConfirm}
+              links={links}
+            />
+          )}
+          onClickConfirmButton={handlerClickAlertConfirm}
+          onClickCancellButton={handlerClickAlertConfirm}
+        />
+        <Footer
+          onSave={handlerClickOnSaveButton}
+          onClickButtonNext={() => changeCurrentTabForNext()}
+          onClickButtonBack={() => changeCurrentTabForPrevious()}
+        />
       </Container>
     </>
   );
