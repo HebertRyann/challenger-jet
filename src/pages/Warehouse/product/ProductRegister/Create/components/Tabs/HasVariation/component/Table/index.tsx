@@ -323,21 +323,6 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
         variação
       </button>
 
-      <div style={{ margin: '20px 0px 0 0' }}>
-        <Footer
-          onSave={handleClickOnSaveButton}
-          onClickButtonNext={() => changeCurrentTabForNext(nameHasVariation)}
-          onClickButtonBack={() =>
-            changeCurrentTabForPrevious(nameHasVariation)
-          }
-        />
-      </div>
-      <Alert
-        isActive={alert}
-        onlyConfirm
-        message="Os campos destacados são de preenchimento obrigatório"
-        onClickConfirmButton={handlerClickAlertConfirm}
-      />
     </Container>
   );
 };
