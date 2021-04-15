@@ -11,12 +11,14 @@ import {
 import { useTabs } from '../../../../../../../hooks/tabs';
 import { makeTabs } from './tabs';
 import { useLoading } from '../../../../../../../hooks/loading';
-import { TabCreateProvider, useTabCreate } from '../../providers/tabsProvider';
+import { useTabCreate } from '../../providers/tabsProvider';
 import { ToolsContainerProps } from '../../../../../../../components/Container';
 import { useToast } from '../../../../../../../hooks/toast';
 import { Alert } from '../../../../../../../components/Alert';
 import { AlertContent } from './AlertContent';
 import { Footer } from '../footer';
+import { useHistory } from 'react-router';
+import { nameSource } from '../../../domain/info';
 
 export type TypeContentTabs = {
   name: string;
@@ -49,8 +51,6 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
   });
 
   const {
-    activeTab,
-    disableTab,
     loadTabs,
     addTab,
     loadCurrentTab,
@@ -58,7 +58,9 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
     changeCurrentTabForPrevious,
     changeCurrentTab,
   } = useTabs();
-  const { overview, validation, save } = useTabCreate();
+  const { validation, save } = useTabCreate();
+
+  const history = useHistory();
 
   useEffect(() => {
     async function load() {
@@ -91,18 +93,24 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
         ];
       });
     });
+
     if (tabsErrorList.length !== 0) {
       setAlert({ active: true });
       return;
     }
 
-    const { code } = await save();
+    const { code, data } = await save();
 
     if (code === 200) {
       addToast({
         type: 'success',
         title: 'Produto adicionado',
         description: 'Produto salvo com sucesso',
+      });
+
+      history.push(`/${nameSource}/view/${data?.id}`, {
+        id: data?.id,
+        value: data?.name,
       });
     } else {
       addToast({
