@@ -5,12 +5,15 @@ import { nameActions, namePageTitle } from '../domain/info';
 import { toolsCreate } from '../domain/tools/create';
 import { Content } from './components/Content';
 import { TabsProvider } from '../../../../../hooks/tabs';
+import { TabCreateProvider } from '../Create/providers/tabsProvider';
 
 const Create = (): JSX.Element => (
   <Container
     Content={() => (
       <TabsProvider>
-        <Content tools={[toolsCreate]} />
+        <TabCreateProvider>
+          <Content tools={[toolsCreate]} />
+        </TabCreateProvider>
       </TabsProvider>
     )}
     pageTitle={namePageTitle}
