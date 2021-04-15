@@ -231,21 +231,6 @@ export const Table = (): JSX.Element => {
           <h6>{total.toFixed(2)}</h6>
         </div>
       </FooterStyled>
-      <div style={{ margin: '20px 0px 0 0' }}>
-        <Footer
-          onSave={handleClickOnSaveButton}
-          onClickButtonNext={() => changeCurrentTabForNext(nameHasComposition)}
-          onClickButtonBack={() =>
-            changeCurrentTabForPrevious(nameHasComposition)
-          }
-        />
-      </div>
-      <Alert
-        isActive={alert}
-        onlyConfirm
-        message="Os campos destacados são de preenchimento obrigatório"
-        onClickConfirmButton={handlerClickAlertConfirm}
-      />
     </Container>
   );
 };
