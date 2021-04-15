@@ -27,11 +27,6 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
   const { changeCurrentTabForNext, changeCurrentTabForPrevious } = useTabs();
   const { overview, validation } = useTabCreate();
   const { typeSelectProdut } = overview.getData();
-
-  const handlerClickAlertConfirm = useCallback(() => {
-    setAlert(false);
-  }, [alert]);
-
   const { stock } = useTabCreate();
   const {
     stockCurrent,
@@ -211,17 +206,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
           </tr>
         </tbody>
       </table>
-      <Footer
-        onClickButtonNext={() => changeCurrentTabForNext(nameStock)}
-        onClickButtonBack={() => changeCurrentTabForPrevious(nameStock)}
-        onSave={() => validation.validate()}
-      />
-      <Alert
-        isActive={alert}
-        onlyConfirm
-        message="Os campos destacados são de preenchimento obrigatório"
-        onClickConfirmButton={handlerClickAlertConfirm}
-      />
+
     </Container>
   );
 };
