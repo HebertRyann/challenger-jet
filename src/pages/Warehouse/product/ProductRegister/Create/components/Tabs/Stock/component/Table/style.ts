@@ -10,7 +10,6 @@ export const Container = styled.div`
   }
   .select {
     .disabled {
-      background-color: red;
       display: none;
     }
   }
