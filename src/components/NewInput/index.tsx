@@ -14,6 +14,7 @@ export interface TypeNewInputProps
   search?: boolean;
   data?: any;
   onClickSearchRow?: (params: any) => void;
+  RenderSearchComponent?: () => JSX.Element;
 }
 
 export const NewInput = ({
@@ -23,6 +24,7 @@ export const NewInput = ({
   search,
   data,
   onClickSearchRow,
+  RenderSearchComponent,
   ...props
 }: TypeNewInputProps): JSX.Element => {
   const searchRef = useRef<HTMLDivElement>(null);
@@ -71,25 +73,30 @@ export const NewInput = ({
       {currentError.descriptionError && (
         <label>{currentError.descriptionError}</label>
       )}
-      {search && activeSearch && (
-        <ContainerSearch active={activeSearch} ref={searchRef}>
-          <ul>
-            {data !== undefined &&
-              data.map(({ name }: { id: string; name: string }) => (
-                <li
-                  onClick={() => {
-                    setActiveSearch(false);
-                    if (onClickSearchRow) {
-                      onClickSearchRow(name);
-                    }
-                  }}
-                >
-                  {name}
-                </li>
-              ))}
-          </ul>
-        </ContainerSearch>
-      )}
+      {search &&
+        (RenderSearchComponent ? (
+          <RenderSearchComponent />
+        ) : (
+          activeSearch && (
+            <ContainerSearch active={activeSearch} ref={searchRef}>
+              <ul>
+                {data !== undefined &&
+                  data.map(({ name }: { id: string; name: string }) => (
+                    <li
+                      onClick={() => {
+                        setActiveSearch(false);
+                        if (onClickSearchRow) {
+                          onClickSearchRow(name);
+                        }
+                      }}
+                    >
+                      {name}
+                    </li>
+                  ))}
+              </ul>
+            </ContainerSearch>
+          )
+        ))}
     </Container>
   );
 };
