@@ -16,6 +16,7 @@ import {
 } from '../../../../domain/products';
 import { RAW_MATERIAL } from '../../../../domain/products';
 import { useLoading } from '../../../../../../../../../hooks/loading';
+import { SearchComponentHasComposition } from '../SearchComponent';
 
 type ProductByTypeSelected = {
   id: string;
@@ -132,87 +133,89 @@ export const Table = (): JSX.Element => {
 
   return (
     <Container className="table-responsive">
-      <table className="table table-bordered margin-bottom-0">
-        <tbody>
-          <tr>
-            <th style={{ width: '50%' }}>Produto</th>
-            <th>Quantidade</th>
-            <th>Custo</th>
-            <th>Subtotal</th>
-            <th>Ações</th>
-          </tr>
-          {products.map(({ amount, cost, nameProduct, subtotal }, index) => (
+      <div className="table-content-relative">
+        <table className="table table-bordered margin-bottom-0">
+          <tbody>
             <tr>
-              <td>
-                <NewInput
-                  search
-                  name="nameProduct"
-                  placeholder="Informe o nome do produto"
-                  className="form-control"
-                  type="text"
-                  value={nameProduct.value}
-                  error={nameProduct.error}
-                  onChange={event =>
-                    handlerChangeNameProduct(event.target.value, index)
-                  }
-                  data={
-                    nameProduct.value !== ''
-                      ? productListByTypeSelectedSearch
-                      : []
-                  }
-                  onClickSearchRow={(select: string) => {
-                    if (select) {
-                      changeInputNameProduct(select, index);
-                    }
-                  }}
-                />
-              </td>
-              <td>
-                <NewInput
-                  name="amount"
-                  value={amount.value}
-                  error={amount.error}
-                  placeholder="0"
-                  isNumber
-                  onChange={event =>
-                    changeInputAmount(event.currentTarget.value, index)
-                  }
-                  className="form-control"
-                  type="text"
-                />
-              </td>
-              <td>
-                <NewInput
-                  name="cost"
-                  value={cost.value}
-                  error={cost.error}
-                  placeholder="0.00"
-                  isNumber
-                  onChange={event =>
-                    changeInputCost(event.currentTarget.value, index)
-                  }
-                  className="form-control"
-                  type="text"
-                />
-              </td>
-              <td>
-                <NewInput
-                  name="subtotal"
-                  disabled
-                  value={(Number(amount.value) * Number(cost.value)).toFixed(2)}
-                  error={subtotal.error}
-                  placeholder="0.00"
-                  className="form-control"
-                  type="text"
-                />
-              </td>
-              <td className="actions">
-                <IconRemove onClick={() => removeComposition(index)} />
-              </td>
+              <th style={{ width: '50%' }}>Produto</th>
+              <th>Quantidade</th>
+              <th>Custo</th>
+              <th>Subtotal</th>
+              <th>Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+            {products.map(({ amount, cost, nameProduct, subtotal }, index) => (
+              <tr
+                style={{
+                  height: '10px',
+                }}
+              >
+                <td>
+                  <NewInput
+                    search={true}
+                    name="nameProduct"
+                    placeholder="Informe o nome do produto"
+                    className="form-control"
+                    type="text"
+                    value={nameProduct.value}
+                    error={nameProduct.error}
+                    onChange={event =>
+                      handlerChangeNameProduct(event.target.value, index)
+                    }
+                    RenderSearchComponent={() => (
+                      <SearchComponentHasComposition />
+                    )}
+                  />
+                </td>
+                <td>
+                  <NewInput
+                    name="amount"
+                    value={amount.value}
+                    error={amount.error}
+                    placeholder="0"
+                    isNumber
+                    onChange={event =>
+                      changeInputAmount(event.currentTarget.value, index)
+                    }
+                    className="form-control"
+                    type="text"
+                  />
+                </td>
+                <td>
+                  <NewInput
+                    name="cost"
+                    value={cost.value}
+                    error={cost.error}
+                    placeholder="0.00"
+                    isNumber
+                    onChange={event =>
+                      changeInputCost(event.currentTarget.value, index)
+                    }
+                    className="form-control"
+                    type="text"
+                  />
+                </td>
+                <td>
+                  <NewInput
+                    name="subtotal"
+                    disabled
+                    value={(Number(amount.value) * Number(cost.value)).toFixed(
+                      2,
+                    )}
+                    error={subtotal.error}
+                    placeholder="0.00"
+                    className="form-control"
+                    type="text"
+                  />
+                </td>
+                <td className="actions">
+                  <IconRemove onClick={() => removeComposition(index)} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
       <hr />
       <FooterStyled>
         <button
