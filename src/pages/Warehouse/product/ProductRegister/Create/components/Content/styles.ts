@@ -4,19 +4,13 @@ export const Container = styled.div`
   height: 100%;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 50px;
+  grid-template-rows: 1fr 60px;
   margin-top: 20px;
 `;
 
 export const ContentItem = styled.div`
-  position: relative;
   margin-top: 40px;
-  > footer {
-    margin-top: 20px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-  }
+  height: 100%;
 `;
 
 export const TabName = styled.div<{ isActive: boolean }>`
@@ -41,6 +35,7 @@ export const TabHeaderContainer = styled.div`
 `;
 
 export const TabPanelContainer = styled.div`
+  height: 100%;
   border: 1px solid #e3e3e3;
   padding: 20px;
 
@@ -51,9 +46,11 @@ export const TabPanelContainer = styled.div`
 
 export const RenderComponent = styled.div<{ isActive: boolean }>`
   display: none;
+
   ${({ isActive }) =>
     isActive &&
     css`
+      height: 100%;
       display: block;
     `};
 `;
