@@ -63,7 +63,10 @@ import {
   AtributesList,
   TypeGenericValueWithError,
 } from './domain.types';
-import { convertValueMaskInNumber, convertValueWithMaskInNumber } from '../../../../../../utlis/mask';
+import {
+  convertValueMaskInNumber,
+  convertValueWithMaskInNumber,
+} from '../../../../../../utlis/mask';
 interface TabCreateContext {
   overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps>;
   details: TypeGetAndSetAndValidateAba<TypeDetailsProps>;
@@ -1006,8 +1009,8 @@ const TabCreateProvider = ({
               .filter(({ value }) => value.id !== '')
               .map(({ value }) => {
                 atributesList.push({
-                  key: convertValueWithMaskInNumber(value.keyParent),
-                  value: convertValueWithMaskInNumber(value.id),
+                  key: parseInt(value.keyParent),
+                  value: parseInt(value.id),
                 });
               });
             stock.push({
