@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 export const Container = styled.div<{ isError?: boolean }>`
   position: relative;
+  /* position: rel */
   ${({ isError }) =>
     isError &&
     css`
@@ -36,7 +37,6 @@ export const ContainerSearch = styled.div<{ active: boolean }>`
   width: 100%;
   max-height: 200px;
   overflow-y: scroll;
-  position: absolute;
   > ul {
     list-style: none;
     display: flex;
