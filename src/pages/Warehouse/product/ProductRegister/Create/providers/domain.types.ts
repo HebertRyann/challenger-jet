@@ -139,6 +139,15 @@ export type TypeProduct = {
 
 export type ResolverComposition = {
   changeInputNameProduct: (name: string, index: number) => void;
+  changeInputProductIdAndStockId: (
+    product_id: number,
+    stockId: number,
+    index: number,
+  ) => void;
+  loadInputProductIdAndStockId: () => {
+    productId: number;
+    stockId: number;
+  }[];
   changeInputAmount: (amount: string, index: number) => void;
   changeInputCost: (cost: string, index: number) => void;
   changeInputSubTotal: (subtotal: string, index: number) => void;
@@ -248,6 +257,8 @@ export type PriceCompositionAndFiscal = {
 };
 
 export type CompositionRequest = {
+  product_id: number;
+  stock_id: number;
   name: string;
   amount: number;
   cost: number;
