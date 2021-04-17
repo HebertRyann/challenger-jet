@@ -91,6 +91,9 @@ const TabCreateProvider = ({
   const [overView, setOverView] = useState<TypeDataOverViewProps>(
     initialStateOverview,
   );
+  const [producIdAndStockId, setProducIdAndStockId] = useState<
+    { productId: number; stockId: number }[]
+  >([{ productId: 0, stockId: 0 }]);
   const [detail, setDetail] = useState<TypeDetailsProps>(initialStateDetails);
   const [stocks, setStocks] = useState<TypeStockProps>(initialStateStock);
   const [
@@ -362,17 +365,30 @@ const TabCreateProvider = ({
   const setDataComposition = (): ResolverComposition => {
     const addComposition = () => {
       setCompositionState([...compositionState, initialStateComposition[0]]);
+      setProducIdAndStockId([
+        ...producIdAndStockId,
+        { productId: 0, stockId: 0 },
+      ]);
     };
 
     const removeComposition = (index: number) => {
       const productWithOutIndex = compositionState[index];
+      const productAndStockIdWithOutIndex = producIdAndStockId[index];
       const result = compositionState.filter(
         product => product !== productWithOutIndex,
+      );
+      const resultProductAndStockIdWithOutIndex = producIdAndStockId.filter(
+        product => product !== productAndStockIdWithOutIndex,
       );
       if (result.length === 0) {
         setCompositionState(initialStateComposition);
       } else {
         setCompositionState([...result]);
+      }
+      if (resultProductAndStockIdWithOutIndex.length === 0) {
+        setProducIdAndStockId([{ productId: 0, stockId: 0 }]);
+      } else {
+        setProducIdAndStockId([...resultProductAndStockIdWithOutIndex]);
       }
     };
 
@@ -423,7 +439,28 @@ const TabCreateProvider = ({
 
     const changeInputSubTotal = (subtotal: string, index: number) => {};
 
+    const changeInputProductIdAndStockId = (
+      newProductId: number,
+      newStockId: number,
+      index: number,
+    ) => {
+      producIdAndStockId.map((_, key) => {
+        if (key === index) {
+          producIdAndStockId[key].productId = newProductId;
+          producIdAndStockId[key].stockId = newStockId;
+        }
+      });
+      setProducIdAndStockId([...producIdAndStockId]);
+    };
+
+    const loadInputProductIdAndStockId = (): {
+      productId: number;
+      stockId: number;
+    }[] => producIdAndStockId;
+
     return {
+      loadInputProductIdAndStockId,
+      changeInputProductIdAndStockId,
       addComposition,
       removeComposition,
       changeInputAmount,
@@ -1074,11 +1111,13 @@ const TabCreateProvider = ({
 
     const createRequestWithComposition = (): CompositionRequest[] => {
       const compositionRequest: CompositionRequest[] = [];
-      compositionState.map(({ amount, cost, nameProduct }) => {
+      compositionState.map(({ amount, cost, nameProduct }, index) => {
         compositionRequest.push({
           amount: convertValueWithMaskInNumber(amount.value),
           cost: convertValueWithMaskInNumber(cost.value),
           name: nameProduct.value,
+          product_id: producIdAndStockId[index].productId,
+          stock_id: producIdAndStockId[index].stockId,
         });
       });
       return compositionRequest;
