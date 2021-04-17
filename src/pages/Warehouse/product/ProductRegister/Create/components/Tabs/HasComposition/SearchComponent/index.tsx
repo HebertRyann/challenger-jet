@@ -1,48 +1,94 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ContainerSearch } from './styles';
 
-export const SearchComponentHasComposition = (): JSX.Element => {
-  const data: any = [];
+type TypeSearchComponentHasCompositionProps = {
+  data: any;
+  active?: boolean;
+  onClickRow?: (currentRow: any) => void;
+};
+
+type ListData = {
+  name: string;
+  stocks: { atributes: string; product_id: number; id: number }[];
+};
+
+export const SearchComponentHasComposition = ({
+  data,
+  active,
+  onClickRow,
+}: TypeSearchComponentHasCompositionProps): JSX.Element => {
+  const searchRef = useRef<HTMLDivElement>(null);
+  const [activeSeach, setActiveSearch] = useState(!!active);
+
+  useEffect(() => {
+    document.addEventListener('click', (event: any) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setActiveSearch(false);
+      }
+    });
+  }, []);
+
+  const handlerClickCurrentRow = (current: any) => {
+    if (onClickRow) onClickRow(current);
+  };
 
   return (
-    <ContainerSearch active>
+    <ContainerSearch ref={searchRef} active={activeSeach}>
       <ul>
-        <table className="table table-bordered margin-bottom-0">
-          <tbody>
-            <h5>Materia prima</h5>
-            <tr>
-              <th>Custo</th>
-              <th>Venda</th>
-              <th>Venda</th>
-            </tr>
-            <tr>
-              <th>Custo</th>
-              <th>Venda</th>
-              <th>Venda</th>
-            </tr>
-            <tr>
-              <th>Custo</th>
-              <th>Venda</th>
-              <th>Venda</th>
-            </tr>
-            <h5>Materia prima</h5>
-            <tr>
-              <th>Custo</th>
-              <th>Venda</th>
-              <th>Venda</th>
-            </tr>
-            <tr>
-              <th>Custo</th>
-              <th>Venda</th>
-              <th>Venda</th>
-            </tr>
-            <tr>
-              <th>Custo</th>
-              <th>Venda</th>
-              <th>Venda</th>
-            </tr>
-          </tbody>
-        </table>
+        {data &&
+          data.map(({ name, stocks }: ListData, indexProductList: number) => (
+            <section>
+              <h5>{name}</h5>
+              <table className="table-bordered">
+                {stocks &&
+                  stocks.map(({ atributes, product_id, id }, indexStock) => {
+                    const atributeList = JSON.parse(atributes.toLowerCase());
+                    if (atributes) {
+                      let headers: { name: string }[] = [];
+                      let body: { name: string }[] = [];
+                      for (let i = 0; i < atributeList.length; i++) {
+                        headers.push({ name: atributeList[i].key });
+                        body.push({ name: atributeList[i].value });
+                      }
+                      return (
+                        <>
+                          <thead>
+                            {headers.map((_, index) => {
+                              return (
+                                indexStock === 0 && (
+                                  <th className="header">
+                                    <h5>{headers[index].name}</h5>
+                                  </th>
+                                )
+                              );
+                            })}
+                          </thead>
+                          <tbody>
+                            <tr>
+                              {body.map((_: any, index) => (
+                                <th>
+                                  <h5
+                                    onClick={() =>
+                                      handlerClickCurrentRow({
+                                        name: body[index].name,
+                                        product_id,
+                                        stock_id: id,
+                                      })
+                                    }
+                                  >
+                                    {body[index].name}
+                                  </h5>
+                                </th>
+                              ))}
+                            </tr>
+                          </tbody>
+                        </>
+                      );
+                    }
+                  })}
+              </table>
+            </section>
+          ))}
       </ul>
     </ContainerSearch>
   );
