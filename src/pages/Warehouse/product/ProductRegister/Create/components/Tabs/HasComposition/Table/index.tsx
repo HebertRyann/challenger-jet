@@ -17,6 +17,8 @@ import {
 import { RAW_MATERIAL } from '../../../../domain/products';
 import { useLoading } from '../../../../../../../../../hooks/loading';
 import { SearchComponentHasComposition } from '../SearchComponent';
+import { useToast } from '../../../../../../../../../hooks/toast';
+import { number } from 'yup/lib/locale';
 
 type ProductByTypeSelected = {
   id: string;
@@ -26,6 +28,7 @@ type ProductByTypeSelected = {
 export const Table = (): JSX.Element => {
   const { activeLoading, disableLoading } = useLoading();
   const [alert, setAlert] = useState(false);
+  const { addToast } = useToast();
   const [productListByTypeSelected, setProductListByTypeSelected] = useState<
     ProductByTypeSelected[]
   >([]);
@@ -48,9 +51,12 @@ export const Table = (): JSX.Element => {
     changeInputNameProduct,
     changeInputAmount,
     changeInputCost,
+    changeInputProductIdAndStockId,
+    loadInputProductIdAndStockId,
   } = composition.setData;
 
   const [total, setTotal] = useState(0);
+  const [activeSearch, setActiveSearch] = useState(false);
 
   useEffect(() => {
     let soma = 0;
@@ -73,35 +79,42 @@ export const Table = (): JSX.Element => {
 
   useEffect(() => {
     (async () => {
-      if (loadCurrentTab().key === nameHasComposition) {
-        if (typeSelectProdut.value.name === SEMI_FINISHED.name) {
-          activeLoading();
-          const productsTypeRawMaterial = await loadProductByType(
-            formatProductTypeToLowerCase(RAW_MATERIAL),
-          );
-          const productsTypeConsumer = await loadProductByType(
-            formatProductTypeToLowerCase(CONSUMER),
-          );
-          setProductListByTypeSelected([
-            ...productsTypeRawMaterial,
-            ...productsTypeConsumer,
-          ]);
-          setProductListByTypeSelectedSearch(productListByTypeSelected);
-          disableLoading();
-          return;
+      try {
+        if (loadCurrentTab().key === nameHasComposition) {
+          console.log('re render');
+          if (typeSelectProdut.value.name === SEMI_FINISHED.name) {
+            activeLoading();
+            const productsTypeRawMaterial = await loadProductByType(
+              formatProductTypeToLowerCase(RAW_MATERIAL),
+            );
+            const productsTypeConsumer = await loadProductByType(
+              formatProductTypeToLowerCase(CONSUMER),
+            );
+            setProductListByTypeSelected([
+              ...productsTypeRawMaterial,
+              ...productsTypeConsumer,
+            ]);
+            setProductListByTypeSelectedSearch(productListByTypeSelected);
+            disableLoading();
+            return;
+          }
+          if (
+            formatProductName(typeSelectProdut.value.name) ===
+            formatProductTypeToLowerCase(SALE)
+          ) {
+            activeLoading();
+            const productsTypeReSale = await loadProductByType(
+              formatProductTypeToLowerCase(RE_SALE),
+            );
+            setProductListByTypeSelected(productsTypeReSale);
+            setProductListByTypeSelectedSearch(productListByTypeSelected);
+            disableLoading();
+          }
         }
-        if (
-          formatProductName(typeSelectProdut.value.name) ===
-          formatProductTypeToLowerCase(SALE)
-        ) {
-          activeLoading();
-          const productsTypeReSale = await loadProductByType(
-            formatProductTypeToLowerCase(RE_SALE),
-          );
-          setProductListByTypeSelected(productsTypeReSale);
-          setProductListByTypeSelectedSearch(productListByTypeSelected);
-          disableLoading();
-        }
+      } catch (error) {
+        console.log(error);
+        disableLoading();
+        addToast({ title: 'Lista de produto não carregada' });
       }
     })();
   }, [typeSelectProdut.value, loadCurrentTab().key]);
@@ -113,23 +126,43 @@ export const Table = (): JSX.Element => {
   const handlerChangeNameProduct = useCallback(
     (value: string, index: number) => {
       changeInputNameProduct(value, index);
-      const matchList = productListByTypeSelected.filter(({ id, name }) => {
-        const regex = new RegExp(`^${value}`, 'gi');
+      if (value.length) {
+        const matchList = productListByTypeSelected.filter(({ id, name }) => {
+          const regex = new RegExp(`^${value}`, 'gi');
 
-        return name.match(regex);
-      });
-      if (value === '') {
-        setProductListByTypeSelectedSearch([]);
-      }
+          return name.match(regex);
+        });
 
-      if (matchList.length > 0) {
-        setProductListByTypeSelectedSearch(matchList);
-      } else {
-        setProductListByTypeSelectedSearch(productListByTypeSelected);
+        if (value === '') {
+          setProductListByTypeSelectedSearch([]);
+          setActiveSearch(false);
+        }
+
+        if (matchList.length > 0) {
+          setProductListByTypeSelectedSearch(matchList);
+          setActiveSearch(true);
+        } else {
+          setActiveSearch(false);
+          setProductListByTypeSelectedSearch(productListByTypeSelected);
+        }
+        return;
       }
+      setActiveSearch(false);
     },
-    [productListByTypeSelected, productListByTypeSelectedSearch],
+    [productListByTypeSelected, productListByTypeSelectedSearch, products],
   );
+
+  const handlerClickRowSearch = ({
+    product,
+    index,
+  }: {
+    product: any;
+    index: number;
+  }) => {
+    handlerChangeNameProduct(product.name, index);
+    changeInputProductIdAndStockId(product.product_id, product.stock_id, index);
+    setActiveSearch(false);
+  };
 
   return (
     <Container className="table-responsive">
@@ -143,75 +176,92 @@ export const Table = (): JSX.Element => {
               <th>Subtotal</th>
               <th>Ações</th>
             </tr>
-            {products.map(({ amount, cost, nameProduct, subtotal }, index) => (
-              <tr
-                style={{
-                  height: '10px',
-                }}
-              >
-                <td>
-                  <NewInput
-                    search={true}
-                    name="nameProduct"
-                    placeholder="Informe o nome do produto"
-                    className="form-control"
-                    type="text"
-                    value={nameProduct.value}
-                    error={nameProduct.error}
-                    onChange={event =>
-                      handlerChangeNameProduct(event.target.value, index)
-                    }
-                    RenderSearchComponent={() => (
-                      <SearchComponentHasComposition />
-                    )}
+            {products &&
+              products.map(({ amount, cost, nameProduct, subtotal }, index) => (
+                <tr
+                  style={{
+                    height: '10px',
+                  }}
+                >
+                  <td>
+                    <NewInput
+                      search={true}
+                      name="nameProduct"
+                      placeholder="Informe o nome do produto"
+                      className="form-control"
+                      type="text"
+                      value={nameProduct.value}
+                      error={nameProduct.error}
+                      onChange={event =>
+                        handlerChangeNameProduct(event.target.value, index)
+                      }
+                      RenderSearchComponent={() => (
+                        <SearchComponentHasComposition
+                          active={activeSearch}
+                          data={productListByTypeSelectedSearch}
+                          onClickRow={(product: any) =>
+                            handlerClickRowSearch({ product, index })
+                          }
+                        />
+                      )}
+                    />
+                  </td>
+                  <td>
+                    <NewInput
+                      name="amount"
+                      value={amount.value}
+                      error={amount.error}
+                      placeholder="0"
+                      isNumber
+                      onChange={event =>
+                        changeInputAmount(event.currentTarget.value, index)
+                      }
+                      className="form-control"
+                      type="text"
+                    />
+                  </td>
+                  <td>
+                    <NewInput
+                      name="cost"
+                      value={cost.value}
+                      error={cost.error}
+                      placeholder="0.00"
+                      isNumber
+                      onChange={event =>
+                        changeInputCost(event.currentTarget.value, index)
+                      }
+                      className="form-control"
+                      type="text"
+                    />
+                  </td>
+                  <td>
+                    <NewInput
+                      name="subtotal"
+                      disabled
+                      value={(
+                        Number(amount.value) * Number(cost.value)
+                      ).toFixed(2)}
+                      error={subtotal.error}
+                      placeholder="0.00"
+                      className="form-control"
+                      type="text"
+                    />
+                  </td>
+                  <input
+                    type="hidden"
+                    name="product_id"
+                    value={loadInputProductIdAndStockId()[index].productId}
                   />
-                </td>
-                <td>
-                  <NewInput
-                    name="amount"
-                    value={amount.value}
-                    error={amount.error}
-                    placeholder="0"
-                    isNumber
-                    onChange={event =>
-                      changeInputAmount(event.currentTarget.value, index)
-                    }
-                    className="form-control"
-                    type="text"
+                  <input
+                    type="hidden"
+                    name="stock_id"
+                    value={loadInputProductIdAndStockId()[index].stockId}
                   />
-                </td>
-                <td>
-                  <NewInput
-                    name="cost"
-                    value={cost.value}
-                    error={cost.error}
-                    placeholder="0.00"
-                    isNumber
-                    onChange={event =>
-                      changeInputCost(event.currentTarget.value, index)
-                    }
-                    className="form-control"
-                    type="text"
-                  />
-                </td>
-                <td>
-                  <NewInput
-                    name="subtotal"
-                    disabled
-                    value={(Number(amount.value) * Number(cost.value)).toFixed(
-                      2,
-                    )}
-                    error={subtotal.error}
-                    placeholder="0.00"
-                    className="form-control"
-                    type="text"
-                  />
-                </td>
-                <td className="actions">
-                  <IconRemove onClick={() => removeComposition(index)} />
-                </td>
-              </tr>
-            ))}
+                  <td className="actions">
+                    <IconRemove onClick={() => removeComposition(index)} />
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
