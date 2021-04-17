@@ -8,7 +8,9 @@ type SaveProductParams = {
 export const loadProductByType = async (
   type: string,
 ): Promise<SaveProductParams[]> => {
-  const { data } = await api.get<SaveProductParams[]>(`/product/type/${type}`);
-
+  const { data, status } = await api.get<SaveProductParams[]>(
+    `/product/type/${type}`,
+  );
+  if (status === 500) throw new Error('Não foi possivel buscar os produtos');
   return data;
 };
