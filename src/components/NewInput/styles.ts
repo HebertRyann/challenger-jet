@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components';
 
 export const Container = styled.div<{ isError?: boolean }>`
   position: relative;
-  /* position: rel */
   ${({ isError }) =>
     isError &&
     css`
