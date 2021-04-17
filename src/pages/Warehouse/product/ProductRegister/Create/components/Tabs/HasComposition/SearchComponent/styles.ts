@@ -3,9 +3,12 @@ import styled, { css } from 'styled-components';
 export const ContainerSearch = styled.div<{ active: boolean }>`
   display: none;
   position: absolute;
-  z-index: 1500000;
+  z-index: 15;
   overflow-y: scroll;
+  overflow-x: hidden;
+  margin-top: 2px;
   ${({ active }) =>
+    active &&
     css`
       display: block;
     `}
@@ -18,8 +21,45 @@ export const ContainerSearch = styled.div<{ active: boolean }>`
     list-style: none;
     display: flex;
     flex-direction: column;
-    h5 {
-      margin-left: 15px;
+    > section {
+      overflow-x: auto;
+      background-color: #fefefe;
+      > h5 {
+        margin-left: 10px;
+        font-weight: 16px;
+        font-weight: bold;
+        color: #555;
+        text-transform: uppercase;
+      }
+      > table {
+        width: 150%;
+        display: table;
+        .header {
+          background-color: #fff;
+          h5 {
+            margin-left: 10px;
+            font-weight: 10px;
+            font-weight: bold;
+          }
+        }
+        td {
+          background-color: red;
+        }
+        th {
+          text-align: center;
+        }
+        tbody {
+          > tr {
+            background-color: #fdfdfd;
+            border: none;
+            > th {
+              > h5 {
+                cursor: pointer;
+              }
+            }
+          }
+        }
+      }
     }
   }
 `;
