@@ -42,8 +42,8 @@ export const SearchComponentHasComposition = ({
               <table className="table-bordered">
                 {stocks &&
                   stocks.map(({ atributes, product_id, id }, indexStock) => {
-                    const atributeList = JSON.parse(atributes.toLowerCase());
                     if (atributes) {
+                      const atributeList = JSON.parse(atributes.toLowerCase());
                       let headers: { name: string }[] = [];
                       let body: { name: string }[] = [];
                       for (let i = 0; i < atributeList.length; i++) {
