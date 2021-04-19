@@ -15,14 +15,14 @@ export const ContainerSearch = styled.div<{ active: boolean }>`
   top: 100%;
   background-color: #fff;
   border: 1px solid #c2cad8;
-  width: 100%;
+  width: 162%;
   max-height: 200px;
   > ul {
     list-style: none;
     display: flex;
     flex-direction: column;
+    width: 67%;
     > section {
-      overflow-x: auto;
       background-color: #fefefe;
       > h5 {
         margin-left: 10px;
