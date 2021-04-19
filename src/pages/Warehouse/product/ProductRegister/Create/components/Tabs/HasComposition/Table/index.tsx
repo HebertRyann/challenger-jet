@@ -81,7 +81,6 @@ export const Table = (): JSX.Element => {
     (async () => {
       try {
         if (loadCurrentTab().key === nameHasComposition) {
-          console.log('re render');
           if (typeSelectProdut.value.name === SEMI_FINISHED.name) {
             activeLoading();
             const productsTypeRawMaterial = await loadProductByType(
