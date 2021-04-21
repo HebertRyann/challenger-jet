@@ -219,6 +219,40 @@ const ProductAtributesView: React.FC = () => {
               </div>
             </div>
           </div>
+          <div className="row" style={{ marginTop: '20px' }}>
+            <div className="col-md-3">
+              <div className="form-group">
+                <label htmlFor="id" className="control-label">
+                  Tipo do produto
+                </label>
+                <p>{product.type}</p>
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div className="form-group">
+                <label htmlFor="name" className="control-label">
+                  Grupo do produto
+                </label>
+                <p>{product?.product_category?.name}</p>
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div className="form-group">
+                <label htmlFor="created" className="control-label">
+                  Categoria de custo
+                </label>
+                <p>{product.financial_category?.name}</p>
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div className="form-group">
+                <label htmlFor="updated" className="control-label">
+                  Subcategoria custo
+                </label>
+                <p>{product.subfinancial_category?.name}</p>
+              </div>
+            </div>
+          </div>
           <p>&nbsp;</p>
           <div className="row">
             <div className="col-md-12">
