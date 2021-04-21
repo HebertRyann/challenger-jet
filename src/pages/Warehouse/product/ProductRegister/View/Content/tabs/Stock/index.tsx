@@ -22,15 +22,15 @@ export const Stock = (): JSX.Element => {
     return (
       <Container>
         <div className="row">
-          <div className="form-content col-md-3">
+          <div className="form-content col-md-4">
             <label htmlFor="Peso">Unidade de medidas</label>
             <p>{unitMensured.unit_mensured.name}</p>
           </div>
-          <div className="form-content col-md-3">
+          <div className="form-content col-md-4">
             <label htmlFor="tipo do produto">Estoque atual</label>
             <p>{current_stock}</p>
           </div>
-          <div className="form-content col-md-3">
+          <div className="form-content col-md-4">
             <label htmlFor="tipo do produto">Ponto de reposição</label>
             <p>{replacement_point}</p>
           </div>
@@ -43,4 +43,4 @@ export const Stock = (): JSX.Element => {
 };
 
 export const labelStock = 'Estoque';
-export const nameStock = '@@tabs-stocks';
+export const nameStock = '@@tabs-view-stocks';
