@@ -65,4 +65,4 @@ export const Details = (): JSX.Element => {
 };
 
 export const labelDetails = 'Detalhes';
-export const nameDetails = '@@tabs-details';
+export const nameDetails = '@@tabs-view-details';
