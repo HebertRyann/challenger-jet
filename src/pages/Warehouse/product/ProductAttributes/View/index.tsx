@@ -301,6 +301,7 @@ const ProductAtributesView: React.FC = () => {
         pageTitle={'Adicionar'}
         Children={
           <FormCategory
+            valueInput=""
             typeForm={'create'}
             isOpenInModal={{
               handleOnClose: handleClickOnClose,
