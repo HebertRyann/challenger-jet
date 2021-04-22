@@ -20,7 +20,8 @@ import { Footer } from '../../footer';
 import { NewSelect } from '../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../providers/tabsProvider';
 import { useToast } from '../../../../../../../../hooks/toast';
-import { AlertContent } from '../../Content/AlertContent';
+import { useAtribute } from '../../../context/HasVariation/Atributes';
+import { AtributesTypesActions } from '../../../context/HasVariation/Atributes/reducers';
 
 export type TypeTabNameEnableOrDisable = {
   keyTab: string;
@@ -55,14 +56,8 @@ export const DataOverview = ({
   categoryFinances: TypeEntityWithIdAndName[];
   categoryProducts: TypeEntityWithIdAndName[];
 }): JSX.Element => {
-  const { addToast } = useToast();
-  const {
-    activeTab,
-    disableTab,
-    changeCurrentTab,
-    changeCurrentTabForNext,
-  } = useTabs();
-  const { overview, validation, save } = useTabCreate();
+  const { activeTab, disableTab } = useTabs();
+  const { overview } = useTabCreate();
   const {
     typeSelectProdut,
     categoryCost,
@@ -71,14 +66,6 @@ export const DataOverview = ({
     nameProduct,
     hasVariation,
   } = overview.getData();
-  const [alert, setAlert] = useState<{
-    active: boolean;
-    message?: string;
-    component?: () => JSX.Element;
-  }>({
-    active: false,
-    message: '',
-  });
 
   const initialState: TypeEntityWithIdAndName = {
     id: '',
@@ -181,6 +168,7 @@ export const DataOverview = ({
     ],
   );
 
+  const { state, dispatch } = useAtribute();
 
   return (
     <>
