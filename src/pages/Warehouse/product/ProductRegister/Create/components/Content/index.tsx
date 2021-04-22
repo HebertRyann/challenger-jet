@@ -19,6 +19,7 @@ import { AlertContent } from './AlertContent';
 import { Footer } from '../footer';
 import { useHistory } from 'react-router';
 import { nameSource } from '../../../domain/info';
+import { AtributeProvider } from '../../context/HasVariation/Atributes';
 
 export type TypeContentTabs = {
   name: string;
@@ -141,14 +142,16 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
             )}
           </TabHeaderContainer>
           <TabPanelContainer>
-            <hr />
-            <>
-              {tabs.map(({ Component, name }) => (
-                <RenderComponent isActive={name === loadCurrentTab().key}>
-                  {Component}
-                </RenderComponent>
-              ))}
-            </>
+            <AtributeProvider>
+              <>
+                <hr />
+                {tabs.map(({ Component, name }) => (
+                  <RenderComponent isActive={name === loadCurrentTab().key}>
+                    {Component}
+                  </RenderComponent>
+                ))}
+              </>
+            </AtributeProvider>
           </TabPanelContainer>
         </ContentItem>
         <Alert
