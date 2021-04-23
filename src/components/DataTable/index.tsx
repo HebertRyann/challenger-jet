@@ -32,6 +32,7 @@ interface DataTableProps {
   headers?: Header[];
   actions?: Action[];
   notHasChildren?: boolean;
+  onlyParent?: boolean;
   searchParameters?: SearchParameters[];
   format?: {
     orderBy: string;
@@ -44,6 +45,7 @@ const DataTable = ({
   source,
   notHasChildren,
   format,
+  onlyParent,
   headers = [
     { name: 'Data', field: 'created_at', sortable: true },
     { name: 'Descrição', field: 'descriptions', sortable: true },
@@ -98,6 +100,7 @@ const DataTable = ({
           orderBySort: sorting.order,
           searchParameters,
           orderBy: format?.orderBy,
+          onlyParent,
         },
       });
       setItems(response.data.items);
@@ -128,6 +131,28 @@ const DataTable = ({
       : firstItem + ItemsPerPage - 1;
 
   const history = useHistory();
+
+  const getTotalItems = (initialValue: number): number => {
+    let sum = 0;
+    if (initialValue > 1) {
+      return items.length + initialValue - 1;
+    } else {
+      if (!!notHasChildren) {
+        sum = items.reduce((sum, value) => {
+          if (!value.parent_id) {
+            return sum + 1;
+          }
+          return sum;
+        }, 0);
+        if (initialValue === 1) {
+          console.log(sum);
+        }
+      } else {
+        sum = items.length;
+      }
+    }
+    return sum;
+  };
 
   return (
     <div className="dataTables_wrapper no-footer">
@@ -302,7 +327,8 @@ const DataTable = ({
       <div className="row">
         <div className="col-md-5 col-sm-5">
           <div className="dataTables_info">
-            Mostrando de {firstItem} até {lastItem} de {totalItems} registros
+            Mostrando de {firstItem} até {getTotalItems(firstItem)} de{' '}
+            {totalItems} registros
           </div>
         </div>
         <div className="col-md-7 col-sm-7">

@@ -17,6 +17,7 @@ const ProductAtributesList = (): JSX.Element => (
       source={nameSource}
       entity={nameEntity}
       format={{ orderBy: 'name' }}
+      onlyParent
       notHasChildren
       headers={headers}
     />
