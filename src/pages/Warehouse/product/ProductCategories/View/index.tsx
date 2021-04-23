@@ -31,7 +31,6 @@ const ProductAtributesView: React.FC = () => {
   let { id } = useParams<{ id: string }>();
   const history = useHistory();
   const location = useLocation<{ id: string; value: string }>();
-  const { updateDataTable } = useUpdateDataTable();
   const [
     productCategory,
     setProductCategory,
