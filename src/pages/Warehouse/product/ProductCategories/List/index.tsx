@@ -21,6 +21,7 @@ const ProductAtributesList = (): JSX.Element => (
     <DataTable
       source={nameSource}
       entity={nameEntity}
+      format={{ orderBy: 'name' }}
       notHasChildren
       headers={headers}
     />

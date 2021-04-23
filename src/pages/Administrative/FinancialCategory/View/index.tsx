@@ -262,6 +262,7 @@ const ProductAtributesView: React.FC = () => {
                     </div>
                     <div className="portlet-body form">
                       <DataTable
+                        format={{ orderBy: 'name' }}
                         source={nameSource}
                         entity={nameEntity}
                         headers={headers}

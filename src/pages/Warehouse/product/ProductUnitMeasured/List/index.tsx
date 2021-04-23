@@ -4,7 +4,6 @@ import DataTable from '../../../../../components/DataTable';
 import {
   nameEntity,
   namePageTitle,
-  nameActions,
   nameSource,
 } from '../domain/info';
 import { headers } from '../domain/headers';
@@ -21,6 +20,7 @@ const ProductUnitMeasuredList = (): JSX.Element => (
     <DataTable
       source={nameSource}
       entity={nameEntity}
+      format={{ orderBy: 'name' }}
       notHasChildren
       headers={headers}
     />

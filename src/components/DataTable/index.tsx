@@ -27,13 +27,15 @@ interface DataTableProps {
     onClickButtonRemove?: <T>(currentValue: T | any) => void;
     onClickButtonList?: <T>(currentValue: T | any) => void;
   };
-
   entity: string;
   source: string;
   headers?: Header[];
   actions?: Action[];
   notHasChildren?: boolean;
   searchParameters?: SearchParameters[];
+  format?: {
+    orderBy: string;
+  };
 }
 
 const DataTable = ({
@@ -41,6 +43,7 @@ const DataTable = ({
   entity,
   source,
   notHasChildren,
+  format,
   headers = [
     { name: 'Data', field: 'created_at', sortable: true },
     { name: 'Descrição', field: 'descriptions', sortable: true },
@@ -54,7 +57,6 @@ const DataTable = ({
   const [ItemsPerPage, setItemsPerPage] = useState(50);
   const [search, setSearch] = useState('');
   const [sorting, setSorting] = useState({ field: '', order: '' });
-  const [isOpenModaEdit, setIsOpenModaEdit] = useState(false);
 
   const handlerOnClickButtonList = (currentValue: any) => {
     if (typeof onActions?.onClickButtonList === 'function') {
@@ -95,6 +97,7 @@ const DataTable = ({
           orderByField: sorting.field,
           orderBySort: sorting.order,
           searchParameters,
+          orderBy: format?.orderBy,
         },
       });
       setItems(response.data.items);
@@ -103,14 +106,19 @@ const DataTable = ({
     };
     getData();
   }, [
-    entity,
-    source,
-    searchParameters,
+    // entity,
+    // source,
+    // searchParameters,
     currentPage,
     search,
-    sorting,
+    // sorting,
     ItemsPerPage,
   ]);
+
+  useEffect(() => {
+    const result = items.sort(() => -1);
+    setItems([...result]);
+  }, [sorting.order]);
 
   const firstItem =
     totalItems === 0 ? totalItems : ItemsPerPage * (currentPage - 1) + 1;

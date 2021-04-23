@@ -266,6 +266,7 @@ const ProductAtributesView: React.FC = () => {
                         entity={nameEntity}
                         headers={headers}
                         searchParameters={searchProductAtributes}
+                        format={{ orderBy: 'name' }}
                         onActions={{
                           onClickButtonEdit: handlerOnClickButtonEditInCurrentRow,
                           onClickButtonRemove: handlerOnClickButtonRemoveInCurrentRow,
