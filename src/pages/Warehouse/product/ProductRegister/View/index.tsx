@@ -74,7 +74,6 @@ const ProductAtributesView: React.FC = () => {
           apiList(location.state.id),
         );
         const { data } = response;
-        // setProductCategory(data);
         setProduct(data);
         disableLoading();
       } catch (err) {
