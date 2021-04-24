@@ -111,16 +111,11 @@ export const Table = (): JSX.Element => {
           }
         }
       } catch (error) {
-        console.log(error);
         disableLoading();
         addToast({ title: 'Lista de produto não carregada' });
       }
     })();
   }, [typeSelectProdut.value, loadCurrentTab().key]);
-
-  const handlerClickAlertConfirm = useCallback(() => {
-    setAlert(false);
-  }, [alert]);
 
   const handlerChangeNameProduct = useCallback(
     (value: string, index: number) => {
