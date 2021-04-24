@@ -145,7 +145,6 @@ const DataTable = ({
           return sum;
         }, 0);
         if (initialValue === 1) {
-          console.log(sum);
         }
       } else {
         sum = items.length;
