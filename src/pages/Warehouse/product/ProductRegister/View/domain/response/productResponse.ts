@@ -1,6 +1,4 @@
 export type Atributes = {
-  id: number;
-  parent_id: number | null;
   key: string;
   value: string;
 };
