@@ -50,10 +50,10 @@ export const CONSUMER: TypeProduct = {
 };
 
 export const typeProducts: TypeProduct[] = [
+  CONSUMER,
+  LOCATION,
   RAW_MATERIAL,
+  RE_SALE,
   SEMI_FINISHED,
   SALE,
-  RE_SALE,
-  LOCATION,
-  CONSUMER,
 ];
