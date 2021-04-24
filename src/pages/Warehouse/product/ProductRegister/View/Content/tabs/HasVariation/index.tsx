@@ -23,63 +23,64 @@ export const HasVariation = (): JSX.Element => {
     }
   }, [getProduct()]);
 
+  const renderThAtributes = (): JSX.Element[] => {
+    let atributesList: Atributes[] = [];
+
+    if (stocks[0].atributes) {
+      atributesList = JSON.parse(stocks[0].atributes);
+    }
+
+    return atributesList.map(({ key }) => (
+      <th key={key} className="title">
+        {key}
+      </th>
+    ));
+  };
+
   if (getProduct().stocks) {
     return (
-      <div>
-        {stocks.map(
-          ({ current_stock, replacement_point, details, atributes }) => {
-            let unitMensured: { unit_mensured: { name: string } } = {
-              unit_mensured: { name: '' },
-            };
+      <Container className="table table-bordered margin-bottom-0">
+        <thead>
+          <tr>
+            <th className="title">Unidade de medidas</th>
+            <th className="title">Estoque atual</th>
+            <th className="title">Ponto de reposição</th>
+            {renderThAtributes()}
+          </tr>
+        </thead>
+        <tbody>
+          {stocks.map(
+            ({ current_stock, replacement_point, details, atributes }) => {
+              let unitmensured: { unit_mensured: { name: string } } = {
+                unit_mensured: { name: '' },
+              };
 
-            if (details) {
-              unitMensured = JSON.parse(details);
-            }
+              let atributesList: Atributes[] = [];
 
-            let atributeList: Atributes[] = [];
+              if (details) {
+                unitmensured = JSON.parse(details);
+              }
 
-            if (atributes) {
-              atributeList = JSON.parse(atributes?.toLowerCase());
-            }
+              if (atributes) {
+                atributesList = JSON.parse(atributes);
+              }
 
-            return (
-              <Container>
-                <div className="row">
-                  <div className="form-content col-md-3">
-                    <label htmlFor="Peso">Unidade de medidas</label>
-                    <p>{unitMensured.unit_mensured.name}</p>
-                  </div>
-                  <div className="form-content col-md-4">
-                    <label htmlFor="tipo do produto">Estoque atual</label>
-                    <p>{current_stock}</p>
-                  </div>
-                  <div className="form-content col-md-4">
-                    <label htmlFor="tipo do produto">Ponto de reposição</label>
-                    <p>{replacement_point}</p>
-                  </div>
-                </div>
-                <hr />
-                <div className="row">
-                  {atributeList.map(({ id, key, value, parent_id }) => {
-                    return (
-                      <div className="form-content col-md-4">
-                        <label htmlFor="tipo do produto">
-                          {parent_id === null && key}
-                        </label>
-                        <p>{parent_id === id ? 'r' : value}</p>
-                        {console.log(id)}
-                      </div>
-                    );
-                  })}
-                </div>
-              </Container>
-            );
-          },
-        )}
-      </div>
+              return (
+                <tr className="items">
+                  <td>{unitmensured.unit_mensured.name}</td>
+                  <td>{current_stock}</td>
+                  <td>{replacement_point}</td>
+                  {atributesList.map(({ value }) => (
+                    <td>{value}</td>
+                  ))}
+                </tr>
+              );
+            },
+          )}
+        </tbody>
+      </Container>
     );
   }
-
   return <div></div>;
 };
 

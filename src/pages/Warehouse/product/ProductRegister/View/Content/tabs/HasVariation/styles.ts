@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  margin-top: 30px;
-  label {
+export const Container = styled.table`
+  .title {
     font-weight: bold;
   }
-
-  hr {
-    margin: 10px 0;
+  .items {
+    > td {
+      text-align: start !important;
+    }
   }
 `;
