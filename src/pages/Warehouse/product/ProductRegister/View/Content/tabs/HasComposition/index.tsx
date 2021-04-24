@@ -39,36 +39,31 @@ export const HasComposition = (): JSX.Element => {
   );
 
   return (
-    <>
-      {compositionList.map(({ amount, cost, name }) => (
-        <Container className="row">
-          <div className="form-content col-md-6">
-            <label htmlFor="Peso">Produto</label>
-            <p>{name}</p>
-          </div>
-          <div className="form-content col-md-2">
-            <label htmlFor="tipo do produto">Quantidade</label>
-            <p>{amount}</p>
-          </div>
-          <div className="form-content col-md-2">
-            <label htmlFor="tipo do produto">Custo</label>
-            <p>{cost}</p>
-          </div>
-          <div className="form-content col-md-2">
-            <label htmlFor="tipo do produto">Subtotal</label>
-            <p>{(amount * cost).toFixed(2)}</p>
-          </div>
-        </Container>
-      ))}
-      <hr />
-      <Container
-        className="form-content total col-md-12"
-        style={{ textAlign: 'end' }}
-      >
-        <label htmlFor="tipo do produto">Total</label>
-        <p>{total}</p>
-      </Container>
-    </>
+    <div>
+      <table className="table table-bordered margin-bottom-0">
+        <tbody>
+          <tr>
+            <th style={{ width: '50%' }}>Produto</th>
+            <th>Quantidade</th>
+            <th>Custo</th>
+            <th>Subtotal</th>
+          </tr>
+          {compositionList &&
+            compositionList.map(({ amount, cost, name }) => (
+              <tr
+                style={{
+                  height: '10px',
+                }}
+              >
+                <td>{name}</td>
+                <td>{amount}</td>
+                <td>{cost}</td>
+                <td>{(amount * cost).toFixed(2)}</td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
