@@ -1,14 +1,10 @@
 import React, { useCallback, useState } from 'react';
-import { Footer } from '../../../../footer';
 import { Container, IconRemove } from './style';
 import { NewInput } from '../../../../../../../../../../components/NewInput';
 import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
-import { Alert } from '../../../../../../../../../../components/Alert';
 import { SALE, RE_SALE } from '../../../../../domain/products';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../../../services/api';
-import { useTabs } from '../../../../../../../../../../hooks/tabs';
-import { nameHasVariation } from '../..';
 
 type TypeUnitMensured = {
   id: string;
@@ -31,7 +27,6 @@ type TypeTableProps = {
 export const Table = (tableProps: TypeTableProps): JSX.Element => {
   const { unitMensuredList } = tableProps;
   const atributesList = tableProps.atributes;
-  const { changeCurrentTabForNext, changeCurrentTabForPrevious } = useTabs();
   const [alert, setAlert] = useState(false);
   const { variation, overview } = useTabCreate();
   const { typeSelectProdut } = overview.getData();
@@ -52,10 +47,6 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
       setAlert(true);
     }
   };
-
-  const handlerClickAlertConfirm = useCallback(() => {
-    setAlert(false);
-  }, [alert]);
 
   const isTypeSaleOrResale = (): boolean =>
     typeSelectProdut.value.name === SALE.name ||
