@@ -7,7 +7,6 @@ import { useTabs } from '../../../../../../../../hooks/tabs';
 import { nameHasComposition } from '../HasComposition';
 import { namePriceComposition } from '../PriceComposition';
 import { NewInput } from '../../../../../../../../components/NewInput';
-import { Alert } from '../../../../../../../../components/Alert';
 import {
   typeProducts,
   TypeProduct,
@@ -16,12 +15,8 @@ import {
   RE_SALE,
 } from '../../../domain/products';
 import { nameStock } from '../Stock';
-import { Footer } from '../../footer';
 import { NewSelect } from '../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../providers/tabsProvider';
-import { useToast } from '../../../../../../../../hooks/toast';
-import { useAtribute } from '../../../context/HasVariation/Atributes';
-import { AtributesTypesActions } from '../../../context/HasVariation/Atributes/reducers';
 
 export type TypeTabNameEnableOrDisable = {
   keyTab: string;
@@ -167,8 +162,6 @@ export const DataOverview = ({
       overview.getData().hasVariation,
     ],
   );
-
-  const { state, dispatch } = useAtribute();
 
   return (
     <>
