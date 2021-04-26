@@ -180,9 +180,9 @@ export const DataOverview = ({
               handlerSelectTypeProduct({ id: Number(id), name });
             }}
           >
-            {typeProducts.map(({ id, name }) => (
+            {typeProducts.map(({ id, name, label }) => (
               <option key={id} value={id + '+' + name}>
-                {name}
+                {label}
               </option>
             ))}
           </NewSelect>
