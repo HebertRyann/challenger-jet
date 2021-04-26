@@ -20,15 +20,12 @@ export const Container = styled.div`
     margin: 40px 0;
   }
 
-  .total {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-end;
-    p {
-      margin-right: 5px;
-      font-weight: bold;
-    }
+  .title {
+    text-align: end;
+    font-weight: bold;
+  }
+  .value {
+    text-align: start !important;
+    font-weight: bold;
   }
 `;
