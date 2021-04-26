@@ -43,9 +43,9 @@ export const HasVariation = (): JSX.Element => {
         <thead>
           <tr>
             <th className="title">Unidade de medidas</th>
+            {renderThAtributes()}
             <th className="title">Estoque atual</th>
             <th className="title">Ponto de reposição</th>
-            {renderThAtributes()}
           </tr>
         </thead>
         <tbody>
@@ -68,11 +68,11 @@ export const HasVariation = (): JSX.Element => {
               return (
                 <tr className="items">
                   <td>{unitmensured.unit_mensured.name}</td>
-                  <td>{current_stock}</td>
-                  <td>{replacement_point}</td>
                   {atributesList.map(({ value }) => (
                     <td>{value}</td>
                   ))}
+                  <td>{current_stock}</td>
+                  <td>{replacement_point}</td>
                 </tr>
               );
             },
