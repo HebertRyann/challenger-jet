@@ -21,6 +21,7 @@ import { Content } from './Content';
 import { TabsProvider } from '../../../../../hooks/tabs';
 import { ProductProvider, useProduct } from './provider/productProvider';
 import { ProductResponse } from './domain/response/productResponse';
+import { Wrapper } from './styles';
 interface ProductCategorytData {
   id: number;
   parent_id: number | null;
@@ -166,7 +167,7 @@ const ProductAtributesView: React.FC = () => {
   const product = getProduct();
 
   return (
-    <>
+    <Wrapper>
       <Container
         pageTitle={namePageTitle}
         portletTitle={nameActions.read.name}
@@ -312,7 +313,7 @@ const ProductAtributesView: React.FC = () => {
         }
         isActive={alertRemoveParent}
       />
-    </>
+    </Wrapper>
   );
 };
 
