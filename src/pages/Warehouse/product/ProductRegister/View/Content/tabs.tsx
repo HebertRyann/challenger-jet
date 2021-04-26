@@ -1,6 +1,5 @@
 import React from 'react';
 import { TypeContentTabs } from './index';
-
 import { Details, labelDetails, nameDetails } from './tabs/Details';
 import { Stock, labelStock, nameStock } from './tabs/Stock';
 import { Fiscal, labelFiscal, nameFiscal } from './tabs/Fiscal';
@@ -49,13 +48,13 @@ export const makeTabs = async (): Promise<TypeContentTabs[]> => {
     {
       label: labelPriceComposition,
       name: namePriceComposition,
-      isEnable: true,
+      isEnable: false,
       Component: <PriceComposition />,
     },
     {
       label: labelFiscal,
       name: nameFiscal,
-      isEnable: true,
+      isEnable: false,
       Component: <Fiscal />,
     },
   ];
