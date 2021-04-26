@@ -24,7 +24,6 @@ type Link = {
 
 export const Content = (): JSX.Element => {
   const [tabs, setTabs] = useState<TypeContentTabs[]>([]);
-
   const { loadTabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs();
 
   useEffect(() => {
