@@ -30,9 +30,12 @@ export const HasVariation = (): JSX.Element => {
       atributesList = JSON.parse(stocks[0].atributes);
     }
 
+    const capitalizeFirstLetter = (value: string) =>
+      value?.[0].toUpperCase() + value?.toLowerCase().substring(1);
+
     return atributesList.map(({ key }) => (
       <th key={key} className="title">
-        {key}
+        {capitalizeFirstLetter(key)}
       </th>
     ));
   };
