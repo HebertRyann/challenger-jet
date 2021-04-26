@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
 
-type TypeTabs = {
+export type TypeTabs = {
   name: string;
   label: string;
   Component: JSX.Element;
