@@ -19,7 +19,7 @@ import { AlertContent } from './AlertContent';
 import { Footer } from '../footer';
 import { useHistory } from 'react-router';
 import { nameSource } from '../../../domain/info';
-import { AtributeProvider } from '../../context/HasVariation/Atributes';
+import { ProductProvider } from '../../context';
 
 export type TypeContentTabs = {
   name: string;
@@ -142,7 +142,7 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
             )}
           </TabHeaderContainer>
           <TabPanelContainer>
-            <AtributeProvider>
+            <ProductProvider>
               <>
                 <hr />
                 {tabs.map(({ Component, name }) => (
@@ -151,7 +151,7 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
                   </RenderComponent>
                 ))}
               </>
-            </AtributeProvider>
+            </ProductProvider>
           </TabPanelContainer>
         </ContentItem>
         <Alert

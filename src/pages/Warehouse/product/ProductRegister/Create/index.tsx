@@ -6,16 +6,13 @@ import { toolsCreate } from '../domain/tools/create';
 import { Content } from './components/Content';
 import { TabsProvider } from '../../../../../hooks/tabs';
 import { TabCreateProvider } from '../Create/providers/tabsProvider';
-import { ProductProvider } from '../View/provider/productProvider';
 
 const Create = (): JSX.Element => (
   <Container
     Content={() => (
       <TabsProvider>
         <TabCreateProvider>
-          <ProductProvider>
-            <Content tools={[toolsCreate]} />
-          </ProductProvider>
+          <Content tools={[toolsCreate]} />
         </TabCreateProvider>
       </TabsProvider>
     )}
