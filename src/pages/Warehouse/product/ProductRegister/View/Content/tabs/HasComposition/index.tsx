@@ -57,12 +57,12 @@ export const HasComposition = (): JSX.Element => {
                 <td>{(amount * cost).toFixed(2)}</td>
               </tr>
             ))}
+          <tr>
+            <td className="title" colSpan={3}>Total</td>
+            <td className="value">{total?.toFixed(2)}</td>
+          </tr>
         </tbody>
       </table>
-      <div className="total">
-        <p>Total</p>
-        <p>{total?.toFixed(2)}</p>
-      </div>
     </Container>
   );
 };
