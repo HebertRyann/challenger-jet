@@ -12,22 +12,11 @@ export type CompositonView = {
 export type FiscalView = {
   ncm: number;
   cfop: number;
-  icms: {
-    stateTaxe: string;
-    origem: string;
-  };
-  ipi: {
-    stateTaxe: string;
-    origem: string;
-  };
-  pis: {
-    stateTaxe: string;
-    origem: string;
-  };
-  confins: {
-    stateTaxe: string;
-    origem: string;
-  };
+  icms_tax_origem: number;
+  icms_tax_situation: number;
+  ipi_tax_situation: number;
+  pis_tax_situation: number;
+  cofins_tax_situation: number;
 };
 
 export type PriceCompositionView = {
