@@ -13,4 +13,14 @@ export const Container = styled.div`
   hr {
     margin: 40px 0;
   }
+  .item {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    > textarea {
+      padding: 5px;
+      height: 70px;
+      cursor: not-allowed;
+    }
+  }
 `;

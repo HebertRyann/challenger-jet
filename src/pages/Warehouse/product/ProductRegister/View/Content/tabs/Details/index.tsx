@@ -43,21 +43,21 @@ export const Details = (): JSX.Element => {
       </div>
       <hr />
       <div className="text-area row">
-        <div className="form-content col-md-12">
-          <label htmlFor="Peso">Descrição e detalhes</label>
-          <p>{detail.description_details}</p>
+        <div className="form-content col-md-12 item">
+          <label htmlFor="tipo do produto">Descrição e detalhes</label>
+          <textarea defaultValue={detail.description_details} disabled />
         </div>
       </div>
       <div className="text-area row">
-        <div className="form-content col-md-12">
+        <div className="form-content col-md-12 item">
           <label htmlFor="tipo do produto">Especificação Técnica</label>
-          <p>{detail.technical_specification}</p>
+          <textarea defaultValue={detail.technical_specification} disabled />
         </div>
       </div>
       <div className="text-area row">
-        <div className="form-content col-md-12">
+        <div className="form-content col-md-12 item">
           <label htmlFor="tipo do produto">Forma de utilização</label>
-          <p>{detail.way_use}</p>
+          <textarea defaultValue={detail.way_use} disabled />
         </div>
       </div>
     </Container>
