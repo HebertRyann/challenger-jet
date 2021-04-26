@@ -20,22 +20,21 @@ export const Stock = (): JSX.Element => {
     }
 
     return (
-      <Container>
-        <div className="row">
-          <div className="form-content col-md-4">
-            <label htmlFor="Peso">Unidade de medidas</label>
-            <p>{unitMensured.unit_mensured.name}</p>
-          </div>
-          <div className="form-content col-md-4">
-            <label htmlFor="tipo do produto">Estoque atual</label>
-            <p>{current_stock}</p>
-          </div>
-          <div className="form-content col-md-4">
-            <label htmlFor="tipo do produto">Ponto de reposição</label>
-            <p>{replacement_point}</p>
-          </div>
-        </div>
-        <hr />
+      <Container className="table table-bordered margin-bottom-0">
+        <thead>
+          <tr>
+            <th className="title">Unidade de medidas</th>
+            <th className="title">Estoque atual</th>
+            <th className="title">Ponto de reposição</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="items">
+            <td>{unitMensured.unit_mensured.name}</td>
+            <td>{current_stock}</td>
+            <td>{replacement_point}</td>
+          </tr>
+        </tbody>
       </Container>
     );
   }

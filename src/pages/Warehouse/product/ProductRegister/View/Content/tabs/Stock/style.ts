@@ -1,16 +1,10 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.table`
   margin-top: 30px;
-  label {
-    font-weight: bold;
-  }
-
-  .text-area {
-    margin-top: 20px;
-  }
-
-  hr {
-    margin: 40px 0;
+  .items {
+    > td {
+      text-align: start !important;
+    }
   }
 `;
