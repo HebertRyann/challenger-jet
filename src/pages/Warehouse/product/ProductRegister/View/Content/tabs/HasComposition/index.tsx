@@ -39,7 +39,7 @@ export const HasComposition = (): JSX.Element => {
   );
 
   return (
-    <div>
+    <Container>
       <table className="table table-bordered margin-bottom-0">
         <tbody>
           <tr>
@@ -50,11 +50,7 @@ export const HasComposition = (): JSX.Element => {
           </tr>
           {compositionList &&
             compositionList.map(({ amount, cost, name }) => (
-              <tr
-                style={{
-                  height: '10px',
-                }}
-              >
+              <tr className="items">
                 <td>{name}</td>
                 <td>{amount}</td>
                 <td>{cost}</td>
@@ -63,7 +59,11 @@ export const HasComposition = (): JSX.Element => {
             ))}
         </tbody>
       </table>
-    </div>
+      <div className="total">
+        <p>Total</p>
+        <p>{total?.toFixed(2)}</p>
+      </div>
+    </Container>
   );
 };
 
