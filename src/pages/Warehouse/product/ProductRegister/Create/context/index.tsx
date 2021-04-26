@@ -1,5 +1,5 @@
 import React from 'react';
-import { HasVariationProvider } from './HasVariation/Atributes/context';
+import { HasVariationProvider } from './HasVariation';
 
 type TypeProductProvider = {
   children: JSX.Element;
