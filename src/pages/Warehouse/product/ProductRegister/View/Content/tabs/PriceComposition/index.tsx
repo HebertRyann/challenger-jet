@@ -1,16 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import {
+  formatProductTypeToLowerCase,
+  RE_SALE,
+  SALE,
+} from '../../../../Create/domain/products';
 import { PriceCompositionView } from '../../../domain/response/productResponse';
 import { useProduct } from '../../../provider/productProvider';
 import { Container } from './style';
+import { useTabs } from '../../../../../../../../hooks/tabs';
 
 export const PriceComposition = (): JSX.Element => {
   const { getProduct } = useProduct();
   const { price_composition } = getProduct();
   let priceCompositionList: PriceCompositionView = {} as PriceCompositionView;
+  const { activeTab } = useTabs();
 
   if (price_composition) {
     priceCompositionList = JSON.parse(price_composition.toLowerCase());
   }
+
+  useEffect(() => {
+    if (
+      getProduct().type?.replace(' ', '-') ===
+        formatProductTypeToLowerCase(RE_SALE) ||
+      getProduct().type?.replace(' ', '-') ===
+        formatProductTypeToLowerCase(SALE)
+    ) {
+      activeTab(namePriceComposition);
+    }
+  }, [getProduct()]);
 
   return (
     <Container>
