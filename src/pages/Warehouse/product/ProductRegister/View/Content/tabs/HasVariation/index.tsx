@@ -3,12 +3,21 @@ import { useTabs } from '../../../../../../../../hooks/tabs';
 import { useProduct } from '../../../provider/productProvider';
 import { Container } from './styles';
 import { nameStock } from '../../tabs/Stock';
-import { Atributes } from '../../../domain/response/productResponse';
+import {
+  Atributes,
+  PriceResponse,
+} from '../../../domain/response/productResponse';
+import {
+  formatProductTypeToLowerCase,
+  RE_SALE,
+  SALE,
+} from '../../../../Create/domain/products';
 
 export const HasVariation = (): JSX.Element => {
   const { disableTab, activeTab } = useTabs();
   const { getProduct } = useProduct();
   const { stocks } = getProduct();
+  let prices: PriceResponse = {} as PriceResponse;
 
   useEffect(() => {
     if (stocks) {
@@ -34,10 +43,31 @@ export const HasVariation = (): JSX.Element => {
       value?.[0].toUpperCase() + value?.toLowerCase().substring(1);
 
     return atributesList.map(({ key }) => (
-      <th key={key} className="title">
+      <th
+        style={
+          isSaleOrResaleType()
+            ? {
+                position: 'relative',
+                lineHeight: '50px',
+              }
+            : {}
+        }
+        rowSpan={isSaleOrResaleType() ? 2 : 1}
+        key={key}
+        className="title"
+      >
         {capitalizeFirstLetter(key)}
       </th>
     ));
+  };
+
+  const isSaleOrResaleType = (): boolean => {
+    return (
+      getProduct().type?.replace(' ', '-') ===
+        formatProductTypeToLowerCase(RE_SALE) ||
+      getProduct().type?.replace(' ', '-') ===
+        formatProductTypeToLowerCase(SALE)
+    );
   };
 
   if (getProduct().stocks) {
@@ -45,15 +75,72 @@ export const HasVariation = (): JSX.Element => {
       <Container className="table table-bordered margin-bottom-0">
         <thead>
           <tr>
-            <th className="title">Unidade de medidas</th>
+            <th
+              style={
+                isSaleOrResaleType()
+                  ? {
+                      position: 'relative',
+                      lineHeight: '50px',
+                    }
+                  : {}
+              }
+              rowSpan={isSaleOrResaleType() ? 2 : 1}
+              className="title"
+            >
+              Unidade de medidas
+            </th>
             {renderThAtributes()}
-            <th className="title">Estoque atual</th>
-            <th className="title">Ponto de reposição</th>
+            <th
+              style={
+                isSaleOrResaleType()
+                  ? {
+                      position: 'relative',
+                      lineHeight: '50px',
+                    }
+                  : {}
+              }
+              rowSpan={isSaleOrResaleType() ? 2 : 1}
+              className="title"
+            >
+              Estoque atual
+            </th>
+            <th
+              style={
+                isSaleOrResaleType()
+                  ? {
+                      position: 'relative',
+                      lineHeight: '50px',
+                    }
+                  : {}
+              }
+              rowSpan={isSaleOrResaleType() ? 2 : 1}
+              className="title"
+            >
+              Ponto de reposição
+            </th>
+            {isSaleOrResaleType() && (
+              <th style={{ textAlign: 'center' }} className="title" colSpan={2}>
+                Preço
+              </th>
+            )}
           </tr>
+          {isSaleOrResaleType() && (
+            <tr>
+              <th className="title">Custo</th>
+              <th className="title">Venda</th>
+            </tr>
+          )}
         </thead>
         <tbody>
           {stocks.map(
-            ({ current_stock, replacement_point, details, atributes }) => {
+            ({
+              current_stock,
+              replacement_point,
+              details,
+              atributes,
+              prices,
+            }) => {
+              let pricesStocks = {} as PriceResponse;
               let unitmensured: { unit_mensured: { name: string } } = {
                 unit_mensured: { name: '' },
               };
@@ -68,6 +155,10 @@ export const HasVariation = (): JSX.Element => {
                 atributesList = JSON.parse(atributes);
               }
 
+              if (isSaleOrResaleType() && prices) {
+                pricesStocks = JSON.parse(prices.toLowerCase());
+              }
+
               return (
                 <tr className="items">
                   <td>{unitmensured.unit_mensured.name}</td>
@@ -76,6 +167,12 @@ export const HasVariation = (): JSX.Element => {
                   ))}
                   <td>{current_stock}</td>
                   <td>{replacement_point}</td>
+                  {isSaleOrResaleType() && (
+                    <>
+                      <td>{pricesStocks.price_cost}</td>
+                      <td>{pricesStocks.price_sale}</td>
+                    </>
+                  )}
                 </tr>
               );
             },
