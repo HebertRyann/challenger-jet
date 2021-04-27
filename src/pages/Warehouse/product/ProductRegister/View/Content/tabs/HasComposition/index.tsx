@@ -33,6 +33,13 @@ export const HasComposition = (): JSX.Element => {
     compositionList = JSON.parse(composition.toLowerCase());
   }
 
+  const productWithAtributes = () =>
+    compositionList?.map(composition => {
+      return composition;
+    });
+
+  productWithAtributes();
+
   let total = compositionList.reduce(
     (sum, { amount, cost }) => sum + cost * amount,
     0,
@@ -49,7 +56,7 @@ export const HasComposition = (): JSX.Element => {
             <th>Subtotal</th>
           </tr>
           {compositionList &&
-            compositionList.map(({ amount, cost, name }) => (
+            compositionList.map(({ amount, cost, name, ...rest }) => (
               <tr className="items">
                 <td>{name}</td>
                 <td>{amount}</td>
