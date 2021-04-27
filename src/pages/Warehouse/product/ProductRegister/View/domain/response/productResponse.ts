@@ -26,6 +26,11 @@ export type PriceCompositionView = {
   margin_profit: number;
 };
 
+export type PriceResponse = {
+  price_cost: number;
+  price_sale: number;
+};
+
 export type ProductResponse = {
   id: number;
   name: string;
@@ -59,4 +64,5 @@ export type ProductResponse = {
       details: string | null;
     },
   ];
+  prices: string;
 };
