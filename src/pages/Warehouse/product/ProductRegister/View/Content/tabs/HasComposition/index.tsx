@@ -58,7 +58,9 @@ export const HasComposition = (): JSX.Element => {
               </tr>
             ))}
           <tr>
-            <td className="title" colSpan={3}>Total</td>
+            <td className="title" colSpan={3}>
+              Total
+            </td>
             <td className="value">{total?.toFixed(2)}</td>
           </tr>
         </tbody>
