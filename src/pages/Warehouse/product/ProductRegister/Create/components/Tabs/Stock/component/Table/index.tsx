@@ -1,17 +1,10 @@
-import React, { useCallback, useState } from 'react';
-import { Footer } from '../../../../footer';
+import React, { useState } from 'react';
 import { Container } from './style';
-import {
-  NewInput,
-  TypeErrorInput,
-} from '../../../../../../../../../../components/NewInput';
+import { NewInput } from '../../../../../../../../../../components/NewInput';
 import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
-import { Alert } from '../../../../../../../../../../components/Alert';
-import { nameDetails } from '../../../Details';
 import { useTabs } from '../../../../../../../../../../hooks/tabs';
 import { RE_SALE, SALE } from '../../../../../domain/products';
-import { nameStock } from '../..';
 
 type TypeUnitMensured = {
   id: string;
@@ -206,7 +199,6 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
           </tr>
         </tbody>
       </table>
-
     </Container>
   );
 };
