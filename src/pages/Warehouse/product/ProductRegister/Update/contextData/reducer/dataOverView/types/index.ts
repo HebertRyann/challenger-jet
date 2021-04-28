@@ -31,6 +31,14 @@ export type InputOrSelectDataOverView = {
   error?: boolean;
 };
 
+export type SelectTypeProduct = {
+  id?: number;
+  parent_id?: number;
+  value: string;
+  label?: string;
+  error?: boolean;
+};
+
 export type HasVariationType = {
   name: string;
   hasVariation: boolean;
@@ -43,7 +51,7 @@ export type TypesDataOvewView = {
   categoryCostList: CategoryCost[];
   subcategoryCostList: SubCategoryCost[];
   inputs: {
-    typeProduct: InputOrSelectDataOverView;
+    typeProduct: SelectTypeProduct;
     groupProduct: InputOrSelectDataOverView;
     nameProduct: InputOrSelectDataOverView;
     categoryCost: InputOrSelectDataOverView;
