@@ -65,6 +65,7 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
   const { validation, save } = useTabCreate();
   const [links, setLinks] = useState<Link[]>([{ link: '', name: '' }]);
   const { activeLoading, disableLoading } = useLoading();
+  const { validate } = useProduct();
 
   useEffect(() => {
     (async () => {
@@ -83,45 +84,42 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
   }, [alert, links]);
 
   const handlerClickOnSaveButton = async () => {
-    const tabsErrorList = validation.validate();
-    setLinks([]);
-    tabsErrorList.map(({ labelName, linkName }) => {
-      setLinks(old => {
-        return [
-          ...old,
-          {
-            link: linkName,
-            name: labelName,
-          },
-        ];
-      });
-    });
-
-    if (tabsErrorList.length !== 0) {
-      setAlert({ active: true });
-      return;
-    }
-
-    const { code, data } = await save();
-
-    if (code === 200) {
-      addToast({
-        type: 'success',
-        title: 'Produto adicionado',
-        description: 'Produto salvo com sucesso',
-      });
-
-      history.push(`/${nameSource}/view/${data?.id}`, {
-        id: data?.id,
-        value: data?.name,
-      });
-    } else {
-      addToast({
-        type: 'error',
-        title: 'Erro ao salvar o produto',
-        description: 'Não foi possivel salvar o produto',
-      });
-    }
+    validate();
+    // const tabsErrorList = validation.validate();
+    // setLinks([]);
+    // tabsErrorList.map(({ labelName, linkName }) => {
+    //   setLinks(old => {
+    //     return [
+    //       ...old,
+    //       {
+    //         link: linkName,
+    //         name: labelName,
+    //       },
+    //     ];
+    //   });
+    // });
+    // if (tabsErrorList.length !== 0) {
+    //   setAlert({ active: true });
+    //   return;
+    // }
+    // const { code, data } = await save();
+    // if (code === 200) {
+    //   addToast({
+    //     type: 'success',
+    //     title: 'Produto adicionado',
+    //     description: 'Produto salvo com sucesso',
+    //   });
+    //   history.push(`/${nameSource}/view/${data?.id}`, {
+    //     id: data?.id,
+    //     value: data?.name,
+    //   });
+    // } else {
+    //   addToast({
+    //     type: 'error',
+    //     title: 'Erro ao salvar o produto',
+    //     description: 'Não foi possivel salvar o produto',
+    //   });
+    // }
   };
 
   return (
