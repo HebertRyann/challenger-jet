@@ -116,7 +116,7 @@ export const DataOverview = ({
     });
   };
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeNameProduct = (event: React.ChangeEvent<HTMLInputElement>) => {
     dataOverViewDispatch({
       type: DataOvewViewActionTypes.CHANGE_INPUT_NAME_PRODUCT,
       payload: {
@@ -125,7 +125,12 @@ export const DataOverview = ({
         },
       },
     });
+    console.log(dataOvewViewState.inputs.nameProduct.value);
   };
+
+  useEffect(() => {
+    console.log('Change');
+  }, [dataOverView.dataOvewViewState.inputs]);
 
   const handlerHasVariation = ({
     keyTab,
@@ -153,6 +158,7 @@ export const DataOverview = ({
       });
     }
   };
+
 
   return (
     <div className="row">
@@ -207,7 +213,11 @@ export const DataOverview = ({
           label="Nome do produto"
           message="Selecione o tipo do produto"
         />
-        <NewInput onChange={onChange} name="category" />
+        <NewInput
+          onChange={onChangeNameProduct}
+          // value={dataOvewViewState.inputs.nameProduct.value}
+          name="category"
+        />
       </div>
       <Container className="form-content col-md-3">
         <TooltipComponent
