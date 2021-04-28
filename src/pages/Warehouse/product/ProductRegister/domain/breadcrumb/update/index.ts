@@ -13,6 +13,6 @@ export const breadcrumbUpdate: TypeBreadcrumb[] = [
     name: 'Produtos',
   },
   {
-    name: nameActions.read.name,
+    name: nameActions.update.name,
   },
 ];
