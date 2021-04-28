@@ -11,6 +11,6 @@ export const initialStateDataOvewView: TypesDataOvewView = {
     hasVariation: { name: '', hasVariation: false },
     nameProduct: { value: '' },
     subcategoryCost: { value: '' },
-    typeProduct: { value: '' },
+    typeProduct: { value: '',  label: ''},
   },
 };
