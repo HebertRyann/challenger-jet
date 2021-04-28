@@ -22,39 +22,38 @@ const formatProductTypeUppercase = (product: string) => {
 
 export const RAW_MATERIAL: TypeProduct = {
   id: 1,
-  name: 'Materia prima',
-  label: 'MATERIA PRIMA'
+  name: 'materia-prima',
+  label: 'MATERIA PRIMA',
 };
 
 export const SEMI_FINISHED: TypeProduct = {
   id: 2,
-  name: 'Semi acabado',
-  label: 'SEMI ACABADO'
+  name: 'semi-acabado',
+  label: 'SEMI ACABADO',
 };
 
 export const SALE: TypeProduct = {
   id: 3,
-  name: 'Venda',
-  label: 'VENDA'
+  name: 'venda',
+  label: 'VENDA',
 };
 
 export const RE_SALE: TypeProduct = {
   id: 4,
-  name: 'Revenda',
-  label: 'REVENDA'
-
+  name: 'revenda',
+  label: 'REVENDA',
 };
 
 export const LOCATION: TypeProduct = {
   id: 5,
-  name: 'Locação',
-  label: 'LOCAÇÃO'
+  name: 'locação',
+  label: 'LOCAÇÃO',
 };
 
 export const CONSUMER: TypeProduct = {
   id: 6,
-  name: 'Consumo',
-  label: 'USO E CONSUMO'
+  name: 'consumo',
+  label: 'USO E CONSUMO',
 };
 
 export const typeProducts: TypeProduct[] = [
