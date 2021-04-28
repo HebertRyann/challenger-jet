@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Container } from './style';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
 import {
@@ -64,11 +64,11 @@ export const DataOverview = ({
     setSubCategoryFinanceData(childrens);
   };
 
-  const handlerSelectTypeProduct = ({ id, name }: TypeProduct) => {
+  const handlerSelectTypeProduct = ({ id, name, label }: TypeProduct) => {
     dataOverViewDispatch({
       type: DataOvewViewActionTypes.CHANGE_SELECT_TYPE_PRODUCT,
       payload: {
-        data: { id, value: name },
+        data: { id, value: name, label },
       },
     });
     if (id === SALE.id) {
@@ -162,16 +162,18 @@ export const DataOverview = ({
           message="Selecione o tipo do produto"
         />
         <NewSelect
-          error={{ isError: !!dataOvewViewState.inputs.categoryCost.error }}
+          isSelected={dataOvewViewState.inputs.typeProduct.label}
+          error={{ isError: !!dataOvewViewState.inputs.typeProduct.error }}
           onChange={event => {
             const split = event.target.value.split('+');
             const id = split[0];
             const name = split[1];
-            handlerSelectTypeProduct({ id: Number(id), name });
+            const label = split[2];
+            handlerSelectTypeProduct({ id: Number(id), name, label });
           }}
         >
           {typeProducts.map(({ id, name, label }) => (
-            <option key={id} value={id + '+' + name}>
+            <option key={id} value={id + '+' + name + '+' + label}>
               {label}
             </option>
           ))}
@@ -191,6 +193,7 @@ export const DataOverview = ({
 
             handlerChangeGroupProduct({ id, name, parent_id: '' });
           }}
+          isSelected={dataOvewViewState.inputs.groupProduct.value}
         >
           {categoryProducts.map(({ id, name }) => (
             <option key={id} value={id + '+' + name}>
