@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer } from 'react';
-import { MainReducerType } from '../reducer';
-import { initialMainState } from '../reducer/initialStateMain';
+import { TypeDataOverViewReducer } from '../reducer';
+import { initialStateProduct } from './initialState';
 import { dataOverViewReducer } from '../reducer/dataOverView/reducers';
 import { initialStateDataOvewView } from '../reducer/dataOverView/states';
 import { DataOvewViewActionTypes } from '../reducer/dataOverView/actions';
@@ -9,13 +9,29 @@ type TypeUpdateProvider = {
   children: JSX.Element;
 };
 
-const HasVariationContext = createContext<MainReducerType>(initialMainState);
+export type ProductContextType = {
+  dataOverView: TypeDataOverViewReducer;
+  validate: () => void;
+};
+
+const HasVariationContext = createContext<ProductContextType>(
+  initialStateProduct,
+);
 
 const ProviderProduct = ({ children }: TypeUpdateProvider) => {
   const [overView, overViewdispatch] = useReducer(
     dataOverViewReducer,
     initialStateDataOvewView,
   );
+
+  const validate = () => {
+    console.log('Validate all');
+    overViewdispatch({
+      type: DataOvewViewActionTypes.VALIDATE_DATA_OVER_VIEW,
+      payload: null,
+    });
+  };
+
   return (
     <HasVariationContext.Provider
       value={{
@@ -23,6 +39,7 @@ const ProviderProduct = ({ children }: TypeUpdateProvider) => {
           dataOvewViewState: overView,
           dataOverViewDispatch: overViewdispatch,
         },
+        validate,
       }}
     >
       {children}
@@ -30,7 +47,7 @@ const ProviderProduct = ({ children }: TypeUpdateProvider) => {
   );
 };
 
-function useProduct(): MainReducerType {
+function useProduct(): ProductContextType {
   const context = useContext(HasVariationContext);
 
   if (!context) {
