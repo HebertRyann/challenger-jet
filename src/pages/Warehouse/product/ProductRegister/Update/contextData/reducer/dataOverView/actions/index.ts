@@ -5,6 +5,7 @@ import {
   SubCategoryCost,
   InputOrSelectDataOverView,
   HasVariationType,
+  SelectTypeProduct
 } from '../types';
 
 type TypeActionsMap<M extends { [index: string]: any }> = {
@@ -24,6 +25,7 @@ export enum DataOvewViewActionTypes {
   CHANGE_SELECT_CATEGORY_COST = '@@ACTION/DATA_OVEW_VIEW/CHANGE/SELECT/CATEGORY_COST',
   CHANGE_SELECT_SUBCATEGORY_COST = '@@ACTION/DATA_OVEW_VIEW/CHANGE/SELECT/SUBCATEGORY_COST',
   CHANGE_SELECT_HAS_VARIATION = '@@ACTION/DATA_OVEW_VIEW/CHANGE/SELECT/HAS_VARIATION',
+  VALIDATE_DATA_OVER_VIEW = '@@ACTION/DATA_OVEW_VIEW/VALIDATE',
 }
 
 type TypeDataOverViewActionsPayload = {
@@ -40,7 +42,7 @@ type TypeDataOverViewActionsPayload = {
     subcategoryCost: SubCategoryCost[];
   };
   [DataOvewViewActionTypes.CHANGE_SELECT_TYPE_PRODUCT]: {
-    data: InputOrSelectDataOverView;
+    data: SelectTypeProduct;
   };
   [DataOvewViewActionTypes.CHANGE_SELECT_GROUP_PRODUCT]: {
     data: InputOrSelectDataOverView;
@@ -55,6 +57,7 @@ type TypeDataOverViewActionsPayload = {
     data: InputOrSelectDataOverView;
   };
   [DataOvewViewActionTypes.CHANGE_SELECT_HAS_VARIATION]: HasVariationType;
+  [DataOvewViewActionTypes.VALIDATE_DATA_OVER_VIEW]: null;
 };
 
 export type TypeDataOverViewActions = TypeActionsMap<TypeDataOverViewActionsPayload>[keyof TypeActionsMap<TypeDataOverViewActionsPayload>];
