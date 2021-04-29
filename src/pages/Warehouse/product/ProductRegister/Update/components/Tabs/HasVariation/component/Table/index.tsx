@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Container, IconRemove } from './style';
 import { NewInput } from '../../../../../../../../../../components/NewInput';
 import { NewSelect } from '../../../../../../../../../../components/NewSelect';
@@ -313,7 +313,6 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
         />
         variação
       </button>
-
     </Container>
   );
 };

@@ -16,9 +16,7 @@ type TypeTableProps = {
 };
 
 export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
-  const [alert, setAlert] = useState(false);
-  const { changeCurrentTabForNext, changeCurrentTabForPrevious } = useTabs();
-  const { overview, validation } = useTabCreate();
+  const { overview } = useTabCreate();
   const { typeSelectProdut } = overview.getData();
   const { stock } = useTabCreate();
   const {
@@ -94,6 +92,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
             <td>
               <NewSelect
                 error={unitMensureds.error}
+                isSelected={stock.getData().unitMensured.value.name}
                 onChange={event => {
                   const id = event.target.value.split('+')[0];
                   const name = event.target.value.split('+')[1];
@@ -130,6 +129,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                     },
                   });
                 }}
+                value={stock.getData().stockCurrent.value}
                 error={stockCurrent.error}
                 name="stock"
                 className="form-control"
