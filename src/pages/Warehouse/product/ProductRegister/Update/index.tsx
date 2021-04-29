@@ -1,26 +1,28 @@
 import React from 'react';
 import Container from '../../../../../components/Container';
-import { breadcrumbUpdate } from '../domain/breadcrumb';
+import { breadcrumbCreate } from '../domain/breadcrumb';
 import { nameActions, namePageTitle } from '../domain/info';
-import { toolsCreate } from '../domain/tools/';
+import { toolsCreate } from '../domain/tools/create';
 import { Content } from './components/Content';
 import { TabsProvider } from '../../../../../hooks/tabs';
-import { ProductProvider } from './contextData';
+import { TabUpdateProvider } from './providers/tabsProvider';
 import { useParams } from 'react-router';
+
 const Create = (): JSX.Element => {
   const { id } = useParams<{ id: string }>();
+
   return (
     <Container
       Content={() => (
         <TabsProvider>
-          <ProductProvider>
+          <TabUpdateProvider>
             <Content id={id} tools={[toolsCreate]} />
-          </ProductProvider>
+          </TabUpdateProvider>
         </TabsProvider>
       )}
       pageTitle={namePageTitle}
-      portletTitle={nameActions.update.name}
-      breadcrumb={breadcrumbUpdate}
+      portletTitle={nameActions.create.name}
+      breadcrumb={breadcrumbCreate}
     />
   );
 };
