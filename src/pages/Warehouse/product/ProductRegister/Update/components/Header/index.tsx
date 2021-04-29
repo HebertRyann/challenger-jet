@@ -31,7 +31,7 @@ export const HeaderCreateProduct = ({
 
   return (
     <div className="portlet-title">
-      <div className="caption">Atualizar</div>
+      <div className="caption">Editar</div>
 
       <div className="tools">
         {tools.map(tool => (
