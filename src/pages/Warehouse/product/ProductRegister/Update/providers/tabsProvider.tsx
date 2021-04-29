@@ -69,7 +69,6 @@ import {
 } from '../../../../../../utlis/mask';
 interface TabCreateContext {
   overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps>;
-  addOverView: (dataOverView: TypeDataOverViewProps) => void;
   details: TypeGetAndSetAndValidateAba<TypeDetailsProps>;
   stock: TypeGetAndSetAndValidateAba<TypeStockProps>;
   priceComposition: TypeGetAndSetAndValidateAba<TypePriceCompositionProps>;
@@ -78,13 +77,20 @@ interface TabCreateContext {
   variation: TypeGetAndSetHasVariation<TypeHasVariation[]>;
   validation: TypeValitionResolve;
   save: () => Promise<ResultOnSaveProdut>;
+  addOverView: (overview: TypeDataOverViewProps) => void;
+  addDetails: (details: TypeDetailsProps) => void;
+  addStock: (stock: TypeStockProps) => void;
+  addHasVariation: (hasVariation: TypeHasVariation) => void;
+  addHasComposition: (hasComposition: TypeProduct) => void;
+  addPriceComposition: (priceComposition: TypePriceCompositionProps) => void;
+  addFiscal: (fiscal: TypeFiscal) => void;
 }
 
 const TabCreateContext = createContext<TabCreateContext>(
   {} as TabCreateContext,
 );
 
-const TabCreateProvider = ({
+const TabUpdateProvider = ({
   children,
 }: {
   children: JSX.Element;
@@ -1161,8 +1167,38 @@ const TabCreateProvider = ({
     };
   };
 
-  const addOverView = (data: TypeDataOverViewProps) => {
-    setDataOverView(data);
+  const addOverView = (overView: TypeDataOverViewProps) => {
+    setDataOverView(overView);
+  };
+
+  const addDetails = (details: TypeDetailsProps) => {
+    setDetail(details);
+  };
+
+  const addStock = (stockParams: TypeStockProps) => {
+    setStock(stockParams);
+  };
+
+  const addHasVariation = (hasVariation: TypeHasVariation) => {
+    setVariationState(prevState => [
+      ...prevState.filter(({ currentStock }) => currentStock.value !== ''),
+      hasVariation,
+    ]);
+  };
+
+  const addHasComposition = (composition: TypeProduct) => {
+    setCompositionState(prevState => [
+      ...prevState.filter(({ nameProduct }) => nameProduct.value !== ''),
+      composition,
+    ]);
+  };
+
+  const addPriceComposition = (priceComposition: TypePriceCompositionProps) => {
+    setPriceCompositionState(priceComposition);
+  };
+
+  const addFiscal = (fiscalParams: TypeFiscal) => {
+    setFiscalState(fiscalParams);
   };
 
   return (
@@ -1171,11 +1207,17 @@ const TabCreateProvider = ({
         overview,
         addOverView,
         details,
+        addDetails,
         stock,
+        addStock,
         priceComposition,
+        addPriceComposition,
         fiscal,
+        addFiscal,
         composition,
+        addHasComposition,
         variation,
+        addHasVariation,
         validation: validation,
         save,
       }}
@@ -1189,10 +1231,10 @@ function useTabCreate(): TabCreateContext {
   const context = useContext(TabCreateContext);
 
   if (!context) {
-    throw new Error('useTabCreate must be used witin a TabCreateProvider');
+    throw new Error('useTabCreate must be used witin a TabUpdateProvider');
   }
 
   return context;
 }
 
-export { TabCreateProvider, useTabCreate };
+export { TabUpdateProvider, useTabCreate };
