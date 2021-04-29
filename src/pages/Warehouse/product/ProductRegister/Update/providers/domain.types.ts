@@ -135,6 +135,8 @@ export type TypeProduct = {
   amount: TypeValueAndError;
   cost: TypeValueAndError;
   subtotal: TypeValueAndError;
+  product_id?: string;
+  stock_id?: string;
 };
 
 export type ResolverComposition = {
