@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Container } from './styles';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../services/api';
 import { Table } from './component/Table';
@@ -31,6 +31,16 @@ export const HasVariation = ({
   const [atributesList, setAtributesList] = useState<
     ResponseEntiryWithIdNameWithChildren[]
   >(atributes);
+
+  useEffect(() => {
+    variation.getData()[0].atributes.forEach(result => {
+      atributesList.forEach((atribute, index) => {
+        if (atribute.id.toString() === result.value.keyParent) {
+          atributesList[index].isChecked = true;
+        }
+      });
+    });
+  }, [variation.getData()]);
 
   const handlerClickCheckBox = useCallback(
     (index: number) => {
