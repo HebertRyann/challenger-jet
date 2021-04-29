@@ -5,6 +5,7 @@ import {
   DataOverview,
   labelDataOverview,
   nameDataOverview,
+  TypeEntityWithIdAndName,
 } from '../Tabs/DataOverview';
 
 import { Details, nameDetails, labelDetails } from '../Tabs/Details';
@@ -40,7 +41,6 @@ import {
   ResponseEntiryWithIdNameWithChildren,
   loadAtributes,
 } from '../../services/api';
-import { TypeEntityWithIdAndName } from '../../domain/types';
 
 export const makeTabs = async (): Promise<TypeContentTabs[]> => {
   const loadCategoryFinances = async (): Promise<TypeEntityWithIdAndName[]> => {
@@ -97,41 +97,41 @@ export const makeTabs = async (): Promise<TypeContentTabs[]> => {
       isEnable: true,
       Component: <Details />,
     },
-    // {
-    //   label: labelPriceComposition,
-    //   name: namePriceComposition,
-    //   isEnable: false,
-    //   Component: <PriceComposition />,
-    // },
-    // {
-    //   label: labelStock,
-    //   name: nameStock,
-    //   isEnable: true,
-    //   Component: <Stock unitMensureds={unitMensureds} />,
-    // },
-    // {
-    //   label: labelHasVariation,
-    //   name: nameHasVariation,
-    //   isEnable: false,
-    //   Component: (
-    //     <HasVariation atributes={atributes} unitMensureds={unitMensureds} />
-    //   ),
-    // },
-    // {
-    //   label: labelFiscal,
-    //   name: nameFiscal,
-    //   isEnable: false,
-    //   Component: (
-    //     <TabsProvider>
-    //       <Fiscal />
-    //     </TabsProvider>
-    //   ),
-    // },
-    // {
-    //   label: labelHasComposition,
-    //   name: nameHasComposition,
-    //   isEnable: false,
-    //   Component: <HasComposition />,
-    // },
+    {
+      label: labelPriceComposition,
+      name: namePriceComposition,
+      isEnable: false,
+      Component: <PriceComposition />,
+    },
+    {
+      label: labelStock,
+      name: nameStock,
+      isEnable: true,
+      Component: <Stock unitMensureds={unitMensureds} />,
+    },
+    {
+      label: labelHasVariation,
+      name: nameHasVariation,
+      isEnable: false,
+      Component: (
+        <HasVariation atributes={atributes} unitMensureds={unitMensureds} />
+      ),
+    },
+    {
+      label: labelFiscal,
+      name: nameFiscal,
+      isEnable: false,
+      Component: (
+        <TabsProvider>
+          <Fiscal />
+        </TabsProvider>
+      ),
+    },
+    {
+      label: labelHasComposition,
+      name: nameHasComposition,
+      isEnable: false,
+      Component: <HasComposition />,
+    },
   ];
 };
