@@ -81,6 +81,12 @@ export const makeTabs = async (): Promise<TypeContentTabs[]> => {
 
   return [
     {
+      label: labelHasComposition,
+      name: nameHasComposition,
+      isEnable: true,
+      Component: <HasComposition />,
+    },
+    {
       label: labelDataOverview,
       name: nameDataOverview,
       isEnable: true,
@@ -127,11 +133,6 @@ export const makeTabs = async (): Promise<TypeContentTabs[]> => {
         </TabsProvider>
       ),
     },
-    {
-      label: labelHasComposition,
-      name: nameHasComposition,
-      isEnable: false,
-      Component: <HasComposition />,
-    },
+
   ];
 };

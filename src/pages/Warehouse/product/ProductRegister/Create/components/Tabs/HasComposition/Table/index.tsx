@@ -18,7 +18,6 @@ import { RAW_MATERIAL } from '../../../../domain/products';
 import { useLoading } from '../../../../../../../../../hooks/loading';
 import { SearchComponentHasComposition } from '../SearchComponent';
 import { useToast } from '../../../../../../../../../hooks/toast';
-import { number } from 'yup/lib/locale';
 
 type ProductByTypeSelected = {
   id: string;
@@ -38,11 +37,7 @@ export const Table = (): JSX.Element => {
   ] = useState<ProductByTypeSelected[]>([]);
 
   const { composition, overview } = useTabCreate();
-  const {
-    changeCurrentTabForNext,
-    changeCurrentTabForPrevious,
-    loadCurrentTab,
-  } = useTabs();
+  const { loadCurrentTab } = useTabs();
   const products = composition.getData();
   const { typeSelectProdut } = overview.getData();
   const {
@@ -56,7 +51,7 @@ export const Table = (): JSX.Element => {
   } = composition.setData;
 
   const [total, setTotal] = useState(0);
-  const [activeSearch, setActiveSearch] = useState(false);
+  const [activeSearch, setActiveSearch] = useState<boolean[]>([false]);
 
   useEffect(() => {
     let soma = 0;
@@ -68,10 +63,9 @@ export const Table = (): JSX.Element => {
     setTotal(soma);
   }, [products]);
 
-  const handleClickOnSaveButton = () => {
-    if (composition.validate()) {
-      setAlert(true);
-    }
+  const handleClickAddComposition = () => {
+    addComposition();
+    setActiveSearch(prevState => prevState.map(() => false));
   };
 
   const formatProductName = (product: string): string =>
@@ -123,25 +117,34 @@ export const Table = (): JSX.Element => {
       if (value.length) {
         const matchList = productListByTypeSelected.filter(({ id, name }) => {
           const regex = new RegExp(`^${value}`, 'gi');
-
           return name.match(regex);
         });
 
         if (value === '') {
           setProductListByTypeSelectedSearch([]);
-          setActiveSearch(false);
+          setActiveSearch(prevState => prevState.map(() => false));
         }
 
         if (matchList.length > 0) {
           setProductListByTypeSelectedSearch(matchList);
-          setActiveSearch(true);
+          setActiveSearch(prevState => {
+            prevState = prevState.map(() => false);
+            prevState[index] = true;
+            return prevState;
+          });
         } else {
-          setActiveSearch(false);
+          setActiveSearch(prevState => {
+            prevState[index] = false;
+            return [...prevState];
+          });
           setProductListByTypeSelectedSearch(productListByTypeSelected);
         }
         return;
       }
-      setActiveSearch(false);
+      setActiveSearch(prevState => {
+        prevState[index] = false;
+        return [...prevState];
+      });
     },
     [productListByTypeSelected, productListByTypeSelectedSearch, products],
   );
@@ -155,7 +158,10 @@ export const Table = (): JSX.Element => {
   }) => {
     handlerChangeNameProduct(product.name, index);
     changeInputProductIdAndStockId(product.product_id, product.stock_id, index);
-    setActiveSearch(false);
+    setActiveSearch(prevState => {
+      prevState[index] = true;
+      return [...prevState];
+    });
   };
 
   return (
@@ -191,7 +197,7 @@ export const Table = (): JSX.Element => {
                       }
                       RenderSearchComponent={() => (
                         <SearchComponentHasComposition
-                          active={activeSearch}
+                          active={activeSearch[index]}
                           data={productListByTypeSelectedSearch}
                           onClickRow={(product: any) =>
                             handlerClickRowSearch({ product, index })
@@ -252,7 +258,14 @@ export const Table = (): JSX.Element => {
                     value={loadInputProductIdAndStockId()[index].stockId}
                   />
                   <td className="actions">
-                    <IconRemove onClick={() => removeComposition(index)} />
+                    <IconRemove
+                      onClick={() => {
+                        removeComposition(index);
+                        setActiveSearch(prevState =>
+                          prevState.map(() => false),
+                        );
+                      }}
+                    />
                   </td>
                 </tr>
               ))}
@@ -263,7 +276,7 @@ export const Table = (): JSX.Element => {
       <hr />
       <FooterStyled>
         <button
-          onClick={addComposition}
+          onClick={() => handleClickAddComposition()}
           className="btn dark btn-sm sbold uppercase"
         >
           <span
