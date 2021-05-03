@@ -79,6 +79,7 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
     disableTab,
   } = useTabs();
   const {
+    overview,
     validation,
     save,
     addOverView,
@@ -199,8 +200,8 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
               origem: {
                 error: { isError: false },
                 value: {
-                  id: fiscalResponse.icms_tax_origem,
-                  name: fiscalResponse.icms_tax_origem,
+                  id: fiscalResponse.icms_tax_origem.toString(),
+                  name: fiscalResponse.icms_tax_origem.toString(),
                 },
               },
               taxesIssue: {
@@ -295,6 +296,7 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
       }
 
       addOverView({
+        id: data.id.toString(),
         typeSelectProdut: {
           error: {
             isError: false,

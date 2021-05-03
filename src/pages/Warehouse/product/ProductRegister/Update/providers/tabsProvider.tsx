@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
-import { saveProduct } from '../services/api/saveProduct';
+import { updateProduct } from '../services/api/updateProduct';
 import {
   RAW_MATERIAL,
   SALE,
@@ -130,7 +130,7 @@ const TabUpdateProvider = ({
   const validationAndSetErrorAllFieldsDataOverView = useCallback(() => {
     let isError = false;
 
-    if (overView.typeSelectProdut.value.id === '') {
+    if (overView.typeSelectProdut.value.name === '') {
       isError = true;
       setOverView(old => ({
         ...old,
@@ -887,7 +887,7 @@ const TabUpdateProvider = ({
       const valueSelectedTypeProduct = overView.typeSelectProdut.value.name;
       const hasVariation = overView.hasVariation.value.hasVariation;
 
-      if (overView.typeSelectProdut.value.id === '') {
+      if (overView.typeSelectProdut.value.name === '') {
         overview.validate();
         return [{ labelName: labelDataOverview, linkName: nameDataOverview }];
       }
@@ -994,6 +994,7 @@ const TabUpdateProvider = ({
       nameProduct,
       subCategoryCost,
       typeSelectProdut,
+      id,
     } = overView;
     const {
       descriptionAndDetails,
@@ -1018,6 +1019,7 @@ const TabUpdateProvider = ({
       stock: TypeProductStock[];
     } => {
       const overview_and_details: TypeProductDataOverView = {
+        id: Number(id),
         details: {
           width: convertValueWithMaskInNumber(width.value),
           weight: convertValueMaskInNumber(weight.value),
@@ -1132,7 +1134,8 @@ const TabUpdateProvider = ({
 
     if (typeProduct === SALE.name || typeProduct === RE_SALE.name) {
       if (typeProduct === SALE.name) {
-        return await saveProduct({
+        return await updateProduct({
+          id,
           details_overview: createRequestWithOverViewDetailsStockOrVariation()
             .overview_and_details,
           stock: createRequestWithOverViewDetailsStockOrVariation().stock,
@@ -1140,15 +1143,17 @@ const TabUpdateProvider = ({
           composition: createRequestWithComposition(),
         });
       }
-      return await saveProduct({
+      return await updateProduct({
         details_overview: createRequestWithOverViewDetailsStockOrVariation()
           .overview_and_details,
         stock: createRequestWithOverViewDetailsStockOrVariation().stock,
         price_composition_fiscal: createRequestWithPriceCompositionAndFiscal(),
+        id,
       });
     }
     if (typeProduct === SEMI_FINISHED.name) {
-      return await saveProduct({
+      return await updateProduct({
+        id,
         details_overview: createRequestWithOverViewDetailsStockOrVariation()
           .overview_and_details,
         stock: createRequestWithOverViewDetailsStockOrVariation().stock,
@@ -1156,7 +1161,8 @@ const TabUpdateProvider = ({
       });
     }
     if (typeProduct !== '') {
-      return await saveProduct({
+      return await updateProduct({
+        id,
         details_overview: createRequestWithOverViewDetailsStockOrVariation()
           .overview_and_details,
         stock: createRequestWithOverViewDetailsStockOrVariation().stock,
@@ -1187,6 +1193,15 @@ const TabUpdateProvider = ({
   };
 
   const addHasComposition = (composition: TypeProduct) => {
+    setProducIdAndStockId(prevState => [
+      ...prevState.filter(
+        ({ productId, stockId }) => productId !== 0 && stockId !== 0,
+      ),
+      {
+        productId: Number(composition?.product_id),
+        stockId: Number(composition?.stock_id),
+      },
+    ]);
     setCompositionState(prevState => [
       ...prevState.filter(({ nameProduct }) => nameProduct.value !== ''),
       composition,

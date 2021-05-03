@@ -39,6 +39,7 @@ export type TypeValitionResolve = {
 };
 
 export type TypeDataOverViewProps = {
+  id: string;
   typeSelectProdut: TypeGenericValueWithError<FieldWithIdName>;
   categoryCost: TypeGenericValueWithError<FieldWithIdName>;
   subCategoryCost: TypeGenericValueWithError<FieldWithIdName>;
@@ -217,6 +218,7 @@ type DetailsProduct = {
 };
 
 export type TypeProductDataOverView = {
+  id: number;
   type: string;
   category_cost_id: number;
   subcategory_cost_id: number;

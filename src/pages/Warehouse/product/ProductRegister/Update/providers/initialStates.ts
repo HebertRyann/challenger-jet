@@ -25,6 +25,7 @@ export const initialStateIdAndNameFieild: TypeGenericValueWithError<EntityWithId
 };
 
 export const initialStateOverview: TypeDataOverViewProps = {
+  id: '',
   categoryCost: initialStateIdAndNameFieild,
   subCategoryCost: initialStateIdAndNameFieild,
   groupProduct: initialStateIdAndNameFieild,
