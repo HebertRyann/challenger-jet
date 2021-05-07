@@ -71,6 +71,7 @@ export type TypeStockProps = {
 };
 
 export type TypePriceCompositionProps = {
+  simpleNational: TypeValueAndError;
   profit: TypeValueAndError;
   ipi: TypeValueAndError;
   cost: TypeValueAndError;
