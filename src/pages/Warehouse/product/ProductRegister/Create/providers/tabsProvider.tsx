@@ -351,6 +351,13 @@ const TabCreateProvider = ({
         profit: { ...old.profit, error: { isError: true } },
       }));
     }
+    if (priceCompositionState.simpleNational.value === '') {
+      isError = true;
+      setPriceCompositionState(old => ({
+        ...old,
+        simpleNational: { ...old.simpleNational, error: { isError: true } },
+      }));
+    }
     return isError;
   }, [priceCompositionState]);
 
