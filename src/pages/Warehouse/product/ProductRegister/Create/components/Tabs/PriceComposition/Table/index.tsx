@@ -12,7 +12,7 @@ import { namePriceComposition } from '..';
 export const Table = (): JSX.Element => {
   const { changeCurrentTabForNext, changeCurrentTabForPrevious } = useTabs();
   const { priceComposition } = useTabCreate();
-  const { cost, dif, ipi, profit } = priceComposition.getData();
+  const { cost, dif, ipi, profit, simpleNational } = priceComposition.getData();
 
   return (
     <>
@@ -104,12 +104,15 @@ export const Table = (): JSX.Element => {
           />
           <NewInput
             name="input"
-            value={numericMask(dif.value)}
-            error={dif.error}
+            value={numericMask(simpleNational.value)}
+            error={simpleNational.error}
             onChange={e =>
               priceComposition.setData({
                 ...priceComposition.getData(),
-                dif: { error: { isError: false }, value: e.target.value },
+                simpleNational: {
+                  error: { isError: false },
+                  value: e.target.value,
+                },
               })
             }
             className="form-control"
