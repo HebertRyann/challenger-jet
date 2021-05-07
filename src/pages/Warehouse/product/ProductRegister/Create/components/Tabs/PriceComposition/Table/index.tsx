@@ -19,7 +19,7 @@ export const Table = (): JSX.Element => {
       <div className="row">
         <ContainerInput className="form-content col-md-3">
           <TooltipComponent
-            label="Margem de lucro"
+            label="Margem de lucro (%)"
             message="Selecione o tipo do produto"
           />
           <NewInput
@@ -59,7 +59,7 @@ export const Table = (): JSX.Element => {
         </ContainerInput>
         <ContainerInput className="form-content col-md-3">
           <TooltipComponent
-            label="Custo fixo"
+            label="Custo fixo (%)"
             message="Selecione o tipo do produto"
           />
           <NewInput
@@ -79,7 +79,27 @@ export const Table = (): JSX.Element => {
         </ContainerInput>
         <ContainerInput className="form-content col-md-3">
           <TooltipComponent
-            label="DIF ICMS"
+            label="DIF ICMS (%)"
+            message="Selecione o tipo do produto"
+          />
+          <NewInput
+            name="input"
+            value={numericMask(dif.value)}
+            error={dif.error}
+            onChange={e =>
+              priceComposition.setData({
+                ...priceComposition.getData(),
+                dif: { error: { isError: false }, value: e.target.value },
+              })
+            }
+            className="form-control"
+            type="text"
+            placeholder="0,00"
+          />
+        </ContainerInput>
+        <ContainerInput className="form-content col-md-3">
+          <TooltipComponent
+            label="Simples nacional (%)"
             message="Selecione o tipo do produto"
           />
           <NewInput
@@ -98,7 +118,6 @@ export const Table = (): JSX.Element => {
           />
         </ContainerInput>
       </div>
-
     </>
   );
 };
