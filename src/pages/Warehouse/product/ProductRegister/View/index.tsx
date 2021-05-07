@@ -35,10 +35,7 @@ const ProductAtributesView: React.FC = () => {
   const history = useHistory();
   const location = useLocation<{ id: string; value: string }>();
   const { updateDataTable } = useUpdateDataTable();
-  const [
-    productCategory,
-    setProductCategory,
-  ] = useState<ProductCategorytData | null>(null);
+
   const { addToast } = useToast();
   const [alert, setIsActiveAlert] = useState<{
     isActive: boolean;
@@ -113,7 +110,7 @@ const ProductAtributesView: React.FC = () => {
         });
         addToast({
           type: 'success',
-          title: 'Atributo removido com sucesso.',
+          title: 'Produto removido com sucesso.',
         });
       } catch (err) {
         setIsActiveAlert({
@@ -123,7 +120,7 @@ const ProductAtributesView: React.FC = () => {
         });
         addToast({
           type: 'error',
-          title: 'Atributo não removido, pois ainda está sendo usada.',
+          title: 'O produto não removido, pois ainda está sendo usada.',
         });
       }
     },
@@ -135,6 +132,7 @@ const ProductAtributesView: React.FC = () => {
   const handleOnClickRemoveParent = useCallback(
     ({ id, name }: { id: string; name: string }) => {
       setAlertRemoveParent(true);
+      console.log('remove product', id);
     },
     [alertRemoveParent],
   );
@@ -176,8 +174,8 @@ const ProductAtributesView: React.FC = () => {
           toolsViewUpdate(String(id)),
           toolsViewDelete(() => {
             handleOnClickRemoveParent({
-              id: String(productCategory?.id),
-              name: String(productCategory?.name),
+              id: String(product?.id),
+              name: String(product?.name),
             });
           }),
           toolsViewCreate(),
@@ -298,18 +296,10 @@ const ProductAtributesView: React.FC = () => {
         }
       />
       <Alert
-        message={`Tem certeza que deseja excluir o registro ${alert.name} ?`}
-        onClickCancellButton={handlerClickButtonCancellAlert}
-        onClickConfirmButton={() => {
-          handlerClickButtonConfirmAlert(String(alert.id));
-        }}
-        isActive={alert.isActive}
-      />
-      <Alert
-        message={`Tem certeza que deseja excluir o registro ${productCategory?.name} ?`}
+        message={`Tem certeza que deseja excluir o registro ${product?.name} ?`}
         onClickCancellButton={handlerOnClickButtonCancelRemoveParent}
         onClickConfirmButton={() =>
-          handlerOnClickButtonConfirmRemoveParent(Number(productCategory?.id))
+          handlerOnClickButtonConfirmRemoveParent(Number(product?.id))
         }
         isActive={alertRemoveParent}
       />
