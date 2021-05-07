@@ -48,6 +48,7 @@ export const initialStateDetails: TypeDetailsProps = {
 };
 
 export const initialStateStock: TypeStockProps = {
+  id: '',
   stockCurrent: { value: '', error },
   replacementPoint: { value: '', error },
   unitMensured: { value: { id: '', name: '' }, error },
@@ -73,6 +74,7 @@ export const initialStatePriceComposition: TypePriceCompositionProps = {
 
 export const intialStateHasVariation: TypeHasVariation[] = [
   {
+    id: '',
     key: Math.random(),
     replacementPoint: {
       error,

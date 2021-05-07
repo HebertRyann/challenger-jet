@@ -64,6 +64,7 @@ export type TypeDetailsProps = {
 };
 
 export type TypeStockProps = {
+  id: string;
   unitMensured: TypeGenericValueWithError<FieldWithIdName>;
   stockCurrent: TypeValueAndError;
   replacementPoint: TypeValueAndError;
@@ -85,6 +86,7 @@ export type AtributesList = {
 };
 
 export type TypeHasVariation = {
+  id: string;
   key: number;
   unitMensured: TypeGenericValueWithError<FieldWithIdName>;
   currentStock: TypeValueAndError;
@@ -234,6 +236,7 @@ export type TypeAtributes = {
 };
 
 export type TypeProductStock = {
+  id: number;
   unit_mensured_id: number;
   replacement_point: number;
   current_stock: number;

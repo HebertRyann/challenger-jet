@@ -227,12 +227,14 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
             product_units_measured,
             replacement_point,
             atributes,
+            id,
           }) => {
             let atributesResponse: AtributeResponseType[] = [];
             if (atributes) {
               atributesResponse = JSON.parse(atributes);
             }
             addHasVariation({
+              id: id?.toString(),
               atributes: atributesResponse.map(({ id, keyParent, name }) => {
                 return {
                   error: { isError: false },
@@ -268,7 +270,9 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
         );
         hasVariation = true;
       } else {
+        console.log(data.stocks[0]);
         addStock({
+          id: data.stocks[0]?.id.toString(),
           stockCurrent: {
             error: { isError: false },
             value: data.stocks[0].current_stock.toString(),

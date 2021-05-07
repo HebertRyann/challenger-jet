@@ -1049,6 +1049,7 @@ const TabUpdateProvider = ({
             unitMensured,
             atributes,
             replacementPoint,
+            id,
           }) => {
             const atributesList: TypeAtributes[] = [];
             atributes
@@ -1060,8 +1061,9 @@ const TabUpdateProvider = ({
                 });
               });
             stock.push({
+              id: Number(id),
               replacement_point: parseFloat(replacementPoint.value),
-              current_stock: parseInt(currentStock.value),
+              current_stock: Number(currentStock.value),
               price_cost: convertValueWithMaskInNumber(priceCost.value),
               price_sale: convertValueWithMaskInNumber(priceSale.value),
               unit_mensured_id: parseInt(unitMensured.value.id),
@@ -1071,11 +1073,12 @@ const TabUpdateProvider = ({
         );
       } else {
         stock.push({
+          id: Number(id),
           replacement_point: parseFloat(replacementPoint.value),
           price_cost: convertValueWithMaskInNumber(priceCost.value),
           price_sale: convertValueWithMaskInNumber(priceSale.value),
           unit_mensured_id: parseInt(unitMensured.value.id),
-          current_stock: parseInt(stockCurrent.value),
+          current_stock: Number(stockCurrent.value),
           atributes: [],
         });
       }
