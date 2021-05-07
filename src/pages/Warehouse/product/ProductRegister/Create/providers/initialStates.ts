@@ -64,6 +64,7 @@ export const initialStateComposition: TypeProduct[] = [
 ];
 
 export const initialStatePriceComposition: TypePriceCompositionProps = {
+  simpleNational: { error, value: '' },
   cost: { error, value: '' },
   dif: { error, value: '' },
   ipi: { error, value: '' },
