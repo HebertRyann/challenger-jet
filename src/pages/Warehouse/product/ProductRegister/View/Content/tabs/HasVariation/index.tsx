@@ -116,7 +116,7 @@ export const HasVariation = (): JSX.Element => {
               rowSpan={isSaleOrResaleType() ? 2 : 1}
               className="title"
             >
-              Ponto de reposição
+              Ponto de reposição ?
             </th>
             {isSaleOrResaleType() && (
               <th style={{ textAlign: 'center' }} className="title" colSpan={2}>

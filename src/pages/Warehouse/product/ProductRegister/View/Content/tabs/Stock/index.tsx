@@ -83,7 +83,7 @@ export const Stock = (): JSX.Element => {
               rowSpan={isSaleOrResaleType() ? 2 : 1}
               className="title"
             >
-              Ponto de reposição
+              Ponto de reposição ?
             </th>
             {isSaleOrResaleType() && (
               <th style={{ textAlign: 'center' }} colSpan={2}>

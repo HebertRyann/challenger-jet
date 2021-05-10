@@ -39,6 +39,29 @@ export const Table = (): JSX.Element => {
         </ContainerInput>
         <ContainerInput className="form-content col-md-3">
           <TooltipComponent
+            label="Simples nacional (%)"
+            message="Selecione o tipo do produto"
+          />
+          <NewInput
+            name="input"
+            value={numericMask(simpleNational.value)}
+            error={simpleNational.error}
+            onChange={e =>
+              priceComposition.setData({
+                ...priceComposition.getData(),
+                simpleNational: {
+                  error: { isError: false },
+                  value: e.target.value,
+                },
+              })
+            }
+            className="form-control"
+            type="text"
+            placeholder="0,00"
+          />
+        </ContainerInput>
+        <ContainerInput className="form-content col-md-3">
+          <TooltipComponent
             label="IPI (%)"
             message="Selecione o tipo do produto"
           />
@@ -90,29 +113,6 @@ export const Table = (): JSX.Element => {
               priceComposition.setData({
                 ...priceComposition.getData(),
                 dif: { error: { isError: false }, value: e.target.value },
-              })
-            }
-            className="form-control"
-            type="text"
-            placeholder="0,00"
-          />
-        </ContainerInput>
-        <ContainerInput className="form-content col-md-3">
-          <TooltipComponent
-            label="Simples nacional (%)"
-            message="Selecione o tipo do produto"
-          />
-          <NewInput
-            name="input"
-            value={numericMask(simpleNational.value)}
-            error={simpleNational.error}
-            onChange={e =>
-              priceComposition.setData({
-                ...priceComposition.getData(),
-                simpleNational: {
-                  error: { isError: false },
-                  value: e.target.value,
-                },
               })
             }
             className="form-control"

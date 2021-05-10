@@ -113,7 +113,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
               }
               rowSpan={isTypeSaleOrResale() ? 2 : 1}
             >
-              Ponto de reposição
+              Ponto de reposição ?
             </th>
             {isTypeSaleOrResale() ? (
               <th align="center" style={{ textAlign: 'center' }} colSpan={2}>

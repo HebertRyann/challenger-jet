@@ -75,7 +75,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
               }
               rowSpan={isTypeSaleOrResale() ? 2 : 1}
             >
-              Ponto de reposição
+              Ponto de reposição ?
             </th>
             {typeSelectProdut.value.name === SALE.name ||
             typeSelectProdut.value.name === RE_SALE.name ? (
