@@ -55,7 +55,6 @@ export const Content = (): JSX.Element => {
             )}
           </TabHeaderContainer>
           <TabPanelContainer>
-            <hr />
             <>
               {tabs.map(({ Component, name }) => (
                 <RenderComponent isActive={name === loadCurrentTab().key}>
