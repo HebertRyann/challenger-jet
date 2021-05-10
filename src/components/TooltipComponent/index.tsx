@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
+import ReactTooltip from 'react-tooltip';
 
 import { Container, JokerIcon } from './style';
 
@@ -10,23 +11,14 @@ type TypeTooltipComponent = {
 export const TooltipComponent = ({ message, label }: TypeTooltipComponent) => {
   const [mouseUp, setMouseUp] = useState(false);
 
-  const handlerMouseUp = useCallback(() => {
-    setMouseUp(true);
-  }, []);
-
-  const handlerMouseDown = useCallback(() => {
-    setMouseUp(false);
-  }, []);
-
   return (
-    <Container hidden={mouseUp}>
+    <Container >
       <label htmlFor="form">{label}</label>
       <div>
-        <span>{message}</span>
-        <JokerIcon
-          onMouseEnter={handlerMouseUp}
-          onMouseLeave={handlerMouseDown}
-        />
+        <a data-tip={message}>
+          <JokerIcon />
+        </a>
+        <ReactTooltip place="top" type="dark" effect="float" />
       </div>
     </Container>
   );
