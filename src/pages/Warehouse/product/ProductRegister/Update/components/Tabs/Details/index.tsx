@@ -178,5 +178,5 @@ export const Details = (): JSX.Element => {
   );
 };
 
-export const labelDetails = 'Detalhes';
+export const labelDetails = 'Detalhe e medida';
 export const nameDetails = '@@tabs-details';
