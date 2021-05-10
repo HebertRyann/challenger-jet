@@ -21,8 +21,8 @@ const toastTypeVariante = {
   `,
 };
 
-export const Contanier = styled(animated.div) <ContanierProps>`
-  width: 360px;
+export const Contanier = styled(animated.div)<ContanierProps>`
+  width: 340px;
   position: relative;
   padding: 16px 30px 16px 16px;
   border-radius: 10px;
@@ -30,7 +30,6 @@ export const Contanier = styled(animated.div) <ContanierProps>`
   display: flex;
 
   ${props => toastTypeVariante[props.type || 'info']};
-
   > svg {
     margin: 4px 12px 0 0;
   }
@@ -44,6 +43,8 @@ export const Contanier = styled(animated.div) <ContanierProps>`
 
     p {
       margin-top: 4px;
+      width: 80%;
+      background-color: black;
       font-size: 14px;
       opacity: 0.8;
       line-height: 20px;
