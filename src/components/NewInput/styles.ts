@@ -21,6 +21,25 @@ export const Container = styled.div<{ isError?: boolean }>`
   }
 `;
 
+export const ContainerInput = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  > input {
+    flex: 1 !important;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    padding-right: 40px;
+    background-color: transparent;
+  }
+  .loading {
+    top: 0;
+    left: 0;
+    width: 20px;
+  }
+`;
+
 export const ContainerSearch = styled.div<{ active: boolean }>`
   display: none;
   ${({ active }) =>
