@@ -1,5 +1,6 @@
 import React, { SelectHTMLAttributes } from 'react';
 import { Container } from './styles';
+import loadingSvg from '../../assets/image/svg/loading.svg';
 
 export type TypeErrorSelect = {
   isError: boolean;
@@ -11,12 +12,14 @@ export interface TypeNewSelectProps
   error?: TypeErrorSelect;
   children?: JSX.Element[];
   isSelected?: string;
+  loading?: boolean;
 }
 
 export const NewSelect = ({
   children,
   error,
   isSelected,
+  loading,
   ...props
 }: TypeNewSelectProps): JSX.Element => {
   return (
@@ -32,6 +35,9 @@ export const NewSelect = ({
         </option>
         {children}
       </select>
+      {loading && (
+        <img className="loading" alt="image-loading" src={loadingSvg} />
+      )}
       {error?.descriptionError && <label>{error.descriptionError}</label>}
     </Container>
   );

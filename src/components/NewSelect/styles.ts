@@ -18,4 +18,11 @@ export const Container = styled.div<{ isError?: boolean }>`
     margin-top: 5px;
     color: #d43f3a !important;
   }
+  img {
+    position: absolute;
+    top: 51%;
+    right: 3%;
+    width: 20px;
+    background-color: #fff;
+  }
 `;
