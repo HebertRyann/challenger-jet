@@ -42,6 +42,7 @@ import {
   loadAtributes,
 } from '../../services/api';
 import { makeLoadAllNCM } from '../../../main/factories/Fiscal/Load/ncm/makeLoadAllNCM';
+import { makeLoadAllCfop } from '../../../main/factories/Fiscal/Load/cfop/makeLoadAllCfop';
 
 export const makeTabs = async (): Promise<TypeContentTabs[]> => {
   const loadCategoryFinances = async (): Promise<TypeEntityWithIdAndName[]> => {
@@ -87,7 +88,7 @@ export const makeTabs = async (): Promise<TypeContentTabs[]> => {
       isEnable: true,
       Component: (
         <TabsProvider>
-          <Fiscal loadAllNCM={makeLoadAllNCM()} />
+          <Fiscal ncmLoader={makeLoadAllNCM()} cfopLoader={makeLoadAllCfop()} />
         </TabsProvider>
       ),
     },
