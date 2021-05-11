@@ -1,5 +1,6 @@
 import React, { InputHTMLAttributes, useState, useEffect, useRef } from 'react';
-import { Container, ContainerSearch } from './styles';
+import { Container, ContainerSearch, ContainerInput } from './styles';
+import loadingSvg from '../../assets/image/svg/loading.svg';
 
 export type TypeErrorInput = {
   isError: boolean;
@@ -15,6 +16,7 @@ export interface TypeNewInputProps
   data?: any;
   onClickSearchRow?: (params: any) => void;
   RenderSearchComponent?: () => JSX.Element;
+  loading?: boolean;
 }
 
 export const NewInput = ({
@@ -25,6 +27,7 @@ export const NewInput = ({
   data,
   onClickSearchRow,
   RenderSearchComponent,
+  loading,
   ...props
 }: TypeNewInputProps): JSX.Element => {
   const searchRef = useRef<HTMLDivElement>(null);
@@ -48,28 +51,33 @@ export const NewInput = ({
 
   return (
     <Container isError={currentError.isError}>
-      <input
-        ref={inputRef}
-        autoComplete="off"
-        name={name}
-        type="text"
-        className="form-control"
-        onChangeCapture={() => {
-          if (inputRef?.current?.value === '') {
-            setActiveSearch(false);
-          }
-        }}
-        onKeyPress={event => {
-          if (isNumber) {
-            const regex = /^[0-9]+$/;
-            if (!regex.test(event.key)) event.preventDefault();
-          }
-          if (search && data && data.length > 0) {
-            setActiveSearch(true);
-          }
-        }}
-        {...props}
-      />
+      <ContainerInput className="form-control">
+        <input
+          ref={inputRef}
+          autoComplete="off"
+          name={name}
+          type="text"
+          onChangeCapture={() => {
+            if (inputRef?.current?.value === '') {
+              setActiveSearch(false);
+            }
+          }}
+          onKeyPress={event => {
+            if (isNumber) {
+              const regex = /^[0-9]+$/;
+              if (!regex.test(event.key)) event.preventDefault();
+            }
+            if (search && data && data.length > 0) {
+              setActiveSearch(true);
+            }
+          }}
+          {...props}
+        />
+        {loading && (
+          <img className="loading" alt="image-loading" src={loadingSvg} />
+        )}
+      </ContainerInput>
+
       {currentError.descriptionError && (
         <label>{currentError.descriptionError}</label>
       )}
