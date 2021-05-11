@@ -10,8 +10,9 @@ import {
   TabPanelContainerFiscal,
   RenderComponent,
 } from './style';
-import { Footer } from '../../footer';
 import { NewInput } from '../../../../../../../../components/NewInput';
+import { SearchComponentNcm } from './SearchComponent';
+import { LoadAllNCM } from '../../../../domain/useCases/FIscal/NCM/Load';
 
 export const labelFiscal = 'Fiscal';
 export const nameFiscal = '@@tabs-fiscal';
@@ -23,19 +24,19 @@ export type TypeContentTabsFiscal = {
   Component: JSX.Element;
 };
 
-export const Fiscal = (): JSX.Element => {
-  const {
-    loadTabs,
-    addTab,
-    loadCurrentTab,
-    changeCurrentTab,
-    changeCurrentTabForNext,
-    changeCurrentTabForPrevious,
-  } = useTabs();
+type TypeFiscal = {
+  loadAllNCM: LoadAllNCM;
+};
+
+export const Fiscal = ({ loadAllNCM }: TypeFiscal): JSX.Element => {
+  const { loadTabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs();
   const { fiscal } = useTabCreate();
   const { ncm, cfop } = fiscal.getData();
   const { changeNCM, changeCFOP } = fiscal.setData;
   const [tabs, setTabs] = useState<TypeContentTabsFiscal[]>([]);
+  const [loadingNcm, setLoadingNcm] = useState(false);
+  const [dataNcmList, setDataNcmList] = useState<LoadAllNCM.NCMResponse[]>([]);
+  const [activeSearch, setActiveSearch] = useState(false);
 
   useEffect(() => {
     function load() {
@@ -48,6 +49,36 @@ export const Fiscal = (): JSX.Element => {
   }, []);
 
   const allTabsData = loadTabs();
+
+  const handlerChangeInputNCM = async (value: string) => {
+    changeNCM(value);
+    if (value.length > 1) {
+      if (dataNcmList.length === 0) {
+        setLoadingNcm(true);
+        const result = await loadAllNCM.loadAllNCM();
+        setDataNcmList(result);
+        setLoadingNcm(false);
+      }
+      const matchList = dataNcmList.filter(({ code }) => {
+        const regex = new RegExp(`^${value}`, 'gi');
+        return code.match(regex);
+      });
+      if (matchList.length > 0) {
+        console.log(matchList);
+        setActiveSearch(true);
+      } else {
+        setActiveSearch(false);
+      }
+    } else {
+      setActiveSearch(false);
+    }
+  };
+
+  const handlerOnClickRowSearchNCM = (value: LoadAllNCM.NCMResponse) => {
+    changeNCM(value.code);
+    setActiveSearch(false);
+  };
+
   return (
     <>
       <Container className="row">
@@ -57,11 +88,21 @@ export const Fiscal = (): JSX.Element => {
             isNumber
             name="ncm"
             error={ncm.error}
-            onChange={event => changeNCM(event.currentTarget.value)}
+            onChange={event => handlerChangeInputNCM(event.target.value)}
             className="form-control"
             type="text"
+            search
             placeholder="Digíte o código"
             value={ncm.value}
+            loading={loadingNcm}
+            RenderSearchComponent={() => (
+              <SearchComponentNcm
+                active={activeSearch}
+                data={dataNcmList}
+                disableSearch={() => setActiveSearch(false)}
+                onClickRow={handlerOnClickRowSearchNCM}
+              />
+            )}
           />
         </div>
         <div className="form-content col-md-6">
