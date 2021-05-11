@@ -11,8 +11,10 @@ import {
   RenderComponent,
 } from './style';
 import { NewInput } from '../../../../../../../../components/NewInput';
-import { SearchComponentNcm } from './SearchComponent';
+import { SearchComponentNcm } from './SearchComponent/SearchComponentNcm';
+import { SearchComponentCFOP } from './SearchComponent/SearchComponentCfop';
 import { LoadAllNCM } from '../../../../domain/useCases/FIscal/NCM/Load';
+import { LoadAllCFOP } from '../../../../domain/useCases/FIscal/CFOP/Load';
 
 export const labelFiscal = 'Fiscal';
 export const nameFiscal = '@@tabs-fiscal';
@@ -25,18 +27,30 @@ export type TypeContentTabsFiscal = {
 };
 
 type TypeFiscal = {
-  loadAllNCM: LoadAllNCM;
+  ncmLoader: LoadAllNCM;
+  cfopLoader: LoadAllCFOP;
 };
 
-export const Fiscal = ({ loadAllNCM }: TypeFiscal): JSX.Element => {
+export const Fiscal = ({ ncmLoader, cfopLoader }: TypeFiscal): JSX.Element => {
   const { loadTabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs();
   const { fiscal } = useTabCreate();
   const { ncm, cfop } = fiscal.getData();
   const { changeNCM, changeCFOP } = fiscal.setData;
   const [tabs, setTabs] = useState<TypeContentTabsFiscal[]>([]);
   const [loadingNcm, setLoadingNcm] = useState(false);
+  const [loadingCfop, setLoadingCfop] = useState(false);
   const [dataNcmList, setDataNcmList] = useState<LoadAllNCM.NCMResponse[]>([]);
+  const [dataNcmListSearch, setDataNcmListSearch] = useState<
+    LoadAllNCM.NCMResponse[]
+  >([]);
+  const [dataCFOPListSearch, setDataCFOPListSearch] = useState<
+    LoadAllCFOP.CFOPResponse[]
+  >([]);
+  const [dataCFOPList, setDataCFOPList] = useState<LoadAllCFOP.CFOPResponse[]>(
+    [],
+  );
   const [activeSearch, setActiveSearch] = useState(false);
+  const [activeSearchCFOP, setActiveSearchCFOP] = useState(false);
 
   useEffect(() => {
     function load() {
@@ -52,10 +66,10 @@ export const Fiscal = ({ loadAllNCM }: TypeFiscal): JSX.Element => {
 
   const handlerChangeInputNCM = async (value: string) => {
     changeNCM(value);
-    if (value.length > 1) {
+    if (value.length > 0) {
       if (dataNcmList.length === 0) {
         setLoadingNcm(true);
-        const result = await loadAllNCM.loadAllNCM();
+        const result = await ncmLoader.loadAllNCM();
         setDataNcmList(result);
         setLoadingNcm(false);
       }
@@ -64,8 +78,8 @@ export const Fiscal = ({ loadAllNCM }: TypeFiscal): JSX.Element => {
         return code.match(regex);
       });
       if (matchList.length > 0) {
-        console.log(matchList);
         setActiveSearch(true);
+        setDataNcmListSearch(matchList);
       } else {
         setActiveSearch(false);
       }
@@ -77,6 +91,35 @@ export const Fiscal = ({ loadAllNCM }: TypeFiscal): JSX.Element => {
   const handlerOnClickRowSearchNCM = (value: LoadAllNCM.NCMResponse) => {
     changeNCM(value.code);
     setActiveSearch(false);
+  };
+
+  const handlerChangeInputCFOP = async (value: string) => {
+    changeCFOP(value);
+    if (value.length > 0) {
+      if (dataCFOPList.length === 0) {
+        setLoadingCfop(true);
+        const result = await cfopLoader.loadAllCFOP();
+        setDataCFOPList(result);
+        setLoadingCfop(false);
+      }
+      const matchList = dataCFOPList.filter(({ code }) => {
+        const regex = new RegExp(`^${value}`, 'gi');
+        return code.match(regex);
+      });
+      if (matchList.length > 0) {
+        setActiveSearchCFOP(true);
+        setDataCFOPListSearch(matchList);
+      } else {
+        setActiveSearchCFOP(false);
+      }
+    } else {
+      setActiveSearchCFOP(false);
+    }
+  };
+
+  const handlerOnClickRowSearchCFOP = (value: LoadAllCFOP.CFOPResponse) => {
+    changeCFOP(value.code);
+    setActiveSearchCFOP(false);
   };
 
   return (
@@ -91,14 +134,14 @@ export const Fiscal = ({ loadAllNCM }: TypeFiscal): JSX.Element => {
             onChange={event => handlerChangeInputNCM(event.target.value)}
             className="form-control"
             type="text"
-            search
             placeholder="Digíte o código"
             value={ncm.value}
             loading={loadingNcm}
+            search
             RenderSearchComponent={() => (
               <SearchComponentNcm
                 active={activeSearch}
-                data={dataNcmList}
+                data={dataNcmListSearch}
                 disableSearch={() => setActiveSearch(false)}
                 onClickRow={handlerOnClickRowSearchNCM}
               />
@@ -116,9 +159,19 @@ export const Fiscal = ({ loadAllNCM }: TypeFiscal): JSX.Element => {
             className="form-control"
             type="text"
             isNumber
-            onChange={event => changeCFOP(event.currentTarget.value)}
             value={cfop.value}
+            onChange={event => handlerChangeInputCFOP(event.target.value)}
             placeholder="Digíte o código"
+            loading={loadingCfop}
+            search
+            RenderSearchComponent={() => (
+              <SearchComponentCFOP
+                active={activeSearchCFOP}
+                data={dataCFOPListSearch}
+                disableSearch={() => setActiveSearchCFOP(false)}
+                onClickRow={handlerOnClickRowSearchCFOP}
+              />
+            )}
           />
         </div>
       </Container>
