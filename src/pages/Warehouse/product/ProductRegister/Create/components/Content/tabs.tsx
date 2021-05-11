@@ -83,16 +83,6 @@ export const makeTabs = async (): Promise<TypeContentTabs[]> => {
 
   return [
     {
-      label: labelFiscal,
-      name: nameFiscal,
-      isEnable: true,
-      Component: (
-        <TabsProvider>
-          <Fiscal ncmLoader={makeLoadAllNCM()} cfopLoader={makeLoadAllCfop()} />
-        </TabsProvider>
-      ),
-    },
-    {
       label: labelDataOverview,
       name: nameDataOverview,
       isEnable: true,
@@ -129,16 +119,16 @@ export const makeTabs = async (): Promise<TypeContentTabs[]> => {
         <HasVariation atributes={atributes} unitMensureds={unitMensureds} />
       ),
     },
-    // {
-    //   label: labelFiscal,
-    //   name: nameFiscal,
-    //   isEnable: false,
-    //   Component: (
-    //     <TabsProvider>
-    //       <Fiscal />
-    //     </TabsProvider>
-    //   ),
-    // },
+    {
+      label: labelFiscal,
+      name: nameFiscal,
+      isEnable: false,
+      Component: (
+        <TabsProvider>
+          <Fiscal ncmLoader={makeLoadAllNCM()} cfopLoader={makeLoadAllCfop()} />
+        </TabsProvider>
+      ),
+    },
     {
       label: labelHasComposition,
       name: nameHasComposition,
