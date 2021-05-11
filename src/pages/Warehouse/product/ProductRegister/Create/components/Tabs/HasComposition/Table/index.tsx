@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Footer } from '../../../footer';
 import { Container, FooterStyled, IconRemove } from './style';
 import { NewInput } from '../../../../../../../../../components/NewInput';
 import { useTabCreate } from '../../../../providers/tabsProvider';
-import { Alert } from '../../../../../../../../../components/Alert';
 import { useTabs } from '../../../../../../../../../hooks/tabs';
 import { loadProductByType } from '../../../../services/api/loadProductByType';
 import { nameHasComposition } from '..';
@@ -195,6 +193,7 @@ export const Table = (): JSX.Element => {
                       onChange={event =>
                         handlerChangeNameProduct(event.target.value, index)
                       }
+                      loading
                       RenderSearchComponent={() => (
                         <SearchComponentHasComposition
                           active={activeSearch[index]}
