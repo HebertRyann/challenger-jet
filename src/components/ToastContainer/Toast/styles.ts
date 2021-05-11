@@ -44,7 +44,6 @@ export const Contanier = styled(animated.div)<ContanierProps>`
     p {
       margin-top: 4px;
       width: 80%;
-      background-color: black;
       font-size: 14px;
       opacity: 0.8;
       line-height: 20px;
