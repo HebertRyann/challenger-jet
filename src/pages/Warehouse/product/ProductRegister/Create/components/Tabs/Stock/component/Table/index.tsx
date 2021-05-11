@@ -5,6 +5,7 @@ import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
 import { useTabs } from '../../../../../../../../../../hooks/tabs';
 import { RE_SALE, SALE } from '../../../../../domain/products';
+import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent';
 
 type TypeUnitMensured = {
   id: string;
@@ -75,7 +76,10 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
               }
               rowSpan={isTypeSaleOrResale() ? 2 : 1}
             >
-              Ponto de reposição ?
+              <TooltipComponent
+                label="Ponto de reposição"
+                message="Ponto de reposição"
+              />
             </th>
             {typeSelectProdut.value.name === SALE.name ||
             typeSelectProdut.value.name === RE_SALE.name ? (

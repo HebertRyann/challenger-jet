@@ -12,6 +12,7 @@ import {
   RE_SALE,
   SALE,
 } from '../../../../Create/domain/products';
+import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
 
 export const HasVariation = (): JSX.Element => {
   const { disableTab, activeTab } = useTabs();
@@ -116,7 +117,10 @@ export const HasVariation = (): JSX.Element => {
               rowSpan={isSaleOrResaleType() ? 2 : 1}
               className="title"
             >
-              Ponto de reposição ?
+              <TooltipComponent
+                label="Ponto de reposição"
+                message="Ponto de reposição"
+              />
             </th>
             {isSaleOrResaleType() && (
               <th style={{ textAlign: 'center' }} className="title" colSpan={2}>

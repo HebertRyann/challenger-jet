@@ -1,4 +1,5 @@
 import React from 'react';
+import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
 import {
   formatProductTypeToLowerCase,
   RE_SALE,
@@ -83,7 +84,10 @@ export const Stock = (): JSX.Element => {
               rowSpan={isSaleOrResaleType() ? 2 : 1}
               className="title"
             >
-              Ponto de reposição ?
+              <TooltipComponent
+                label="Ponto de reposição"
+                message="Ponto de reposição"
+              />
             </th>
             {isSaleOrResaleType() && (
               <th style={{ textAlign: 'center' }} colSpan={2}>

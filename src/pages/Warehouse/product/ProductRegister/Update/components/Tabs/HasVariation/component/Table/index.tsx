@@ -5,6 +5,7 @@ import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
 import { SALE, RE_SALE } from '../../../../../domain/products';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../../../services/api';
+import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent';
 
 type TypeUnitMensured = {
   id: string;
@@ -113,7 +114,10 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
               }
               rowSpan={isTypeSaleOrResale() ? 2 : 1}
             >
-              Ponto de reposição ?
+              <TooltipComponent
+                label="Ponto de reposição"
+                message="Ponto de reposição"
+              />
             </th>
             {isTypeSaleOrResale() ? (
               <th align="center" style={{ textAlign: 'center' }} colSpan={2}>
