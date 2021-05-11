@@ -159,7 +159,6 @@ export const DataOverview = ({
     }
   };
 
-
   return (
     <div className="row">
       <div className="form-content col-md-3">
@@ -215,6 +214,7 @@ export const DataOverview = ({
         />
         <NewInput
           onChange={onChangeNameProduct}
+          className="form-control"
           // value={dataOvewViewState.inputs.nameProduct.value}
           name="category"
         />
