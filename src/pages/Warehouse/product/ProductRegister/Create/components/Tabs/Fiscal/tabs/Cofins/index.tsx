@@ -1,13 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent';
 import { dataIcms } from '../Icms/icms';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
+import { LoadTaxSituations } from '../../../../../../domain/useCases/FIscal/TaxSituations/Load';
+import { useTabs } from '../../../../../../../../../../hooks/tabs';
 
-export const Confins = (): JSX.Element => {
+type TypeConfins = {
+  taxSituationsLoader: LoadTaxSituations;
+};
+
+export const Confins = ({ taxSituationsLoader }: TypeConfins): JSX.Element => {
   const { fiscal } = useTabCreate();
   const { changeCofinsTaxeIssue } = fiscal.setData;
   const { cofins } = fiscal.getData();
+  const { loadCurrentTab } = useTabs();
+  const [taxSituations, setTaxSituations] = useState<
+    LoadTaxSituations.LoadTaxSituationsResponse[]
+  >([]);
+  const [loadingData, setLoadingData] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const curretTab = loadCurrentTab();
+      if (curretTab.key === nameFiscalConfins && taxSituations.length < 1) {
+        setLoadingData(true);
+        const response = await taxSituationsLoader.loadTaxSituations();
+        setTaxSituations(response);
+        setLoadingData(false);
+      }
+    })();
+  }, [loadCurrentTab()]);
 
   return (
     <div className="row">
@@ -23,11 +46,14 @@ export const Confins = (): JSX.Element => {
             const name = split[1];
             changeCofinsTaxeIssue({ id, name });
           }}
+          loading={loadingData}
           error={cofins.taxesIssue.error}
         >
-          {/* {dataIcms.map(({ id, name }) => (
-            <option value={`${id}+${name}`}>{name}</option>
-          ))} */}
+          {taxSituations.map(({ id, code, descriptions }) => (
+            <option
+              value={`${id}+${code}`}
+            >{`${code} - ${descriptions}`}</option>
+          ))}
         </NewSelect>
       </div>
     </div>
