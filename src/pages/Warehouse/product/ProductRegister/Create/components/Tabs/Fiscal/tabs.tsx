@@ -4,6 +4,7 @@ import { labelFiscalIcms, nameFiscalIcms, Icms } from './tabs/Icms';
 import { labelFiscalIpi, nameFiscalIpi, Ipi } from './tabs/Ipi';
 import { labelFiscalPis, nameFiscalPis, Pis } from './tabs/Pis';
 import { labelFiscalConfins, nameFiscalConfins, Confins } from './tabs/Cofins';
+import { makeLoadAllTaxSituations } from '../../../../main/factories/Fiscal/Load/TaxSituations/makeLoadAllCfop';
 
 export const makeTabsFiscal = (): TypeContentTabsFiscal[] => [
   {
@@ -28,6 +29,6 @@ export const makeTabsFiscal = (): TypeContentTabsFiscal[] => [
     label: labelFiscalConfins,
     name: nameFiscalConfins,
     isEnable: true,
-    Component: <Confins />,
+    Component: <Confins taxSituationsLoader={makeLoadAllTaxSituations()} />,
   },
 ];
