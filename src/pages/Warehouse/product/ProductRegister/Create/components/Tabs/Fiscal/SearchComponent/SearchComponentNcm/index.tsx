@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { LoadAllNCM } from '../../../../../domain/useCases/FIscal/NCM/Load';
+import { LoadAllNCM } from '../../../../../../domain/useCases/FIscal/NCM/Load';
 import { ContainerSearch } from './styles';
 
 type TypeSearchComponentFiscalProps = {
