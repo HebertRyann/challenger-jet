@@ -25,7 +25,6 @@ const DataTableProvider = ({ children }: { children: React.ReactNode }) => {
 
 function useUpdateDataTable(): DataTableContext {
   const context = useContext(DataTableContext);
-
   if (!context) {
     throw new Error('Updated Provider must be used witin a DataTableProvider');
   }

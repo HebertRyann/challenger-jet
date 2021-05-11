@@ -109,12 +109,12 @@ const DataTable = ({
     };
     getData();
   }, [
-    // entity,
-    // source,
-    // searchParameters,
+    entity,
+    source,
+    searchParameters,
     currentPage,
     search,
-    // sorting,
+    sorting,
     ItemsPerPage,
   ]);
 
