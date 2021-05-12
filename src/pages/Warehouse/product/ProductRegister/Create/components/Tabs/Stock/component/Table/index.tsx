@@ -79,6 +79,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
               <TooltipComponent
                 label="Ponto de reposição"
                 message="Ponto de reposição"
+                bold
               />
             </th>
             {typeSelectProdut.value.name === SALE.name ||
@@ -179,7 +180,6 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                           },
                         });
                       }}
-                      className="form-control"
                       type="text"
                     />
                   </tr>
@@ -193,7 +193,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                       disabled
                       error={priceSale.error}
                       placeholder="0.00"
-                      className="form-control"
+                      className="form-control secundary"
                       type="text"
                     />
                   </tr>

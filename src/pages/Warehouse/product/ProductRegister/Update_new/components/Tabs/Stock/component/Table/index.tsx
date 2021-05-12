@@ -79,6 +79,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
               <TooltipComponent
                 label="Ponto de reposição"
                 message="Ponto de reposição"
+                bold
               />
             </th>
             {typeSelectProdut.value.name === SALE.name ||

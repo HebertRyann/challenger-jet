@@ -27,15 +27,16 @@ export const ContainerInput = styled.div`
   justify-content: flex-end;
   > input {
     flex: 1 !important;
-    position: absolute !important;
+    /* position: absolute !important; */
     top: 0;
     left: 0;
-    padding-right: 40px;
+    /* padding-right: 40px; */
     background-color: transparent;
   }
   .loading {
-    top: 0;
-    left: 0;
+    position: absolute;
+    top: 15%;
+    right: 10px;
     width: 20px;
   }
 `;

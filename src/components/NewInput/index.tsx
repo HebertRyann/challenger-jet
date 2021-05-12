@@ -51,7 +51,7 @@ export const NewInput = ({
 
   return (
     <Container isError={currentError.isError}>
-      <ContainerInput className="form-control">
+      <ContainerInput >
         <input
           ref={inputRef}
           autoComplete="off"

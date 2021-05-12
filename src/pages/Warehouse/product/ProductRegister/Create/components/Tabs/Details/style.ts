@@ -14,6 +14,9 @@ export const Container = styled.div`
     }
     text-align: end;
   }
+  .col-md-3 {
+    margin-bottom: 10px !important;
+  }
 `;
 
 export const TextArea = styled.textarea<{ isError: boolean }>`

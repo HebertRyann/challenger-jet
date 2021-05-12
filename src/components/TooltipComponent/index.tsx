@@ -6,13 +6,16 @@ import { Container, JokerIcon } from './style';
 type TypeTooltipComponent = {
   message: string;
   label: string;
+  bold?: boolean;
 };
 
-export const TooltipComponent = ({ message, label }: TypeTooltipComponent) => {
-  const [mouseUp, setMouseUp] = useState(false);
-
+export const TooltipComponent = ({
+  message,
+  label,
+  bold,
+}: TypeTooltipComponent) => {
   return (
-    <Container >
+    <Container bold={bold}>
       <label htmlFor="form">{label}</label>
       <div>
         <a data-tip={message}>

@@ -45,7 +45,7 @@ export const Icms = ({
         setLoadingData(false);
       }
     })();
-  }, [loadCurrentTab()]);
+  }, [loadCurrentTab(), typeSelectProdut]);
 
   useEffect(() => {
     (async () => {

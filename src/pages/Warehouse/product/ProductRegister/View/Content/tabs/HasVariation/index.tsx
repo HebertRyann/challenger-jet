@@ -120,6 +120,7 @@ export const HasVariation = (): JSX.Element => {
               <TooltipComponent
                 label="Ponto de reposição"
                 message="Ponto de reposição"
+                bold
               />
             </th>
             {isSaleOrResaleType() && (

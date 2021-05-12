@@ -117,6 +117,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
               <TooltipComponent
                 label="Ponto de reposição"
                 message="Ponto de reposição"
+                bold
               />
             </th>
             {isTypeSaleOrResale() ? (

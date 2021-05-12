@@ -16,7 +16,7 @@ export const ContainerSearch = styled.div<{ active: boolean }>`
   top: 105%;
   background-color: #fff;
   border: 1px solid #c2cad8;
-  width: 205%;
+  width: 100%;
   max-height: 200px;
   > ul {
     li {
