@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent';
-import { dataIcms, TypeICMS } from '../Icms/icms';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
+import { useTabs } from '../../../../../../../../../../hooks/tabs';
+import { LoadTaxSituations } from '../../../../../../domain/useCases/FIscal/TaxSituations/Load';
 
-export const Ipi = (): JSX.Element => {
+type TypeIpi = {
+  taxSituationsLoader: LoadTaxSituations;
+};
+
+export const Ipi = ({ taxSituationsLoader }: TypeIpi): JSX.Element => {
+  const { loadCurrentTab } = useTabs();
+  const [taxSituations, setTaxSituations] = useState<
+    LoadTaxSituations.LoadTaxSituationsResponse[]
+  >([]);
+  const [loadingData, setLoadingData] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const curretTab = loadCurrentTab();
+      if (curretTab.key === nameFiscalIpi && taxSituations.length < 1) {
+        setLoadingData(true);
+        const response = await taxSituationsLoader.loadTaxSituations();
+        setTaxSituations(response);
+        setLoadingData(false);
+      }
+    })();
+  }, [loadCurrentTab()]);
+
   const { fiscal } = useTabCreate();
   const { changeIpiTaxeIssue } = fiscal.setData;
   const { ipi } = fiscal.getData();
@@ -23,10 +46,13 @@ export const Ipi = (): JSX.Element => {
             changeIpiTaxeIssue({ id, name });
           }}
           error={ipi.taxesIssue.error}
+          loading={loadingData}
         >
-          {/* {dataIcms.map(({ id, name }) => (
-            <option value={`${id}+${name}`}>{name}</option>
-          ))} */}
+          {taxSituations.map(({ id, code, descriptions }) => (
+            <option
+              value={`${id}+${code}`}
+            >{`${code} - ${descriptions}`}</option>
+          ))}
         </NewSelect>
       </div>
     </div>
