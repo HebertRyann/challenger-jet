@@ -74,8 +74,9 @@ export const Fiscal = ({ ncmLoader, cfopLoader }: TypeFiscal): JSX.Element => {
         setLoadingNcm(false);
       }
       const matchList = dataNcmList.filter(({ code }) => {
+        const codeMatch = code.toString();
         const regex = new RegExp(`^${value}`, 'gi');
-        return code.match(regex);
+        return code.match(codeMatch);
       });
       if (matchList.length > 0) {
         setActiveSearch(true);
@@ -89,7 +90,7 @@ export const Fiscal = ({ ncmLoader, cfopLoader }: TypeFiscal): JSX.Element => {
   };
 
   const handlerOnClickRowSearchNCM = (value: LoadAllNCM.NCMResponse) => {
-    changeNCM(value.code);
+    changeNCM(value.code.toString());
     setActiveSearch(false);
   };
 
@@ -103,8 +104,9 @@ export const Fiscal = ({ ncmLoader, cfopLoader }: TypeFiscal): JSX.Element => {
         setLoadingCfop(false);
       }
       const matchList = dataCFOPList.filter(({ code }) => {
+        const codeFilter = code.toString();
         const regex = new RegExp(`^${value}`, 'gi');
-        return code.match(regex);
+        return codeFilter.match(regex);
       });
       if (matchList.length > 0) {
         setActiveSearchCFOP(true);
@@ -118,7 +120,7 @@ export const Fiscal = ({ ncmLoader, cfopLoader }: TypeFiscal): JSX.Element => {
   };
 
   const handlerOnClickRowSearchCFOP = (value: LoadAllCFOP.CFOPResponse) => {
-    changeCFOP(value.code);
+    changeCFOP(value.code.toString());
     setActiveSearchCFOP(false);
   };
 
