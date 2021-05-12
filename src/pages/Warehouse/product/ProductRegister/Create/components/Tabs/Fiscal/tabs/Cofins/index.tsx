@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent';
-import { dataIcms } from '../Icms/icms';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
 import { LoadTaxSituations } from '../../../../../../domain/useCases/FIscal/TaxSituations/Load';
+import { LoadNatureOperations } from '../../../../../../domain/useCases/FIscal/NatureOperations/Load';
 import { useTabs } from '../../../../../../../../../../hooks/tabs';
 
 type TypeConfins = {
