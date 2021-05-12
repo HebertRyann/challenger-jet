@@ -57,6 +57,7 @@ export const NewInput = ({
           autoComplete="off"
           name={name}
           type="text"
+          className="form-control"
           onChangeCapture={() => {
             if (inputRef?.current?.value === '') {
               setActiveSearch(false);
