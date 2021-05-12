@@ -1,15 +1,69 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
-import { dataIcms } from './icms';
-export const nameFiscalIcms = '@@tabs-fiscal-icms';
-export const labelFiscalIcms = 'ICMS';
+import { LoadNatureOperations } from '../../../../../../domain/useCases/FIscal/NatureOperations/Load';
+import { useTabs } from '../../../../../../../../../../hooks/tabs';
+import { LoadTaxSituations } from '../../../../../../domain/useCases/FIscal/TaxSituations/Load';
 
-export const Icms = (): JSX.Element => {
+type TypeIcms = {
+  natureOperationsLoader: LoadNatureOperations;
+  taxSituationsLoader: LoadTaxSituations;
+};
+
+export const Icms = ({
+  natureOperationsLoader,
+  taxSituationsLoader,
+}: TypeIcms): JSX.Element => {
+  const { loadCurrentTab } = useTabs();
+  const [natureOperations, setNatureOperations] = useState<
+    LoadNatureOperations.NatureOperationsResponse[]
+  >([]);
+  const [taxSituations, setTaxSituations] = useState<
+    LoadTaxSituations.LoadTaxSituationsResponse[]
+  >([]);
+  const [loadingData, setLoadingData] = useState(false);
   const { fiscal } = useTabCreate();
   const { changeIcmsTaxeIssue, changeIcmsOrigem } = fiscal.setData;
   const { icms } = fiscal.getData();
+  const { overview } = useTabCreate();
+
+  const { typeSelectProdut } = overview.getData();
+
+  useEffect(() => {
+    (async () => {
+      const curretTab = loadCurrentTab();
+      if (
+        curretTab.key === nameFiscalIcms &&
+        natureOperations.length < 1 &&
+        (typeSelectProdut.value.name === 'Revenda' ||
+          typeSelectProdut.value.name === 'Venda')
+      ) {
+        setLoadingData(true);
+        const response = await natureOperationsLoader.loadAllNatureOperations();
+        setNatureOperations(response);
+        setLoadingData(false);
+      }
+    })();
+  }, [loadCurrentTab()]);
+
+  useEffect(() => {
+    (async () => {
+      const curretTab = loadCurrentTab();
+      if (
+        curretTab.key === nameFiscalIcms &&
+        taxSituations.length < 1 &&
+        (typeSelectProdut.value.name === 'Revenda' ||
+          typeSelectProdut.value.name === 'Venda')
+      ) {
+        setLoadingData(true);
+        const response = await taxSituationsLoader.loadTaxSituations();
+        setTaxSituations(response);
+        setLoadingData(false);
+      }
+    })();
+  }, [loadCurrentTab(), typeSelectProdut]);
+
   return (
     <div className="row">
       <div className="form-content col-md-6">
@@ -18,6 +72,7 @@ export const Icms = (): JSX.Element => {
           message="Situação tributaria do produto"
         />
         <NewSelect
+          loading={loadingData}
           onChange={event => {
             const split = event.target.value.split('+');
             const id = split[0];
@@ -26,9 +81,11 @@ export const Icms = (): JSX.Element => {
           }}
           error={icms.taxesIssue.error}
         >
-          {/* {dataIcms.map(({ id, name }) => (
-            <option value={`${id}+${name}`}>{name}</option>
-          ))} */}
+          {taxSituations.map(({ id, code, descriptions }) => (
+            <option
+              value={`${id}+${code}`}
+            >{`${code} - ${descriptions}`}</option>
+          ))}
         </NewSelect>
       </div>
       <div className="form-content col-md-6">
@@ -42,11 +99,14 @@ export const Icms = (): JSX.Element => {
           }}
           error={icms.origem.error}
         >
-          {/* {dataIcms.map(({ id, name }) => (
-            <option value={`${id}+${name}`}>{name}</option>
-          ))} */}
+          {natureOperations.map(({ id, name }) => (
+            <option value={`${id}+${name}`}>{`${name}`}</option>
+          ))}
         </NewSelect>
       </div>
     </div>
   );
 };
+
+export const nameFiscalIcms = '@@tabs-fiscal-icms';
+export const labelFiscalIcms = 'ICMS';
