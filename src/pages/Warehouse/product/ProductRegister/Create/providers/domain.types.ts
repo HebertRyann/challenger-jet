@@ -245,6 +245,7 @@ export type PriceCompositionAndFiscal = {
     ipi: number;
     fixed_cost: number;
     dif: number;
+    simple_national: number;
   };
   fiscal: {
     ncm: number;
