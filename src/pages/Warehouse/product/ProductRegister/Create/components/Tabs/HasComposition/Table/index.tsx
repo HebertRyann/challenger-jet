@@ -109,43 +109,40 @@ export const Table = (): JSX.Element => {
     })();
   }, [typeSelectProdut.value, loadCurrentTab().key]);
 
-  const handlerChangeNameProduct = useCallback(
-    (value: string, index: number) => {
-      changeInputNameProduct(value, index);
-      if (value.length) {
-        const matchList = productListByTypeSelected.filter(({ id, name }) => {
-          const regex = new RegExp(`^${value}`, 'gi');
-          return name.match(regex);
-        });
-
-        if (value === '') {
-          setProductListByTypeSelectedSearch([]);
-          setActiveSearch(prevState => prevState.map(() => false));
-        }
-
-        if (matchList.length > 0) {
-          setProductListByTypeSelectedSearch(matchList);
-          setActiveSearch(prevState => {
-            prevState = prevState.map(() => false);
-            prevState[index] = true;
-            return prevState;
-          });
-        } else {
-          setActiveSearch(prevState => {
-            prevState[index] = false;
-            return [...prevState];
-          });
-          setProductListByTypeSelectedSearch(productListByTypeSelected);
-        }
-        return;
-      }
-      setActiveSearch(prevState => {
-        prevState[index] = false;
-        return [...prevState];
+  const handlerChangeNameProduct = (value: string, index: number) => {
+    changeInputNameProduct(value, index);
+    if (value.length) {
+      const matchList = productListByTypeSelected.filter(({ id, name }) => {
+        const regex = new RegExp(`^${value}`, 'gi');
+        return name.match(regex);
       });
-    },
-    [productListByTypeSelected, productListByTypeSelectedSearch, products],
-  );
+
+      if (value === '') {
+        setProductListByTypeSelectedSearch([]);
+        setActiveSearch(prevState => prevState.map(() => false));
+      }
+
+      if (matchList.length > 0) {
+        setProductListByTypeSelectedSearch(matchList);
+        setActiveSearch(prevState => {
+          prevState = prevState.map(() => false);
+          prevState[index] = true;
+          return prevState;
+        });
+      } else {
+        setActiveSearch(prevState => {
+          prevState[index] = false;
+          return [...prevState];
+        });
+        setProductListByTypeSelectedSearch(productListByTypeSelected);
+      }
+      return;
+    }
+    setActiveSearch(prevState => {
+      prevState[index] = false;
+      return [...prevState];
+    });
+  };
 
   const handlerClickRowSearch = ({
     product,
@@ -211,9 +208,14 @@ export const Table = (): JSX.Element => {
                       error={amount.error}
                       placeholder="0"
                       isNumber
-                      onChange={event =>
-                        changeInputAmount(event.currentTarget.value, index)
-                      }
+                      onChange={event => {
+                        changeInputAmount(event.currentTarget.value, index);
+                        setActiveSearch(prevState => {
+                          prevState[index] = false;
+                          return [...prevState];
+                        });
+                        console.log(activeSearch);
+                      }}
                       className="form-control"
                       type="text"
                     />
