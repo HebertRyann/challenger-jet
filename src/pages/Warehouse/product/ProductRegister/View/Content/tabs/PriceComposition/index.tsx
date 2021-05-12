@@ -38,6 +38,10 @@ export const PriceComposition = (): JSX.Element => {
           <p>{priceCompositionList.dif?.toFixed(3)}</p>
         </div>
         <div className="form-content col-md-3">
+          <label htmlFor="tipo do produto">Simples nacional (%)</label>
+          <p>{Number(priceCompositionList.simple_national).toFixed(2)}</p>
+        </div>
+        <div className="form-content col-md-3">
           <label htmlFor="tipo do produto">IPI (%)</label>
           <p>{priceCompositionList.fixed_cost?.toFixed(2)}</p>
         </div>
