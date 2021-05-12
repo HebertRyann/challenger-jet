@@ -223,7 +223,7 @@ export const DataOverview = ({
             message="Selecione o tipo do produto"
           />
           <NewInput
-
+            className="form-control"
             error={nameProduct.error}
             onChange={event => {
               overview.setData({
