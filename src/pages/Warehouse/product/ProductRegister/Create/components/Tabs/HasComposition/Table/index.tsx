@@ -193,7 +193,6 @@ export const Table = (): JSX.Element => {
                       onChange={event =>
                         handlerChangeNameProduct(event.target.value, index)
                       }
-                      loading
                       RenderSearchComponent={() => (
                         <SearchComponentHasComposition
                           active={activeSearch[index]}
