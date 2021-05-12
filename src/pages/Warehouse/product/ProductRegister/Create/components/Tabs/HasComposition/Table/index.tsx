@@ -154,7 +154,7 @@ export const Table = (): JSX.Element => {
     handlerChangeNameProduct(product.name, index);
     changeInputProductIdAndStockId(product.product_id, product.stock_id, index);
     setActiveSearch(prevState => {
-      prevState[index] = true;
+      prevState[index] = false;
       return [...prevState];
     });
   };
