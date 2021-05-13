@@ -49,6 +49,8 @@ export const PriceComposition = (): JSX.Element => {
           <label htmlFor="tipo do produto">Custo fixo</label>
           <p>{priceCompositionList.ipi?.toFixed(2)}</p>
         </div>
+      </div>
+      <div style={{ marginTop: '20px' }} className="row">
         <div className="form-content col-md-3">
           <label htmlFor="tipo do produto">DIF ICMS</label>
           <p>{priceCompositionList.margin_profit?.toFixed(2)}</p>
