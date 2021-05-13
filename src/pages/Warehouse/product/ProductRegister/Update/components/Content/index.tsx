@@ -154,6 +154,10 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
             error: { isError: false },
             value: priceCompositionResponser.margin_profit.toString(),
           },
+          simpleNational: {
+            error: { isError: false },
+            value: priceCompositionResponser.simple_national.toString(),
+          },
         });
 
         let fiscalResponse: FiscalResponseType;

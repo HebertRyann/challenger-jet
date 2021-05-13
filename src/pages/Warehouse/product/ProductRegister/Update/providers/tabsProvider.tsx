@@ -1090,7 +1090,7 @@ const TabUpdateProvider = ({
 
     const createRequestWithPriceCompositionAndFiscal = (): PriceCompositionAndFiscal => {
       const { cfop, cofins, icms, ipi, ncm, pis } = fiscalState;
-      const { cost, dif, profit } = priceCompositionState;
+      const { cost, dif, profit, simpleNational } = priceCompositionState;
       const ipiPriceComposition = priceCompositionState.ipi;
 
       const priceCompositionAndFiscal: PriceCompositionAndFiscal = {
@@ -1099,6 +1099,7 @@ const TabUpdateProvider = ({
           fixed_cost: convertValueWithMaskInNumber(cost.value),
           ipi: convertValueWithMaskInNumber(ipiPriceComposition.value),
           margin_profit: convertValueWithMaskInNumber(profit.value),
+          simple_national: convertValueWithMaskInNumber(simpleNational.value),
         },
         fiscal: {
           cfop: convertValueWithMaskInNumber(cfop.value),

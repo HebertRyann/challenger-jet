@@ -4,15 +4,12 @@ import { NewInput } from '../../../../../../../../../components/NewInput';
 import { numericMask } from '../../../../../../../../../utlis/mask';
 import { ContainerInput } from './style';
 import { useTabCreate } from '../../../../providers/tabsProvider';
-import { Footer } from '../../../footer';
-import { Alert } from '../../../../../../../../../components/Alert';
-import { useTabs } from '../../../../../../../../../hooks/tabs';
-import { namePriceComposition } from '..';
 
 export const Table = (): JSX.Element => {
-  const { changeCurrentTabForNext, changeCurrentTabForPrevious } = useTabs();
   const { priceComposition } = useTabCreate();
-  const { cost, dif, ipi, profit } = priceComposition.getData();
+  const { cost, dif, ipi, profit, simpleNational } = priceComposition.getData();
+
+  console.log(priceComposition.getData());
 
   return (
     <>
@@ -30,6 +27,26 @@ export const Table = (): JSX.Element => {
               priceComposition.setData({
                 ...priceComposition.getData(),
                 profit: { error: { isError: false }, value: e.target.value },
+              })
+            }
+            className="form-control"
+            type="text"
+            placeholder="0,00"
+          />
+        </ContainerInput>
+        <ContainerInput className="form-content col-md-3">
+          <TooltipComponent
+            label="Simples nacional (%)"
+            message="Simples nacional"
+          />
+          <NewInput
+            name="input"
+            value={numericMask(simpleNational.value)}
+            error={simpleNational.error}
+            onChange={e =>
+              priceComposition.setData({
+                ...priceComposition.getData(),
+                simpleNational: { error: { isError: false }, value: e.target.value },
               })
             }
             className="form-control"
@@ -98,7 +115,6 @@ export const Table = (): JSX.Element => {
           />
         </ContainerInput>
       </div>
-
     </>
   );
 };

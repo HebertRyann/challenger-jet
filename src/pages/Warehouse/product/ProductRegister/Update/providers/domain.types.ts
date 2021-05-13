@@ -77,6 +77,7 @@ export type TypePriceCompositionProps = {
   ipi: TypeValueAndError;
   cost: TypeValueAndError;
   dif: TypeValueAndError;
+  simpleNational: TypeValueAndError;
 };
 
 export type AtributesList = {
@@ -251,6 +252,7 @@ export type PriceCompositionAndFiscal = {
     ipi: number;
     fixed_cost: number;
     dif: number;
+    simple_national: number;
   };
   fiscal: {
     ncm: number;

@@ -70,6 +70,7 @@ export const initialStatePriceComposition: TypePriceCompositionProps = {
   dif: { error, value: '' },
   ipi: { error, value: '' },
   profit: { error, value: '' },
+  simpleNational: { error, value: '' },
 };
 
 export const intialStateHasVariation: TypeHasVariation[] = [

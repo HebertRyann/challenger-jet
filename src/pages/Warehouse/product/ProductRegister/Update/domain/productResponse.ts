@@ -32,6 +32,7 @@ export type PriceCompositionResponserType = {
   ipi: number;
   fixed_cost: number;
   margin_profit: number;
+  simple_national: number;
 };
 
 export type FiscalResponseType = {
