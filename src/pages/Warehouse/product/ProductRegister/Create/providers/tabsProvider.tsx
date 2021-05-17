@@ -481,29 +481,33 @@ const TabCreateProvider = ({
 
   const validationAndSetErrorAllFieldsComposition = useCallback(() => {
     let isError = false;
-    const tempState: TypeProduct[] = JSON.parse(
-      JSON.stringify(compositionState),
-    );
 
-    tempState.map(({ amount, cost, nameProduct, subtotal }) => {
-      if (amount.value === '') {
-        isError = true;
-        amount.error.isError = true;
-      }
-      if (cost.value === '') {
-        isError = true;
-        cost.error.isError = true;
-        subtotal.error.isError = true;
-      }
-      if (nameProduct.value === '') {
-        isError = true;
-        nameProduct.error.isError = true;
-        subtotal.error.isError = true;
-      }
-    });
-    setCompositionState(tempState);
+    if (overView.typeSelectProdut.value.name !== SEMI_FINISHED.name) {
+      const tempState: TypeProduct[] = JSON.parse(
+        JSON.stringify(compositionState),
+      );
+
+      tempState.map(({ amount, cost, nameProduct, subtotal }) => {
+        if (amount.value === '') {
+          isError = true;
+          amount.error.isError = true;
+        }
+        if (cost.value === '') {
+          isError = true;
+          cost.error.isError = true;
+          subtotal.error.isError = true;
+        }
+        if (nameProduct.value === '') {
+          isError = true;
+          nameProduct.error.isError = true;
+          subtotal.error.isError = true;
+        }
+      });
+      setCompositionState(tempState);
+    }
+
     return isError;
-  }, [compositionState]);
+  }, [compositionState, overView]);
 
   const composition: TypeGetAndSetComposition<TypeProduct[]> = {
     getData: getDataComposition,
