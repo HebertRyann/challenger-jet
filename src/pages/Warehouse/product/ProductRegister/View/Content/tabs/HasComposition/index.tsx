@@ -11,23 +11,23 @@ import { Container } from './style';
 
 export const HasComposition = (): JSX.Element => {
   const { getProduct } = useProduct();
-
+  let compositionList: CompositonView[] = [];
   const { activeTab } = useTabs();
 
   useEffect(() => {
-    if (
-      getProduct().type?.replace(' ', '-') ===
-        formatProductTypeToLowerCase(SEMI_FINISHED) ||
-      getProduct().type?.replace(' ', '-') ===
-        formatProductTypeToLowerCase(SALE)
-    ) {
-      activeTab(nameHasComposition);
+    if (compositionList[0]?.name !== '') {
+      if (
+        getProduct().type?.replace(' ', '-') ===
+          formatProductTypeToLowerCase(SEMI_FINISHED) ||
+        getProduct().type?.replace(' ', '-') ===
+          formatProductTypeToLowerCase(SALE)
+      ) {
+        activeTab(nameHasComposition);
+      }
     }
   }, [getProduct()]);
 
   const { composition } = getProduct();
-
-  let compositionList: CompositonView[] = [];
 
   if (composition) {
     compositionList = JSON.parse(composition.toLowerCase());
