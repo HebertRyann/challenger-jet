@@ -7,6 +7,7 @@ import {
 } from '../../providers/domain.types';
 import api from '../../../../../../../services/api';
 type SaveProductParams = {
+  user_id: string;
   composition?: CompositionRequest[];
   price_composition_fiscal?: PriceCompositionAndFiscal;
   stock: TypeProductStock[];

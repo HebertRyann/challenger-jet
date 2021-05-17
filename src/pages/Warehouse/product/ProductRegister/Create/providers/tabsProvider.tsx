@@ -67,6 +67,7 @@ import {
   convertValueMaskInNumber,
   convertValueWithMaskInNumber,
 } from '../../../../../../utlis/mask';
+import { useAuth } from '../../../../../../hooks/auth';
 interface TabCreateContext {
   overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps>;
   details: TypeGetAndSetAndValidateAba<TypeDetailsProps>;
@@ -88,6 +89,7 @@ const TabCreateProvider = ({
 }: {
   children: JSX.Element;
 }): JSX.Element => {
+  const { user } = useAuth();
   const [overView, setOverView] = useState<TypeDataOverViewProps>(
     initialStateOverview,
   );
@@ -1134,6 +1136,7 @@ const TabCreateProvider = ({
     if (typeProduct === SALE.name || typeProduct === RE_SALE.name) {
       if (typeProduct === SALE.name) {
         return await saveProduct({
+          user_id: user.id,
           details_overview: createRequestWithOverViewDetailsStockOrVariation()
             .overview_and_details,
           stock: createRequestWithOverViewDetailsStockOrVariation().stock,
@@ -1142,6 +1145,7 @@ const TabCreateProvider = ({
         });
       }
       return await saveProduct({
+        user_id: user.id,
         details_overview: createRequestWithOverViewDetailsStockOrVariation()
           .overview_and_details,
         stock: createRequestWithOverViewDetailsStockOrVariation().stock,
@@ -1150,6 +1154,7 @@ const TabCreateProvider = ({
     }
     if (typeProduct === SEMI_FINISHED.name) {
       return await saveProduct({
+        user_id: user.id,
         details_overview: createRequestWithOverViewDetailsStockOrVariation()
           .overview_and_details,
         stock: createRequestWithOverViewDetailsStockOrVariation().stock,
@@ -1158,6 +1163,7 @@ const TabCreateProvider = ({
     }
     if (typeProduct !== '') {
       return await saveProduct({
+        user_id: user.id,
         details_overview: createRequestWithOverViewDetailsStockOrVariation()
           .overview_and_details,
         stock: createRequestWithOverViewDetailsStockOrVariation().stock,
