@@ -274,7 +274,6 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
         );
         hasVariation = true;
       } else {
-        console.log(data.stocks[0]);
         addStock({
           id: data.stocks[0]?.id.toString(),
           // stockCurrent: {
