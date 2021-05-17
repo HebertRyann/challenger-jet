@@ -28,12 +28,11 @@ type TypeTableProps = {
 export const Table = (tableProps: TypeTableProps): JSX.Element => {
   const { unitMensuredList } = tableProps;
   const atributesList = tableProps.atributes;
-  const [alert, setAlert] = useState(false);
   const { variation, overview } = useTabCreate();
   const { typeSelectProdut } = overview.getData();
   const variationList = variation.getData();
   const {
-    changeCurrentStock,
+    // changeCurrentStock,
     changePriceCost,
     changePriceSale,
     changeUnitMensured,
@@ -42,12 +41,6 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
     removeVariation,
     changeCurrentReplacementPoint,
   } = variation.setData;
-
-  const handleClickOnSaveButton = () => {
-    if (variation.validate()) {
-      setAlert(true);
-    }
-  };
 
   const isTypeSaleOrResale = (): boolean =>
     typeSelectProdut.value.name === SALE.name ||
@@ -90,7 +83,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                   </th>
                 ),
             )}
-            <th
+            {/* <th
               style={
                 isTypeSaleOrResale()
                   ? {
@@ -102,7 +95,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
               rowSpan={isTypeSaleOrResale() ? 2 : 1}
             >
               Estoque atual
-            </th>
+            </th> */}
             <th
               style={
                 isTypeSaleOrResale()
@@ -220,7 +213,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                         </td>
                       ),
                   )}
-                  <td>
+                  {/* <td>
                     <NewInput
                       name="currentStock"
                       value={currentStock.value}
@@ -232,7 +225,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                       className="form-control"
                       type="text"
                     />
-                  </td>
+                  </td> */}
                   <td>
                     <NewInput
                       name="replacementPoint"

@@ -277,13 +277,13 @@ const TabUpdateProvider = ({
 
   const validationAndSetErrorAllFieldsStock = useCallback(() => {
     let isError = false;
-    if (stocks.stockCurrent.value === '') {
-      isError = true;
-      setStocks(old => ({
-        ...old,
-        stockCurrent: { ...old.stockCurrent, error: { isError: true } },
-      }));
-    }
+    // if (stocks.stockCurrent.value === '') {
+    //   isError = true;
+    //   setStocks(old => ({
+    //     ...old,
+    //     stockCurrent: { ...old.stockCurrent, error: { isError: true } },
+    //   }));
+    // }
     if (stocks.unitMensured.value.id === '') {
       isError = true;
       setStocks(old => ({
@@ -668,7 +668,7 @@ const TabUpdateProvider = ({
       addVariation,
       removeVariation,
       changeCurrentReplacementPoint,
-      changeCurrentStock,
+      // changeCurrentStock,
       changePriceCost,
       changePriceSale,
       changeUnitMensured,
@@ -1008,7 +1008,7 @@ const TabUpdateProvider = ({
     const {
       priceCost,
       priceSale,
-      stockCurrent,
+      // stockCurrent,
       unitMensured,
       replacementPoint,
     } = stocks;
@@ -1063,7 +1063,7 @@ const TabUpdateProvider = ({
             stock.push({
               id: Number(id),
               replacement_point: parseFloat(replacementPoint.value),
-              current_stock: Number(currentStock.value),
+              // current_stock: Number(currentStock.value),
               price_cost: convertValueWithMaskInNumber(priceCost.value),
               price_sale: convertValueWithMaskInNumber(priceSale.value),
               unit_mensured_id: parseInt(unitMensured.value.id),
@@ -1078,7 +1078,7 @@ const TabUpdateProvider = ({
           price_cost: convertValueWithMaskInNumber(priceCost.value),
           price_sale: convertValueWithMaskInNumber(priceSale.value),
           unit_mensured_id: parseInt(unitMensured.value.id),
-          current_stock: Number(stockCurrent.value),
+          // current_stock: Number(stockCurrent.value),
           atributes: [],
         });
       }

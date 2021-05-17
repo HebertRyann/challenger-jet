@@ -277,10 +277,10 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
         console.log(data.stocks[0]);
         addStock({
           id: data.stocks[0]?.id.toString(),
-          stockCurrent: {
-            error: { isError: false },
-            value: data.stocks[0].current_stock.toString(),
-          },
+          // stockCurrent: {
+          //   error: { isError: false },
+          //   value: data.stocks[0].current_stock.toString(),
+          // },
           priceCost: {
             error: { isError: false },
             value: '0',

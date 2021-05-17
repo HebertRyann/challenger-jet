@@ -66,7 +66,7 @@ export type TypeDetailsProps = {
 export type TypeStockProps = {
   id: string;
   unitMensured: TypeGenericValueWithError<FieldWithIdName>;
-  stockCurrent: TypeValueAndError;
+  // stockCurrent: TypeValueAndError;
   replacementPoint: TypeValueAndError;
   priceCost: TypeValueAndError;
   priceSale: TypeValueAndError;
@@ -114,7 +114,7 @@ export type TypeGetAndSetDataOverView<T> = {
 
 export type ResolverHasVariation = {
   changeUnitMensured: (unitMensured: FieldWithIdName, index: number) => void;
-  changeCurrentStock: (stock: string, index: number) => void;
+  // changeCurrentStock: (stock: string, index: number) => void;
   changeCurrentReplacementPoint: (
     replacementPoint: string,
     index: number,
@@ -240,7 +240,7 @@ export type TypeProductStock = {
   id: number;
   unit_mensured_id: number;
   replacement_point: number;
-  current_stock: number;
+  // current_stock: number;
   price_sale: number;
   price_cost: number;
   atributes: TypeAtributes[];

@@ -21,7 +21,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
   const { typeSelectProdut } = overview.getData();
   const { stock } = useTabCreate();
   const {
-    stockCurrent,
+    // stockCurrent,
     priceCost,
     priceSale,
     replacementPoint,
@@ -50,7 +50,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
             >
               Unidade de medidas
             </th>
-            <th
+            {/* <th
               style={
                 isTypeSaleOrResale()
                   ? {
@@ -62,7 +62,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
               rowSpan={isTypeSaleOrResale() ? 2 : 1}
             >
               Estoque atual
-            </th>
+            </th> */}
             <th
               style={
                 isTypeSaleOrResale()
@@ -122,7 +122,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                 )}
               </NewSelect>
             </td>
-            <td>
+            {/* <td>
               <NewInput
                 isNumber
                 onChange={event => {
@@ -140,7 +140,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                 className="form-control"
                 type="text"
               />
-            </td>
+            </td> */}
             <td>
               <NewInput
                 isNumber

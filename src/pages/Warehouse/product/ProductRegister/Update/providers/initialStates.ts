@@ -49,7 +49,7 @@ export const initialStateDetails: TypeDetailsProps = {
 
 export const initialStateStock: TypeStockProps = {
   id: '',
-  stockCurrent: { value: '', error },
+  // stockCurrent: { value: '', error },
   replacementPoint: { value: '', error },
   unitMensured: { value: { id: '', name: '' }, error },
   priceCost: { value: '', error },
