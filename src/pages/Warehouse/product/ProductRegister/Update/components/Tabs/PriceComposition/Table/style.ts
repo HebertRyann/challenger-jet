@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const ContainerInput = styled.div`
+  background-color: green !important;
   input {
-    margin-bottom: 15px;
     -moz-placeholder {
       text-align: right;
     }

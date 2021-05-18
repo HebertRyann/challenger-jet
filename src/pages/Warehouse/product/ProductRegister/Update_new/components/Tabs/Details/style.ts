@@ -5,7 +5,6 @@ export const Container = styled.div`
     height: 90px;
   }
   input {
-    margin-bottom: 15px;
     -moz-placeholder {
       text-align: right;
     }

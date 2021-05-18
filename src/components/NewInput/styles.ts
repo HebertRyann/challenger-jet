@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 export const Container = styled.div<{ isError?: boolean }>`
   position: relative;
+
   ${({ isError }) =>
     isError &&
     css`
@@ -17,12 +18,14 @@ export const Container = styled.div<{ isError?: boolean }>`
     margin-top: 5px;
     color: #d43f3a !important;
   }
+  overflow: hidden;
 `;
 
 export const ContainerInput = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+
   > input {
     flex: 1 !important;
     /* position: absolute !important; */
