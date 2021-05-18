@@ -197,7 +197,10 @@ export type TypeGetAndSetFiscal<T> = {
 };
 
 export type ResultOnSaveProdut = {
-  code: number;
+  error?: {
+    code: number;
+    message: string;
+  };
   data?: {
     id: number;
     name: string;

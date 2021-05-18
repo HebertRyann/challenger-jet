@@ -17,9 +17,19 @@ type SaveProductParams = {
 export const saveProduct = async (
   params: SaveProductParams,
 ): Promise<ResultOnSaveProdut> => {
-  const { status, data } = await api.post('/product', {
-    params,
-  });
-
-  return { code: status, data };
+  try {
+    const { status, data } = await api.post('/product', {
+      params,
+    });
+    if (data.error) {
+      return { error: { code: data.error.code, message: data.error.message } };
+    }
+    return {
+      data,
+    };
+  } catch (error) {
+    return {
+      error: { code: 500, message: 'Não foi possivel salvar o produto' },
+    };
+  }
 };

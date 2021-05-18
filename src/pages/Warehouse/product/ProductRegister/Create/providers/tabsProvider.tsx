@@ -1174,7 +1174,10 @@ const TabCreateProvider = ({
       });
     }
     return {
-      code: 500,
+      error: {
+        code: 500,
+        message: 'Não foi possivel salvar o produto',
+      },
     };
   };
 
