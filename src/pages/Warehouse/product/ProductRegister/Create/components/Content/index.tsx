@@ -100,9 +100,9 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
       return;
     }
 
-    const { code, data } = await save();
+    const { error, data } = await save();
 
-    if (code === 200) {
+    if (!error) {
       addToast({
         type: 'success',
         title: 'Produto adicionado',
@@ -117,7 +117,7 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
       addToast({
         type: 'error',
         title: 'Erro ao salvar o produto',
-        description: 'Não foi possivel salvar o produto',
+        description: error.message,
       });
     }
   };
