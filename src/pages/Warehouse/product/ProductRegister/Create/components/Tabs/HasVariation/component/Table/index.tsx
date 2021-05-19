@@ -3,7 +3,7 @@ import { Container, IconRemove } from './style';
 import { NewInput } from '../../../../../../../../../../components/NewInput';
 import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
-import { SALE, RE_SALE } from '../../../../../domain/products';
+import { SALE, RE_SALE } from '../../../../../../domain/products';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../../../services/api';
 import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent';
 import ReactTooltip from 'react-tooltip';

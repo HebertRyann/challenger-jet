@@ -4,7 +4,7 @@ import {
   formatProductTypeToLowerCase,
   SALE,
   SEMI_FINISHED,
-} from '../../../../Create/domain/products';
+} from '../../../../domain/products';
 import { CompositonView } from '../../../domain/response/productResponse';
 import { useProduct } from '../../../provider/productProvider';
 import { Container } from './style';

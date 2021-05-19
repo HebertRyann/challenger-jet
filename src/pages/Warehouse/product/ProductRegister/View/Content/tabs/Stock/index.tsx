@@ -4,7 +4,7 @@ import {
   formatProductTypeToLowerCase,
   RE_SALE,
   SALE,
-} from '../../../../Create/domain/products';
+} from '../../../../domain/products';
 import { PriceResponse } from '../../../domain/response/productResponse';
 import { useProduct } from '../../../provider/productProvider';
 import { Container } from './style';

@@ -11,8 +11,8 @@ import {
   SALE,
   SEMI_FINISHED,
   formatProductTypeToLowerCase,
-} from '../../../../domain/products';
-import { RAW_MATERIAL } from '../../../../domain/products';
+} from '../../../../../domain/products';
+import { RAW_MATERIAL } from '../../../../../domain/products';
 import { useLoading } from '../../../../../../../../../hooks/loading';
 import { SearchComponentHasComposition } from '../SearchComponent';
 import { useToast } from '../../../../../../../../../hooks/toast';

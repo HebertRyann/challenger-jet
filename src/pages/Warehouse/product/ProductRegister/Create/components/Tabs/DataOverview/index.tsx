@@ -13,7 +13,7 @@ import {
   SALE,
   SEMI_FINISHED,
   RE_SALE,
-} from '../../../domain/products';
+} from '../../../../domain/products';
 import { nameStock } from '../Stock';
 import { NewSelect } from '../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../providers/tabsProvider';

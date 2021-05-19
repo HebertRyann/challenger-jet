@@ -4,7 +4,7 @@ import { NewInput } from '../../../../../../../../../../components/NewInput';
 import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
 import { useTabs } from '../../../../../../../../../../hooks/tabs';
-import { RE_SALE, SALE } from '../../../../../domain/products';
+import { RE_SALE, SALE } from '../../../../../../domain/products';
 import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent';
 
 type TypeUnitMensured = {

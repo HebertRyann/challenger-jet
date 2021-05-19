@@ -7,7 +7,7 @@ import {
   RE_SALE,
   LOCATION,
   CONSUMER,
-} from '../domain/products';
+} from '../../domain/products';
 import {
   labelDataOverview,
   nameDataOverview,

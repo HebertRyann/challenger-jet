@@ -11,7 +11,7 @@ import {
   formatProductTypeToLowerCase,
   RE_SALE,
   SALE,
-} from '../../../../Create/domain/products';
+} from '../../../../domain/products';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
 
 export const HasVariation = (): JSX.Element => {
