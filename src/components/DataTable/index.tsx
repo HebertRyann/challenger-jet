@@ -194,6 +194,11 @@ const DataTable = ({
           <tbody>
             {(items.length > 0 &&
               items.map(item => {
+                if (item?.type) {
+                  if (item.type === 'CONSUMO') {
+                    item.type = 'USO E CONSUMO';
+                  }
+                }
                 return !notHasChildren ? (
                   <tr key={item.id}>
                     {headers.map(

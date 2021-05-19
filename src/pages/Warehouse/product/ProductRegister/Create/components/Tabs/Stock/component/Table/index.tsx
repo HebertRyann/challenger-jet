@@ -17,9 +17,7 @@ type TypeTableProps = {
 };
 
 export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
-  const [alert, setAlert] = useState(false);
-  const { changeCurrentTabForNext, changeCurrentTabForPrevious } = useTabs();
-  const { overview, validation } = useTabCreate();
+  const { overview } = useTabCreate();
   const { typeSelectProdut } = overview.getData();
   const { stock } = useTabCreate();
   const {
