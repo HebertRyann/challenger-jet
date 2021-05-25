@@ -1,9 +1,20 @@
 import styled, { css } from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.div<{ isEmpty: boolean }>`
   margin-top: 30px;
   label {
     font-weight: bold;
+  }
+
+  .flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    .form-content {
+      width: 100%;
+      margin: 0 2px;
+    }
   }
 
   .text-area {
@@ -23,4 +34,14 @@ export const Container = styled.div`
       cursor: not-allowed;
     }
   }
+  ${({ isEmpty }) =>
+    isEmpty &&
+    css`
+      hr {
+        display: none;
+      }
+      .section {
+        margin-top: -40px;
+      }
+    `}
 `;
