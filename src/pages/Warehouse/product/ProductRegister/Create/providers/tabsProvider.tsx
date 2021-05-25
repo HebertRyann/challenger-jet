@@ -197,34 +197,34 @@ const TabCreateProvider = ({
   const validationAndSetErrorAllFieldsDetails = useCallback(() => {
     let isError = false;
 
-    if (detail.weight.value === '') {
-      isError = true;
-      setDetail(old => ({
-        ...old,
-        weight: { ...old.weight, error: { isError: true } },
-      }));
-    }
-    if (detail.width.value === '') {
-      isError = true;
-      setDetail(old => ({
-        ...old,
-        width: { ...old.width, error: { isError: true } },
-      }));
-    }
-    if (detail.height.value === '') {
-      isError = true;
-      setDetail(old => ({
-        ...old,
-        height: { ...old.height, error: { isError: true } },
-      }));
-    }
-    if (detail.length.value === '') {
-      isError = true;
-      setDetail(old => ({
-        ...old,
-        length: { ...old.length, error: { isError: true } },
-      }));
-    }
+    // if (detail.weight.value === '') {
+    //   isError = true;
+    //   setDetail(old => ({
+    //     ...old,
+    //     weight: { ...old.weight, error: { isError: true } },
+    //   }));
+    // }
+    // if (detail.width.value === '') {
+    //   isError = true;
+    //   setDetail(old => ({
+    //     ...old,
+    //     width: { ...old.width, error: { isError: true } },
+    //   }));
+    // }
+    // if (detail.height.value === '') {
+    //   isError = true;
+    //   setDetail(old => ({
+    //     ...old,
+    //     height: { ...old.height, error: { isError: true } },
+    //   }));
+    // }
+    // if (detail.length.value === '') {
+    //   isError = true;
+    //   setDetail(old => ({
+    //     ...old,
+    //     length: { ...old.length, error: { isError: true } },
+    //   }));
+    // }
     if (detail.descriptionAndDetails.value === '') {
       isError = true;
       setDetail(old => ({
@@ -1009,6 +1009,8 @@ const TabCreateProvider = ({
       wayOfUse,
       weight,
       width,
+      measure,
+      thickness,
     } = detail;
     const {
       priceCost,
@@ -1026,9 +1028,11 @@ const TabCreateProvider = ({
       const overview_and_details: TypeProductDataOverView = {
         details: {
           width: convertValueWithMaskInNumber(width.value),
-          weight: convertValueMaskInNumber(weight.value),
+          weight: convertValueWithMaskInNumber(weight.value || ''),
           height: convertValueWithMaskInNumber(height.value),
           length: convertValueWithMaskInNumber(length.value),
+          thickness: convertValueWithMaskInNumber(thickness.value),
+          measure: measure.value,
           description_details: descriptionAndDetails.value,
           technical_specification: technicalSpecification.value,
           way_use: wayOfUse.value,

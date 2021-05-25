@@ -57,6 +57,8 @@ export type TypeDetailsProps = {
   width: TypeValueAndError;
   height: TypeValueAndError;
   length: TypeValueAndError;
+  thickness: TypeValueAndError;
+  measure: TypeValueAndError;
   descriptionAndDetails: TypeValueAndError;
   technicalSpecification: TypeValueAndError;
   wayOfUse: TypeValueAndError;
@@ -208,11 +210,18 @@ export type ResultOnSaveProdut = {
   };
 };
 
+export type TypeDetailsSelect = {
+  label: string;
+  value: string;
+};
+
 type DetailsProduct = {
   weight: number;
   width: number;
   height: number;
   length: number;
+  thickness: number;
+  measure: string;
   description_details: string;
   technical_specification: string;
   way_use: string;

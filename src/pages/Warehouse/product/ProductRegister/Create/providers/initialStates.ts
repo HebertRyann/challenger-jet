@@ -42,6 +42,8 @@ export const initialStateDetails: TypeDetailsProps = {
   length: { value: '', error },
   technicalSpecification: { value: '', error },
   wayOfUse: { value: '', error },
+  measure: { value: '', error },
+  thickness: { value: '', error },
   weight: { value: '', error: { isError: false } },
   width: { value: '', error: { isError: false } },
 };
