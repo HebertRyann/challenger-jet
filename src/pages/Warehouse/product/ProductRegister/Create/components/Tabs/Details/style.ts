@@ -13,8 +13,8 @@ export const Container = styled.div`
     }
     text-align: end;
   }
-  .col-md-2 {
-    margin-bottom: 10px !important;
+  .row {
+    margin-bottom: 20px !important;
   }
 
 `;
