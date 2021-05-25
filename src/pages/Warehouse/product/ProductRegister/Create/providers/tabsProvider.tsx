@@ -1011,6 +1011,7 @@ const TabCreateProvider = ({
       width,
       measure,
       thickness,
+      measureWeight
     } = detail;
     const {
       priceCost,
@@ -1033,6 +1034,7 @@ const TabCreateProvider = ({
           length: convertValueWithMaskInNumber(length.value),
           thickness: convertValueWithMaskInNumber(thickness.value),
           measure: measure.value,
+          measure_weight: measureWeight.value,
           description_details: descriptionAndDetails.value,
           technical_specification: technicalSpecification.value,
           way_use: wayOfUse.value,
