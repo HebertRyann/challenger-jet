@@ -8,6 +8,23 @@ import {
   weightMask,
 } from '../../../../../../../../utlis/mask';
 import { useTabCreate } from '../../../providers/tabsProvider';
+import { NewSelect } from '../../../../../../../../components/NewSelect';
+
+const typeUnitMensuredDetails: { value: string; label: string }[] = [
+  {
+    label: 'Centímetro',
+    value: 'cm',
+  },
+  {
+    label: 'Metro',
+    value: 'm',
+  },
+
+  {
+    label: 'Milimetro',
+    value: 'mm',
+  },
+];
 
 export const Details = (): JSX.Element => {
   const { details } = useTabCreate();
@@ -25,7 +42,7 @@ export const Details = (): JSX.Element => {
   return (
     <Container>
       <div className="row">
-        <div className="form-content col-md-3">
+        <div className="form-content col-md-2">
           <TooltipComponent label="Peso (kg)" message="Infome o peso em kg" />
           <NewInput
             isNumber
@@ -41,12 +58,32 @@ export const Details = (): JSX.Element => {
             className="form-control"
             type="text"
             maxLength={12}
-            placeholder="0,000"
+            placeholder="0,00"
           />
         </div>
-        <div className="form-content col-md-3">
+        <div className="form-content col-md-2">
           <TooltipComponent
-            label="Largura (m)"
+            label="Medida"
+            message="Selecione a Medida de dimensão"
+          />
+          <NewSelect
+            error={{ isError: false }}
+            onChange={event => {
+              const split = event.target.value.split('+');
+              const id = split[0];
+              const name = split[1];
+            }}
+          >
+            {typeUnitMensuredDetails.map(({ value, label }) => (
+              <option key={Math.random()} value={value}>
+                {label}
+              </option>
+            ))}
+          </NewSelect>
+        </div>
+        <div className="form-content col-md-2">
+          <TooltipComponent
+            label="Largura"
             message="Informe a largura em metros"
           />
           <NewInput
@@ -66,9 +103,9 @@ export const Details = (): JSX.Element => {
             placeholder="0,00"
           />
         </div>
-        <div className="form-content col-md-3">
+        <div className="form-content col-md-2">
           <TooltipComponent
-            label="Altura (m)"
+            label="Altura"
             message="Informe a altura em metros"
           />
           <NewInput
@@ -88,9 +125,9 @@ export const Details = (): JSX.Element => {
             placeholder="0,00"
           />
         </div>
-        <div className="form-content col-md-3">
+        <div className="form-content col-md-2">
           <TooltipComponent
-            label="Comprimento (m)"
+            label="Comprimento"
             message="Informe a comprimento em metros"
           />
           <NewInput
@@ -107,6 +144,25 @@ export const Details = (): JSX.Element => {
             name="comprimento"
             className="form-control"
             type="text"
+            placeholder="0,00"
+          />
+        </div>
+        <div className="form-content col-md-2">
+          <TooltipComponent label="Espessura" message="Infome a esperssura" />
+          <NewInput
+            isNumber
+            value={weightMask(weight.value)}
+            onChange={e =>
+              details.setData({
+                ...details.getData(),
+                weight: { error: { isError: false }, value: e.target.value },
+              })
+            }
+            error={weight.error}
+            name="peso"
+            className="form-control"
+            type="text"
+            maxLength={12}
             placeholder="0,00"
           />
         </div>

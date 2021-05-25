@@ -29,15 +29,15 @@ export const Details = (): JSX.Element => {
           <p>{detail.weight?.toFixed(3)}</p>
         </div>
         <div className="form-content col-md-3">
-          <label htmlFor="tipo do produto">Largura (m)</label>
+          <label htmlFor="tipo do produto">Largura</label>
           <p>{detail.width?.toFixed(2)}</p>
         </div>
         <div className="form-content col-md-3">
-          <label htmlFor="tipo do produto">Altura (m)</label>
+          <label htmlFor="tipo do produto">Altura</label>
           <p>{detail.height?.toFixed(2)}</p>
         </div>
         <div className="form-content col-md-3">
-          <label htmlFor="tipo do produto">Comprimento (m)</label>
+          <label htmlFor="tipo do produto">Comprimento</label>
           <p>{detail.length?.toFixed(2)}</p>
         </div>
       </div>

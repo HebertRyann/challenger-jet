@@ -46,7 +46,7 @@ export const Details = (): JSX.Element => {
         </div>
         <div className="form-content col-md-3">
           <TooltipComponent
-            label="Largura (m)"
+            label="Largura"
             message="Informe a largura em metros"
           />
           <NewInput
@@ -68,7 +68,7 @@ export const Details = (): JSX.Element => {
         </div>
         <div className="form-content col-md-3">
           <TooltipComponent
-            label="Altura (m)"
+            label="Altura"
             message="Informe a altura em metros"
           />
           <NewInput
@@ -90,7 +90,7 @@ export const Details = (): JSX.Element => {
         </div>
         <div className="form-content col-md-3">
           <TooltipComponent
-            label="Comprimento (m)"
+            label="Comprimento"
             message="Informe a comprimento em metros"
           />
           <NewInput
