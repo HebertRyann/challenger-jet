@@ -18,7 +18,7 @@ export const saveProduct = async (
   params: SaveProductParams,
 ): Promise<ResultOnSaveProdut> => {
   try {
-    const { status, data } = await api.post('/product', {
+    const { data } = await api.post('/product', {
       params,
     });
     if (data.error) {
