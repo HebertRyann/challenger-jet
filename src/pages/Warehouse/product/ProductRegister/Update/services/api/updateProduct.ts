@@ -24,7 +24,6 @@ export const updateProduct = async (
     },
   );
 
-  console.log(params);
 
   return { code: status, data };
 };

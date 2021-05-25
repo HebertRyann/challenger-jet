@@ -21,7 +21,6 @@ export const Details = (): JSX.Element => {
   let detail: Details = {} as Details;
   if (details) {
     detail = JSON.parse(details.toLowerCase());
-    console.log(detail);
   }
   const [isEmpty, setEmpty] = useState(true);
 

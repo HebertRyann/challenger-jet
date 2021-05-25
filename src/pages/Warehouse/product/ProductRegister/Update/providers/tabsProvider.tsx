@@ -1004,6 +1004,9 @@ const TabUpdateProvider = ({
       wayOfUse,
       weight,
       width,
+      measure,
+      measureWeight,
+      thickness,
     } = detail;
     const {
       priceCost,
@@ -1022,9 +1025,12 @@ const TabUpdateProvider = ({
         id: Number(id),
         details: {
           width: convertValueWithMaskInNumber(width.value),
-          weight: convertValueMaskInNumber(weight.value),
+          weight: convertValueWithMaskInNumber(weight.value),
           height: convertValueWithMaskInNumber(height.value),
           length: convertValueWithMaskInNumber(length.value),
+          thickness: convertValueWithMaskInNumber(thickness.value),
+          measure: measure.value,
+          measure_weight: measureWeight.value,
           description_details: descriptionAndDetails.value,
           technical_specification: technicalSpecification.value,
           way_use: wayOfUse.value,

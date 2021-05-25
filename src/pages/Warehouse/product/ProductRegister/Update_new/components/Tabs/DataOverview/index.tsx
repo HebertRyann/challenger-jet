@@ -125,11 +125,9 @@ export const DataOverview = ({
         },
       },
     });
-    console.log(dataOvewViewState.inputs.nameProduct.value);
   };
 
   useEffect(() => {
-    console.log('Change');
   }, [dataOverView.dataOvewViewState.inputs]);
 
   const handlerHasVariation = ({

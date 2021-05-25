@@ -9,8 +9,6 @@ export const Table = (): JSX.Element => {
   const { priceComposition } = useTabCreate();
   const { cost, dif, ipi, profit, simpleNational } = priceComposition.getData();
 
-  console.log(priceComposition.getData());
-
   return (
     <>
       <div className="row">

@@ -25,7 +25,6 @@ const ProviderProduct = ({ children }: TypeUpdateProvider) => {
   );
 
   const validate = () => {
-    console.log('Validate all');
     overViewdispatch({
       type: DataOvewViewActionTypes.VALIDATE_DATA_OVER_VIEW,
       payload: null,

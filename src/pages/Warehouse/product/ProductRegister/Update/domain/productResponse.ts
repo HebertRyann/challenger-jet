@@ -83,4 +83,7 @@ export type DetailsResponseType = {
   way_use: string;
   description_details: string;
   technical_specification: string;
+  measure_weight: string;
+  thickness: string;
+  measure: string;
 };

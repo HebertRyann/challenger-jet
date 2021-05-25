@@ -54,6 +54,9 @@ export type TypeValueAndError = {
 };
 
 export type TypeDetailsProps = {
+  measureWeight: TypeValueAndError;
+  thickness: TypeValueAndError;
+  measure: TypeValueAndError;
   weight: TypeValueAndError;
   width: TypeValueAndError;
   height: TypeValueAndError;
@@ -211,6 +214,9 @@ export type ResultOnSaveProdut = {
 };
 
 type DetailsProduct = {
+  measure_weight: string;
+  thickness: number;
+  measure: string;
   weight: number;
   width: number;
   height: number;

@@ -1,6 +1,9 @@
 import styled, { css } from 'styled-components';
 
 export const Container = styled.div`
+  .row {
+    margin-bottom: 20px;
+  }
   textarea {
     height: 90px;
   }

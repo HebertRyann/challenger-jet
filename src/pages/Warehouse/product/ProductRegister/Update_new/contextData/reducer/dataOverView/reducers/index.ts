@@ -41,7 +41,6 @@ export const dataOverViewReducer = (
         state.inputs.typeProduct.error = true;
       if (state.inputs.groupProduct.value === '')
         state.inputs.groupProduct.error = true;
-      console.log(state.inputs);
       return { ...state };
     default:
       return state;

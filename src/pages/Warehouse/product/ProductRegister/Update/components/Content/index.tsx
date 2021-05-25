@@ -351,6 +351,18 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
       );
 
       addDetails({
+        thickness: {
+          error: { isError: false },
+          value: detailResponse?.thickness?.toString() || "",
+        },
+        measureWeight: {
+          error: { isError: false },
+          value: detailResponse?.measure_weight?.toString(),
+        },
+        measure: {
+          error: { isError: false },
+          value: detailResponse?.measure?.toString(),
+        },
         height: {
           error: { isError: false },
           value: detailResponse.height.toString(),

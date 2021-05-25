@@ -132,7 +132,6 @@ const ProductAtributesView: React.FC = () => {
   const handleOnClickRemoveParent = useCallback(
     ({ id, name }: { id: string; name: string }) => {
       setAlertRemoveParent(true);
-      console.log('remove product', id);
     },
     [alertRemoveParent],
   );

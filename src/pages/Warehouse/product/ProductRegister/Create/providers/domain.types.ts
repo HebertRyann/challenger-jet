@@ -54,12 +54,12 @@ export type TypeValueAndError = {
 
 export type TypeDetailsProps = {
   measureWeight: TypeValueAndError;
+  thickness: TypeValueAndError;
+  measure: TypeValueAndError;
   weight: TypeValueAndError;
   width: TypeValueAndError;
   height: TypeValueAndError;
   length: TypeValueAndError;
-  thickness: TypeValueAndError;
-  measure: TypeValueAndError;
   descriptionAndDetails: TypeValueAndError;
   technicalSpecification: TypeValueAndError;
   wayOfUse: TypeValueAndError;
@@ -218,12 +218,12 @@ export type TypeDetailsSelect = {
 
 type DetailsProduct = {
   measure_weight: string;
+  thickness: number;
+  measure: string;
   weight: number;
   width: number;
   height: number;
   length: number;
-  thickness: number;
-  measure: string;
   description_details: string;
   technical_specification: string;
   way_use: string;

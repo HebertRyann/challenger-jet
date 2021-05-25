@@ -27,9 +27,7 @@ export class HTTPClientFiscal
     LoadNatureOperations.NatureOperationsResponse[]
   > {
     try {
-      console.log(
-        `consulta API ${this.baseUrlLoadersFiscal.taxeNatureOperations}`,
-      );
+
       const { data, status } = await apiAxios.get<
         LoadNatureOperations.NatureOperationsResponse[]
       >(this.baseUrlLoadersFiscal.taxeNatureOperations);
@@ -47,7 +45,6 @@ export class HTTPClientFiscal
     LoadTaxSituations.LoadTaxSituationsResponse[]
   > {
     try {
-      console.log(`consulta API ${this.baseUrlLoadersFiscal.taxeSituation}`);
       const { data, status } = await apiAxios.get<
         LoadTaxSituations.LoadTaxSituationsResponse[]
       >(this.baseUrlLoadersFiscal.taxeSituation);
@@ -62,7 +59,6 @@ export class HTTPClientFiscal
   }
   async loadAllCFOP(): Promise<LoadAllCFOP.CFOPResponse[]> {
     try {
-      console.log(`consulta API ${this.baseUrlLoadersFiscal.taxeCfop}`);
       const { data, status } = await apiAxios.get<LoadAllCFOP.CFOPResponse[]>(
         this.baseUrlLoadersFiscal.taxeCfop,
       );
@@ -78,7 +74,6 @@ export class HTTPClientFiscal
 
   async loadAllNCM(): Promise<LoadAllNCM.NCMResponse[]> {
     try {
-      console.log(`consulta API ${this.baseUrlLoadersFiscal.taxeNcms}`);
       const { data, status } = await apiAxios.get<LoadAllNCM.NCMResponse[]>(
         this.baseUrlLoadersFiscal.taxeNcms,
       );

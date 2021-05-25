@@ -214,7 +214,6 @@ export const Table = (): JSX.Element => {
                           prevState[index] = false;
                           return [...prevState];
                         });
-                        console.log(activeSearch);
                       }}
                       className="form-control"
                       type="text"

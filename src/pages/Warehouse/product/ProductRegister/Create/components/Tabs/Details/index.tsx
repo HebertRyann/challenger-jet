@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
 import { Container, TextArea } from './style';
 import { NewInput } from '../../../../../../../../components/NewInput';
-import {
-  genericMaskWithTwoZero,
-  numericMask,
-  weightMask,
-} from '../../../../../../../../utlis/mask';
+import { genericMaskWithTwoZero } from '../../../../../../../../utlis/mask';
 import { useTabCreate } from '../../../providers/tabsProvider';
 import { NewSelect } from '../../../../../../../../components/NewSelect';
 
