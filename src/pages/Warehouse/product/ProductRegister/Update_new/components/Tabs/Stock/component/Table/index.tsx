@@ -77,8 +77,8 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
               rowSpan={isTypeSaleOrResale() ? 2 : 1}
             >
               <TooltipComponent
-                label="Ponto de reposição"
-                message="Ponto de reposição"
+                label="Reposição de estoque"
+                message="Reposição de estoque"
                 bold
               />
             </th>

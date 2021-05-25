@@ -85,8 +85,8 @@ export const Stock = (): JSX.Element => {
               className="title"
             >
               <TooltipComponent
-                label="Ponto de reposição"
-                message="Ponto de reposição"
+                label="Reposição de estoque"
+                message="Reposição de estoque"
                 bold
               />
             </th>
