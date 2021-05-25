@@ -42,13 +42,12 @@ const typeUnitMensuredWeight: { value: string; label: string }[] = [
 
 export const Details = (): JSX.Element => {
   const { details } = useTabCreate();
-  const [unitMensuredDimension, setUnitMensuredDimension] = useState('');
-  const [unitMensuredWeight, setUnitMensuredWeight] = useState('');
   const {
     weight,
     width,
     height,
     length,
+    thickness,
     descriptionAndDetails,
     technicalSpecification,
     wayOfUse,
@@ -68,14 +67,14 @@ export const Details = (): JSX.Element => {
               const split = event.target.value.split('+');
               details.setData({
                 ...details.getData(),
-                measure: {
+                measureWeight: {
                   error: { isError: false },
                   value: split[1],
                 },
               });
             }}
           >
-            {typeUnitMensuredDetails.map(({ label, value }) => {
+            {typeUnitMensuredWeight.map(({ label, value }) => {
               return <option value={`${label}+${value}`}>{label}</option>;
             })}
           </NewSelect>
@@ -194,7 +193,7 @@ export const Details = (): JSX.Element => {
           <TooltipComponent label="Espessura" message="Infome a esperssura" />
           <NewInput
             isNumber
-            value={genericMaskWithTwoZero(weight.value)}
+            value={genericMaskWithTwoZero(thickness.value)}
             onChange={e =>
               details.setData({
                 ...details.getData(),

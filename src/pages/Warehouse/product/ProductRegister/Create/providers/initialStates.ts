@@ -38,6 +38,7 @@ export const initialStateOverview: TypeDataOverViewProps = {
 
 export const initialStateDetails: TypeDetailsProps = {
   descriptionAndDetails: { value: '', error },
+  measureWeight: { value: '', error },
   height: { value: '', error },
   length: { value: '', error },
   technicalSpecification: { value: '', error },
