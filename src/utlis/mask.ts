@@ -1,20 +1,23 @@
 export function numericMask(value: string) {
-  let newvalue = value.replace(/\D/g, '');
-  newvalue = newvalue.replace(/(\d{2})$/, ',$1');
-  newvalue = newvalue.replace(/(\d+)(\d{3},\d{2})$/g, '$1.$2');
-  const qtdLoop = (newvalue.length - 3) / 3;
-  let count = 0;
-  while (qtdLoop > count) {
-    count++;
-    newvalue = newvalue.replace(/(\d+)(\d{3}.*)/, '$1.$2');
+  if (!value) {
+    let newvalue = value?.replace(/\D/g, '');
+    newvalue = newvalue?.replace(/(\d{2})$/, ',$1');
+    newvalue = newvalue?.replace(/(\d+)(\d{3},\d{2})$/g, '$1.$2');
+    const qtdLoop = (newvalue?.length - 3) / 3;
+    let count = 0;
+    while (qtdLoop > count) {
+      count++;
+      newvalue = newvalue?.replace(/(\d+)(\d{3}.*)/, '$1.$2');
+    }
+    newvalue = newvalue?.replace(/^(0)(\d)/g, '$2');
+    return newvalue;
   }
-  newvalue = newvalue.replace(/^(0)(\d)/g, '$2');
-  return newvalue;
+  return value;
 }
 
-export function convertValueWithMaskInNumber(value: string): number {
-  return +value.replace(/\D/g, '').replace(/(\d{2})$/, '.$1');
-}
+export const convertValueWithMaskInNumber = (value: string): string => {
+  return value;
+};
 
 export function weightMask(value: string): string {
   let newValue = value;
@@ -39,18 +42,18 @@ export function weightMask(value: string): string {
 
 export function genericMaskWithTwoZero(value: string): string {
   let newValue = value;
-  const integer = newValue.split('.')[0];
+  const integer = newValue?.split('.')[0];
 
-  newValue = newValue.replace(/\D/g, '');
+  newValue = newValue?.replace(/\D/g, '');
 
-  newValue = newValue.replace(/^[0]+/, '');
+  newValue = newValue?.replace(/^[0]+/, '');
 
-  if (newValue.length <= 2 || !integer) {
-    if (newValue.length === 1) newValue = '0,0' + newValue;
+  if (newValue?.length <= 2 || !integer) {
+    if (newValue?.length === 1) newValue = '0,0' + newValue;
 
-    if (newValue.length === 2) newValue = '0,' + newValue;
+    if (newValue?.length === 2) newValue = '0,' + newValue;
   } else {
-    newValue = newValue.replace(/^(\d{1,})(\d{2})$/, '$1,$2');
+    newValue = newValue?.replace(/^(\d{1,})(\d{2})$/, '$1,$2');
   }
 
   return newValue;

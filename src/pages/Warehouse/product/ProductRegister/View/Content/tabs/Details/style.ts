@@ -6,15 +6,8 @@ export const Container = styled.div<{ isEmpty: boolean }>`
     font-weight: bold;
   }
 
-  .flex {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 10px;
-    .form-content {
-      width: 100%;
-      margin: 0 2px;
-    }
+  .col-md-3{
+    margin-bottom: 20px;
   }
 
   .text-area {

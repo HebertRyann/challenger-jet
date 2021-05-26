@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import {
+  convertValueWithMaskInNumber,
+  genericMaskWithTwoZero,
+  numericMask,
+} from '../../../../../../../../utlis/mask';
+import {
+  typeUnitMensuredDetails,
+  typeUnitMensuredWeight,
+} from '../../../../domain/details/measureds';
 import { useProduct } from '../../../provider/productProvider';
 import { Container } from './style';
 
 type Details = {
-  width: number;
-  height: number;
-  length: number;
-  weight: number;
-  thickness: number;
+  width: string;
+  height: string;
+  length: string;
+  weight: string;
+  thickness: string;
   measure: string;
   way_use: string;
   measure_weight: string;
@@ -27,59 +36,77 @@ export const Details = (): JSX.Element => {
   useEffect(() => {
     setEmpty(
       () =>
-        detail.height === 0 &&
-        detail.length === 0 &&
-        detail.thickness === 0 &&
-        detail.weight === 0 &&
-        detail.width === 0 &&
+        detail.height === '0' &&
+        detail.length === '0' &&
+        detail.thickness === '0' &&
+        detail.weight === '0' &&
+        detail.width === '0' &&
         detail.measure_weight === '' &&
         detail.measure === '',
     );
   }, [detail]);
 
+  const gettypeUnitMensuredDetails = (isEqual: string): string => {
+    const match = typeUnitMensuredDetails.filter(
+      ({ value }) => value === isEqual,
+    );
+    if (match && match[0]) return match[0].label;
+    return isEqual;
+  };
+
+  const getTypeUnitMensuredWeight = (isEqual: string): string => {
+    const match = typeUnitMensuredWeight.filter(
+      ({ value }) => value === isEqual,
+    );
+    if (match && match[0]) return match[0].label;
+    return isEqual;
+  };
+
   return (
     <Container isEmpty={isEmpty}>
-      <div className="flex">
+      <div className="row">
         {detail.measure_weight !== '' && (
-          <div className="form-content">
+          <div className="form-content col-md-3">
             <label htmlFor="Peso_medida">Peso medida</label>
-            <p>{detail.measure_weight}</p>
+            <p>{getTypeUnitMensuredWeight(detail.measure_weight)}</p>
           </div>
         )}
-        {detail.length !== 0 && (
-          <div className="form-content">
+        {detail.length !== '0' && (
+          <div className="form-content col-md-3">
             <label htmlFor="Peso">Peso</label>
-            <p>{detail.weight?.toFixed(2)}</p>
+            <p>{detail?.weight?.toString()}</p>
           </div>
         )}
         {detail.measure && detail.measure !== '' && (
-          <div className="form-content">
+          <div className="form-content col-md-3">
             <label htmlFor="tipo do produto">Dimensão medida</label>
-            <p>{detail.measure}</p>
+            <p>{gettypeUnitMensuredDetails(detail?.measure)}</p>
           </div>
         )}
-        {detail.width !== 0 && (
-          <div className="form-content">
+        {detail.width !== '0' && (
+          <div className="form-content col-md-3">
             <label htmlFor="tipo do produto">Largura</label>
-            <p>{detail.width?.toFixed(2)}</p>
+            <p>{genericMaskWithTwoZero(detail.width)}</p>
           </div>
         )}
-        {detail.height !== 0 && (
-          <div className="form-content">
+      </div>
+      <div className="row">
+        {detail.height !== '0' && (
+          <div className="form-content col-md-3">
             <label htmlFor="tipo do produto">Altura</label>
-            <p>{detail.height?.toFixed(2)}</p>
+            <p>{genericMaskWithTwoZero(detail.height)}</p>
           </div>
         )}
-        {detail.length !== 0 && (
-          <div className="form-content">
+        {detail.length !== '0' && (
+          <div className="form-content col-md-3">
             <label htmlFor="tipo do produto">Comprimento</label>
-            <p>{detail.length?.toFixed(2)}</p>
+            <p>{genericMaskWithTwoZero(detail.length)}</p>
           </div>
         )}
-        {detail.thickness !== 0 && detail.thickness && (
-          <div className="form-content">
+        {detail.thickness !== '0' && detail.thickness && (
+          <div className="form-content col-md-3">
             <label htmlFor="tipo do produto">Espessura</label>
-            <p>{detail.thickness?.toFixed(2)}</p>
+            <p>{genericMaskWithTwoZero(detail.thickness)}</p>
           </div>
         )}
       </div>
