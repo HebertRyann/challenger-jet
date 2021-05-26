@@ -218,12 +218,12 @@ export type TypeDetailsSelect = {
 
 type DetailsProduct = {
   measure_weight: string;
-  thickness: number;
+  thickness: string;
   measure: string;
-  weight: number;
-  width: number;
-  height: number;
-  length: number;
+  weight: string;
+  width: string;
+  height: string;
+  length: string;
   description_details: string;
   technical_specification: string;
   way_use: string;
@@ -248,27 +248,27 @@ export type TypeProductStock = {
   unit_mensured_id: number;
   replacement_point: number;
   current_stock: number;
-  price_sale: number;
-  price_cost: number;
+  price_sale: string;
+  price_cost: string;
   atributes: TypeAtributes[];
 };
 
 export type PriceCompositionAndFiscal = {
   price_composition: {
-    margin_profit: number;
-    ipi: number;
-    fixed_cost: number;
-    dif: number;
-    simple_national: number;
+    margin_profit: string;
+    ipi: string;
+    fixed_cost: string;
+    dif: string;
+    simple_national: string;
   };
   fiscal: {
-    ncm: number;
-    cfop: number;
-    icms_tax_situation: number;
-    icms_tax_origem: number;
-    ipi_tax_situation: number;
-    pis_tax_situation: number;
-    cofins_tax_situation: number;
+    ncm: string;
+    cfop: string;
+    icms_tax_situation: string;
+    icms_tax_origem: string;
+    ipi_tax_situation: string;
+    pis_tax_situation: string;
+    cofins_tax_situation: string;
   };
 };
 
@@ -276,6 +276,6 @@ export type CompositionRequest = {
   product_id: number;
   stock_id: number;
   name: string;
-  amount: number;
-  cost: number;
+  amount: string;
+  cost: string;
 };

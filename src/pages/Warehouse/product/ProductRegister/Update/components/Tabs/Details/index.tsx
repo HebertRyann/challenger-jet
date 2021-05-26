@@ -2,43 +2,13 @@ import React from 'react';
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
 import { Container, TextArea } from './style';
 import { NewInput } from '../../../../../../../../components/NewInput';
-import {
-  genericMaskWithTwoZero,
-  numericMask,
-  weightMask,
-} from '../../../../../../../../utlis/mask';
+import { genericMaskWithTwoZero } from '../../../../../../../../utlis/mask';
 import { useTabCreate } from '../../../providers/tabsProvider';
 import { NewSelect } from '../../../../../../../../components/NewSelect';
-
-const typeUnitMensuredDetails: { value: string; label: string }[] = [
-  {
-    label: 'Metro',
-    value: 'm',
-  },
-  {
-    label: 'Centímetro',
-    value: 'cm',
-  },
-  {
-    label: 'Milimetro',
-    value: 'mm',
-  },
-];
-
-const typeUnitMensuredWeight: { value: string; label: string }[] = [
-  {
-    label: 'Tonelada',
-    value: 't',
-  },
-  {
-    label: 'Quilograma',
-    value: 'kg',
-  },
-  {
-    label: 'Grama',
-    value: 'g',
-  },
-];
+import {
+  typeUnitMensuredDetails,
+  typeUnitMensuredWeight,
+} from '../../../../domain/details/measureds';
 
 const gettypeUnitMensuredDetails = (isEqual: string): string => {
   const match = typeUnitMensuredDetails.filter(
@@ -56,7 +26,6 @@ const getTypeUnitMensuredWeight = (isEqual: string): string => {
 
 export const Details = (): JSX.Element => {
   const { details } = useTabCreate();
-  console.log(details.getData());
   const {
     weight,
     width,
@@ -85,7 +54,7 @@ export const Details = (): JSX.Element => {
               const split = event.target.value.split('+');
               details.setData({
                 ...details.getData(),
-                weight: { error: { isError: false }, value: split[1] },
+                measureWeight: { error: { isError: false }, value: split[1] },
               });
             }}
           >
@@ -99,12 +68,12 @@ export const Details = (): JSX.Element => {
           <NewInput
             isNumber
             value={genericMaskWithTwoZero(weight.value)}
-            onChange={e =>
+            onChange={e => {
               details.setData({
                 ...details.getData(),
                 weight: { error: { isError: false }, value: e.target.value },
-              })
-            }
+              });
+            }}
             error={weight.error}
             name="peso"
             className="form-control"
@@ -125,7 +94,7 @@ export const Details = (): JSX.Element => {
               const split = event.target.value.split('+');
               details.setData({
                 ...details.getData(),
-                width: { error: { isError: false }, value: split[1] },
+                measure: { error: { isError: false }, value: split[1] },
               });
             }}
           >
@@ -158,7 +127,7 @@ export const Details = (): JSX.Element => {
         </div>
       </div>
       <div className="row">
-        <div className="form-content col-md-4">
+        <div className="form-content col-md-3">
           <TooltipComponent
             label="Altura"
             message="Informe a altura em metros"
@@ -180,7 +149,7 @@ export const Details = (): JSX.Element => {
             placeholder="0,00"
           />
         </div>
-        <div className="form-content col-md-4">
+        <div className="form-content col-md-3">
           <TooltipComponent
             label="Comprimento"
             message="Informe a comprimento em metros"
@@ -202,7 +171,7 @@ export const Details = (): JSX.Element => {
             placeholder="0,00"
           />
         </div>
-        <div className="form-content col-md-4">
+        <div className="form-content col-md-3">
           <TooltipComponent label="Espessura" message="Infome a esperssura" />
           <NewInput
             isNumber

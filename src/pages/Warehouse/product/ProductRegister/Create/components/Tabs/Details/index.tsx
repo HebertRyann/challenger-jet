@@ -5,36 +5,10 @@ import { NewInput } from '../../../../../../../../components/NewInput';
 import { genericMaskWithTwoZero } from '../../../../../../../../utlis/mask';
 import { useTabCreate } from '../../../providers/tabsProvider';
 import { NewSelect } from '../../../../../../../../components/NewSelect';
-
-const typeUnitMensuredDetails: { value: string; label: string }[] = [
-  {
-    label: 'Metro',
-    value: 'm',
-  },
-  {
-    label: 'Centímetro',
-    value: 'cm',
-  },
-  {
-    label: 'Milimetro',
-    value: 'mm',
-  },
-];
-
-const typeUnitMensuredWeight: { value: string; label: string }[] = [
-  {
-    label: 'Tonelada',
-    value: 't',
-  },
-  {
-    label: 'Quilograma',
-    value: 'kg',
-  },
-  {
-    label: 'Grama',
-    value: 'g',
-  },
-];
+import {
+  typeUnitMensuredDetails,
+  typeUnitMensuredWeight,
+} from '../../../../domain/details/measureds';
 
 export const Details = (): JSX.Element => {
   const { details } = useTabCreate();
@@ -141,7 +115,7 @@ export const Details = (): JSX.Element => {
         </div>
       </div>
       <div className="row">
-        <div className="form-content col-md-4">
+        <div className="form-content col-md-3">
           <TooltipComponent
             label="Altura"
             message="Informe a altura em metros"
@@ -163,7 +137,7 @@ export const Details = (): JSX.Element => {
             placeholder="0,00"
           />
         </div>
-        <div className="form-content col-md-4">
+        <div className="form-content col-md-3">
           <TooltipComponent
             label="Comprimento"
             message="Informe a comprimento em metros"
@@ -185,7 +159,7 @@ export const Details = (): JSX.Element => {
             placeholder="0,00"
           />
         </div>
-        <div className="form-content col-md-4">
+        <div className="form-content col-md-3">
           <TooltipComponent label="Espessura" message="Infome a esperssura" />
           <NewInput
             isNumber

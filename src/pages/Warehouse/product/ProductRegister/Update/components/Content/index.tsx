@@ -30,12 +30,12 @@ import {
   PriceCompositionResponserType,
   ProductResponse,
 } from '../../domain/productResponse';
-import { nameHasVariation } from '../../../Update_new/components/Tabs/HasVariation';
-import { nameStock } from '../../../Update_new/components/Tabs/Stock';
 import { SEMI_FINISHED, SALE, RE_SALE } from '../../domain/products';
 import { nameHasComposition } from '../Tabs/HasComposition';
 import { namePriceComposition } from '../Tabs/PriceComposition';
 import { nameFiscal } from '../Tabs/Fiscal';
+import { nameHasVariation } from '../../../View/Content/tabs/HasVariation';
+import { nameStock } from '../Tabs/Stock';
 
 export type TypeContentTabs = {
   name: string;
@@ -353,7 +353,7 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
       addDetails({
         thickness: {
           error: { isError: false },
-          value: detailResponse?.thickness?.toString() || "",
+          value: detailResponse?.thickness?.toString() || '',
         },
         measureWeight: {
           error: { isError: false },
