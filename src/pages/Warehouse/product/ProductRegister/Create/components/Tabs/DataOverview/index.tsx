@@ -24,11 +24,6 @@ export type TypeTabNameEnableOrDisable = {
   active: boolean;
 };
 
-type Link = {
-  link: string;
-  name: string;
-};
-
 const dataHasVariation: TypeTabNameEnableOrDisable[] = [
   {
     keyTab: nameHasVariation,

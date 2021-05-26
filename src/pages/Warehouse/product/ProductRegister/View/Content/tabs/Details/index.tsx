@@ -70,7 +70,7 @@ export const Details = (): JSX.Element => {
         {detail.length !== '0' && (
           <div className="form-content col-md-3">
             <label htmlFor="Peso">Peso</label>
-            <p>{detail?.weight?.toString()}</p>
+            <p>{genericMaskWithTwoZero(detail?.weight)}</p>
           </div>
         )}
         {detail.measure && detail.measure !== '' && (
