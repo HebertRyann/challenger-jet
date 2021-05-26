@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  convertValueWithMaskInNumber,
-  genericMaskWithTwoZero,
-  numericMask,
-} from '../../../../../../../../utlis/mask';
+import { genericMaskWithTwoZero } from '../../../../../../../../utlis/mask';
 import {
   typeUnitMensuredDetails,
   typeUnitMensuredWeight,
