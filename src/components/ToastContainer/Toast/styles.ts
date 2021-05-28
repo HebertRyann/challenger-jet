@@ -22,7 +22,7 @@ const toastTypeVariante = {
 };
 
 export const Contanier = styled(animated.div)<ContanierProps>`
-  width: 340px;
+  width: 320px;
   position: relative;
   padding: 16px 30px 16px 16px;
   border-radius: 10px;
@@ -33,7 +33,6 @@ export const Contanier = styled(animated.div)<ContanierProps>`
   > svg {
     margin: 4px 12px 0 0;
   }
-
   & + div {
     margin-top: 8px;
   }

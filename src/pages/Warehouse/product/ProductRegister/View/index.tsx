@@ -150,7 +150,7 @@ const ProductAtributesView: React.FC = () => {
         setAlertRemoveParent(false);
         addToast({
           type: 'error',
-          title: 'Atributo não removido, pois ainda está sendo usada.',
+          title: 'Produto não pode ser removido, pois ainda está em uso.',
         });
       }
     },
