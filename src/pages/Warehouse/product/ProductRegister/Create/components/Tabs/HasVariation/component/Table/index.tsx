@@ -211,13 +211,19 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                               );
                             }}
                           >
-                            {childrenList.map(atributeChildren => (
-                              <option
-                                value={`${index}+${indexAtribute}+${atributeChildren.id}+${atributeChildren.name}+${id}`}
-                              >
-                                {atributeChildren.name}
-                              </option>
-                            ))}
+                            {childrenList
+                              .sort((a, b) => {
+                                if (a.name > b.name) return 1;
+                                if (a.name < b.name) return -1;
+                                return 0;
+                              })
+                              .map(atributeChildren => (
+                                <option
+                                  value={`${index}+${indexAtribute}+${atributeChildren.id}+${atributeChildren.name}+${id}`}
+                                >
+                                  {atributeChildren.name}
+                                </option>
+                              ))}
                           </NewSelect>
                         </td>
                       ),
