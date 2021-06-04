@@ -9,6 +9,7 @@ import {
   TypeHasVariation,
   TypePriceCompositionProps,
   TypeFiscal,
+  TypeCheckBox,
 } from './domain.types';
 
 export const error: TypeErroProps = {
@@ -108,3 +109,7 @@ export const initialStateFiscal: TypeFiscal = {
   pis: { taxesIssue: { error, value: { id: '', name: '' } } },
   cofins: { taxesIssue: { error, value: { id: '', name: '' } } },
 };
+
+export const initialStateCheckbox: TypeCheckBox[] = [
+  { childrenList: [], id: '', name: '', parent_id: '', isChecked: false },
+];
