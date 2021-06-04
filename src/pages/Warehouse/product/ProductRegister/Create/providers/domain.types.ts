@@ -1,3 +1,5 @@
+import { ResponseEntiryWithIdNameWithChildren } from "../services/api";
+
 export type TypeGetAndSetAndValidateAba<T> = {
   getData: () => T;
   setData: (data: T) => void;
@@ -279,3 +281,18 @@ export type CompositionRequest = {
   amount: string;
   cost: string;
 };
+
+export type TypeCheckBox = {
+  id: string;
+  name: string;
+  parent_id: string | null;
+  childrenList: ResponseEntiryWithIdNameWithChildren[];
+  isChecked?: boolean;
+};
+
+
+export type CheckBoxProvider = {
+  addCheckBox: (checkbox: TypeCheckBox[]) => void
+  toggleCheckbox: (index: number) => void
+  loadCheckbox: () => TypeCheckBox[]
+}
