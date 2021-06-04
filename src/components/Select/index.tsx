@@ -86,8 +86,7 @@ export const Select = <T extends { name: string }>({
         <IconArrowDown />
       </header>
       <main>
-        {search
-? (
+        {search ? (
           <section>
             <header>
               <input
@@ -103,10 +102,11 @@ export const Select = <T extends { name: string }>({
               <div className="no-content">
                 <h5>Nenhum dado encontrado</h5>
               </div>
-                ) : (
+            ) : (
               <ul>
                 {renderDataSearch().map(current => (
                   <li
+                    key={Math.random()}
                     onClick={() => {
                       handleClickRow(current)
                     }}
@@ -115,13 +115,13 @@ export const Select = <T extends { name: string }>({
                   </li>
                 ))}
               </ul>
-                )}
+            )}
           </section>
-        )
-: (
+        ) : (
           <ul>
             {data.map(current => (
               <li
+                key={Math.random()}
                 onClick={() => {
                   handleClickRow(current)
                 }}

@@ -88,7 +88,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
               <th align="center" style={{ textAlign: 'center' }} colSpan={2}>
                 Preço
               </th>
-                ) : null}
+            ) : null}
             <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
               Ações
             </Th>

@@ -227,9 +227,9 @@ export const FormCategory = ({
         </div>
         {isOpenInModal && typeForm === 'create' ? (
           <hr className="divider" />
-            ) : (
+        ) : (
           <div style={{ margin: '10px 0' }} />
-            )}
+        )}
         <div className="form-actions right">
           {isOpenInModal && (
             <button

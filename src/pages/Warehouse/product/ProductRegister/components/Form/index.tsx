@@ -41,6 +41,9 @@ export const FormCategory = ({
   const history = useHistory()
   const [id, setId] = useState<any>(0)
   const { updateDataTable } = useUpdateDataTable()
+
+  const [inputValue, setInputValue] = useState<string>('')
+
   useEffect(() => {
     if (valueInput !== undefined) {
       setInputValue(valueInput)
@@ -195,8 +198,6 @@ export const FormCategory = ({
     [addToast, history]
   )
 
-  const [inputValue, setInputValue] = useState<string>('')
-
   useEffect(() => {
     if (typeForm !== 'create') {
       setInputValue(typeForm.inputValue)
@@ -227,9 +228,9 @@ export const FormCategory = ({
         </div>
         {isOpenInModal && typeForm === 'create' ? (
           <hr className="divider" />
-            ) : (
+        ) : (
           <div style={{ margin: '10px 0' }} />
-            )}
+        )}
         <div className="form-actions right">
           {isOpenInModal && (
             <button

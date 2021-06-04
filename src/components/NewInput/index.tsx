@@ -85,13 +85,14 @@ export const NewInput = ({
       {search &&
         (RenderSearchComponent ? (
           <RenderSearchComponent />
-            ) : (
-              activeSearch && (
+        ) : (
+          activeSearch && (
             <ContainerSearch active={activeSearch} ref={searchRef}>
               <ul>
                 {data !== undefined &&
                   data.map(({ name }: { id: string; name: string }) => (
                     <li
+                      key={Math.random()}
                       onClick={() => {
                         setActiveSearch(false)
                         if (onClickSearchRow) {
@@ -104,8 +105,8 @@ export const NewInput = ({
                   ))}
               </ul>
             </ContainerSearch>
-              )
-            ))}
+          )
+        ))}
     </Container>
   )
 }

@@ -17,12 +17,12 @@ interface DropdownInputProps<T>
 export const DropdownInput = <
   T extends { id: string; name: string; parent_id: string | null }
 >({
-  label,
-  data,
-  onChangeCurrentRow,
-  error,
-  ...props
-}: DropdownInputProps<T>): JSX.Element => {
+    label,
+    data,
+    onChangeCurrentRow,
+    error,
+    ...props
+  }: DropdownInputProps<T>): JSX.Element => {
   const inputRef = useRef<HTMLDivElement>(null)
   const [inputValues, setInputValue] = useState<T[]>(data)
   const [isActiveInput, setIsActiveInput] = useState(false)
@@ -106,9 +106,9 @@ export const DropdownInput = <
             <div className="no-content">
               <h5>Nenhum dado encontrado</h5>
             </div>
-              ) : (
-                renderDataSearch().map((current: T) =>
-                  current.parent_id === null ? (
+          ) : (
+            renderDataSearch().map((current: T) =>
+              current.parent_id === null ? (
                 <div
                   key={Math.random()}
                   style={{
@@ -122,7 +122,7 @@ export const DropdownInput = <
                 >
                   {current.name}
                 </div>
-                      ) : (
+              ) : (
                 <>
                   <ul key={Math.random()}>
                     <li
@@ -134,9 +134,9 @@ export const DropdownInput = <
                     </li>
                   </ul>
                 </>
-                      )
-                )
-              )}
+              )
+            )
+          )}
         </div>
       </Content>
     </ContainerDropdown>
