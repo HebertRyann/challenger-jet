@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, FooterStyled, IconRemove } from './style'
 import { NewInput } from '../../../../../../../../../components/NewInput'
 import { useTabCreate } from '../../../../providers/tabsProvider'
@@ -10,8 +10,9 @@ import {
   RE_SALE,
   SALE,
   SEMI_FINISHED,
-  formatProductTypeToLowerCase
- RAW_MATERIAL } from '../../../../../domain/products';
+  formatProductTypeToLowerCase,
+  RAW_MATERIAL
+} from '../../../../../domain/products'
 
 import { useLoading } from '../../../../../../../../../hooks/loading'
 import { SearchComponentHasComposition } from '../SearchComponent'
@@ -24,7 +25,6 @@ type ProductByTypeSelected = {
 
 export const Table = (): JSX.Element => {
   const { activeLoading, disableLoading } = useLoading()
-  const [alert, setAlert] = useState(false)
   const { addToast } = useToast()
   const [productListByTypeSelected, setProductListByTypeSelected] = useState<
     ProductByTypeSelected[]
@@ -62,7 +62,7 @@ export const Table = (): JSX.Element => {
   const handleClickAddComposition = () => {
     addComposition()
     setActiveSearch(prevState => prevState.map(() => false))
-  };
+  }
 
   const formatProductName = (product: string): string =>
     product.replace(' ', '-').toLowerCase()
@@ -85,7 +85,7 @@ export const Table = (): JSX.Element => {
             ])
             setProductListByTypeSelectedSearch(productListByTypeSelected)
             disableLoading()
-            return;
+            return
           }
           if (
             formatProductName(typeSelectProdut.value.name) ===
@@ -105,12 +105,19 @@ export const Table = (): JSX.Element => {
         addToast({ title: 'Lista de produto não carregada' })
       }
     })()
-  }, [typeSelectProdut.value, loadCurrentTab().key])
+  }, [
+    activeLoading,
+    addToast,
+    disableLoading,
+    loadCurrentTab,
+    productListByTypeSelected,
+    typeSelectProdut.value.name
+  ])
 
   const handlerChangeNameProduct = (value: string, index: number) => {
     changeInputNameProduct(value, index)
     if (value.length) {
-      const matchList = productListByTypeSelected.filter(({ id, name }) => {
+      const matchList = productListByTypeSelected.filter(({ name }) => {
         const regex = new RegExp(`^${value}`, 'gi')
         return name.match(regex)
       })
@@ -172,6 +179,7 @@ export const Table = (): JSX.Element => {
             {products &&
               products.map(({ amount, cost, nameProduct, subtotal }, index) => (
                 <tr
+                  key={Math.random()}
                   style={{
                     height: '10px'
                   }}
@@ -288,4 +296,4 @@ export const Table = (): JSX.Element => {
       </FooterStyled>
     </Container>
   )
-};
+}

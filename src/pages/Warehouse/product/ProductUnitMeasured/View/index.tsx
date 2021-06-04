@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useParams, useLocation, useHistory } from 'react-router-dom'
 import Container from '../../../../../components/Container'
 import Tabs from '../../../../../components/Tabs'
@@ -58,37 +58,31 @@ const View = (): JSX.Element => {
       }
     }
     loadCategory()
-  }, [id, addToast])
+  }, [id, addToast, activeLoading, location.state.id, disableLoading])
 
   const [alertRemoveParent, setAlertRemoveParent] = useState(false)
 
-  const handleOnClickRemoveParent = useCallback(
-    ({ id, name }: { id: string; name: string }) => {
-      setAlertRemoveParent(true)
-    },
-    [alertRemoveParent]
-  )
+  const handleOnClickRemoveParent = () => {
+    setAlertRemoveParent(true)
+  }
 
-  const handlerOnClickButtonConfirmRemoveParent = useCallback(
-    async (id: number) => {
-      try {
-        await api.delete(apiDelete(String(id)))
-        setAlertRemoveParent(false)
-        addToast({
-          type: 'success',
-          title: 'Atributo removido com sucesso.'
-        })
-        history.goBack()
-      } catch (err) {
-        setAlertRemoveParent(false)
-        addToast({
-          type: 'error',
-          title: 'Atributo não removido, pois ainda está sendo usada.'
-        })
-      }
-    },
-    [alertRemoveParent]
-  )
+  const handlerOnClickButtonConfirmRemoveParent = async (id: number) => {
+    try {
+      await api.delete(apiDelete(String(id)))
+      setAlertRemoveParent(false)
+      addToast({
+        type: 'success',
+        title: 'Atributo removido com sucesso.'
+      })
+      history.goBack()
+    } catch (err) {
+      setAlertRemoveParent(false)
+      addToast({
+        type: 'error',
+        title: 'Atributo não removido, pois ainda está sendo usada.'
+      })
+    }
+  }
 
   const handlerOnClickButtonCancelRemoveParent = useCallback(() => {
     setAlertRemoveParent(false)
@@ -103,10 +97,7 @@ const View = (): JSX.Element => {
         tools={[
           toolsViewUpdate(String(id)),
           toolsViewDelete(() => {
-            handleOnClickRemoveParent({
-              id: String(productCategory?.id),
-              name: String(productCategory?.name)
-            })
+            handleOnClickRemoveParent()
           }),
           toolsViewCreate(),
           toolsViewList()
@@ -152,7 +143,7 @@ const View = (): JSX.Element => {
             <div className="col-md-12">
               <Tabs>
                 {[
-                  <Tab title="Histórico">
+                  <Tab key={Math.random()} title="Histórico">
                     <div className="portlet light">
                       <div className="portlet-title">
                         <div className="caption">Listagem</div>

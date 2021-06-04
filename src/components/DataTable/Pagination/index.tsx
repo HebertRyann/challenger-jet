@@ -18,7 +18,8 @@ const PaginationComponent: React.FC<TablePaginationProps> = ({
 
   useEffect(() => {
     if (total > 0 && itemsPerPage > 0) {
-    { setTotalPages(Math.ceil(total / itemsPerPage))}
+      setTotalPages(Math.ceil(total / itemsPerPage))
+    }
   }, [total, itemsPerPage])
 
   const paginationItems = useMemo(() => {
@@ -43,19 +44,17 @@ const PaginationComponent: React.FC<TablePaginationProps> = ({
 
   return (
     <Pagination>
-      {currentPage === 1
-? (
+      {currentPage === 1 ? (
         <Pagination.Prev disabled={true} />
       ) : (
         <Pagination.Prev onClick={() => onPageChange(currentPage - 1)} />
-          )}
+      )}
       {paginationItems}
-      {currentPage === totalPages
-? (
+      {currentPage === totalPages ? (
         <Pagination.Next disabled={true} />
       ) : (
         <Pagination.Next onClick={() => onPageChange(currentPage + 1)} />
-          )}
+      )}
     </Pagination>
   )
 }

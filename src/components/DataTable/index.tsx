@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../../services/api'
@@ -52,13 +54,14 @@ const DataTable = ({
   ],
   actions,
   searchParameters
-}: DataTableProps) => {
+}: DataTableProps): JSX.Element => {
   const [items, setItems] = useState<any[]>([])
   const [totalItems, setTotalItems] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const [ItemsPerPage, setItemsPerPage] = useState(50)
   const [search, setSearch] = useState('')
   const [sorting, setSorting] = useState({ field: '', order: '' })
+  const history = useHistory()
 
   const handlerOnClickButtonList = (currentValue: any) => {
     if (typeof onActions?.onClickButtonList === 'function') {
@@ -84,7 +87,8 @@ const DataTable = ({
 
   const handlerOnClickButtonRemove = (currentValue: any) => {
     if (onActions?.onClickButtonRemove) {
-    { onActions.onClickButtonRemove(currentValue)}
+      onActions.onClickButtonRemove(currentValue)
+    }
   }
 
   useEffect(() => {
@@ -125,12 +129,6 @@ const DataTable = ({
 
   const firstItem =
     totalItems === 0 ? totalItems : ItemsPerPage * (currentPage - 1) + 1
-  const lastItem =
-    firstItem + ItemsPerPage - 1 >= totalItems
-      ? totalItems
-      : firstItem + ItemsPerPage - 1
-
-  const history = useHistory()
 
   const getTotalItems = (initialValue: number): number => {
     let sum = 0
@@ -144,8 +142,6 @@ const DataTable = ({
           }
           return sum
         }, 0)
-        if (initialValue === 1) {
-        }
       } else {
         sum = items.length
       }
@@ -263,8 +259,8 @@ const DataTable = ({
                         )
                     )}
                   </tr>
-                    ) : (
-                      !item.parent_id && (
+                ) : (
+                  !item.parent_id && (
                     <tr key={item.id}>
                       {headers.map(
                         header =>
@@ -317,8 +313,8 @@ const DataTable = ({
                           )
                       )}
                     </tr>
-                      )
-                    )
+                  )
+                )
               })) || (
               <tr>
                 <td colSpan={headers.length}>Nenhum registro encontrado</td>
