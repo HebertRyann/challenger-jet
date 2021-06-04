@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const Contanier = styled.div`
   position: fixed;
@@ -7,4 +7,4 @@ export const Contanier = styled.div`
   padding: 30px;
   overflow: hidden;
   transform: translateX(50%);
-`;
+`

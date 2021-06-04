@@ -1,18 +1,18 @@
-import { nameActionPageMain } from '../../info';
-import { TypeBreadcrumb } from "../index";
+import { nameActionPageMain } from '../../info'
+import { TypeBreadcrumb } from '../index'
 
 export const breadcrumbList: TypeBreadcrumb[] = [
   {
     name: 'Início',
-    to: '/',
+    to: '/'
   },
   {
-    name: 'Almoxarifado',
+    name: 'Almoxarifado'
   },
   {
-    name: 'Produtos',
+    name: 'Produtos'
   },
   {
-    name: nameActionPageMain.name,
-  },
-];
+    name: nameActionPageMain.name
+  }
+]

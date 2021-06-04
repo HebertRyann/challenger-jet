@@ -1,9 +1,9 @@
-import React from 'react';
-import ProductRegisterList from '../../../pages/Warehouse/product/ProductRegister/List';
-import ProductRegisterUpdate from '../../../pages/Warehouse/product/ProductRegister/Update';
-import ProductRegisterCreate from '../../../pages/Warehouse/product/ProductRegister/Create';
-import ProductRegisterView from '../../../pages/Warehouse/product/ProductRegister/View';
-import Route from '../../Route';
+import React from 'react'
+import ProductRegisterList from '../../../pages/Warehouse/product/ProductRegister/List'
+import ProductRegisterUpdate from '../../../pages/Warehouse/product/ProductRegister/Update'
+import ProductRegisterCreate from '../../../pages/Warehouse/product/ProductRegister/Create'
+import ProductRegisterView from '../../../pages/Warehouse/product/ProductRegister/View'
+import Route from '../../Route'
 
 export const ProductRegisterRouter = (): JSX.Element => (
   <>
@@ -24,4 +24,4 @@ export const ProductRegisterRouter = (): JSX.Element => (
       isPrivate
     />
   </>
-);
+)

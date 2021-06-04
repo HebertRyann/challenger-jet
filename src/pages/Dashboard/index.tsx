@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const Dashboard: React.FC = () => (
   <div className="page-head">
@@ -8,6 +8,6 @@ const Dashboard: React.FC = () => (
       </div>
     </div>
   </div>
-);
+)
 
-export default Dashboard;
+export default Dashboard

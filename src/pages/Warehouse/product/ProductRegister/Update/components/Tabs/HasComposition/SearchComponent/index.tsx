@@ -1,36 +1,36 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ContainerSearch } from './styles';
+import React, { useEffect, useRef, useState } from 'react'
+import { ContainerSearch } from './styles'
 
 type TypeSearchComponentHasCompositionProps = {
-  data: any;
-  active?: boolean;
-  onClickRow?: (currentRow: any) => void;
-};
+  data: any
+  active?: boolean
+  onClickRow?: (currentRow: any) => void
+}
 
 type ListData = {
-  name: string;
-  stocks: { atributes: string; product_id: number; id: number }[];
-};
+  name: string
+  stocks: { atributes: string; product_id: number; id: number }[]
+}
 
 export const SearchComponentHasComposition = ({
   data,
   active,
-  onClickRow,
+  onClickRow
 }: TypeSearchComponentHasCompositionProps): JSX.Element => {
-  const searchRef = useRef<HTMLDivElement>(null);
-  const [activeSeach, setActiveSearch] = useState(!!active);
+  const searchRef = useRef<HTMLDivElement>(null)
+  const [activeSeach, setActiveSearch] = useState(!!active)
 
   useEffect(() => {
     document.addEventListener('click', (event: any) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
-        setActiveSearch(false);
+        setActiveSearch(false)
       }
-    });
-  }, []);
+    })
+  }, [])
 
   const handlerClickCurrentRow = (current: any) => {
-    if (onClickRow) onClickRow(current);
-  };
+    if (onClickRow) onClickRow(current)
+  }
 
   return (
     <ContainerSearch ref={searchRef} active={activeSeach}>
@@ -43,12 +43,12 @@ export const SearchComponentHasComposition = ({
                 {stocks &&
                   stocks.map(({ atributes, product_id, id }, indexStock) => {
                     if (atributes) {
-                      const atributeList = JSON.parse(atributes.toLowerCase());
-                      let headers: { name: string }[] = [];
-                      let body: { name: string }[] = [];
+                      const atributeList = JSON.parse(atributes.toLowerCase())
+                      const headers: { name: string }[] = []
+                      const body: { name: string }[] = []
                       for (let i = 0; i < atributeList.length; i++) {
-                        headers.push({ name: atributeList[i].key });
-                        body.push({ name: atributeList[i].value });
+                        headers.push({ name: atributeList[i].key })
+                        body.push({ name: atributeList[i].value })
                       }
                       return (
                         <>
@@ -60,7 +60,7 @@ export const SearchComponentHasComposition = ({
                                     <h5>{headers[index].name}</h5>
                                   </th>
                                 )
-                              );
+                              )
                             })}
                           </thead>
                           <tbody>
@@ -72,7 +72,7 @@ export const SearchComponentHasComposition = ({
                                       handlerClickCurrentRow({
                                         name: body[index].name,
                                         product_id,
-                                        stock_id: id,
+                                        stock_id: id
                                       })
                                     }
                                   >
@@ -83,7 +83,7 @@ export const SearchComponentHasComposition = ({
                             </tr>
                           </tbody>
                         </>
-                      );
+                      )
                     }
                   })}
               </table>
@@ -91,5 +91,5 @@ export const SearchComponentHasComposition = ({
           ))}
       </ul>
     </ContainerSearch>
-  );
-};
+  )
+}

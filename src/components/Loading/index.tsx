@@ -1,10 +1,10 @@
-import React from 'react';
-import loadingSvg from '../../assets/image/svg/loading.svg';
-import { Container } from './styles';
+import React from 'react'
+import loadingSvg from '../../assets/image/svg/loading.svg'
+import { Container } from './styles'
 
 type PropsLoading = {
-  isActive: boolean;
-};
+  isActive: boolean
+}
 
 export const Loading = ({ isActive }: PropsLoading): JSX.Element => {
   return (
@@ -14,5 +14,5 @@ export const Loading = ({ isActive }: PropsLoading): JSX.Element => {
         <p>Carregando</p>
       </div>
     </Container>
-  );
-};
+  )
+}

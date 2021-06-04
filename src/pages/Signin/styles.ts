@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const Contanier = styled.div`
   display: flex;
@@ -11,7 +11,7 @@ export const Contanier = styled.div`
       text-transform: capitalize !important;
     }
   }
-`;
+`
 
 export const Content = styled.div`
   body {
@@ -227,4 +227,4 @@ export const Content = styled.div`
       font-size: 13px;
     }
   }
-`;
+`

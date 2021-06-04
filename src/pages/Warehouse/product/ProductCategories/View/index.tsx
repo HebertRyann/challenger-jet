@@ -1,153 +1,151 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams, useLocation, useHistory } from 'react-router-dom';
-import Container from '../../../../../components/Container';
-import Tabs from '../../../../../components/Tabs';
-import Tab from '../../../../../components/Tabs/Tab';
-import DataTable from '../../../../../components/DataTable';
-import api from '../../../../../services/api';
-import { useToast } from '../../../../../hooks/toast';
-import { useLoading } from '../../../../../hooks/loading';
-import { Alert } from '../../../../../components/Alert';
-import { useUpdateDataTable } from '../../../../../hooks/dataTable';
-import { nameActions, nameEntity, namePageTitle } from '../domain/info';
-import { apiDelete, apiList } from '../domain/api';
-import { breadcrumbView } from '../domain/breadcrumb';
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useParams, useLocation, useHistory } from 'react-router-dom'
+import Container from '../../../../../components/Container'
+import Tabs from '../../../../../components/Tabs'
+import Tab from '../../../../../components/Tabs/Tab'
+import DataTable from '../../../../../components/DataTable'
+import api from '../../../../../services/api'
+import { useToast } from '../../../../../hooks/toast'
+import { useLoading } from '../../../../../hooks/loading'
+import { Alert } from '../../../../../components/Alert'
+import { useUpdateDataTable } from '../../../../../hooks/dataTable'
+import { nameActions, nameEntity, namePageTitle } from '../domain/info'
+import { apiDelete, apiList } from '../domain/api'
+import { breadcrumbView } from '../domain/breadcrumb'
 import {
   toolsViewCreate,
   toolsViewDelete,
   toolsViewUpdate,
-  toolsViewList,
-} from '../domain/tools';
+  toolsViewList
+} from '../domain/tools'
 
 interface ProductCategorytData {
-  id: number;
-  parent_id: number | null;
-  name: string;
-  created_at: string;
-  updated_at: string;
+  id: number
+  parent_id: number | null
+  name: string
+  created_at: string
+  updated_at: string
 }
 
 const ProductAtributesView: React.FC = () => {
-  let { id } = useParams<{ id: string }>();
-  const history = useHistory();
-  const location = useLocation<{ id: string; value: string }>();
-  const [
-    productCategory,
-    setProductCategory,
-  ] = useState<ProductCategorytData | null>(null);
-  const { addToast } = useToast();
-  const searchParametersAuditLog = [{ entity: nameEntity, entity_id: id }];
-  const searchProductAtributes = [{ parent_id: id }];
+  const { id } = useParams<{ id: string }>()
+  const history = useHistory()
+  const location = useLocation<{ id: string; value: string }>()
+  const [productCategory, setProductCategory] =
+    useState<ProductCategorytData | null>(null)
+  const { addToast } = useToast()
+  const searchParametersAuditLog = [{ entity: nameEntity, entity_id: id }]
+  const searchProductAtributes = [{ parent_id: id }]
   const [alert, setIsActiveAlert] = useState<{
-    isActive: boolean;
-    id: number;
-    name: string;
+    isActive: boolean
+    id: number
+    name: string
   }>({
     id: 0,
     isActive: false,
-    name: '',
-  });
+    name: ''
+  })
 
-  const [modalEdit, setModalEdit] = useState(false);
-  const [modalCreate, setModalCreate] = useState(false);
-  const { disableLoading, activeLoading } = useLoading();
+  const [modalEdit, setModalEdit] = useState(false)
+  const [modalCreate, setModalCreate] = useState(false)
+  const { disableLoading, activeLoading } = useLoading()
 
   useEffect(() => {
     async function loadCategory(): Promise<void> {
-      activeLoading();
+      activeLoading()
       try {
         const response = await api.get<ProductCategorytData>(
-          apiList(location.state.id),
-        );
-        const { data } = response;
-        setProductCategory(data);
-        disableLoading();
+          apiList(location.state.id)
+        )
+        const { data } = response
+        setProductCategory(data)
+        disableLoading()
       } catch (err) {
-        disableLoading();
+        disableLoading()
         addToast({
           type: 'error',
           title: 'Error ao carregar a categoria',
           description:
-            'Houve um error ao carregar a categoria, tente novamente mais tarde!',
-        });
+            'Houve um error ao carregar a categoria, tente novamente mais tarde!'
+        })
       }
     }
-    loadCategory();
-  }, [id, addToast]);
+    loadCategory()
+  }, [id, addToast])
 
   const handlerClickButtonCancellAlert = useCallback(() => {
     setIsActiveAlert({
       id: 0,
       isActive: false,
-      name: '',
-    });
+      name: ''
+    })
     addToast({
       type: 'info',
-      title: 'Operação cancelada.',
-    });
-  }, [alert]);
+      title: 'Operação cancelada.'
+    })
+  }, [alert])
 
   const handlerClickButtonConfirmAlert = useCallback(
     async (id: string) => {
       try {
-        await api.delete(apiDelete(id));
+        await api.delete(apiDelete(id))
         setIsActiveAlert({
           id: 0,
           isActive: false,
-          name: '',
-        });
+          name: ''
+        })
         addToast({
           type: 'success',
-          title: 'Atributo removido com sucesso.',
-        });
+          title: 'Atributo removido com sucesso.'
+        })
       } catch (err) {
         setIsActiveAlert({
           id: 0,
           isActive: false,
-          name: '',
-        });
+          name: ''
+        })
         addToast({
           type: 'error',
-          title: 'Atributo não removido, pois ainda está sendo usada.',
-        });
+          title: 'Atributo não removido, pois ainda está sendo usada.'
+        })
       }
     },
-    [alert],
-  );
+    [alert]
+  )
 
-  const [alertRemoveParent, setAlertRemoveParent] = useState(false);
+  const [alertRemoveParent, setAlertRemoveParent] = useState(false)
 
   const handleOnClickRemoveParent = useCallback(
     ({ id, name }: { id: string; name: string }) => {
-      setAlertRemoveParent(true);
+      setAlertRemoveParent(true)
     },
-    [alertRemoveParent],
-  );
+    [alertRemoveParent]
+  )
 
   const handlerOnClickButtonConfirmRemoveParent = useCallback(
     async (id: number) => {
       try {
-        await api.delete(apiDelete(String(id)));
-        setAlertRemoveParent(false);
+        await api.delete(apiDelete(String(id)))
+        setAlertRemoveParent(false)
         addToast({
           type: 'success',
-          title: 'Atributo removido com sucesso.',
-        });
-        history.goBack();
+          title: 'Atributo removido com sucesso.'
+        })
+        history.goBack()
       } catch (err) {
-        setAlertRemoveParent(false);
+        setAlertRemoveParent(false)
         addToast({
           type: 'error',
-          title: 'Atributo não removido, pois ainda está sendo usada.',
-        });
+          title: 'Atributo não removido, pois ainda está sendo usada.'
+        })
       }
     },
-    [alertRemoveParent],
-  );
+    [alertRemoveParent]
+  )
 
   const handlerOnClickButtonCancelRemoveParent = useCallback(() => {
-    setAlertRemoveParent(false);
-  }, []);
+    setAlertRemoveParent(false)
+  }, [])
 
   return (
     <>
@@ -160,11 +158,11 @@ const ProductAtributesView: React.FC = () => {
           toolsViewDelete(() => {
             handleOnClickRemoveParent({
               id: String(productCategory?.id),
-              name: String(productCategory?.name),
-            });
+              name: String(productCategory?.name)
+            })
           }),
           toolsViewCreate(),
-          toolsViewList(),
+          toolsViewList()
         ]}
       >
         <div className="form-body">
@@ -207,7 +205,7 @@ const ProductAtributesView: React.FC = () => {
             <div className="col-md-12">
               <Tabs>
                 {[
-                  <Tab title="Histórico">
+                  <Tab key={Math.random()} title="Histórico">
                     <div className="portlet light">
                       <div className="portlet-title">
                         <div className="caption">Listagem</div>
@@ -221,7 +219,7 @@ const ProductAtributesView: React.FC = () => {
                         />
                       </div>
                     </div>
-                  </Tab>,
+                  </Tab>
                 ]}
               </Tabs>
             </div>
@@ -232,7 +230,7 @@ const ProductAtributesView: React.FC = () => {
         message={`Tem certeza que deseja excluir o registro ${alert.name} ?`}
         onClickCancellButton={handlerClickButtonCancellAlert}
         onClickConfirmButton={() => {
-          handlerClickButtonConfirmAlert(String(alert.id));
+          handlerClickButtonConfirmAlert(String(alert.id))
         }}
         isActive={alert.isActive}
       />
@@ -245,7 +243,7 @@ const ProductAtributesView: React.FC = () => {
         isActive={alertRemoveParent}
       />
     </>
-  );
-};
+  )
+}
 
-export default ProductAtributesView;
+export default ProductAtributesView

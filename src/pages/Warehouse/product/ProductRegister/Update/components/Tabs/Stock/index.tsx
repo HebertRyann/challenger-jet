@@ -1,22 +1,22 @@
-import React from 'react';
-import { Table } from './component/Table';
+import React from 'react'
+import { Table } from './component/Table'
 
 type TypeHasVariationProps = {
   unitMensureds: {
-    id: string;
-    name: string;
-  }[];
-};
+    id: string
+    name: string
+  }[]
+}
 
 export const Stock = ({
-  unitMensureds,
+  unitMensureds
 }: TypeHasVariationProps): JSX.Element => {
   return (
     <div className="row">
       <Table unitMensured={unitMensureds} />
     </div>
-  );
-};
+  )
+}
 
-export const labelStock = 'Estoque';
-export const nameStock = '@@tabs-stock';
+export const labelStock = 'Estoque'
+export const nameStock = '@@tabs-stock'

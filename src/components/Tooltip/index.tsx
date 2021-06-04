@@ -1,10 +1,10 @@
-import React from 'react';
+import React from 'react'
 
-import { Contanier } from './styled';
+import { Contanier } from './styled'
 
 interface TooltipProps {
-  title: string;
-  className?: string;
+  title: string
+  className?: string
 }
 
 const Tooltip: React.FC<TooltipProps> = ({ title, className, children }) => {
@@ -13,7 +13,7 @@ const Tooltip: React.FC<TooltipProps> = ({ title, className, children }) => {
       {children}
       <span>{title}</span>
     </Contanier>
-  );
-};
+  )
+}
 
-export default Tooltip;
+export default Tooltip

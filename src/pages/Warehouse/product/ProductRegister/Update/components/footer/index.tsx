@@ -1,17 +1,17 @@
-import React from 'react';
+import React from 'react'
 
-import { Container, ContainerFooter } from './styles';
+import { Container, ContainerFooter } from './styles'
 
 type TypeFooterCreateProduct = {
-  onClickButtonBack?: (params: any) => any;
-  onClickButtonNext?: (params: any) => any;
-  onSave?: (params: any) => void;
-};
+  onClickButtonBack?: (params: any) => any
+  onClickButtonNext?: (params: any) => any
+  onSave?: (params: any) => void
+}
 
 export const Footer = ({
   onClickButtonBack,
   onClickButtonNext,
-  onSave,
+  onSave
 }: TypeFooterCreateProduct): JSX.Element => {
   return (
     <>
@@ -54,5 +54,5 @@ export const Footer = ({
         </button>
       </ContainerFooter>
     </>
-  );
-};
+  )
+}

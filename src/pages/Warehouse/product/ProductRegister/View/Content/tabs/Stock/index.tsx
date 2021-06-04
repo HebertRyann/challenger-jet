@@ -1,20 +1,20 @@
-import React from 'react';
-import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
+import React from 'react'
+import { TooltipComponent } from '../../../../../../../../components/TooltipComponent'
 import {
   formatProductTypeToLowerCase,
   RE_SALE,
-  SALE,
-} from '../../../../domain/products';
-import { PriceResponse } from '../../../domain/response/productResponse';
-import { useProduct } from '../../../provider/productProvider';
-import { Container } from './style';
+  SALE
+} from '../../../../domain/products'
+import { PriceResponse } from '../../../domain/response/productResponse'
+import { useProduct } from '../../../provider/productProvider'
+import { Container } from './style'
 
-type Stock = {};
+type Stock = {}
 
 export const Stock = (): JSX.Element => {
-  const { getProduct } = useProduct();
-  const { stocks } = getProduct();
-  let pricesStock = {} as PriceResponse;
+  const { getProduct } = useProduct()
+  const { stocks } = getProduct()
+  let pricesStock = {} as PriceResponse
 
   const isSaleOrResaleType = (): boolean => {
     return (
@@ -22,22 +22,22 @@ export const Stock = (): JSX.Element => {
         formatProductTypeToLowerCase(RE_SALE) ||
       getProduct().type?.replace(' ', '-') ===
         formatProductTypeToLowerCase(SALE)
-    );
-  };
+    )
+  }
 
   if (stocks) {
-    const { current_stock, replacement_point, details, prices } = stocks[0];
+    const { current_stock, replacement_point, details, prices } = stocks[0]
 
     let unitMensured: { unit_mensured: { name: string } } = {
-      unit_mensured: { name: '' },
-    };
+      unit_mensured: { name: '' }
+    }
 
     if (details) {
-      unitMensured = JSON.parse(details);
+      unitMensured = JSON.parse(details)
     }
 
     if (isSaleOrResaleType() && prices) {
-      pricesStock = JSON.parse(prices?.toLowerCase());
+      pricesStock = JSON.parse(prices?.toLowerCase())
     }
 
     return (
@@ -50,7 +50,7 @@ export const Stock = (): JSX.Element => {
                 isSaleOrResaleType()
                   ? {
                       position: 'relative',
-                      lineHeight: '50px',
+                      lineHeight: '50px'
                     }
                   : {}
               }
@@ -63,7 +63,7 @@ export const Stock = (): JSX.Element => {
                 isSaleOrResaleType()
                   ? {
                       position: 'relative',
-                      lineHeight: '50px',
+                      lineHeight: '50px'
                     }
                   : {}
               }
@@ -77,7 +77,7 @@ export const Stock = (): JSX.Element => {
                 isSaleOrResaleType()
                   ? {
                       position: 'relative',
-                      lineHeight: '50px',
+                      lineHeight: '50px'
                     }
                   : {}
               }
@@ -118,10 +118,10 @@ export const Stock = (): JSX.Element => {
           </tr>
         </tbody>
       </Container>
-    );
+    )
   }
-  return <div />;
-};
+  return <div />
+}
 
-export const labelStock = 'Estoque';
-export const nameStock = '@@tabs-view-stocks';
+export const labelStock = 'Estoque'
+export const nameStock = '@@tabs-view-stocks'

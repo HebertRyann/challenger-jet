@@ -1,5 +1,5 @@
-import React, { ReactElement, useState } from "react"
-import TabTitle from "./TabTitle"
+import React, { ReactElement, useState } from 'react'
+import TabTitle from './TabTitle'
 
 type Props = {
   children: ReactElement[]
@@ -11,21 +11,17 @@ const Tabs: React.FC<Props> = ({ children }) => {
   return (
     <div>
       <ul className="nav nav-tabs">
-        {children.map((item, index) =>
-          (
+        {children.map((item, index) => (
           <TabTitle
             key={index}
-            active={(index === selectedTab)?true:false}
+            active={index === selectedTab}
             title={item.props.title}
             index={index}
             setSelectedTab={setSelectedTab}
           />
-          )
-        )}
+        ))}
       </ul>
-      <div className="tab-content">
-        {children[selectedTab]}
-      </div>
+      <div className="tab-content">{children[selectedTab]}</div>
     </div>
   )
 }

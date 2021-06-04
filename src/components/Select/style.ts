@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components';
-import { MdArrowDropDown, MdSearch } from 'react-icons/md';
+import styled, { css } from 'styled-components'
+import { MdArrowDropDown, MdSearch } from 'react-icons/md'
 
 export const Container = styled.div<{ isActive: boolean; disable: boolean }>`
   position: relative;
@@ -78,11 +78,11 @@ export const Container = styled.div<{ isActive: boolean; disable: boolean }>`
   > section {
     background-color: red;
   }
-`;
+`
 
 export const IconArrowDown = styled(MdArrowDropDown).attrs(() => ({
   size: '18px',
-  color: '#555',
+  color: '#555'
 }))`
   position: absolute;
   top: 0;
@@ -90,13 +90,13 @@ export const IconArrowDown = styled(MdArrowDropDown).attrs(() => ({
   background-color: rgba(233, 237, 239, 0.9);
   height: 100%;
   border: 1px solid #c2cad8;
-`;
+`
 
 export const IconSearch = styled(MdSearch).attrs(() => ({
   size: '18px',
-  color: '#555',
+  color: '#555'
 }))`
   position: absolute;
   top: 40%;
   right: 20px;
-`;
+`

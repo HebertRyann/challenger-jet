@@ -1,33 +1,33 @@
 export const typeUnitMensuredDetails: { value: string; label: string }[] = [
   {
     label: 'METRO',
-    value: 'm',
+    value: 'm'
   },
   {
     label: 'CENTÍMETRO',
-    value: 'cm',
+    value: 'cm'
   },
   {
     label: 'MILIMETRO',
-    value: 'mm',
-  },
-];
+    value: 'mm'
+  }
+]
 
 export const typeUnitMensuredWeight: { value: string; label: string }[] = [
   {
     label: 'TONELADA',
-    value: 't',
+    value: 't'
   },
   {
     label: 'QUILOGRAMA',
-    value: 'kg',
+    value: 'kg'
   },
   {
     label: 'GRAMA',
-    value: 'g',
+    value: 'g'
   },
   {
     label: 'MILIGRAMA',
-    value: 'mg',
-  },
-];
+    value: 'mg'
+  }
+]

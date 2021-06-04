@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components';
-import { MdClose } from 'react-icons/md';
+import styled, { css } from 'styled-components'
+import { MdClose } from 'react-icons/md'
 
 export const Container = styled.div<{ isActive: boolean }>`
   position: fixed;
@@ -40,13 +40,13 @@ export const Container = styled.div<{ isActive: boolean }>`
   main {
     position: relative;
   }
-`;
+`
 
 export const InconClose = styled(MdClose).attrs(() => ({
-  color: '#333333',
+  color: '#333333'
 }))`
   position: absolute;
   top: 15px;
   right: 15px;
   cursor: pointer;
-`;
+`

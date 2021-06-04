@@ -1,194 +1,190 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { FormCategory } from '../components/Form';
-import Container from '../../../../components/Container';
-import Tabs from '../../../../components/Tabs';
-import Tab from '../../../../components/Tabs/Tab';
-import DataTable from '../../../../components/DataTable';
-import api from '../../../../services/api';
-import { useToast } from '../../../../hooks/toast';
-import Modal from '../../../../components/Modal';
-import { useLoading } from '../../../../hooks/loading';
-import { Alert } from '../../../../components/Alert';
-import { useUpdateDataTable } from '../../../../hooks/dataTable';
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useParams, useLocation, useHistory } from 'react-router-dom'
+import { FormCategory } from '../components/Form'
+import Container from '../../../../components/Container'
+import Tabs from '../../../../components/Tabs'
+import Tab from '../../../../components/Tabs/Tab'
+import DataTable from '../../../../components/DataTable'
+import api from '../../../../services/api'
+import { useToast } from '../../../../hooks/toast'
+import Modal from '../../../../components/Modal'
+import { useLoading } from '../../../../hooks/loading'
+import { Alert } from '../../../../components/Alert'
+import { useUpdateDataTable } from '../../../../hooks/dataTable'
 import {
   nameActions,
   nameEntity,
   namePageTitle,
-  nameSource,
-} from '../domain/info';
-import { apiDelete, apiList } from '../domain/api';
-import { headers } from '../domain/headers';
-import { breadcrumbView } from '../domain/breadcrumb';
+  nameSource
+} from '../domain/info'
+import { apiDelete, apiList } from '../domain/api'
+import { headers } from '../domain/headers'
+import { breadcrumbView } from '../domain/breadcrumb'
 import {
   toolsViewCreate,
   toolsViewDelete,
   toolsViewUpdate,
-  toolsViewList,
-} from '../domain/tools';
+  toolsViewList
+} from '../domain/tools'
 
 interface ProductCategorytData {
-  id: number;
-  parent_id: number | null;
-  name: string;
-  created_at: string;
-  updated_at: string;
+  id: number
+  parent_id: number | null
+  name: string
+  created_at: string
+  updated_at: string
 }
 
 const ProductAtributesView: React.FC = () => {
-  let { id } = useParams<{ id: string }>();
-  const history = useHistory();
-  const location = useLocation<{ id: string; value: string }>();
-  const { updateDataTable } = useUpdateDataTable();
-  const [
-    productCategory,
-    setProductCategory,
-  ] = useState<ProductCategorytData | null>(null);
-  const { addToast } = useToast();
-  const searchParametersAuditLog = [{ entity: nameEntity, entity_id: id }];
-  const searchProductAtributes = [{ parent_id: id }];
+  const { id } = useParams<{ id: string }>()
+  const history = useHistory()
+  const location = useLocation<{ id: string; value: string }>()
+  const { updateDataTable } = useUpdateDataTable()
+  const [productCategory, setProductCategory] =
+    useState<ProductCategorytData | null>(null)
+  const { addToast } = useToast()
+  const searchParametersAuditLog = [{ entity: nameEntity, entity_id: id }]
+  const searchProductAtributes = [{ parent_id: id }]
   const [alert, setIsActiveAlert] = useState<{
-    isActive: boolean;
-    id: number;
-    name: string;
+    isActive: boolean
+    id: number
+    name: string
   }>({
     id: 0,
     isActive: false,
-    name: '',
-  });
+    name: ''
+  })
 
-  const [
-    currentItemUpdate,
-    setCurrentItemUpdate,
-  ] = useState<ProductCategorytData>({} as ProductCategorytData);
+  const [currentItemUpdate, setCurrentItemUpdate] =
+    useState<ProductCategorytData>({} as ProductCategorytData)
 
-  const [modalEdit, setModalEdit] = useState(false);
-  const [modalCreate, setModalCreate] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false)
+  const [modalCreate, setModalCreate] = useState(false)
 
   const handleClickOnClose = useCallback(() => {
-    setModalCreate(false);
-    setModalEdit(false);
-    updateDataTable();
-  }, [modalCreate, modalEdit]);
+    setModalCreate(false)
+    setModalEdit(false)
+    updateDataTable()
+  }, [modalCreate, modalEdit])
 
   const handlerOnClickButtonEditInCurrentRow = useCallback(
     (currentValue: ProductCategorytData) => {
-      setCurrentItemUpdate(currentValue);
-      setModalEdit(true);
+      setCurrentItemUpdate(currentValue)
+      setModalEdit(true)
     },
-    [currentItemUpdate, modalEdit],
-  );
+    [currentItemUpdate, modalEdit]
+  )
 
   const handleClickOnOpenModalCreate = useCallback(() => {
-    setModalCreate(true);
-  }, [modalCreate]);
+    setModalCreate(true)
+  }, [modalCreate])
 
-  const refModal = useRef(null);
-  const { disableLoading, activeLoading } = useLoading();
+  const refModal = useRef(null)
+  const { disableLoading, activeLoading } = useLoading()
 
   useEffect(() => {
     async function loadCategory(): Promise<void> {
-      activeLoading();
+      activeLoading()
       try {
         const response = await api.get<ProductCategorytData>(
-          apiList(location.state.id),
-        );
-        const { data } = response;
-        setProductCategory(data);
-        disableLoading();
+          apiList(location.state.id)
+        )
+        const { data } = response
+        setProductCategory(data)
+        disableLoading()
       } catch (err) {
-        disableLoading();
+        disableLoading()
         addToast({
           type: 'error',
           title: 'Error ao carregar a categoria',
           description:
-            'Houve um error ao carregar a categoria, tente novamente mais tarde!',
-        });
+            'Houve um error ao carregar a categoria, tente novamente mais tarde!'
+        })
       }
     }
-    loadCategory();
-  }, [id, addToast]);
+    loadCategory()
+  }, [id, addToast])
 
   const handlerOnClickButtonRemoveInCurrentRow = useCallback(
     ({ id, name }: ProductCategorytData) => {
-      setIsActiveAlert({ id, name, isActive: true });
+      setIsActiveAlert({ id, name, isActive: true })
     },
-    [alert],
-  );
+    [alert]
+  )
 
   const handlerClickButtonCancellAlert = useCallback(() => {
     setIsActiveAlert({
       id: 0,
       isActive: false,
-      name: '',
-    });
+      name: ''
+    })
     addToast({
       type: 'info',
-      title: 'Operação cancelada.',
-    });
-  }, [alert]);
+      title: 'Operação cancelada.'
+    })
+  }, [alert])
 
   const handlerClickButtonConfirmAlert = useCallback(
     async (id: string) => {
       try {
-        await api.delete(apiDelete(id));
+        await api.delete(apiDelete(id))
         setIsActiveAlert({
           id: 0,
           isActive: false,
-          name: '',
-        });
+          name: ''
+        })
         addToast({
           type: 'success',
-          title: 'Atributo removido com sucesso.',
-        });
+          title: 'Atributo removido com sucesso.'
+        })
       } catch (err) {
         setIsActiveAlert({
           id: 0,
           isActive: false,
-          name: '',
-        });
+          name: ''
+        })
         addToast({
           type: 'error',
-          title: 'Atributo não removido, pois ainda está sendo usada.',
-        });
+          title: 'Atributo não removido, pois ainda está sendo usada.'
+        })
       }
     },
-    [alert],
-  );
+    [alert]
+  )
 
-  const [alertRemoveParent, setAlertRemoveParent] = useState(false);
+  const [alertRemoveParent, setAlertRemoveParent] = useState(false)
 
   const handleOnClickRemoveParent = useCallback(
     ({ id, name }: { id: string; name: string }) => {
-      setAlertRemoveParent(true);
+      setAlertRemoveParent(true)
     },
-    [alertRemoveParent],
-  );
+    [alertRemoveParent]
+  )
 
   const handlerOnClickButtonConfirmRemoveParent = useCallback(
     async (id: number) => {
       try {
-        await api.delete(apiDelete(String(id)));
-        setAlertRemoveParent(false);
+        await api.delete(apiDelete(String(id)))
+        setAlertRemoveParent(false)
         addToast({
           type: 'success',
-          title: 'Atributo removido com sucesso.',
-        });
-        history.goBack();
+          title: 'Atributo removido com sucesso.'
+        })
+        history.goBack()
       } catch (err) {
-        setAlertRemoveParent(false);
+        setAlertRemoveParent(false)
         addToast({
           type: 'error',
-          title: 'Atributo não removido, pois ainda está sendo usada.',
-        });
+          title: 'Atributo não removido, pois ainda está sendo usada.'
+        })
       }
     },
-    [alertRemoveParent],
-  );
+    [alertRemoveParent]
+  )
 
   const handlerOnClickButtonCancelRemoveParent = useCallback(() => {
-    setAlertRemoveParent(false);
-  }, []);
+    setAlertRemoveParent(false)
+  }, [])
 
   return (
     <>
@@ -201,11 +197,11 @@ const ProductAtributesView: React.FC = () => {
           toolsViewDelete(() => {
             handleOnClickRemoveParent({
               id: String(productCategory?.id),
-              name: String(productCategory?.name),
-            });
+              name: String(productCategory?.name)
+            })
           }),
           toolsViewCreate(),
-          toolsViewList(),
+          toolsViewList()
         ]}
       >
         <div className="form-body">
@@ -268,8 +264,10 @@ const ProductAtributesView: React.FC = () => {
                         headers={headers}
                         searchParameters={searchProductAtributes}
                         onActions={{
-                          onClickButtonEdit: handlerOnClickButtonEditInCurrentRow,
-                          onClickButtonRemove: handlerOnClickButtonRemoveInCurrentRow,
+                          onClickButtonEdit:
+                            handlerOnClickButtonEditInCurrentRow,
+                          onClickButtonRemove:
+                            handlerOnClickButtonRemoveInCurrentRow
                         }}
                       />
                     </div>
@@ -306,7 +304,7 @@ const ProductAtributesView: React.FC = () => {
             typeForm={'create'}
             isOpenInModal={{
               handleOnClose: handleClickOnClose,
-              idParent: Number(id),
+              idParent: Number(id)
             }}
           />
         }
@@ -321,11 +319,11 @@ const ProductAtributesView: React.FC = () => {
             valueInput={currentItemUpdate.name}
             typeForm={{
               idUpdate: currentItemUpdate.id,
-              inputValue: currentItemUpdate.name,
+              inputValue: currentItemUpdate.name
             }}
             isOpenInModal={{
               handleOnClose: handleClickOnClose,
-              idParent: Number(id),
+              idParent: Number(id)
             }}
           />
         }
@@ -334,7 +332,7 @@ const ProductAtributesView: React.FC = () => {
         message={`Tem certeza que deseja excluir o registro ${alert.name} ?`}
         onClickCancellButton={handlerClickButtonCancellAlert}
         onClickConfirmButton={() => {
-          handlerClickButtonConfirmAlert(String(alert.id));
+          handlerClickButtonConfirmAlert(String(alert.id))
         }}
         isActive={alert.isActive}
       />
@@ -347,7 +345,7 @@ const ProductAtributesView: React.FC = () => {
         isActive={alertRemoveParent}
       />
     </>
-  );
-};
+  )
+}
 
-export default ProductAtributesView;
+export default ProductAtributesView

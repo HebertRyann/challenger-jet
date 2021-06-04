@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 interface TableHeadProps {
   headers: {
-    name: string;
-    field: string;
-    sortable: boolean;
-  }[];
-  onSorting(field: string, order: string): void;
+    name: string
+    field: string
+    sortable: boolean
+  }[]
+  onSorting(field: string, order: string): void
 }
 
 const TableHeader: React.FC<TableHeadProps> = ({ headers, onSorting }) => {
-  const [sortingField, setSortingField] = useState('');
-  const [sortingOrder, setSortingOrder] = useState('ASC');
+  const [sortingField, setSortingField] = useState('')
+  const [sortingOrder, setSortingOrder] = useState('ASC')
 
   const onSortingChange = (field: string) => {
     const order =
-      field === sortingField && sortingOrder === 'ASC' ? 'DESC' : 'ASC';
+      field === sortingField && sortingOrder === 'ASC' ? 'DESC' : 'ASC'
 
-    setSortingField(field);
-    setSortingOrder(order);
-    onSorting(field, order);
-  };
+    setSortingField(field)
+    setSortingOrder(order)
+    onSorting(field, order)
+  }
 
   return (
     <thead>
@@ -31,11 +31,11 @@ const TableHeader: React.FC<TableHeadProps> = ({ headers, onSorting }) => {
               sortingField === field &&
               (sortingOrder === 'ASC' ? 'sorting_asc' : 'sorting_desc')) ||
             (sortable && 'sorting') ||
-            '';
+            ''
 
-          const classAction = field === 'actions' ? 'actions' : '';
+          const classAction = field === 'actions' ? 'actions' : ''
 
-          const className = classSort + classAction;
+          const className = classSort + classAction
           return (
             <th
               key={name}
@@ -44,10 +44,10 @@ const TableHeader: React.FC<TableHeadProps> = ({ headers, onSorting }) => {
             >
               {name}
             </th>
-          );
+          )
         })}
       </tr>
     </thead>
-  );
-};
-export default TableHeader;
+  )
+}
+export default TableHeader

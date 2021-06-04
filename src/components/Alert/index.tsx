@@ -1,15 +1,15 @@
-import React from 'react';
+import React from 'react'
 
-import { Container, InconClose } from './style';
+import { Container, InconClose } from './style'
 
 type AlertProps = {
-  message?: string;
-  isActive: boolean;
-  onClickConfirmButton: (id: string) => void;
-  onClickCancellButton?: () => void;
-  RenderComponent?: () => JSX.Element;
-  onlyConfirm?: boolean;
-};
+  message?: string
+  isActive: boolean
+  onClickConfirmButton: (id: string) => void
+  onClickCancellButton?: () => void
+  RenderComponent?: () => JSX.Element
+  onlyConfirm?: boolean
+}
 
 export const Alert = ({
   message,
@@ -17,14 +17,14 @@ export const Alert = ({
   onClickConfirmButton,
   isActive,
   onlyConfirm,
-  RenderComponent,
+  RenderComponent
 }: AlertProps): JSX.Element => {
   return (
     <Container isActive={isActive}>
       <main>
         <InconClose
           onClick={() => {
-            if (onClickCancellButton) onClickCancellButton();
+            if (onClickCancellButton) onClickCancellButton()
           }}
         />
         <h4>Atenção</h4>
@@ -36,7 +36,7 @@ export const Alert = ({
           <button
             className="btn dark btn-sm sbold uppercase"
             onClick={() => {
-              onClickConfirmButton('');
+              onClickConfirmButton('')
             }}
           >
             Ok
@@ -52,5 +52,5 @@ export const Alert = ({
         </footer>
       </main>
     </Container>
-  );
-};
+  )
+}

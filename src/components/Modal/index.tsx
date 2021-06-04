@@ -1,24 +1,24 @@
-import React from 'react';
-import { Container, CloseIcon } from './styles';
+import React from 'react'
+import { Container, CloseIcon } from './styles'
 
 type TypeModalProps = {
-  isOpenModal: boolean;
-  pageTitle: string;
-  onClickButtonCancel: () => void;
-  Children: JSX.Element;
-  refModal: React.LegacyRef<HTMLElement>;
-};
+  isOpenModal: boolean
+  pageTitle: string
+  onClickButtonCancel: () => void
+  Children: JSX.Element
+  refModal: React.LegacyRef<HTMLElement>
+}
 
 const Modal = ({
   pageTitle,
   isOpenModal,
   Children,
   refModal,
-  onClickButtonCancel,
+  onClickButtonCancel
 }: TypeModalProps): JSX.Element => {
   const handleClickCloseModal = () => {
-    onClickButtonCancel();
-  };
+    onClickButtonCancel()
+  }
 
   return (
     <Container openModal={isOpenModal}>
@@ -30,12 +30,10 @@ const Modal = ({
           </div>
         </header>
         <hr />
-        <main>
-          {Children}
-        </main>
+        <main>{Children}</main>
       </section>
     </Container>
-  );
-};
+  )
+}
 
-export default Modal;
+export default Modal

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const Contanier = styled.div`
   position: relative;
@@ -35,4 +35,4 @@ export const Contanier = styled.div`
     opacity: 1;
     visibility: visible;
   }
-`;
+`

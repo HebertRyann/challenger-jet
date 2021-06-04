@@ -1,11 +1,11 @@
-import styled from 'styled-components';
-import { shade } from 'polished';
+import styled from 'styled-components'
+import { shade } from 'polished'
 
 export const Contanier = styled.div`
   height: 100vh;
   display: flex;
   align-items: stretch;
-`;
+`
 
 export const Content = styled.div`
   display: flex;
@@ -51,9 +51,9 @@ export const Content = styled.div`
       color: ${shade(0.2, '#f4ede8')};
     }
   }
-`;
+`
 
 export const Background = styled.div`
   flex: 1;
   background-size: cover;
-`;
+`

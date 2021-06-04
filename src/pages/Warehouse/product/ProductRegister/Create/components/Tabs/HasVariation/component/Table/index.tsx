@@ -1,38 +1,38 @@
-import React, { useState } from 'react';
-import { Container, IconRemove, Td, Th } from './style';
-import { NewInput } from '../../../../../../../../../../components/NewInput';
-import { NewSelect } from '../../../../../../../../../../components/NewSelect';
-import { useTabCreate } from '../../../../../providers/tabsProvider';
-import { SALE, RE_SALE } from '../../../../../../domain/products';
-import { ResponseEntiryWithIdNameWithChildren } from '../../../../../services/api';
-import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent';
-import ReactTooltip from 'react-tooltip';
+import React, { useState } from 'react'
+import { Container, IconRemove, Td, Th } from './style'
+import { NewInput } from '../../../../../../../../../../components/NewInput'
+import { NewSelect } from '../../../../../../../../../../components/NewSelect'
+import { useTabCreate } from '../../../../../providers/tabsProvider'
+import { SALE, RE_SALE } from '../../../../../../domain/products'
+import { ResponseEntiryWithIdNameWithChildren } from '../../../../../services/api'
+import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent'
+import ReactTooltip from 'react-tooltip'
 
 type TypeUnitMensured = {
-  id: string;
-  name: string;
-};
+  id: string
+  name: string
+}
 
 type TypeAtributes = {
-  id: string;
-  name: string;
-  parent_id: string | null;
-  childrenList: ResponseEntiryWithIdNameWithChildren[];
-  isChecked?: boolean;
-};
+  id: string
+  name: string
+  parent_id: string | null
+  childrenList: ResponseEntiryWithIdNameWithChildren[]
+  isChecked?: boolean
+}
 
 type TypeTableProps = {
-  unitMensuredList: TypeUnitMensured[];
-  atributes: TypeAtributes[];
-};
+  unitMensuredList: TypeUnitMensured[]
+  atributes: TypeAtributes[]
+}
 
 export const Table = (tableProps: TypeTableProps): JSX.Element => {
-  const { unitMensuredList } = tableProps;
-  const atributesList = tableProps.atributes;
-  const [alert, setAlert] = useState(false);
-  const { variation, overview } = useTabCreate();
-  const { typeSelectProdut } = overview.getData();
-  const variationList = variation.getData();
+  const { unitMensuredList } = tableProps
+  const atributesList = tableProps.atributes
+  const [alert, setAlert] = useState(false)
+  const { variation, overview } = useTabCreate()
+  const { typeSelectProdut } = overview.getData()
+  const variationList = variation.getData()
   const {
     changeCurrentStock,
     changePriceCost,
@@ -41,18 +41,18 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
     changeAtributes,
     addVariation,
     removeVariation,
-    changeCurrentReplacementPoint,
-  } = variation.setData;
+    changeCurrentReplacementPoint
+  } = variation.setData
 
   const handleClickOnSaveButton = () => {
     if (variation.validate()) {
-      setAlert(true);
+      setAlert(true)
     }
-  };
+  }
 
   const isTypeSaleOrResale = (): boolean =>
     typeSelectProdut.value.name === SALE.name ||
-    typeSelectProdut.value.name === RE_SALE.name;
+    typeSelectProdut.value.name === RE_SALE.name
 
   return (
     <Container className="table-responsive">
@@ -71,7 +71,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                   >
                     {name}
                   </Th>
-                ),
+                )
             )}
             <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
               Estoque atual
@@ -88,7 +88,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
               <th align="center" style={{ textAlign: 'center' }} colSpan={2}>
                 Preço
               </th>
-            ) : null}
+                ) : null}
             <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
               Ações
             </Th>
@@ -107,19 +107,19 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                 priceSale,
                 priceCost,
                 atributes,
-                replacementPoint,
+                replacementPoint
               },
-              index,
+              index
             ) => (
               <tr>
                 <td>
                   <NewSelect
                     isSelected={variationList[index]?.unitMensured?.value.name}
                     onChange={event => {
-                      const split = event.target.value.split('+');
-                      const id = split[0];
-                      const name = split[1];
-                      changeUnitMensured({ id, name }, index);
+                      const split = event.target.value.split('+')
+                      const id = split[0]
+                      const name = split[1]
+                      changeUnitMensured({ id, name }, index)
                     }}
                     name="unitMensured"
                     className="form-control"
@@ -134,7 +134,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                   {atributesList.map(
                     (
                       { parent_id, childrenList, id, isChecked },
-                      indexAtribute,
+                      indexAtribute
                     ) =>
                       parent_id === null && (
                         <Td key={Math.random()} active={isChecked}>
@@ -145,32 +145,31 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                             isSelected={atributes[indexAtribute]?.value.name}
                             error={{
                               isError:
-                                atributes[indexAtribute]?.error.isError ||
-                                false,
+                                atributes[indexAtribute]?.error.isError || false
                             }}
                             onChange={event => {
-                              const split = event.target.value.split('+');
-                              const x = Number(split[0]);
-                              const y = Number(split[1]);
-                              const id = split[2];
-                              const name = split[3];
-                              const keyParent = split[4];
+                              const split = event.target.value.split('+')
+                              const x = Number(split[0])
+                              const y = Number(split[1])
+                              const id = split[2]
+                              const name = split[3]
+                              const keyParent = split[4]
                               changeAtributes(
                                 {
                                   id,
                                   name,
-                                  keyParent,
+                                  keyParent
                                 },
                                 x,
-                                y,
-                              );
+                                y
+                              )
                             }}
                           >
                             {childrenList
                               .sort((a, b) => {
-                                if (a.name > b.name) return 1;
-                                if (a.name < b.name) return -1;
-                                return 0;
+                                if (a.name > b.name) return 1
+                                if (a.name < b.name) return -1
+                                return 0
                               })
                               .map(atributeChildren => (
                                 <option
@@ -181,7 +180,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                               ))}
                           </NewSelect>
                         </Td>
-                      ),
+                      )
                   )}
                   <td>
                     <NewInput
@@ -205,7 +204,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                       onChange={event =>
                         changeCurrentReplacementPoint(
                           event.currentTarget.value,
-                          index,
+                          index
                         )
                       }
                       className="form-control"
@@ -223,8 +222,8 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                           error={priceCost.error}
                           placeholder="0.00"
                           onKeyPress={event => {
-                            const regex = /^[0-9.]+$/;
-                            if (!regex.test(event.key)) event.preventDefault();
+                            const regex = /^[0-9.]+$/
+                            if (!regex.test(event.key)) event.preventDefault()
                           }}
                           onChange={event =>
                             changePriceCost(event.currentTarget.value, index)
@@ -243,8 +242,8 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                           error={priceSale.error}
                           placeholder="0.00"
                           onKeyPress={event => {
-                            const regex = /^[0-9.]+$/;
-                            if (!regex.test(event.key)) event.preventDefault();
+                            const regex = /^[0-9.]+$/
+                            if (!regex.test(event.key)) event.preventDefault()
                           }}
                           onChange={event =>
                             changePriceSale(event.currentTarget.value, index)
@@ -263,14 +262,14 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                   />
                 </td>
               </tr>
-            ),
+            )
           )}
         </tbody>
       </table>
       <hr />
       <button
         onClick={() => {
-          addVariation();
+          addVariation()
         }}
         className="btn dark btn-sm sbold uppercase"
       >
@@ -282,5 +281,5 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
         variação
       </button>
     </Container>
-  );
-};
+  )
+}

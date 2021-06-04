@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
   margin-top: 30px;
@@ -13,4 +13,4 @@ export const Container = styled.div`
   hr {
     margin: 40px 0;
   }
-`;
+`

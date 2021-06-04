@@ -1,100 +1,98 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams, useLocation, useHistory } from 'react-router-dom';
-import Container from '../../../../../components/Container';
-import Tabs from '../../../../../components/Tabs';
-import Tab from '../../../../../components/Tabs/Tab';
-import DataTable from '../../../../../components/DataTable';
-import api from '../../../../../services/api';
-import { useToast } from '../../../../../hooks/toast';
-import { useLoading } from '../../../../../hooks/loading';
-import { Alert } from '../../../../../components/Alert';
-import { nameActions, nameEntity, namePageTitle } from '../domain/info';
-import { apiDelete, apiList } from '../domain/api';
-import { breadcrumbView } from '../domain/breadcrumb';
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useParams, useLocation, useHistory } from 'react-router-dom'
+import Container from '../../../../../components/Container'
+import Tabs from '../../../../../components/Tabs'
+import Tab from '../../../../../components/Tabs/Tab'
+import DataTable from '../../../../../components/DataTable'
+import api from '../../../../../services/api'
+import { useToast } from '../../../../../hooks/toast'
+import { useLoading } from '../../../../../hooks/loading'
+import { Alert } from '../../../../../components/Alert'
+import { nameActions, nameEntity, namePageTitle } from '../domain/info'
+import { apiDelete, apiList } from '../domain/api'
+import { breadcrumbView } from '../domain/breadcrumb'
 import {
   toolsViewCreate,
   toolsViewDelete,
   toolsViewUpdate,
-  toolsViewList,
-} from '../domain/tools';
+  toolsViewList
+} from '../domain/tools'
 
 interface ProductCategorytData {
-  id: number;
-  parent_id: number | null;
-  name: string;
-  created_at: string;
-  updated_at: string;
+  id: number
+  parent_id: number | null
+  name: string
+  created_at: string
+  updated_at: string
 }
 
 const View = (): JSX.Element => {
-  let { id } = useParams<{ id: string }>();
-  const history = useHistory();
-  const location = useLocation<{ id: string; value: string }>();
-  const [
-    productCategory,
-    setProductCategory,
-  ] = useState<ProductCategorytData | null>(null);
-  const { addToast } = useToast();
-  const searchParametersAuditLog = [{ entity: nameEntity, entity_id: id }];
+  const { id } = useParams<{ id: string }>()
+  const history = useHistory()
+  const location = useLocation<{ id: string; value: string }>()
+  const [productCategory, setProductCategory] =
+    useState<ProductCategorytData | null>(null)
+  const { addToast } = useToast()
+  const searchParametersAuditLog = [{ entity: nameEntity, entity_id: id }]
 
-  const { disableLoading, activeLoading } = useLoading();
+  const { disableLoading, activeLoading } = useLoading()
 
   useEffect(() => {
     async function loadCategory(): Promise<void> {
-      activeLoading();
+      activeLoading()
       try {
         const response = await api.get<ProductCategorytData>(
-          apiList(location.state.id),
-        );
-        const { data } = response;
-        setProductCategory(data);
-        disableLoading();
+          apiList(location.state.id)
+        )
+        const { data } = response
+        setProductCategory(data)
+        disableLoading()
       } catch (err) {
-        disableLoading();
+        disableLoading()
         addToast({
           type: 'error',
           title: 'Error ao carregar a categoria',
           description:
-            'Houve um error ao carregar a categoria, tente novamente mais tarde!',
-        });
+            'Houve um error ao carregar a categoria, tente novamente mais tarde!'
+        })
       }
     }
-    loadCategory();
-  }, [id, addToast]);
+    loadCategory()
+  }, [id, addToast])
 
-  const [alertRemoveParent, setAlertRemoveParent] = useState(false);
+  const [alertRemoveParent, setAlertRemoveParent] = useState(false)
 
   const handleOnClickRemoveParent = useCallback(
     ({ id, name }: { id: string; name: string }) => {
-      setAlertRemoveParent(true);
+      setAlertRemoveParent(true)
     },
-    [alertRemoveParent],
-  );
+    [alertRemoveParent]
+  )
 
   const handlerOnClickButtonConfirmRemoveParent = useCallback(
     async (id: number) => {
       try {
-        await api.delete(apiDelete(String(id)));
-        setAlertRemoveParent(false);
+        await api.delete(apiDelete(String(id)))
+        setAlertRemoveParent(false)
         addToast({
           type: 'success',
-          title: 'Atributo removido com sucesso.',
-        });
-        history.goBack();
+          title: 'Atributo removido com sucesso.'
+        })
+        history.goBack()
       } catch (err) {
-        setAlertRemoveParent(false);
+        setAlertRemoveParent(false)
         addToast({
           type: 'error',
-          title: 'Atributo não removido, pois ainda está sendo usada.',
-        });
+          title: 'Atributo não removido, pois ainda está sendo usada.'
+        })
       }
     },
-    [alertRemoveParent],
-  );
+    [alertRemoveParent]
+  )
 
   const handlerOnClickButtonCancelRemoveParent = useCallback(() => {
-    setAlertRemoveParent(false);
-  }, []);
+    setAlertRemoveParent(false)
+  }, [])
 
   return (
     <>
@@ -107,11 +105,11 @@ const View = (): JSX.Element => {
           toolsViewDelete(() => {
             handleOnClickRemoveParent({
               id: String(productCategory?.id),
-              name: String(productCategory?.name),
-            });
+              name: String(productCategory?.name)
+            })
           }),
           toolsViewCreate(),
-          toolsViewList(),
+          toolsViewList()
         ]}
       >
         <div className="form-body">
@@ -168,7 +166,7 @@ const View = (): JSX.Element => {
                         />
                       </div>
                     </div>
-                  </Tab>,
+                  </Tab>
                 ]}
               </Tabs>
             </div>
@@ -184,7 +182,7 @@ const View = (): JSX.Element => {
         isActive={alertRemoveParent}
       />
     </>
-  );
-};
+  )
+}
 
-export default View;
+export default View

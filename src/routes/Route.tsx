@@ -1,17 +1,17 @@
-import React from 'react';
+import React from 'react'
 import {
   Route as ReactDOMRoute,
   RouteProps as ReactDOMRouteProps,
-  Redirect,
-} from 'react-router-dom';
+  Redirect
+} from 'react-router-dom'
 
-import DefaultLayout from '../pages/_layouts/default';
+import DefaultLayout from '../pages/_layouts/default'
 
-import { useAuth } from '../hooks/auth';
+import { useAuth } from '../hooks/auth'
 
 interface RouteProps extends ReactDOMRouteProps {
-  isPrivate?: boolean;
-  component: React.ComponentType;
+  isPrivate?: boolean
+  component: React.ComponentType
 }
 
 const Route: React.FC<RouteProps> = ({
@@ -19,8 +19,8 @@ const Route: React.FC<RouteProps> = ({
   component: Component,
   ...rest
 }) => {
-  const { userLogged } = useAuth();
-  const Layout = DefaultLayout;
+  const { userLogged } = useAuth()
+  const Layout = DefaultLayout
 
   return (
     <ReactDOMRoute
@@ -31,21 +31,21 @@ const Route: React.FC<RouteProps> = ({
             <Layout>
               <Component />
             </Layout>
-          );
+          )
         }
         return isPrivate === !!userLogged() ? (
           <Component />
-        ) : (
+            ) : (
           <Redirect
             to={{
               pathname: isPrivate ? '/' : '/dashboard',
-              state: { from: location },
+              state: { from: location }
             }}
           />
-        );
+            )
       }}
     />
-  );
-};
+  )
+}
 
-export default Route;
+export default Route

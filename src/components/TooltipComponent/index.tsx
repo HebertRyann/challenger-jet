@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import ReactTooltip from 'react-tooltip';
+import React, { useState } from 'react'
+import ReactTooltip from 'react-tooltip'
 
-import { Container, JokerIcon } from './style';
+import { Container, JokerIcon } from './style'
 
 type TypeTooltipComponent = {
-  message: string;
-  label: string;
-  bold?: boolean;
-};
+  message: string
+  label: string
+  bold?: boolean
+}
 
 export const TooltipComponent = ({
   message,
   label,
-  bold,
+  bold
 }: TypeTooltipComponent) => {
   return (
     <Container bold={bold}>
@@ -24,5 +24,5 @@ export const TooltipComponent = ({
         <ReactTooltip place="top" type="dark" effect="float" />
       </div>
     </Container>
-  );
-};
+  )
+}

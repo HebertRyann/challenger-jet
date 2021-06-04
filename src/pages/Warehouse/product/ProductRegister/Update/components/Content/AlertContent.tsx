@@ -1,30 +1,30 @@
-import React from 'react';
-import { useCallback, useState } from 'react';
-import { useTabs } from '../../../../../../../hooks/tabs';
+import React, { useCallback, useState } from 'react'
+
+import { useTabs } from '../../../../../../../hooks/tabs'
 
 type Link = {
-  link: string;
-  name: string;
-};
+  link: string
+  name: string
+}
 
 type TypeAlertContentProps = {
-  onClickItem?: (params: any) => void;
-  links: Link[];
-};
+  onClickItem?: (params: any) => void
+  links: Link[]
+}
 
 export const AlertContent = ({
   onClickItem,
-  links,
+  links
 }: TypeAlertContentProps): JSX.Element => {
-  const { changeCurrentTab } = useTabs();
+  const { changeCurrentTab } = useTabs()
 
   const handlerClickAlertConfirm = useCallback(
     (link: string) => {
-      changeCurrentTab(link);
-      if (onClickItem) onClickItem(link);
+      changeCurrentTab(link)
+      if (onClickItem) onClickItem(link)
     },
-    [alert],
-  );
+    [alert]
+  )
 
   return (
     <h4 style={{ fontWeight: 300 }}>
@@ -34,7 +34,7 @@ export const AlertContent = ({
         .map(({ link, name }, index) => (
           <div
             onClick={() => {
-              handlerClickAlertConfirm(link);
+              handlerClickAlertConfirm(link)
             }}
             style={{ margin: '40px; 0', cursor: 'pointer' }}
           >
@@ -43,5 +43,5 @@ export const AlertContent = ({
         ))}
       são de preenchimento obrigatório
     </h4>
-  );
-};
+  )
+}

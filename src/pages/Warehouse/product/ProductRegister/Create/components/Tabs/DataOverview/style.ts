@@ -1,12 +1,12 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
   margin-top: 15px;
   margin-bottom: 15px;
-`;
+`
 
 export const Select = styled.select.attrs(() => ({
-  className: 'form-control',
+  className: 'form-control'
 }))<{ isError: boolean }>`
   ${({ isError }) =>
     isError &&
@@ -19,4 +19,4 @@ export const Select = styled.select.attrs(() => ({
         color: #666;
       }
     `}
-`;
+`

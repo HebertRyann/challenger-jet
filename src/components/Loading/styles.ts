@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div<{ isActive: boolean }>`
   position: fixed;
@@ -41,4 +41,4 @@ export const Container = styled.div<{ isActive: boolean }>`
     css`
       display: none;
     `}
-`;
+`

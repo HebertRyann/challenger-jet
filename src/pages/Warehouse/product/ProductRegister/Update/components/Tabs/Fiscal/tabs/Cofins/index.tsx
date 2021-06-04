@@ -1,13 +1,13 @@
-import React from 'react';
-import { NewSelect } from '../../../../../../../../../../components/NewSelect';
-import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent';
-import { dataIcms } from '../Icms/icms';
-import { useTabCreate } from '../../../../../providers/tabsProvider';
+import React from 'react'
+import { NewSelect } from '../../../../../../../../../../components/NewSelect'
+import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent'
+import { dataIcms } from '../Icms/icms'
+import { useTabCreate } from '../../../../../providers/tabsProvider'
 
 export const Confins = (): JSX.Element => {
-  const { fiscal } = useTabCreate();
-  const { changeCofinsTaxeIssue } = fiscal.setData;
-  const { cofins } = fiscal.getData();
+  const { fiscal } = useTabCreate()
+  const { changeCofinsTaxeIssue } = fiscal.setData
+  const { cofins } = fiscal.getData()
 
   return (
     <div className="row">
@@ -18,10 +18,10 @@ export const Confins = (): JSX.Element => {
         />
         <NewSelect
           onChange={event => {
-            const split = event.target.value.split('+');
-            const id = split[0];
-            const name = split[1];
-            changeCofinsTaxeIssue({ id, name });
+            const split = event.target.value.split('+')
+            const id = split[0]
+            const name = split[1]
+            changeCofinsTaxeIssue({ id, name })
           }}
           error={cofins.taxesIssue.error}
         >
@@ -31,8 +31,8 @@ export const Confins = (): JSX.Element => {
         </NewSelect>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export const labelFiscalConfins = 'Confins';
-export const nameFiscalConfins = '@@tabs-fiscal-cofins';
+export const labelFiscalConfins = 'Confins'
+export const nameFiscalConfins = '@@tabs-fiscal-cofins'

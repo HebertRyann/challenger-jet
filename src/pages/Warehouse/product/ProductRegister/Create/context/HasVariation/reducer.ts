@@ -1,34 +1,34 @@
 import {
   HasVariationActionTypes,
   TypeHasVariationAction,
-  TypeHasVariationState,
-} from './types';
+  TypeHasVariationState
+} from './types'
 
 export const hasVariationReducer = (
   state: TypeHasVariationState,
-  actions: TypeHasVariationAction,
+  actions: TypeHasVariationAction
 ) => {
   switch (actions.type) {
     case HasVariationActionTypes.SELECT_UNIT_MENSURED:
       state.hasVariation.inputs[actions.payload.index].unitMensured.value =
-        actions.payload.value;
-      return state;
+        actions.payload.value
+      return state
     case HasVariationActionTypes.CHANGE_CURRENT_STOCK:
-      return state;
+      return state
     case HasVariationActionTypes.CHANGE_REPLACEMENT_POINT:
-      return state;
+      return state
     case HasVariationActionTypes.CHANGE_COST:
-      return state;
+      return state
     case HasVariationActionTypes.TOGGLE_SELECT_ATRIBUTE:
-      return state;
+      return state
     default:
-      return state;
+      return state
   }
-};
+}
 
 export const hasVariationMainReducer = (
   { hasVariation }: { hasVariation: TypeHasVariationState },
-  action: TypeHasVariationAction,
+  action: TypeHasVariationAction
 ) => ({
-  hasVariation: hasVariationReducer(hasVariation, action),
-});
+  hasVariation: hasVariationReducer(hasVariation, action)
+})

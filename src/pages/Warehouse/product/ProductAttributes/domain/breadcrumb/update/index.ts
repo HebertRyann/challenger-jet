@@ -1,22 +1,22 @@
-import { nameActionPageMain, nameActions } from '../../info';
-import { TypeBreadcrumb } from '..';
+import { nameActionPageMain, nameActions } from '../../info'
+import { TypeBreadcrumb } from '..'
 
 export const breadcrumbUpdate: TypeBreadcrumb[] = [
   {
     name: 'Início',
-    to: '/',
+    to: '/'
   },
   {
-    name: 'Almoxarifado',
+    name: 'Almoxarifado'
   },
   {
-    name: 'Cadastros',
+    name: 'Cadastros'
   },
   {
     name: nameActionPageMain.name,
-    to: nameActionPageMain.to,
+    to: nameActionPageMain.to
   },
   {
-    name: nameActions.read.name,
-  },
-];
+    name: nameActions.read.name
+  }
+]

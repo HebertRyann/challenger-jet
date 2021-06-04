@@ -1,33 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { genericMaskWithTwoZero } from '../../../../../../../../utlis/mask';
+import React, { useEffect, useState } from 'react'
+import { genericMaskWithTwoZero } from '../../../../../../../../utlis/mask'
 import {
   typeUnitMensuredDetails,
-  typeUnitMensuredWeight,
-} from '../../../../domain/details/measureds';
-import { useProduct } from '../../../provider/productProvider';
-import { Container } from './style';
+  typeUnitMensuredWeight
+} from '../../../../domain/details/measureds'
+import { useProduct } from '../../../provider/productProvider'
+import { Container } from './style'
 
 type Details = {
-  width: string;
-  height: string;
-  length: string;
-  weight: string;
-  thickness: string;
-  measure: string;
-  way_use: string;
-  measure_weight: string;
-  description_details: string;
-  technical_specification: string;
-};
+  width: string
+  height: string
+  length: string
+  weight: string
+  thickness: string
+  measure: string
+  way_use: string
+  measure_weight: string
+  description_details: string
+  technical_specification: string
+}
 
 export const Details = (): JSX.Element => {
-  const { getProduct } = useProduct();
-  const { details } = getProduct();
-  let detail: Details = {} as Details;
+  const { getProduct } = useProduct()
+  const { details } = getProduct()
+  let detail: Details = {} as Details
   if (details) {
-    detail = JSON.parse(details.toLowerCase());
+    detail = JSON.parse(details.toLowerCase())
   }
-  const [isEmpty, setEmpty] = useState(true);
+  const [isEmpty, setEmpty] = useState(true)
 
   useEffect(() => {
     setEmpty(
@@ -38,25 +38,25 @@ export const Details = (): JSX.Element => {
         detail.weight === '0' &&
         detail.width === '0' &&
         detail.measure_weight === '' &&
-        detail.measure === '',
-    );
-  }, [detail]);
+        detail.measure === ''
+    )
+  }, [detail])
 
   const gettypeUnitMensuredDetails = (isEqual: string): string => {
     const match = typeUnitMensuredDetails.filter(
-      ({ value }) => value === isEqual,
-    );
-    if (match && match[0]) return match[0].label;
-    return isEqual;
-  };
+      ({ value }) => value === isEqual
+    )
+    if (match && match[0]) return match[0].label
+    return isEqual
+  }
 
   const getTypeUnitMensuredWeight = (isEqual: string): string => {
     const match = typeUnitMensuredWeight.filter(
-      ({ value }) => value === isEqual,
-    );
-    if (match && match[0]) return match[0].label;
-    return isEqual;
-  };
+      ({ value }) => value === isEqual
+    )
+    if (match && match[0]) return match[0].label
+    return isEqual
+  }
 
   return (
     <Container isEmpty={isEmpty}>
@@ -128,8 +128,8 @@ export const Details = (): JSX.Element => {
         </div>
       </div>
     </Container>
-  );
-};
+  )
+}
 
-export const labelDetails = 'Detalhe e medida';
-export const nameDetails = '@@tabs-view-details';
+export const labelDetails = 'Detalhe e medida'
+export const nameDetails = '@@tabs-view-details'

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div<{ isError?: boolean }>`
   ${({ isError }) =>
@@ -25,4 +25,4 @@ export const Container = styled.div<{ isError?: boolean }>`
     width: 20px;
     background-color: #fff;
   }
-`;
+`

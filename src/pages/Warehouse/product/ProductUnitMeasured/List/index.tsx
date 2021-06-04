@@ -1,14 +1,10 @@
-import React from 'react';
-import Container from '../../../../../components/Container';
-import DataTable from '../../../../../components/DataTable';
-import {
-  nameEntity,
-  namePageTitle,
-  nameSource,
-} from '../domain/info';
-import { headers } from '../domain/headers';
-import { breadcrumbList } from '../domain/breadcrumb';
-import { toolsList } from '../domain/tools';
+import React from 'react'
+import Container from '../../../../../components/Container'
+import DataTable from '../../../../../components/DataTable'
+import { nameEntity, namePageTitle, nameSource } from '../domain/info'
+import { headers } from '../domain/headers'
+import { breadcrumbList } from '../domain/breadcrumb'
+import { toolsList } from '../domain/tools'
 
 const ProductUnitMeasuredList = (): JSX.Element => (
   <Container
@@ -25,6 +21,6 @@ const ProductUnitMeasuredList = (): JSX.Element => (
       headers={headers}
     />
   </Container>
-);
+)
 
-export default ProductUnitMeasuredList;
+export default ProductUnitMeasuredList

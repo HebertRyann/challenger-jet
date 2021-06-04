@@ -1,36 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import Container from '../../../../components/Container';
-import { useLoading } from '../../../../hooks/loading';
-import api from '../../../../services/api';
-import { FormCategory } from '../components/Form';
-import { apiList } from '../domain/api';
-import { nameActions, namePageTitle } from '../domain/info';
-import { breadcrumbUpdate } from '../domain/breadcrumb';
-import { toolsUpdate } from '../domain/tools';
+import React, { useEffect, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
+import Container from '../../../../components/Container'
+import { useLoading } from '../../../../hooks/loading'
+import api from '../../../../services/api'
+import { FormCategory } from '../components/Form'
+import { apiList } from '../domain/api'
+import { nameActions, namePageTitle } from '../domain/info'
+import { breadcrumbUpdate } from '../domain/breadcrumb'
+import { toolsUpdate } from '../domain/tools'
 
 const ProductAtributeUpdate = (): JSX.Element => {
-  const { location } = useHistory<{
-    id: string;
-    value: string;
-  }>();
-  const { id } = useParams<{ id: string }>();
-  const { activeLoading, disableLoading } = useLoading();
+  const { location } =
+    useHistory<{
+      id: string
+      value: string
+    }>()
+  const { id } = useParams<{ id: string }>()
+  const { activeLoading, disableLoading } = useLoading()
   const [categoryItem, setCategoryItem] = useState<{
-    id: string;
-    name: string;
-  }>({ id: '', name: '' });
+    id: string
+    name: string
+  }>({ id: '', name: '' })
 
   useEffect(() => {
     async function loadData() {
-      activeLoading();
-      const response = await api.get(apiList(id));
-      const { data } = response;
-      setCategoryItem({ id: data.id, name: data.name });
-      disableLoading();
+      activeLoading()
+      const response = await api.get(apiList(id))
+      const { data } = response
+      setCategoryItem({ id: data.id, name: data.name })
+      disableLoading()
     }
-    loadData();
-  }, []);
+    loadData()
+  }, [])
   return (
     <Container
       pageTitle={namePageTitle}
@@ -39,8 +40,8 @@ const ProductAtributeUpdate = (): JSX.Element => {
       tools={[
         toolsUpdate({
           id: location.state.id,
-          value: location.state.value,
-        }),
+          value: location.state.value
+        })
       ]}
     >
       <div className="form-body">
@@ -48,12 +49,12 @@ const ProductAtributeUpdate = (): JSX.Element => {
           valueInput={categoryItem.name}
           typeForm={{
             idUpdate: Number(categoryItem.id),
-            inputValue: categoryItem.name,
+            inputValue: categoryItem.name
           }}
         />
       </div>
     </Container>
-  );
-};
+  )
+}
 
-export default ProductAtributeUpdate;
+export default ProductAtributeUpdate

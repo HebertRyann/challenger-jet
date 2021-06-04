@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
   .row {
@@ -16,7 +16,7 @@ export const Container = styled.div`
     }
     text-align: end;
   }
-`;
+`
 
 export const TextArea = styled.textarea<{ isError: boolean }>`
   height: 90px;
@@ -31,4 +31,4 @@ export const TextArea = styled.textarea<{ isError: boolean }>`
         color: #666;
       }
     `}
-`;
+`

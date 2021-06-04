@@ -1,40 +1,40 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Container,
   ContentItem,
   RenderComponent,
   TabHeaderContainer,
   TabName,
-  TabPanelContainer,
-} from './styles';
-import { useTabs } from '../../../../../../hooks/tabs';
-import { makeTabs } from './tabs';
+  TabPanelContainer
+} from './styles'
+import { useTabs } from '../../../../../../hooks/tabs'
+import { makeTabs } from './tabs'
 
 export type TypeContentTabs = {
-  name: string;
-  label: string;
-  isEnable: boolean;
-  Component: JSX.Element;
-};
+  name: string
+  label: string
+  isEnable: boolean
+  Component: JSX.Element
+}
 
 type Link = {
-  link: string;
-  name: string;
-};
+  link: string
+  name: string
+}
 
 export const Content = (): JSX.Element => {
-  const [tabs, setTabs] = useState<TypeContentTabs[]>([]);
-  const { loadTabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs();
+  const [tabs, setTabs] = useState<TypeContentTabs[]>([])
+  const { loadTabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs()
 
   useEffect(() => {
     async function load() {
-      const tabs = await makeTabs();
-      tabs.map(tab => addTab(tab));
-      changeCurrentTab(tabs[0].name);
-      setTabs(loadTabs());
+      const tabs = await makeTabs()
+      tabs.map(tab => addTab(tab))
+      changeCurrentTab(tabs[0].name)
+      setTabs(loadTabs())
     }
-    load();
-  }, []);
+    load()
+  }, [])
 
   return (
     <>
@@ -51,7 +51,7 @@ export const Content = (): JSX.Element => {
                   >
                     {label}
                   </TabName>
-                ),
+                )
             )}
           </TabHeaderContainer>
           <TabPanelContainer>
@@ -66,5 +66,5 @@ export const Content = (): JSX.Element => {
         </ContentItem>
       </Container>
     </>
-  );
-};
+  )
+}

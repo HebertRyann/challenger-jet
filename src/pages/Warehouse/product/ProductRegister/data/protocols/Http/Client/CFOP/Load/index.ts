@@ -1,5 +1,5 @@
-import { LoadAllCFOP } from '../../../../../../domain/useCases/FIscal/CFOP/Load';
+import { LoadAllCFOP } from '../../../../../../domain/useCases/FIscal/CFOP/Load'
 
 export interface HttpClientLoadCFOP {
-  loadAllCFOP: () => Promise<LoadAllCFOP.CFOPResponse[]>;
+  loadAllCFOP: () => Promise<LoadAllCFOP.CFOPResponse[]>
 }

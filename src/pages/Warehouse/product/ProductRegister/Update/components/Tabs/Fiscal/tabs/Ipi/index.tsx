@@ -1,13 +1,13 @@
-import React from 'react';
-import { NewSelect } from '../../../../../../../../../../components/NewSelect';
-import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent';
-import { dataIcms, TypeICMS } from '../Icms/icms';
-import { useTabCreate } from '../../../../../providers/tabsProvider';
+import React from 'react'
+import { NewSelect } from '../../../../../../../../../../components/NewSelect'
+import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent'
+import { dataIcms, TypeICMS } from '../Icms/icms'
+import { useTabCreate } from '../../../../../providers/tabsProvider'
 
 export const Ipi = (): JSX.Element => {
-  const { fiscal } = useTabCreate();
-  const { changeIpiTaxeIssue } = fiscal.setData;
-  const { ipi } = fiscal.getData();
+  const { fiscal } = useTabCreate()
+  const { changeIpiTaxeIssue } = fiscal.setData
+  const { ipi } = fiscal.getData()
   return (
     <div className="row">
       <div className="form-content col-md-6">
@@ -17,10 +17,10 @@ export const Ipi = (): JSX.Element => {
         />
         <NewSelect
           onChange={event => {
-            const split = event.target.value.split('+');
-            const id = split[0];
-            const name = split[1];
-            changeIpiTaxeIssue({ id, name });
+            const split = event.target.value.split('+')
+            const id = split[0]
+            const name = split[1]
+            changeIpiTaxeIssue({ id, name })
           }}
           error={ipi.taxesIssue.error}
         >
@@ -30,8 +30,8 @@ export const Ipi = (): JSX.Element => {
         </NewSelect>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export const nameFiscalIpi = '@@tabs-fiscal-ipi';
-export const labelFiscalIpi = 'IPI';
+export const nameFiscalIpi = '@@tabs-fiscal-ipi'
+export const labelFiscalIpi = 'IPI'

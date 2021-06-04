@@ -1,32 +1,32 @@
-import React, { HTMLAttributes, StyleHTMLAttributes } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { useLoading } from '../../hooks/loading';
-import { Loading } from '../Loading';
+import React, { HTMLAttributes } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { useLoading } from '../../hooks/loading'
+import { Loading } from '../Loading'
 
 interface Breadcrumb {
-  name: string;
-  to?: string;
+  name: string
+  to?: string
 }
 
 type ParamsPush = {
-  id: string;
-  value: string;
-};
+  id: string
+  value: string
+}
 export interface ToolsContainerProps {
-  name: string;
-  to: string;
-  icon: string;
-  hasParams?: false | ParamsPush;
-  handleOnClick?: <T>(currentValue: T | any) => void;
+  name: string
+  to: string
+  icon: string
+  hasParams?: false | ParamsPush
+  handleOnClick?: <T>(currentValue: T | any) => void
 }
 
 interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
-  pageTitle: string;
-  portletTitle: string;
-  breadcrumb?: Breadcrumb[];
-  tools?: ToolsContainerProps[];
-  styleContent?: HTMLAttributes<HTMLDivElement>;
-  Content?: () => JSX.Element;
+  pageTitle: string
+  portletTitle: string
+  breadcrumb?: Breadcrumb[]
+  tools?: ToolsContainerProps[]
+  styleContent?: HTMLAttributes<HTMLDivElement>
+  Content?: () => JSX.Element
 }
 
 const Container: React.FC<ContainerProps> = ({
@@ -38,32 +38,32 @@ const Container: React.FC<ContainerProps> = ({
   Content,
   ...props
 }) => {
-  const history = useHistory();
-  const { loading } = useLoading();
+  const history = useHistory()
+  const { loading } = useLoading()
 
   const handleClickAction = ({
     hasParams,
     icon,
     name,
     to,
-    handleOnClick,
+    handleOnClick
   }: ToolsContainerProps) => {
     if (!handleOnClick) {
       history.push(`${to}`, {
         id: hasParams ? hasParams.id : '',
-        value: hasParams ? hasParams.value : '',
-      });
+        value: hasParams ? hasParams.value : ''
+      })
     }
     if (handleOnClick !== undefined) {
-      handleOnClick({ hasParams, icon, name, to, handleOnClick });
+      handleOnClick({ hasParams, icon, name, to, handleOnClick })
     }
-  };
+  }
 
   return (
     <div
       {...props}
       style={{
-        margin: '0 -40px',
+        margin: '0 -40px'
       }}
       className="page-content-wrapper"
     >
@@ -106,11 +106,11 @@ const Container: React.FC<ContainerProps> = ({
                               {tools.map(tool => (
                                 <a
                                   style={{
-                                    cursor: 'pointer',
+                                    cursor: 'pointer'
                                   }}
                                   key={Math.random()}
                                   onClick={() => {
-                                    handleClickAction(tool);
+                                    handleClickAction(tool)
                                   }}
                                 >
                                   <i className={tool.icon} /> {tool.name}
@@ -130,7 +130,7 @@ const Container: React.FC<ContainerProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Container;
+export default Container

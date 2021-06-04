@@ -1,71 +1,71 @@
-import React, { useCallback, useState } from 'react';
-import { Container } from './style';
-import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
-import { nameHasVariation } from '../HasVariation';
-import { nameFiscal } from '../Fiscal';
-import { useTabs } from '../../../../../../../../hooks/tabs';
-import { nameHasComposition } from '../HasComposition';
-import { namePriceComposition } from '../PriceComposition';
-import { NewInput } from '../../../../../../../../components/NewInput';
+import React, { useCallback, useState } from 'react'
+import { Container } from './style'
+import { TooltipComponent } from '../../../../../../../../components/TooltipComponent'
+import { nameHasVariation } from '../HasVariation'
+import { nameFiscal } from '../Fiscal'
+import { useTabs } from '../../../../../../../../hooks/tabs'
+import { nameHasComposition } from '../HasComposition'
+import { namePriceComposition } from '../PriceComposition'
+import { NewInput } from '../../../../../../../../components/NewInput'
 import {
   typeProducts,
   TypeProduct,
   SALE,
   SEMI_FINISHED,
-  RE_SALE,
-} from '../../../../domain/products';
-import { nameStock } from '../Stock';
-import { NewSelect } from '../../../../../../../../components/NewSelect';
-import { useTabCreate } from '../../../providers/tabsProvider';
+  RE_SALE
+} from '../../../../domain/products'
+import { nameStock } from '../Stock'
+import { NewSelect } from '../../../../../../../../components/NewSelect'
+import { useTabCreate } from '../../../providers/tabsProvider'
 
 export type TypeTabNameEnableOrDisable = {
-  keyTab: string;
-  name: string;
-  active: boolean;
-};
+  keyTab: string
+  name: string
+  active: boolean
+}
 
 const dataHasVariation: TypeTabNameEnableOrDisable[] = [
   {
     keyTab: nameHasVariation,
     name: 'Sim',
-    active: false,
+    active: false
   },
-  { keyTab: nameHasVariation, name: 'Não', active: false },
-];
+  { keyTab: nameHasVariation, name: 'Não', active: false }
+]
 
 export type TypeEntityWithIdAndName = {
-  id: string;
-  name: string;
-  parent_id: string | null;
-};
+  id: string
+  name: string
+  parent_id: string | null
+}
 
 export const DataOverview = ({
   categoryFinances,
-  categoryProducts,
+  categoryProducts
 }: {
-  categoryFinances: TypeEntityWithIdAndName[];
-  categoryProducts: TypeEntityWithIdAndName[];
+  categoryFinances: TypeEntityWithIdAndName[]
+  categoryProducts: TypeEntityWithIdAndName[]
 }): JSX.Element => {
-  const { activeTab, disableTab } = useTabs();
-  const { overview } = useTabCreate();
+  const { activeTab, disableTab } = useTabs()
+  const { overview } = useTabCreate()
   const {
     typeSelectProdut,
     categoryCost,
     subCategoryCost,
     groupProduct,
     nameProduct,
-    hasVariation,
-  } = overview.getData();
+    hasVariation
+  } = overview.getData()
 
   const initialState: TypeEntityWithIdAndName = {
     id: '',
     name: '',
-    parent_id: null,
-  };
+    parent_id: null
+  }
 
   const [subCategoryFinanceData, setSubCategoryFinanceData] = useState<
     TypeEntityWithIdAndName[]
-  >([initialState]);
+  >([initialState])
 
   const handlerChangeCategoryCost = useCallback(
     ({ id, name }: TypeEntityWithIdAndName) => {
@@ -74,45 +74,45 @@ export const DataOverview = ({
         categoryCost: {
           value: {
             id,
-            name,
+            name
           },
-          error: { isError: false },
-        },
-      });
+          error: { isError: false }
+        }
+      })
       const childrens = categoryFinances.filter(
-        parents => parents.parent_id == id,
-      );
-      setSubCategoryFinanceData(childrens);
+        parents => parents.parent_id == id
+      )
+      setSubCategoryFinanceData(childrens)
     },
-    [subCategoryFinanceData, categoryCost, overview.getData()],
-  );
+    [subCategoryFinanceData, categoryCost, overview.getData()]
+  )
 
   const handlerHasVariation = useCallback(
     ({ keyTab, name }: TypeTabNameEnableOrDisable) => {
       if (name.toLowerCase() === 'sim') {
-        activeTab(keyTab);
+        activeTab(keyTab)
         overview.setData({
           ...overview.getData(),
           hasVariation: {
             error: { isError: false },
-            value: { name, hasVariation: true },
-          },
-        });
-        disableTab(nameStock);
+            value: { name, hasVariation: true }
+          }
+        })
+        disableTab(nameStock)
       } else {
-        activeTab(nameStock);
-        disableTab(keyTab);
+        activeTab(nameStock)
+        disableTab(keyTab)
         overview.setData({
           ...overview.getData(),
           hasVariation: {
             error: { isError: false },
-            value: { name, hasVariation: false },
-          },
-        });
+            value: { name, hasVariation: false }
+          }
+        })
       }
     },
-    [overview.getData()],
-  );
+    [overview.getData()]
+  )
 
   const handlerSelectTypeProduct = useCallback(
     (value: TypeProduct) => {
@@ -121,32 +121,32 @@ export const DataOverview = ({
         typeSelectProdut: {
           value: {
             id: value.id.toString(),
-            name: value.name,
+            name: value.name
           },
-          error: { isError: false },
-        },
-      });
+          error: { isError: false }
+        }
+      })
       if (value.id === SALE.id) {
-        activeTab(nameHasComposition);
-        activeTab(nameFiscal);
-        activeTab(namePriceComposition);
-        return;
+        activeTab(nameHasComposition)
+        activeTab(nameFiscal)
+        activeTab(namePriceComposition)
+        return
       }
       if (value.id === RE_SALE.id) {
-        activeTab(nameFiscal);
-        disableTab(nameHasComposition);
-        activeTab(namePriceComposition);
-        return;
+        activeTab(nameFiscal)
+        disableTab(nameHasComposition)
+        activeTab(namePriceComposition)
+        return
       }
       if (value.id === SEMI_FINISHED.id) {
-        activeTab(nameHasComposition);
-        disableTab(nameFiscal);
-        disableTab(namePriceComposition);
-        return;
+        activeTab(nameHasComposition)
+        disableTab(nameFiscal)
+        disableTab(namePriceComposition)
+        return
       }
-      disableTab(nameHasComposition);
-      disableTab(nameFiscal);
-      disableTab(namePriceComposition);
+      disableTab(nameHasComposition)
+      disableTab(nameFiscal)
+      disableTab(namePriceComposition)
     },
     [
       typeSelectProdut,
@@ -154,9 +154,9 @@ export const DataOverview = ({
       subCategoryCost,
       categoryCost,
       nameProduct,
-      overview.getData().hasVariation,
-    ],
-  );
+      overview.getData().hasVariation
+    ]
+  )
 
   return (
     <>
@@ -169,10 +169,10 @@ export const DataOverview = ({
           <NewSelect
             error={typeSelectProdut.error}
             onChange={event => {
-              const split = event.target.value.split('+');
-              const id = split[0];
-              const name = split[1];
-              handlerSelectTypeProduct({ id: Number(id), name });
+              const split = event.target.value.split('+')
+              const id = split[0]
+              const name = split[1]
+              handlerSelectTypeProduct({ id: Number(id), name })
             }}
           >
             {typeProducts.map(({ id, name, label }) => (
@@ -190,19 +190,19 @@ export const DataOverview = ({
           <NewSelect
             error={groupProduct.error}
             onChange={event => {
-              const split = event.target.value.split('+');
-              const id = split[0];
-              const name = split[1];
+              const split = event.target.value.split('+')
+              const id = split[0]
+              const name = split[1]
               overview.setData({
                 ...overview.getData(),
                 groupProduct: {
                   error: { isError: false },
                   value: {
                     id,
-                    name,
-                  },
-                },
-              });
+                    name
+                  }
+                }
+              })
             }}
           >
             {categoryProducts.map(({ id, name }) => (
@@ -225,9 +225,9 @@ export const DataOverview = ({
                 ...overview.getData(),
                 nameProduct: {
                   error: { isError: false },
-                  value: event.target.value,
-                },
-              });
+                  value: event.target.value
+                }
+              })
             }}
             value={nameProduct.value}
             name="category"
@@ -241,10 +241,10 @@ export const DataOverview = ({
           <NewSelect
             error={categoryCost.error}
             onChange={event => {
-              const split = event.target.value.split('+');
-              const id = split[0];
-              const name = split[1];
-              handlerChangeCategoryCost({ id, name, parent_id: null });
+              const split = event.target.value.split('+')
+              const id = split[0]
+              const name = split[1]
+              handlerChangeCategoryCost({ id, name, parent_id: null })
             }}
           >
             {categoryFinances
@@ -265,19 +265,19 @@ export const DataOverview = ({
             disabled={categoryCost.value.id === ''}
             error={subCategoryCost.error}
             onChange={event => {
-              const split = event.target.value.split('+');
-              const id = split[0];
-              const name = split[1];
+              const split = event.target.value.split('+')
+              const id = split[0]
+              const name = split[1]
               overview.setData({
                 ...overview.getData(),
                 subCategoryCost: {
                   error: { isError: false },
                   value: {
                     id,
-                    name,
-                  },
-                },
-              });
+                    name
+                  }
+                }
+              })
             }}
           >
             {subCategoryFinanceData.map(({ id, name, parent_id }) => (
@@ -295,11 +295,11 @@ export const DataOverview = ({
           <NewSelect
             error={hasVariation.error}
             onChange={event => {
-              const split = event.target.value.split('+');
-              const active = split[0];
-              const keyTab = split[1];
-              const name = split[2];
-              handlerHasVariation({ active: Boolean(active), keyTab, name });
+              const split = event.target.value.split('+')
+              const active = split[0]
+              const keyTab = split[1]
+              const name = split[2]
+              handlerHasVariation({ active: Boolean(active), keyTab, name })
             }}
           >
             {dataHasVariation.map(({ active, keyTab, name }) => (
@@ -311,8 +311,8 @@ export const DataOverview = ({
         </Container>
       </div>
     </>
-  );
-};
+  )
+}
 
-export const labelDataOverview = 'Dados';
-export const nameDataOverview = '@@tabs-overview';
+export const labelDataOverview = 'Dados'
+export const nameDataOverview = '@@tabs-overview'

@@ -1,37 +1,37 @@
 export type TypeICMS = {
-  id: number;
-  name: string;
-};
+  id: number
+  name: string
+}
 
 export const RAW_MATERIAL: TypeICMS = {
   id: 1,
-  name: 'Materia prima',
-};
+  name: 'Materia prima'
+}
 
 export const SEMI_FINISHED: TypeICMS = {
   id: 2,
-  name: 'Semi acabado',
-};
+  name: 'Semi acabado'
+}
 
 export const SALE: TypeICMS = {
   id: 3,
-  name: 'Venda',
-};
+  name: 'Venda'
+}
 
 export const RE_SALE: TypeICMS = {
   id: 4,
-  name: 'Revenda',
-};
+  name: 'Revenda'
+}
 
 export const LOCATION: TypeICMS = {
   id: 5,
-  name: 'Locação',
-};
+  name: 'Locação'
+}
 
 export const CONSUMER: TypeICMS = {
   id: 6,
-  name: 'Consumo',
-};
+  name: 'Consumo'
+}
 
 export const dataIcms: TypeICMS[] = [
   RAW_MATERIAL,
@@ -39,5 +39,5 @@ export const dataIcms: TypeICMS[] = [
   SEMI_FINISHED,
   RE_SALE,
   LOCATION,
-  CONSUMER,
-];
+  CONSUMER
+]

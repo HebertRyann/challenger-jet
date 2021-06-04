@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
   .name-fisco {
@@ -12,7 +12,7 @@ export const Container = styled.div`
       margin-bottom: 15px;
     }
   }
-`;
+`
 
 export const ContainerFiscal = styled.div`
   height: 100%;
@@ -20,7 +20,7 @@ export const ContainerFiscal = styled.div`
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 50px;
   margin-top: 20px;
-`;
+`
 
 export const ContentItemFiscal = styled.div`
   position: relative;
@@ -31,7 +31,7 @@ export const ContentItemFiscal = styled.div`
     justify-content: flex-end;
     align-items: center;
   }
-`;
+`
 
 export const TabNameFiscal = styled.div<{ isActive: boolean }>`
   cursor: pointer;
@@ -46,13 +46,13 @@ export const TabNameFiscal = styled.div<{ isActive: boolean }>`
       border-bottom-color: #ffffff;
     `};
   margin-bottom: 40px;
-`;
+`
 
 export const TabHeaderContainerFiscal = styled.div`
   transform: translateY(10px);
   position: absolute;
   display: flex;
-`;
+`
 
 export const TabPanelContainerFiscal = styled.div`
   border: 1px solid #e3e3e3;
@@ -62,8 +62,7 @@ export const TabPanelContainerFiscal = styled.div`
   hr {
     margin-bottom: 20px;
   }
-`;
-
+`
 
 export const RenderComponent = styled.div<{ isActive: boolean }>`
   display: none;
@@ -72,4 +71,4 @@ export const RenderComponent = styled.div<{ isActive: boolean }>`
     css`
       display: block;
     `};
-`;
+`

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const Container = styled.div`
   margin-top: 30px;
@@ -28,4 +28,4 @@ export const Container = styled.div`
     text-align: start !important;
     font-weight: bold;
   }
-`;
+`

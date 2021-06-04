@@ -1,18 +1,18 @@
-import React, { SelectHTMLAttributes } from 'react';
-import { Container } from './styles';
-import loadingSvg from '../../assets/image/svg/loading.svg';
+import React, { SelectHTMLAttributes } from 'react'
+import { Container } from './styles'
+import loadingSvg from '../../assets/image/svg/loading.svg'
 
 export type TypeErrorSelect = {
-  isError: boolean;
-  descriptionError?: string;
-};
+  isError: boolean
+  descriptionError?: string
+}
 
 export interface TypeNewSelectProps
   extends SelectHTMLAttributes<HTMLSelectElement> {
-  error?: TypeErrorSelect;
-  children?: JSX.Element[];
-  isSelected?: string;
-  loading?: boolean;
+  error?: TypeErrorSelect
+  children?: JSX.Element[]
+  isSelected?: string
+  loading?: boolean
 }
 
 export const NewSelect = ({
@@ -40,5 +40,5 @@ export const NewSelect = ({
       )}
       {error?.descriptionError && <label>{error.descriptionError}</label>}
     </Container>
-  );
-};
+  )
+}

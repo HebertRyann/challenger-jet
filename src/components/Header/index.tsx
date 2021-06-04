@@ -1,43 +1,43 @@
-import React, { Children, useCallback } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { useAuth } from '../../hooks/auth';
-import { useToast } from '../../hooks/toast';
-import logoImg from '../../assets/logo-multfluxo.png';
-import AvatarImg from '../../assets/layouts/layout3/img/avatar.png';
+import React, { Children, useCallback } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { useAuth } from '../../hooks/auth'
+import { useToast } from '../../hooks/toast'
+import logoImg from '../../assets/logo-multfluxo.png'
+import AvatarImg from '../../assets/layouts/layout3/img/avatar.png'
 
 interface Menu {
-  id: number;
-  parent_id?: number;
-  method?: string;
-  name: string;
-  url?: string;
-  permission: boolean;
-  children?: Menu[];
+  id: number
+  parent_id?: number
+  method?: string
+  name: string
+  url?: string
+  permission: boolean
+  children?: Menu[]
 }
 
 const Header: React.FC = () => {
-  const history = useHistory();
-  const { signOut, user, menus } = useAuth();
-  const { addToast } = useToast();
+  const history = useHistory()
+  const { signOut, user, menus } = useAuth()
+  const { addToast } = useToast()
 
   const createMenu = (arrayMenus: Menu[], submenu = false) =>
     arrayMenus
       .filter(
         menu =>
           (menu.method === null && menu.children) ||
-          (menu.method && menu.permission === true),
+          (menu.method && menu.permission === true)
       )
       .map(menu => {
-        const className = menu.url ? '' : 'dropdown-submenu';
-        let showMenu = true;
+        const className = menu.url ? '' : 'dropdown-submenu'
+        let showMenu = true
         if (menu.method === null && (menu.children || menu.url)) {
           if (menu.children) {
             const subMenus = menu.children.filter(
-              sub => sub.permission === true,
-            );
-            showMenu = subMenus.length > 0;
+              sub => sub.permission === true
+            )
+            showMenu = subMenus.length > 0
           }
-          showMenu = true;
+          showMenu = true
         }
         if (showMenu) {
           return (
@@ -54,19 +54,19 @@ const Header: React.FC = () => {
                 </ul>
               )}
             </li>
-          );
+          )
         }
-        return '';
-      });
+        return ''
+      })
 
   const handleLogout = useCallback(() => {
-    signOut();
+    signOut()
     addToast({
       type: 'info',
-      title: 'Logout realizado com sucesso!',
-    });
-    history.push('/');
-  }, [signOut, addToast, history]);
+      title: 'Logout realizado com sucesso!'
+    })
+    history.push('/')
+  }, [signOut, addToast, history])
 
   return (
     <div className="page-header">
@@ -118,7 +118,7 @@ const Header: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header
