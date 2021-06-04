@@ -1,4 +1,4 @@
-export function numericMask(value: string) {
+export function numericMask(value: string): string {
   if (!value) {
     let newvalue = value?.replace(/\D/g, '')
     newvalue = newvalue?.replace(/(\d{2})$/, ',$1')
