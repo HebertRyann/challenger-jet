@@ -3,8 +3,10 @@ import { NewSelect } from '../../../../../../../../../../components/NewSelect'
 import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent'
 import { useTabCreate } from '../../../../../providers/tabsProvider'
 import { LoadTaxSituations } from '../../../../../../domain/useCases/FIscal/TaxSituations/Load'
-import { LoadNatureOperations } from '../../../../../../domain/useCases/FIscal/NatureOperations/Load'
 import { useTabs } from '../../../../../../../../../../hooks/tabs'
+
+export const labelFiscalConfins = 'Confins'
+export const nameFiscalConfins = '@@tabs-fiscal-cofins'
 
 type TypeConfins = {
   taxSituationsLoader: LoadTaxSituations
@@ -21,7 +23,7 @@ export const Confins = ({ taxSituationsLoader }: TypeConfins): JSX.Element => {
   const [loadingData, setLoadingData] = useState(false)
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const curretTab = loadCurrentTab()
       if (curretTab.key === nameFiscalConfins && taxSituations.length < 1) {
         setLoadingData(true)
@@ -30,7 +32,7 @@ export const Confins = ({ taxSituationsLoader }: TypeConfins): JSX.Element => {
         setLoadingData(false)
       }
     })()
-  }, [loadCurrentTab()])
+  }, [loadCurrentTab, taxSituations.length, taxSituationsLoader])
 
   return (
     <div className="row">
@@ -51,6 +53,7 @@ export const Confins = ({ taxSituationsLoader }: TypeConfins): JSX.Element => {
         >
           {taxSituations.map(({ id, code, descriptions }) => (
             <option
+              key={Math.random()}
               value={`${id}+${code}`}
             >{`${code} - ${descriptions}`}</option>
           ))}
@@ -59,6 +62,3 @@ export const Confins = ({ taxSituationsLoader }: TypeConfins): JSX.Element => {
     </div>
   )
 }
-
-export const labelFiscalConfins = 'Confins'
-export const nameFiscalConfins = '@@tabs-fiscal-cofins'

@@ -9,6 +9,9 @@ type TypeIpi = {
   taxSituationsLoader: LoadTaxSituations
 }
 
+export const nameFiscalIpi = '@@tabs-fiscal-ipi'
+export const labelFiscalIpi = 'IPI'
+
 export const Ipi = ({ taxSituationsLoader }: TypeIpi): JSX.Element => {
   const { loadCurrentTab } = useTabs()
   const [taxSituations, setTaxSituations] = useState<
@@ -17,7 +20,7 @@ export const Ipi = ({ taxSituationsLoader }: TypeIpi): JSX.Element => {
   const [loadingData, setLoadingData] = useState(false)
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const curretTab = loadCurrentTab()
       if (curretTab.key === nameFiscalIpi && taxSituations.length < 1) {
         setLoadingData(true)
@@ -26,7 +29,7 @@ export const Ipi = ({ taxSituationsLoader }: TypeIpi): JSX.Element => {
         setLoadingData(false)
       }
     })()
-  }, [loadCurrentTab()])
+  }, [loadCurrentTab, taxSituations.length, taxSituationsLoader])
 
   const { fiscal } = useTabCreate()
   const { changeIpiTaxeIssue } = fiscal.setData
@@ -50,6 +53,7 @@ export const Ipi = ({ taxSituationsLoader }: TypeIpi): JSX.Element => {
         >
           {taxSituations.map(({ id, code, descriptions }) => (
             <option
+              key={Math.random()}
               value={`${id}+${code}`}
             >{`${code} - ${descriptions}`}</option>
           ))}
@@ -58,6 +62,3 @@ export const Ipi = ({ taxSituationsLoader }: TypeIpi): JSX.Element => {
     </div>
   )
 }
-
-export const nameFiscalIpi = '@@tabs-fiscal-ipi'
-export const labelFiscalIpi = 'IPI'

@@ -5,6 +5,9 @@ import { useTabCreate } from '../../../../../providers/tabsProvider'
 import { useTabs } from '../../../../../../../../../../hooks/tabs'
 import { LoadTaxSituations } from '../../../../../../domain/useCases/FIscal/TaxSituations/Load'
 
+export const nameFiscalPis = '@@tabs-fiscal-pis'
+export const labelFiscalPis = 'Pis'
+
 type TypePis = {
   taxSituationsLoader: LoadTaxSituations
 }
@@ -17,7 +20,7 @@ export const Pis = ({ taxSituationsLoader }: TypePis): JSX.Element => {
   const [loadingData, setLoadingData] = useState(false)
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const curretTab = loadCurrentTab()
       if (curretTab.key === nameFiscalPis && taxSituations.length < 1) {
         setLoadingData(true)
@@ -26,7 +29,7 @@ export const Pis = ({ taxSituationsLoader }: TypePis): JSX.Element => {
         setLoadingData(false)
       }
     })()
-  }, [loadCurrentTab()])
+  }, [loadCurrentTab, taxSituations.length, taxSituationsLoader])
 
   const { fiscal } = useTabCreate()
   const { changePisTaxeIssue } = fiscal.setData
@@ -50,6 +53,7 @@ export const Pis = ({ taxSituationsLoader }: TypePis): JSX.Element => {
         >
           {taxSituations.map(({ id, code, descriptions }) => (
             <option
+              key={Math.random()}
               value={`${id}+${code}`}
             >{`${code} - ${descriptions}`}</option>
           ))}
@@ -58,6 +62,3 @@ export const Pis = ({ taxSituationsLoader }: TypePis): JSX.Element => {
     </div>
   )
 }
-
-export const nameFiscalPis = '@@tabs-fiscal-pis'
-export const labelFiscalPis = 'Pis'

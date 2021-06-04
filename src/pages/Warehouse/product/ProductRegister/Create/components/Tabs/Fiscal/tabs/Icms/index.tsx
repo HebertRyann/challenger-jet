@@ -6,6 +6,9 @@ import { LoadNatureOperations } from '../../../../../../domain/useCases/FIscal/N
 import { useTabs } from '../../../../../../../../../../hooks/tabs'
 import { LoadTaxSituations } from '../../../../../../domain/useCases/FIscal/TaxSituations/Load'
 
+export const nameFiscalIcms = '@@tabs-fiscal-icms'
+export const labelFiscalIcms = 'ICMS'
+
 type TypeIcms = {
   natureOperationsLoader: LoadNatureOperations
   taxSituationsLoader: LoadTaxSituations
@@ -31,7 +34,7 @@ export const Icms = ({
   const { typeSelectProdut } = overview.getData()
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const curretTab = loadCurrentTab()
       if (
         curretTab.key === nameFiscalIcms &&
@@ -45,10 +48,15 @@ export const Icms = ({
         setLoadingData(false)
       }
     })()
-  }, [loadCurrentTab(), typeSelectProdut])
+  }, [
+    loadCurrentTab,
+    natureOperations.length,
+    natureOperationsLoader,
+    typeSelectProdut
+  ])
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const curretTab = loadCurrentTab()
       if (
         curretTab.key === nameFiscalIcms &&
@@ -62,7 +70,12 @@ export const Icms = ({
         setLoadingData(false)
       }
     })()
-  }, [loadCurrentTab(), typeSelectProdut])
+  }, [
+    loadCurrentTab,
+    taxSituations.length,
+    taxSituationsLoader,
+    typeSelectProdut
+  ])
 
   return (
     <div className="row">
@@ -83,6 +96,7 @@ export const Icms = ({
         >
           {taxSituations.map(({ id, code, descriptions }) => (
             <option
+              key={Math.random()}
               value={`${id}+${code}`}
             >{`${code} - ${descriptions}`}</option>
           ))}
@@ -100,13 +114,13 @@ export const Icms = ({
           error={icms.origem.error}
         >
           {natureOperations.map(({ id, name }) => (
-            <option value={`${id}+${name}`}>{`${name}`}</option>
+            <option
+              key={Math.random()}
+              value={`${id}+${name}`}
+            >{`${name}`}</option>
           ))}
         </NewSelect>
       </div>
     </div>
   )
 }
-
-export const nameFiscalIcms = '@@tabs-fiscal-icms'
-export const labelFiscalIcms = 'ICMS'
