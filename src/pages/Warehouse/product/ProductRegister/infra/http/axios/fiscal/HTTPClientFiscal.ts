@@ -13,7 +13,8 @@ export class HTTPClientFiscal
     HttpClientLoadNCM,
     HttpClientLoadCFOP,
     HttpClientLoadTaxSituations,
-    HttpClientLoadNatureOperations {
+    HttpClientLoadNatureOperations
+{
   constructor(
     private readonly baseUrlLoadersFiscal: {
       taxeSituation: string

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import * as Yup from 'yup'
 import api from '../../../../../../services/api'
@@ -195,20 +196,28 @@ export const FormCategory = ({
         }
       }
     },
-    [addToast, history]
+    [
+      activeLoading,
+      addToast,
+      disableLoading,
+      history,
+      isOpenInModal,
+      typeForm,
+      updateDataTable
+    ]
   )
 
   useEffect(() => {
     if (typeForm !== 'create') {
       setInputValue(typeForm.inputValue)
     }
-  }, [])
+  }, [typeForm])
 
   const handleChangeInputValue = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setInputValue(event.currentTarget.value)
     },
-    [inputValue]
+    []
   )
 
   return (

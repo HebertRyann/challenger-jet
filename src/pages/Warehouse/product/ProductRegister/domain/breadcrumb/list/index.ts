@@ -1,4 +1,3 @@
-import { nameActionPageMain } from '../../info'
 import { TypeBreadcrumb } from '../index'
 
 export const breadcrumbList: TypeBreadcrumb[] = [

@@ -12,12 +12,8 @@ export const formatProductTypeToLowerCase = (
     | typeof RE_SALE
     | typeof LOCATION
     | typeof CONSUMER
-) => {
-  return product.name.replace(' ', '-').toLowerCase()
-}
-
-const formatProductTypeUppercase = (product: string) => {
-  return product.replace('-', ' ').toLocaleLowerCase()
+): string => {
+  return product?.name?.replace(' ', '-')?.toLowerCase()
 }
 
 export const RAW_MATERIAL: TypeProduct = {
