@@ -17,12 +17,12 @@ interface DropdownInputProps<T>
 export const DropdownInput = <
   T extends { id: string; name: string; parent_id: string | null }
 >({
-    label,
-    data,
-    onChangeCurrentRow,
-    error,
-    ...props
-  }: DropdownInputProps<T>): JSX.Element => {
+  label,
+  data,
+  onChangeCurrentRow,
+  error,
+  ...props
+}: DropdownInputProps<T>): JSX.Element => {
   const inputRef = useRef<HTMLDivElement>(null)
   const [inputValues, setInputValue] = useState<T[]>(data)
   const [isActiveInput, setIsActiveInput] = useState(false)
@@ -49,21 +49,15 @@ export const DropdownInput = <
     setInputValue(data)
   }, [data])
 
-  const handleClickRow = useCallback(
-    (value: T) => {
-      setSelectItem(value)
-      if (onChangeCurrentRow) onChangeCurrentRow(value)
-      setIsActiveInput(false)
-    },
-    [selectItem, isActiveInput]
-  )
+  const handleClickRow = (value: T) => {
+    setSelectItem(value)
+    if (onChangeCurrentRow) onChangeCurrentRow(value)
+    setIsActiveInput(false)
+  }
 
-  const handlerChangeInput = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setInputSearch(event.target.value)
-    },
-    [inputSearch, inputValues]
-  )
+  const handlerChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputSearch(event.target.value)
+  }
 
   const isParent = (id: string): boolean => {
     return inputValues.filter(({ parent_id }) => parent_id === id).length === 0

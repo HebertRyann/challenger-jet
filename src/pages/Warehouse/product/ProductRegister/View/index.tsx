@@ -19,7 +19,7 @@ import {
 } from '../domain/tools'
 import { Content } from './Content'
 import { TabsProvider } from '../../../../../hooks/tabs'
-import { ProductProvider, useProduct } from './provider/productProvider'
+import { ProductProvider } from './provider/productProvider'
 import { ProductResponse } from './domain/response/productResponse'
 import { Wrapper } from './styles'
 interface ProductCategorytData {
@@ -37,19 +37,11 @@ const ProductAtributesView: React.FC = () => {
   const { updateDataTable } = useUpdateDataTable()
 
   const { addToast } = useToast()
-  const [alert, setIsActiveAlert] = useState<{
-    isActive: boolean
-    id: number
-    name: string
-  }>({
-    id: 0,
-    isActive: false,
-    name: ''
-  })
 
-  const [currentItemUpdate, setCurrentItemUpdate] =
-    useState<ProductCategorytData>({} as ProductCategorytData)
-  const { setProduct, getProduct } = useProduct()
+  const [currentItemUpdate] = useState<ProductCategorytData>(
+    {} as ProductCategorytData
+  )
+  const [product, setProduct] = useState<ProductResponse>()
   const [modalEdit, setModalEdit] = useState(false)
   const [modalCreate, setModalCreate] = useState(false)
 
@@ -57,7 +49,7 @@ const ProductAtributesView: React.FC = () => {
     setModalCreate(false)
     setModalEdit(false)
     updateDataTable()
-  }, [modalCreate, modalEdit])
+  }, [updateDataTable])
 
   const refModal = useRef(null)
   const { disableLoading, activeLoading } = useLoading()
@@ -65,74 +57,44 @@ const ProductAtributesView: React.FC = () => {
   useEffect(() => {
     async function loadCategory(): Promise<void> {
       activeLoading()
+
+      // try {
+
       try {
         const response = await api.get<ProductResponse>(
           apiList(location.state.id)
         )
         const { data } = response
+        // setProduct(data)
         setProduct(data)
-        disableLoading()
-      } catch (err) {
-        disableLoading()
-        addToast({
-          type: 'error',
-          title: 'Error ao carregar a categoria',
-          description:
-            'Houve um error ao carregar a categoria, tente novamente mais tarde!'
-        })
+        console.log(response)
+      } catch (error) {
+        console.error(error)
       }
+
+      //   console.log(response)
+      //   const { data } = response
+      //   setProduct(data)
+      //   disableLoading()
+      // } catch (err) {
+      //   disableLoading()
+      //   addToast({
+      //     type: 'error',
+      //     title: 'Error ao carregar a categoria',
+      //     description:
+      //       'Houve um error ao carregar a categoria, tente novamente mais tarde!'
+      //   })
+      // }
+      disableLoading()
     }
     loadCategory()
-  }, [id, addToast])
-
-  const handlerClickButtonCancellAlert = useCallback(() => {
-    setIsActiveAlert({
-      id: 0,
-      isActive: false,
-      name: ''
-    })
-    addToast({
-      type: 'info',
-      title: 'Operação cancelada.'
-    })
-  }, [alert])
-
-  const handlerClickButtonConfirmAlert = useCallback(
-    async (id: string) => {
-      try {
-        await api.delete(apiDelete(id))
-        setIsActiveAlert({
-          id: 0,
-          isActive: false,
-          name: ''
-        })
-        addToast({
-          type: 'success',
-          title: 'Produto removido com sucesso.'
-        })
-      } catch (err) {
-        setIsActiveAlert({
-          id: 0,
-          isActive: false,
-          name: ''
-        })
-        addToast({
-          type: 'error',
-          title: 'O produto não removido, pois ainda está sendo usada.'
-        })
-      }
-    },
-    [alert]
-  )
+  }, [activeLoading, disableLoading, location.state.id])
 
   const [alertRemoveParent, setAlertRemoveParent] = useState(false)
 
-  const handleOnClickRemoveParent = useCallback(
-    ({ id, name }: { id: string; name: string }) => {
-      setAlertRemoveParent(true)
-    },
-    [alertRemoveParent]
-  )
+  const handleOnClickRemoveParent = () => {
+    setAlertRemoveParent(true)
+  }
 
   const handlerOnClickButtonConfirmRemoveParent = useCallback(
     async (id: number) => {
@@ -152,14 +114,12 @@ const ProductAtributesView: React.FC = () => {
         })
       }
     },
-    [alertRemoveParent]
+    [addToast, history]
   )
 
   const handlerOnClickButtonCancelRemoveParent = useCallback(() => {
     setAlertRemoveParent(false)
   }, [])
-
-  const product = getProduct()
 
   return (
     <Wrapper>
@@ -170,10 +130,7 @@ const ProductAtributesView: React.FC = () => {
         tools={[
           toolsViewUpdate(String(id)),
           toolsViewDelete(() => {
-            handleOnClickRemoveParent({
-              id: String(product?.id),
-              name: String(product?.name)
-            })
+            handleOnClickRemoveParent()
           }),
           toolsViewCreate(),
           toolsViewList()
@@ -186,7 +143,7 @@ const ProductAtributesView: React.FC = () => {
                 <label htmlFor="id" className="control-label">
                   Cód.
                 </label>
-                <p>{product.id}</p>
+                <p>{product?.id}</p>
               </div>
             </div>
             <div className="col-md-3">
@@ -194,7 +151,7 @@ const ProductAtributesView: React.FC = () => {
                 <label htmlFor="name" className="control-label">
                   Nome
                 </label>
-                <p>{product.name}</p>
+                <p>{product?.name}</p>
               </div>
             </div>
             <div className="col-md-3">
@@ -202,7 +159,7 @@ const ProductAtributesView: React.FC = () => {
                 <label htmlFor="created" className="control-label">
                   Cadastrado em
                 </label>
-                <p>{product.created_at}</p>
+                <p>{product?.created_at}</p>
               </div>
             </div>
             <div className="col-md-3">
@@ -210,7 +167,7 @@ const ProductAtributesView: React.FC = () => {
                 <label htmlFor="updated" className="control-label">
                   Atualizado em
                 </label>
-                <p>{product.updated_at}</p>
+                <p>{product?.updated_at}</p>
               </div>
             </div>
           </div>
@@ -223,7 +180,7 @@ const ProductAtributesView: React.FC = () => {
                 <p>
                   {product?.type?.toLocaleUpperCase() === 'CONSUMO'
                     ? 'USO E CONSUMO'
-                    : product.type}
+                    : product?.type}
                 </p>
               </div>
             </div>
@@ -240,7 +197,7 @@ const ProductAtributesView: React.FC = () => {
                 <label htmlFor="created" className="control-label">
                   Categoria de custo
                 </label>
-                <p>{product.financial_category?.name}</p>
+                <p>{product?.financial_category?.name}</p>
               </div>
             </div>
             <div className="col-md-3">
@@ -248,7 +205,7 @@ const ProductAtributesView: React.FC = () => {
                 <label htmlFor="updated" className="control-label">
                   Subcategoria custo
                 </label>
-                <p>{product.subfinancial_category?.name}</p>
+                <p>{product?.subfinancial_category?.name}</p>
               </div>
             </div>
           </div>
@@ -308,7 +265,7 @@ const ProductAtributesView: React.FC = () => {
   )
 }
 
-const ProductHOC = () => (
+const ProductHOC = (): JSX.Element => (
   <ProductProvider>
     <ProductAtributesView />
   </ProductProvider>

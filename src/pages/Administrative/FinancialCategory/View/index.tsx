@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useParams, useLocation, useHistory } from 'react-router-dom'
 import { FormCategory } from '../components/Form'
 import Container from '../../../../components/Container'
@@ -61,23 +61,21 @@ const ProductAtributesView: React.FC = () => {
   const [modalEdit, setModalEdit] = useState(false)
   const [modalCreate, setModalCreate] = useState(false)
 
-  const handleClickOnClose = useCallback(() => {
+  const handleClickOnClose = () => {
     setModalCreate(false)
     setModalEdit(false)
     updateDataTable()
-  }, [modalCreate, modalEdit])
+  }
+  const handlerOnClickButtonEditInCurrentRow = (
+    currentValue: ProductCategorytData
+  ) => {
+    setCurrentItemUpdate(currentValue)
+    setModalEdit(true)
+  }
 
-  const handlerOnClickButtonEditInCurrentRow = useCallback(
-    (currentValue: ProductCategorytData) => {
-      setCurrentItemUpdate(currentValue)
-      setModalEdit(true)
-    },
-    [currentItemUpdate, modalEdit]
-  )
-
-  const handleClickOnOpenModalCreate = useCallback(() => {
+  const handleClickOnOpenModalCreate = () => {
     setModalCreate(true)
-  }, [modalCreate])
+  }
 
   const refModal = useRef(null)
   const { disableLoading, activeLoading } = useLoading()
@@ -103,16 +101,16 @@ const ProductAtributesView: React.FC = () => {
       }
     }
     loadCategory()
-  }, [id, addToast])
+  }, [activeLoading, addToast, disableLoading, location.state.id])
 
-  const handlerOnClickButtonRemoveInCurrentRow = useCallback(
-    ({ id, name }: ProductCategorytData) => {
-      setIsActiveAlert({ id, name, isActive: true })
-    },
-    [alert]
-  )
+  const handlerOnClickButtonRemoveInCurrentRow = ({
+    id,
+    name
+  }: ProductCategorytData) => {
+    setIsActiveAlert({ id, name, isActive: true })
+  }
 
-  const handlerClickButtonCancellAlert = useCallback(() => {
+  const handlerClickButtonCancellAlert = () => {
     setIsActiveAlert({
       id: 0,
       isActive: false,
@@ -122,69 +120,60 @@ const ProductAtributesView: React.FC = () => {
       type: 'info',
       title: 'Operação cancelada.'
     })
-  }, [alert])
+  }
 
-  const handlerClickButtonConfirmAlert = useCallback(
-    async (id: string) => {
-      try {
-        await api.delete(apiDelete(id))
-        setIsActiveAlert({
-          id: 0,
-          isActive: false,
-          name: ''
-        })
-        addToast({
-          type: 'success',
-          title: 'Atributo removido com sucesso.'
-        })
-      } catch (err) {
-        setIsActiveAlert({
-          id: 0,
-          isActive: false,
-          name: ''
-        })
-        addToast({
-          type: 'error',
-          title: 'Atributo não removido, pois ainda está sendo usada.'
-        })
-      }
-    },
-    [alert]
-  )
+  const handlerClickButtonConfirmAlert = async (id: string) => {
+    try {
+      await api.delete(apiDelete(id))
+      setIsActiveAlert({
+        id: 0,
+        isActive: false,
+        name: ''
+      })
+      addToast({
+        type: 'success',
+        title: 'Atributo removido com sucesso.'
+      })
+    } catch (err) {
+      setIsActiveAlert({
+        id: 0,
+        isActive: false,
+        name: ''
+      })
+      addToast({
+        type: 'error',
+        title: 'Atributo não removido, pois ainda está sendo usada.'
+      })
+    }
+  }
 
   const [alertRemoveParent, setAlertRemoveParent] = useState(false)
 
-  const handleOnClickRemoveParent = useCallback(
-    ({ id, name }: { id: string; name: string }) => {
-      setAlertRemoveParent(true)
-    },
-    [alertRemoveParent]
-  )
+  const handleOnClickRemoveParent = () => {
+    setAlertRemoveParent(true)
+  }
 
-  const handlerOnClickButtonConfirmRemoveParent = useCallback(
-    async (id: number) => {
-      try {
-        await api.delete(apiDelete(String(id)))
-        setAlertRemoveParent(false)
-        addToast({
-          type: 'success',
-          title: 'Atributo removido com sucesso.'
-        })
-        history.goBack()
-      } catch (err) {
-        setAlertRemoveParent(false)
-        addToast({
-          type: 'error',
-          title: 'Atributo não removido, pois ainda está sendo usada.'
-        })
-      }
-    },
-    [alertRemoveParent]
-  )
+  const handlerOnClickButtonConfirmRemoveParent = async (id: number) => {
+    try {
+      await api.delete(apiDelete(String(id)))
+      setAlertRemoveParent(false)
+      addToast({
+        type: 'success',
+        title: 'Atributo removido com sucesso.'
+      })
+      history.goBack()
+    } catch (err) {
+      setAlertRemoveParent(false)
+      addToast({
+        type: 'error',
+        title: 'Atributo não removido, pois ainda está sendo usada.'
+      })
+    }
+  }
 
-  const handlerOnClickButtonCancelRemoveParent = useCallback(() => {
+  const handlerOnClickButtonCancelRemoveParent = () => {
     setAlertRemoveParent(false)
-  }, [])
+  }
 
   return (
     <>
@@ -195,10 +184,7 @@ const ProductAtributesView: React.FC = () => {
         tools={[
           toolsViewUpdate(String(id)),
           toolsViewDelete(() => {
-            handleOnClickRemoveParent({
-              id: String(productCategory?.id),
-              name: String(productCategory?.name)
-            })
+            handleOnClickRemoveParent()
           }),
           toolsViewCreate(),
           toolsViewList()

@@ -9,6 +9,9 @@ import { useProduct } from '../../../provider/productProvider'
 import { Container } from './style'
 import { useTabs } from '../../../../../../../../hooks/tabs'
 
+export const labelPriceComposition = 'Formação de preço'
+export const namePriceComposition = '@@tabs-view-PriceComposition'
+
 export const PriceComposition = (): JSX.Element => {
   const { getProduct } = useProduct()
   const { price_composition } = getProduct()
@@ -28,7 +31,7 @@ export const PriceComposition = (): JSX.Element => {
     ) {
       activeTab(namePriceComposition)
     }
-  }, [getProduct()])
+  }, [activeTab, getProduct])
 
   return (
     <Container>
@@ -59,6 +62,3 @@ export const PriceComposition = (): JSX.Element => {
     </Container>
   )
 }
-
-export const labelPriceComposition = 'Formação de preço'
-export const namePriceComposition = '@@tabs-view-PriceComposition'
