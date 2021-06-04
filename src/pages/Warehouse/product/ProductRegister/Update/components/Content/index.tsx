@@ -34,7 +34,7 @@ import { SEMI_FINISHED, SALE, RE_SALE } from '../../domain/products';
 import { nameHasComposition } from '../Tabs/HasComposition';
 import { namePriceComposition } from '../Tabs/PriceComposition';
 import { nameFiscal } from '../Tabs/Fiscal';
-import { nameHasVariation } from '../../../View/Content/tabs/HasVariation';
+import { nameHasVariation } from '../../components/Tabs/HasVariation';
 import { nameStock } from '../Tabs/Stock';
 
 export type TypeContentTabs = {
@@ -222,7 +222,17 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
 
       let hasVariation = false;
 
-      if (data.stocks.length > 1) {
+      data.stocks.map(currentStock => {
+        if (
+          currentStock?.atributes !== '' &&
+          currentStock?.atributes !== '[]'
+        ) {
+          hasVariation = true;
+          return;
+        }
+      });
+
+      if (hasVariation) {
         activeTab(nameHasVariation);
         disableTab(nameStock);
         data.stocks.map(
@@ -276,10 +286,6 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
       } else {
         addStock({
           id: data.stocks[0]?.id.toString(),
-          // stockCurrent: {
-          //   error: { isError: false },
-          //   value: data.stocks[0].current_stock.toString(),
-          // },
           priceCost: {
             error: { isError: false },
             value: '0',
