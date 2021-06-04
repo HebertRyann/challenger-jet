@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Container, IconRemove } from './style';
+import React from 'react';
+import { Container, IconRemove, Td, Th } from './style';
 import { NewInput } from '../../../../../../../../../../components/NewInput';
 import { NewSelect } from '../../../../../../../../../../components/NewSelect';
 import { useTabCreate } from '../../../../../providers/tabsProvider';
@@ -66,22 +66,8 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
             </th>
 
             {atributesList.map(
-              ({ name, parent_id }) =>
-                parent_id === null && (
-                  <th
-                    style={
-                      isTypeSaleOrResale()
-                        ? {
-                            position: 'relative',
-                            lineHeight: '50px',
-                          }
-                        : {}
-                    }
-                    rowSpan={isTypeSaleOrResale() ? 2 : 1}
-                  >
-                    {name}
-                  </th>
-                ),
+              ({ name, parent_id, isChecked }) =>
+                parent_id === null && <Th active={isChecked}>{name}</Th>,
             )}
             {/* <th
               style={
@@ -96,41 +82,21 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
             >
               Estoque atual
             </th> */}
-            <th
-              style={
-                isTypeSaleOrResale()
-                  ? {
-                      position: 'relative',
-                      lineHeight: '50px',
-                    }
-                  : {}
-              }
-              rowSpan={isTypeSaleOrResale() ? 2 : 1}
-            >
+            <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
               <TooltipComponent
                 label="Reposição de estoque"
                 message="Reposição de estoque"
                 bold
               />
-            </th>
+            </Th>
             {isTypeSaleOrResale() ? (
               <th align="center" style={{ textAlign: 'center' }} colSpan={2}>
                 Preço
               </th>
             ) : null}
-            <th
-              style={
-                isTypeSaleOrResale()
-                  ? {
-                      position: 'relative',
-                      lineHeight: '50px',
-                    }
-                  : {}
-              }
-              rowSpan={isTypeSaleOrResale() ? 2 : 1}
-            >
+            <Th isTypeSaleOrResale={isTypeSaleOrResale()} active>
               Ações
-            </th>
+            </Th>
           </tr>
           {isTypeSaleOrResale() && (
             <tr>
@@ -171,9 +137,12 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                 </td>
                 <>
                   {atributesList.map(
-                    ({ parent_id, childrenList, id }, indexAtribute) =>
+                    (
+                      { parent_id, childrenList, id, isChecked },
+                      indexAtribute,
+                    ) =>
                       parent_id === null && (
-                        <td key={Math.random()}>
+                        <Td active={isChecked} key={Math.random()}>
                           <NewSelect
                             className="form-control"
                             name="Selecione"
@@ -210,7 +179,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                               </option>
                             ))}
                           </NewSelect>
-                        </td>
+                        </Td>
                       ),
                   )}
                   {/* <td>

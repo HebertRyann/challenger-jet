@@ -76,10 +76,7 @@ export const HasVariation = ({
         </div>
       </Container>
       <div className="row">
-        <Table
-          unitMensuredList={unitMensureds}
-          atributes={atributesList.filter(({ isChecked }) => isChecked)}
-        />
+        <Table unitMensuredList={unitMensureds} atributes={atributesList} />
       </div>
     </>
   );
