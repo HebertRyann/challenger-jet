@@ -31,7 +31,8 @@ const ProductAtributeUpdate = (): JSX.Element => {
       disableLoading()
     }
     loadData()
-  }, [])
+  }, [activeLoading, disableLoading, id])
+
   return (
     <Container
       pageTitle={namePageTitle}
