@@ -20,6 +20,7 @@ import {
   initialStatePriceComposition,
   initialStateStock,
   intialStateHasVariation,
+  initialStateCheckbox,
 } from './initialStates';
 import { labelDetails, nameDetails } from '../components/Tabs/Details';
 import { labelFiscal, nameFiscal } from '../components/Tabs/Fiscal';
@@ -62,11 +63,10 @@ import {
   CompositionRequest,
   AtributesList,
   TypeGenericValueWithError,
+  CheckBoxProvider,
+  TypeCheckBox,
 } from './domain.types';
-import {
-  convertValueMaskInNumber,
-  convertValueWithMaskInNumber,
-} from '../../../../../../utlis/mask';
+import { convertValueWithMaskInNumber } from '../../../../../../utlis/mask';
 import { useAuth } from '../../../../../../hooks/auth';
 interface TabCreateContext {
   overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps>;
@@ -78,6 +78,7 @@ interface TabCreateContext {
   variation: TypeGetAndSetHasVariation<TypeHasVariation[]>;
   validation: TypeValitionResolve;
   save: () => Promise<ResultOnSaveProdut>;
+  checkbox: CheckBoxProvider;
 }
 
 const TabCreateContext = createContext<TabCreateContext>(
@@ -114,6 +115,8 @@ const TabCreateProvider = ({
   const [variationState, setVariationState] = useState<TypeHasVariation[]>(
     intialStateHasVariation,
   );
+
+  const [checkBoxState, setCheckBoxState] = useState(initialStateCheckbox);
 
   const setDataOverView = (newOverView: TypeDataOverViewProps) =>
     setOverView(newOverView);
@@ -1011,7 +1014,7 @@ const TabCreateProvider = ({
       width,
       measure,
       thickness,
-      measureWeight
+      measureWeight,
     } = detail;
     const {
       priceCost,
@@ -1187,6 +1190,25 @@ const TabCreateProvider = ({
     };
   };
 
+  const addCheckBox = (checkboxs: TypeCheckBox[]) => {
+    setCheckBoxState([...checkboxs]);
+  };
+
+  const loadCheckbox = () => checkBoxState;
+
+  const toggleCheckbox = (index: number) => {
+    setCheckBoxState(prevState => {
+      prevState[index].isChecked = !prevState[index].isChecked;
+      return prevState;
+    });
+  };
+
+  const checkbox: CheckBoxProvider = {
+    addCheckBox,
+    loadCheckbox,
+    toggleCheckbox,
+  };
+
   return (
     <TabCreateContext.Provider
       value={{
@@ -1199,6 +1221,7 @@ const TabCreateProvider = ({
         variation,
         validation: validation,
         save,
+        checkbox,
       }}
     >
       {children}
