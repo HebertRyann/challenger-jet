@@ -39,8 +39,11 @@ export const FormCategory = ({
   const formRef = useRef<FormHandles>(null)
   const { addToast } = useToast()
   const history = useHistory()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [id, setId] = useState<any>(0)
   const { updateDataTable } = useUpdateDataTable()
+  const [inputValue, setInputValue] = useState<string>('')
+
   useEffect(() => {
     if (valueInput !== undefined) {
       setInputValue(valueInput)
@@ -192,24 +195,28 @@ export const FormCategory = ({
         }
       }
     },
-    [addToast, history]
+    [
+      activeLoading,
+      addToast,
+      disableLoading,
+      history,
+      isOpenInModal,
+      typeForm,
+      updateDataTable
+    ]
   )
-
-  const [inputValue, setInputValue] = useState<string>('')
 
   useEffect(() => {
     if (typeForm !== 'create') {
       setInputValue(typeForm.inputValue)
     }
-  }, [])
+  }, [typeForm])
 
-  const handleChangeInputValue = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setInputValue(event.currentTarget.value)
-    },
-    [inputValue]
-  )
-
+  const handleChangeInputValue = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setInputValue(event.currentTarget.value)
+  }
   return (
     <FormComponent formRef={formRef} onSubmitForm={onSubmitForm}>
       <>
