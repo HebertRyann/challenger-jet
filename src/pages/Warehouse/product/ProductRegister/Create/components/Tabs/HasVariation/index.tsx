@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Container } from './styles';
 import { ResponseEntiryWithIdNameWithChildren } from '../../../services/api';
 import { Table } from './component/Table';
@@ -26,25 +26,23 @@ export const HasVariation = ({
   unitMensureds,
   atributes,
 }: TypeHasVariationProps): JSX.Element => {
+  const { checkbox } = useTabCreate();
   const { variation } = useTabCreate();
   const { addAtributes, removeAtributes } = variation.setData;
-  const [atributesList, setAtributesList] = useState<
-    ResponseEntiryWithIdNameWithChildren[]
-  >(atributes);
+  const atributesList = checkbox.loadCheckbox();
+  useEffect(() => {
+    checkbox.addCheckBox(atributes);
+  }, []);
 
-  const handlerClickCheckBox = useCallback(
-    (index: number) => {
-      atributesList[index].isChecked = !atributesList[index].isChecked;
-      setAtributesList([...atributesList]);
-      removeAtributes();
-      atributesList
-        .filter(({ isChecked }) => isChecked)
-        .map(() => {
-          addAtributes();
-        });
-    },
-    [atributesList, variation.getData()],
-  );
+  const handlerClickCheckBox = (index: number) => {
+    checkbox.toggleCheckbox(index);
+    removeAtributes();
+    atributesList
+      .filter(({ isChecked }) => isChecked)
+      .map(() => {
+        addAtributes();
+      });
+  };
 
   return (
     <>
