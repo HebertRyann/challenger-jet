@@ -54,11 +54,10 @@ const DataTable = ({
   format
 }: DataTableProps): JSX.Element => {
   const [items, setItems] = useState<any[]>([])
+  const [filterItems, setFilterItems] = useState([])
   const [totalItems, setTotalItems] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const [ItemsPerPage, setItemsPerPage] = useState(50)
-  // const [search, setSearch] = useState('')
-  // const [sorting, setSorting] = useState({ field: '', order: '' })
   const history = useHistory()
 
   const handlerOnClickButtonList = (currentValue: any) => {
@@ -111,6 +110,7 @@ const DataTable = ({
         const params = loadParams()
         const response = await api.get('dataTable', { params })
         setItems(response.data.items)
+        setFilterItems(response.data.items)
         setTotalItems(response.data.totalItens)
         setCurrentPage(response.data.page)
       } catch (error) {
@@ -142,8 +142,18 @@ const DataTable = ({
   }
 
   const onSearchItem = (value: string) => {
-    console.log(value)
-    console.log(format)
+    if (value.length === 0) {
+      setItems(filterItems)
+      return
+    }
+    if (items && items.length > 0) {
+      const itemsFilter = items.filter(({ name }) =>
+        name.toLowerCase().includes(value.toLowerCase())
+      )
+      setItems(itemsFilter)
+      return
+    }
+    setItems(filterItems)
   }
 
   return (
@@ -168,12 +178,7 @@ const DataTable = ({
           <div className="dataTables_filter">
             <label>
               Pesquisar
-              <Search
-                onSearch={value => {
-                  onSearchItem(value)
-                  setCurrentPage(1)
-                }}
-              />
+              <Search onSearch={value => onSearchItem(value)} />
             </label>
           </div>
         </div>
