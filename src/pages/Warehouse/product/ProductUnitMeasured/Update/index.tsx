@@ -32,7 +32,8 @@ const ProductUnitMeasuredUpdate = (): JSX.Element => {
     }
 
     loadData()
-  }, [])
+  }, [activeLoading, disableLoading, id])
+
   return (
     <Container
       pageTitle={namePageTitle}

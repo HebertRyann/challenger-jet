@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, useLocation, useHistory } from 'react-router-dom'
 import Container from '../../../../../components/Container'
 import Tabs from '../../../../../components/Tabs'
@@ -84,9 +84,9 @@ const View = (): JSX.Element => {
     }
   }
 
-  const handlerOnClickButtonCancelRemoveParent = useCallback(() => {
+  const handlerOnClickButtonCancelRemoveParent = () => {
     setAlertRemoveParent(false)
-  }, [])
+  }
 
   return (
     <>
