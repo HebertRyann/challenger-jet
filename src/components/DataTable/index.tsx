@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../../services/api'
 import TableHeader from './Header'
@@ -35,7 +35,7 @@ interface DataTableProps {
   notHasChildren?: boolean
   onlyParent?: boolean
   searchParameters?: SearchParameters[]
-  format?: {
+  format: {
     orderBy: string
   }
 }
@@ -45,21 +45,20 @@ const DataTable = ({
   entity,
   source,
   notHasChildren,
-  format,
   onlyParent,
   headers = [
     { name: 'Data', field: 'created_at', sortable: true },
     { name: 'Descrição', field: 'descriptions', sortable: true }
   ],
   actions,
-  searchParameters
+  format
 }: DataTableProps): JSX.Element => {
   const [items, setItems] = useState<any[]>([])
   const [totalItems, setTotalItems] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const [ItemsPerPage, setItemsPerPage] = useState(50)
-  const [search, setSearch] = useState('')
-  const [sorting, setSorting] = useState({ field: '', order: '' })
+  // const [search, setSearch] = useState('')
+  // const [sorting, setSorting] = useState({ field: '', order: '' })
   const history = useHistory()
 
   const handlerOnClickButtonList = (currentValue: any) => {
@@ -90,38 +89,35 @@ const DataTable = ({
     }
   }
 
-  useEffect(() => {
-    const getData = async () => {
-      const response = await api.get('dataTable', {
-        params: {
-          entity,
-          source,
-          keyword: search,
-          page: currentPage,
-          perPage: ItemsPerPage,
-          orderByField: sorting.field,
-          orderBySort: sorting.order,
-          searchParameters,
-          orderBy: format?.orderBy,
-          onlyParent
-        }
-      })
-      setItems(response.data.items)
-      setTotalItems(response.data.totalItens)
-      setCurrentPage(response.data.page)
+  const loadParams = useCallback(() => {
+    const params = {
+      entity,
+      source,
+      keyword: '',
+      page: currentPage,
+      perPage: ItemsPerPage,
+      orderByField: '',
+      searchParameters: '',
+      onlyParent,
+      orderBy: format.orderBy
     }
-    getData()
-  }, [
-    entity,
-    source,
-    searchParameters,
-    currentPage,
-    search,
-    sorting,
-    ItemsPerPage,
-    format?.orderBy,
-    onlyParent
-  ])
+
+    return params
+  }, [ItemsPerPage, currentPage, entity, format, onlyParent, source])
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const params = loadParams()
+        const response = await api.get('dataTable', { params })
+        setItems(response.data.items)
+        setTotalItems(response.data.totalItens)
+        setCurrentPage(response.data.page)
+      } catch (error) {
+        console.error(error)
+      }
+    })()
+  }, [loadParams])
 
   const firstItem =
     totalItems === 0 ? totalItems : ItemsPerPage * (currentPage - 1) + 1
@@ -143,6 +139,11 @@ const DataTable = ({
       }
     }
     return sum
+  }
+
+  const onSearchItem = (value: string) => {
+    console.log(value)
+    console.log(format)
   }
 
   return (
@@ -169,7 +170,7 @@ const DataTable = ({
               Pesquisar
               <Search
                 onSearch={value => {
-                  setSearch(value)
+                  onSearchItem(value)
                   setCurrentPage(1)
                 }}
               />
@@ -181,7 +182,10 @@ const DataTable = ({
         <table className="dataTable table table-striped table-bordered table-hover dt-responsive dtr-inline">
           <TableHeader
             headers={headers}
-            onSorting={(field, order) => setSorting({ field, order })}
+            onSorting={() => {
+              const itemSorted = items.sort(() => -1)
+              setItems([...itemSorted])
+            }}
           />
           <tbody>
             {(items.length > 0 &&
