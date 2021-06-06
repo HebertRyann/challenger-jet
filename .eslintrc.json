@@ -26,6 +26,7 @@
     "prettier"
   ],
   "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": "error",
     "@typescript-eslint/no-namespace": "off",
     "brace-style": "off",
     "indent": "off",

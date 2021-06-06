@@ -7,7 +7,11 @@ interface DataTableContext {
 
 const DataTableContext = createContext<DataTableContext>({} as DataTableContext)
 
-const DataTableProvider = ({ children }: { children: React.ReactNode }) => {
+const DataTableProvider = ({
+  children
+}: {
+  children: React.ReactNode
+}): JSX.Element => {
   const [isUpdated, setIsUpdate] = useState<boolean>(false)
 
   const updateDataTable = useCallback(() => {

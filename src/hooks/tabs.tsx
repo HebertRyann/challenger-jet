@@ -145,7 +145,7 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
   )
 }
 
-const useTabs = () => {
+const useTabs = (): TypeTabsContext => {
   const context = useContext(TabsContext)
 
   if (!context) {
