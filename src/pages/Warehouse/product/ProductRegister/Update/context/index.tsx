@@ -5,6 +5,8 @@ type TypeProductProvider = {
   children: JSX.Element
 }
 
-export const ProductProvider = ({ children }: TypeProductProvider) => {
+export const ProductProvider = ({
+  children
+}: TypeProductProvider): JSX.Element => {
   return <HasVariationProvider>{children}</HasVariationProvider>
 }

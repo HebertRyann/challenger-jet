@@ -63,10 +63,7 @@ import {
   AtributesList,
   TypeGenericValueWithError
 } from './domain.types'
-import {
-  convertValueMaskInNumber,
-  convertValueWithMaskInNumber
-} from '../../../../../../utlis/mask'
+import { convertValueWithMaskInNumber } from '../../../../../../utlis/mask'
 interface TabCreateContext {
   overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps>
   details: TypeGetAndSetAndValidateAba<TypeDetailsProps>
