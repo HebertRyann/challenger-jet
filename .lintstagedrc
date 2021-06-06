@@ -1,3 +1,0 @@
-{
-  "*.{ts, tsx}": ["eslint '*/**/*.{js,ts,tsx}' --quiet --fix", "git add"]
-}
