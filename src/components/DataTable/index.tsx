@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import api from '../../services/api'
@@ -7,6 +5,7 @@ import TableHeader from './Header'
 import Pagination from './Pagination'
 import Search from './Search'
 import '../../assets/global/plugins/datatables/datatables.min.css'
+import { LinkContainer } from './style'
 interface Action {
   name: string
   icon: string
@@ -119,13 +118,10 @@ const DataTable = ({
     currentPage,
     search,
     sorting,
-    ItemsPerPage
+    ItemsPerPage,
+    format?.orderBy,
+    onlyParent
   ])
-
-  useEffect(() => {
-    const result = items.sort(() => -1)
-    setItems([...result])
-  }, [sorting.order])
 
   const firstItem =
     totalItems === 0 ? totalItems : ItemsPerPage * (currentPage - 1) + 1
@@ -221,9 +217,10 @@ const DataTable = ({
                                   <span className={action.icon} />
                                 </Link>
                               ))) || (
-                              <>
+                              <LinkContainer>
                                 {!item.parent_id && (
-                                  <a
+                                  <div
+                                    className="link"
                                     key={Math.random()}
                                     title="Visualizar"
                                     onClick={() =>
@@ -231,10 +228,11 @@ const DataTable = ({
                                     }
                                   >
                                     <span className="fa fa-search" />
-                                  </a>
+                                  </div>
                                 )}
                                 <div>
-                                  <a
+                                  <div
+                                    className="link"
                                     key={Math.random()}
                                     title="Editar"
                                     onClick={() => {
@@ -242,18 +240,19 @@ const DataTable = ({
                                     }}
                                   >
                                     <span className="fa fa-edit" />
-                                  </a>
-                                  <a
+                                  </div>
+                                  <div
                                     key={Math.random()}
                                     title="Remover"
+                                    className="link"
                                     onClick={() => {
                                       handlerOnClickButtonRemove(item)
                                     }}
                                   >
                                     <span className="fa fa-remove" />
-                                  </a>
+                                  </div>
                                 </div>
-                              </>
+                              </LinkContainer>
                             )}
                           </td>
                         )
@@ -286,9 +285,10 @@ const DataTable = ({
                                     <span className={action.icon} />
                                   </Link>
                                 ))) || (
-                                <>
+                                <LinkContainer>
                                   {!item.parent_id && (
-                                    <a
+                                    <div
+                                      className="link"
                                       key={Math.random()}
                                       title="Visualizar"
                                       onClick={() => {
@@ -296,9 +296,10 @@ const DataTable = ({
                                       }}
                                     >
                                       <span className="fa fa-search" />
-                                    </a>
+                                    </div>
                                   )}
-                                  <a
+                                  <div
+                                    className="link"
                                     key={Math.random()}
                                     title="Editar"
                                     onClick={() => {
@@ -306,8 +307,8 @@ const DataTable = ({
                                     }}
                                   >
                                     <span className="fa fa-edit" />
-                                  </a>
-                                </>
+                                  </div>
+                                </LinkContainer>
                               )}
                             </td>
                           )
