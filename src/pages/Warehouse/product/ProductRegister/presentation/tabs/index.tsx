@@ -1,3 +1,3 @@
-export const Tabs = (): JSX.Element => {
+export const Tabs = () => {
   return <h1>teste</h1>
 }
