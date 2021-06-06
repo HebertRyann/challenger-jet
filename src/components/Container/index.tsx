@@ -2,6 +2,7 @@ import React, { HTMLAttributes } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useLoading } from '../../hooks/loading'
 import { Loading } from '../Loading'
+import { LinkContainer } from './style'
 
 interface Breadcrumb {
   name: string
@@ -102,9 +103,9 @@ const Container: React.FC<ContainerProps> = ({
                         <div className="portlet-title">
                           <div className="caption">{portletTitle}</div>
                           {tools && (
-                            <div className="tools">
+                            <LinkContainer className="tools">
                               {tools.map(tool => (
-                                <a
+                                <div
                                   style={{
                                     cursor: 'pointer'
                                   }}
@@ -113,10 +114,11 @@ const Container: React.FC<ContainerProps> = ({
                                     handleClickAction(tool)
                                   }}
                                 >
-                                  <i className={tool.icon} /> {tool.name}
-                                </a>
+                                  <i className={tool.icon} />
+                                  <p>{tool.name}</p>
+                                </div>
                               ))}
-                            </div>
+                            </LinkContainer>
                           )}
                         </div>
                         <div className="portlet-body form">{children} </div>

@@ -7,7 +7,7 @@ import { Contanier } from './styles'
 
 interface ToastProps {
   message: ToastMessage
-  style: object
+  style: any
 }
 
 const icons = {

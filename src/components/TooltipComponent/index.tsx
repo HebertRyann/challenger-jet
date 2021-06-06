@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ReactTooltip from 'react-tooltip'
 
 import { Container, JokerIcon } from './style'
@@ -13,7 +13,7 @@ export const TooltipComponent = ({
   message,
   label,
   bold
-}: TypeTooltipComponent) => {
+}: TypeTooltipComponent): JSX.Element => {
   return (
     <Container bold={bold}>
       <label htmlFor="form">{label}</label>

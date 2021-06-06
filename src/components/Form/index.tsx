@@ -8,6 +8,7 @@ type TypesFormProps<T> = {
   children?: JSX.Element
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const Form = <T extends {}>({
   formRef,
   onSubmitForm,
