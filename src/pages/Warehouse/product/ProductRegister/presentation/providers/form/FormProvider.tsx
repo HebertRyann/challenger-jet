@@ -1,5 +1,6 @@
 import React, { createContext, useContext } from 'react'
 import { useForm, FormProvider as FormContextRHF } from 'react-hook-form'
+import { FormState } from './types'
 
 type FormContextType = {
   control: any
@@ -17,7 +18,7 @@ export const FormProvider = ({ children }: FormProviderType): JSX.Element => {
   const { handleSubmit, control, formState } = methods
   const errors = formState.errors
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: FormState) => {
     console.log(data)
   }
 
