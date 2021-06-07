@@ -1,7 +1,10 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
+import { useLoading } from '../../../../../../../hooks/loading'
+import { TypeProductModel } from '../../../domain/models/typeProduct'
+import { LoadTypeProduct } from '../../../domain/useCases/product/load/LoadTypeProduct'
 
 type ProductContextType = {
-  loadTypeProduct: () => Promise<void>
+  loadTypeProducts: () => TypeProductModel[]
   loadGroupProduct: () => Promise<void>
   loadCategoryCost: () => Promise<void>
   loadSubCategoryCost: () => Promise<void>
@@ -13,12 +16,27 @@ const ProductContext = createContext<ProductContextType>(
 
 type ProductProvider = {
   children: JSX.Element
+  loadTypeProduct: LoadTypeProduct
 }
 
-export const ProductProvider = ({ children }: ProductProvider): JSX.Element => {
-  const loadTypeProduct = (): Promise<void> => {
-    return Promise.resolve()
-  }
+export const ProductProvider = ({
+  children,
+  loadTypeProduct
+}: ProductProvider): JSX.Element => {
+  const [productType, setProducTypes] = useState<TypeProductModel[]>([])
+  const { activeLoading, disableLoading } = useLoading()
+
+  useEffect(() => {
+    activeLoading()
+    ;(async () => {
+      const productTypes = await loadTypeProduct.loadTypeProduct()
+      setProducTypes(productTypes)
+    })()
+    disableLoading()
+  }, [activeLoading, disableLoading, loadTypeProduct])
+
+  const loadTypeProducts = (): TypeProductModel[] => productType
+
   const loadGroupProduct = (): Promise<void> => {
     return Promise.resolve()
   }
@@ -35,7 +53,7 @@ export const ProductProvider = ({ children }: ProductProvider): JSX.Element => {
         loadCategoryCost,
         loadGroupProduct,
         loadSubCategoryCost,
-        loadTypeProduct
+        loadTypeProducts
       }}
     >
       {children}
