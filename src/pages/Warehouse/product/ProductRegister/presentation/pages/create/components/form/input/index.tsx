@@ -14,8 +14,6 @@ export const InputForm = ({
 }: InputType): JSX.Element => {
   const { register } = useFormContext()
 
-  console.log(name)
-
   return (
     <input
       className={error ? 'form-control error' : 'form-control'}
