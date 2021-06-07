@@ -16,7 +16,7 @@ export const Container = styled.div<{ bold?: boolean }>`
   > div {
     margin-left: 15px;
     cursor: help;
-    a {
+    span {
       cursor: help;
     }
   }

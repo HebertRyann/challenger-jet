@@ -18,9 +18,9 @@ export const TooltipComponent = ({
     <Container bold={bold}>
       <label htmlFor="form">{label}</label>
       <div>
-        <a data-tip={message}>
+        <span data-tip={message}>
           <JokerIcon />
-        </a>
+        </span>
         <ReactTooltip place="top" type="dark" effect="float" />
       </div>
     </Container>
