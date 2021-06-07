@@ -3,7 +3,7 @@ import React from 'react'
 // import ProductRegisterUpdate from '../../../pages/Warehouse/product/ProductRegister/Update'
 // import ProductRegisterCreate from '../../../pages/Warehouse/product/ProductRegister/Create'
 // import ProductRegisterView from '../../../pages/Warehouse/product/ProductRegister/View'
-import { CreateProductPage } from '../../../pages/Warehouse/product/ProductRegister/presentation/create/index'
+import { CreateProductPage } from '../../../pages/Warehouse/product/ProductRegister/presentation/pages/create/index'
 import Route from '../../Route'
 
 const Render = (): JSX.Element => <h1>Render</h1>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { TabsModel } from '../../domain/models/tabs'
+import { TabsModel } from '../../../domain/models/tabs'
 import {
   Container,
   ContentItem,
