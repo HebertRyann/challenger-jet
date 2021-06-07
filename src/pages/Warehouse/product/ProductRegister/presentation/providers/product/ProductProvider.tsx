@@ -2,13 +2,15 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useLoading } from '../../../../../../../hooks/loading'
 import { TypeProductModel } from '../../../domain/models/typeProduct'
 import { GroupProductModel } from '../../../domain/models/groupProduct'
+import { CategoryCostModel } from '../../../domain/models/categoryCost'
 import { LoadTypeProduct } from '../../../domain/useCases/product/load/LoadTypeProduct'
 import { LoadGroupProduct } from '../../../domain/useCases/product/load/LoadGroupProduct'
+import { LoadCategoryCost } from '../../../domain/useCases/product/load/LoadCategoryCostProduct'
 
 type ProductContextType = {
   loadTypeProducts: () => TypeProductModel[]
   loadGroupProduct: () => GroupProductModel[]
-  loadCategoryCost: () => Promise<void>
+  loadCategoriesCost: () => CategoryCostModel[]
   loadSubCategoryCost: () => Promise<void>
 }
 
@@ -20,15 +22,18 @@ type ProductProvider = {
   children: JSX.Element
   loadTypeProduct: LoadTypeProduct
   loadGroupProducts: LoadGroupProduct
+  loadCategoryCost: LoadCategoryCost
 }
 
 export const ProductProvider = ({
   children,
   loadTypeProduct,
-  loadGroupProducts
+  loadGroupProducts,
+  loadCategoryCost
 }: ProductProvider): JSX.Element => {
   const [productType, setProducTypes] = useState<TypeProductModel[]>([])
   const [groupProduct, setGroupProduct] = useState<GroupProductModel[]>([])
+  const [categoriesCost, setCategoriesCost] = useState<CategoryCostModel[]>([])
   const { activeLoading, disableLoading } = useLoading()
 
   useEffect(() => {
@@ -38,17 +43,24 @@ export const ProductProvider = ({
       setProducTypes(productTypes)
       const groupProduct = await loadGroupProducts.loadGroupProduct()
       setGroupProduct(groupProduct)
+      const categoriesCost = await loadCategoryCost.loadTypeCategoryCost()
+      setCategoriesCost(categoriesCost)
       disableLoading()
     })()
-  }, [activeLoading, disableLoading, loadGroupProducts, loadTypeProduct])
+  }, [
+    activeLoading,
+    disableLoading,
+    loadCategoryCost,
+    loadGroupProducts,
+    loadTypeProduct
+  ])
 
   const loadTypeProducts = () => productType
 
   const loadGroupProduct = () => groupProduct
 
-  const loadCategoryCost = (): Promise<void> => {
-    return Promise.resolve()
-  }
+  const loadCategoriesCost = () => categoriesCost
+
   const loadSubCategoryCost = (): Promise<void> => {
     return Promise.resolve()
   }
@@ -56,7 +68,7 @@ export const ProductProvider = ({
   return (
     <ProductContext.Provider
       value={{
-        loadCategoryCost,
+        loadCategoriesCost,
         loadGroupProduct,
         loadSubCategoryCost,
         loadTypeProducts

@@ -10,6 +10,7 @@ import { namePageTitle, nameActions } from '../../../domain/data/info'
 import { FormProvider } from '../../providers/form/FormProvider'
 import { makeLoadProdutctsType } from '../../../main/factories/products/load/makeLoadProdutctsType'
 import { makeLoadProdutctsGroups } from '../../../main/factories/products/load/makeLoadProdutctsGroups'
+import { makeLoadProdutctsCategoryCost } from '../../../main/factories/products/load/makeLoadProdutctsCategoryCost'
 
 const tabs: TabsModel[] = [
   {
@@ -40,6 +41,7 @@ export const CreateProductPage = (): JSX.Element => {
     <ProductProvider
       loadTypeProduct={makeLoadProdutctsType()}
       loadGroupProducts={makeLoadProdutctsGroups()}
+      loadCategoryCost={makeLoadProdutctsCategoryCost()}
     >
       <Container
         Content={RenderContentTabs}
