@@ -93,8 +93,9 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
     }
   }
 
-  const changeCurrentTab = (keyTab: string): void =>
+  const changeCurrentTab = useCallback((keyTab: string) => {
     setCurrentTab({ key: keyTab })
+  }, [])
 
   const loadCurrentTab = (): TypeCurrentTab => currentTab
 
