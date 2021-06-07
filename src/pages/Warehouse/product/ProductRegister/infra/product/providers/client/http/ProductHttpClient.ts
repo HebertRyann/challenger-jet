@@ -1,17 +1,16 @@
+import api from '../../../../../../../../../services/api'
 import { LoadGroupProductProvider } from '../../../../../data/protocols/provider/product/load/LoadProductGroupProvider'
-import axios from 'axios'
+
 export class ProductHttpClient implements LoadGroupProductProvider {
   async loadGroupProducts(
     url: string
   ): Promise<LoadGroupProductProvider.LoadGroupProductProviderResponse[]> {
     try {
-      const response = await axios.get<
+      const { data } = await api.get<
         LoadGroupProductProvider.LoadGroupProductProviderResponse[]
       >(url)
 
-      console.log(response)
-
-      return []
+      return data
     } catch (error) {
       console.error(error)
       return []
