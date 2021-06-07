@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+import loadingSvg from '../../assets/image/svg/loading.svg'
 
 export const Container = styled.div<{ isError?: boolean }>`
   ${({ isError }) =>
@@ -25,4 +26,13 @@ export const Container = styled.div<{ isError?: boolean }>`
     width: 20px;
     background-color: #fff;
   }
+`
+
+export const Loading = styled.div`
+  background-image: url(${loadingSvg});
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  width: 100%;
+  height: 50%;
 `
