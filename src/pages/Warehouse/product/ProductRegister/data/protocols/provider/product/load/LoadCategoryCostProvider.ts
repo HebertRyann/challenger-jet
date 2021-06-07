@@ -1,9 +1,9 @@
 import { CategoryCostModel } from '../../../../../domain/models/categoryCost'
 
 export interface LoadCategoryCostProvider {
-  loadProductCategoryCost: () => Promise<
-    LoadCategoryCostProvider.LoadCategoryCostProviderResponse[]
-  >
+  loadProductCategoryCost: (
+    url: string
+  ) => Promise<LoadCategoryCostProvider.LoadCategoryCostProviderResponse[]>
 }
 
 export namespace LoadCategoryCostProvider {

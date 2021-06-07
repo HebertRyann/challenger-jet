@@ -3,14 +3,15 @@ import { LoadCategoryCostProvider } from '../../../protocols/provider/product/lo
 
 export class LoadCategoryCostProduct implements LoadCategoryCost {
   constructor(
-    private readonly loadCategoryCostProvider: LoadCategoryCostProvider
+    private readonly loadCategoryCostProvider: LoadCategoryCostProvider,
+    private readonly url: string
   ) {}
 
   async loadTypeCategoryCost(): Promise<
     LoadCategoryCost.LoadCategoryCostProductResponse[]
   > {
     const response =
-      await this.loadCategoryCostProvider.loadProductCategoryCost()
+      await this.loadCategoryCostProvider.loadProductCategoryCost(this.url)
     return response
   }
 }
