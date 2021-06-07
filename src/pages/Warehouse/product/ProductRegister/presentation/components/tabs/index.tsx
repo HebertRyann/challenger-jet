@@ -15,13 +15,17 @@ type TypeContentProps = {
 }
 
 const TabComponent = ({ tabList }: TypeContentProps): JSX.Element => {
-  const { addTab, loadCurrentTab } = useTabs()
+  const { addTab, loadCurrentTab, changeCurrentTab } = useTabs()
 
   useEffect(() => {
     tabList.forEach(({ name, isDefault, label, isEnable, Component }) => {
       addTab({ default: isDefault, name, label, isEnable, Component })
     })
   }, [addTab, tabList])
+
+  const onClickNameTab = (name: string) => {
+    changeCurrentTab(name)
+  }
 
   return (
     <TabsProvider>
@@ -31,7 +35,11 @@ const TabComponent = ({ tabList }: TypeContentProps): JSX.Element => {
             {tabList.map(
               ({ label, isEnable, name }, index) =>
                 isEnable && (
-                  <TabName key={index} isActive={loadCurrentTab().key === name}>
+                  <TabName
+                    onClick={() => onClickNameTab(name)}
+                    key={index}
+                    isActive={loadCurrentTab().key === name}
+                  >
                     {label}
                   </TabName>
                 )
