@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useLoading } from '../../../../../../../hooks/loading'
 import { TypeProductModel } from '../../../domain/models/typeProduct'
+import { GroupProductModel } from '../../../domain/models/groupProduct'
 import { LoadTypeProduct } from '../../../domain/useCases/product/load/LoadTypeProduct'
+import { LoadGroupProduct } from '../../../domain/useCases/product/load/LoadGroupProduct'
 
 type ProductContextType = {
   loadTypeProducts: () => TypeProductModel[]
-  loadGroupProduct: () => Promise<void>
+  loadGroupProduct: () => GroupProductModel[]
   loadCategoryCost: () => Promise<void>
   loadSubCategoryCost: () => Promise<void>
 }
@@ -17,29 +19,33 @@ const ProductContext = createContext<ProductContextType>(
 type ProductProvider = {
   children: JSX.Element
   loadTypeProduct: LoadTypeProduct
+  loadGroupProducts: LoadGroupProduct
 }
 
 export const ProductProvider = ({
   children,
-  loadTypeProduct
+  loadTypeProduct,
+  loadGroupProducts
 }: ProductProvider): JSX.Element => {
   const [productType, setProducTypes] = useState<TypeProductModel[]>([])
+  const [groupProduct, setGroupProduct] = useState<GroupProductModel[]>([])
   const { activeLoading, disableLoading } = useLoading()
 
   useEffect(() => {
-    activeLoading()
     ;(async () => {
+      activeLoading()
       const productTypes = await loadTypeProduct.loadTypeProduct()
       setProducTypes(productTypes)
+      const groupProduct = await loadGroupProducts.loadGroupProduct()
+      setGroupProduct(groupProduct)
+      disableLoading()
     })()
-    disableLoading()
-  }, [activeLoading, disableLoading, loadTypeProduct])
+  }, [activeLoading, disableLoading, loadGroupProducts, loadTypeProduct])
 
-  const loadTypeProducts = (): TypeProductModel[] => productType
+  const loadTypeProducts = () => productType
 
-  const loadGroupProduct = (): Promise<void> => {
-    return Promise.resolve()
-  }
+  const loadGroupProduct = () => groupProduct
+
   const loadCategoryCost = (): Promise<void> => {
     return Promise.resolve()
   }

@@ -21,12 +21,10 @@ export const FormProvider = ({ children }: FormProviderType): JSX.Element => {
   const { handleSubmit, control, formState } = methods
   const errors = formState.errors
 
-  const typeProductSelected = useWatch({
-    control,
-    name: 'overview.selectTypeProduct'
-  })
-
-  console.log(typeProductSelected)
+  // const typeProductSelected = useWatch({
+  //   control,
+  //   name: 'overview.selectTypeProduct'
+  // })
 
   const onSubmit = (data: any) => {
     console.log(data)

@@ -7,8 +7,9 @@ import { DetailsTab } from './components/tabs/details'
 import Container from '../../../../../../../components/Container'
 import { breadcrumbCreate } from '../../../domain/data/breadcrumb/create'
 import { namePageTitle, nameActions } from '../../../domain/data/info'
-import { makeLoadProdutctsType } from '../../../main/factories/products/load/makeLoadProdutctsType'
 import { FormProvider } from '../../providers/form/FormProvider'
+import { makeLoadProdutctsType } from '../../../main/factories/products/load/makeLoadProdutctsType'
+import { makeLoadProdutctsGroups } from '../../../main/factories/products/load/makeLoadProdutctsGroups'
 
 const tabs: TabsModel[] = [
   {
@@ -36,7 +37,10 @@ const RenderContentTabs = (): JSX.Element => {
 
 export const CreateProductPage = (): JSX.Element => {
   return (
-    <ProductProvider loadTypeProduct={makeLoadProdutctsType()}>
+    <ProductProvider
+      loadTypeProduct={makeLoadProdutctsType()}
+      loadGroupProducts={makeLoadProdutctsGroups()}
+    >
       <Container
         Content={RenderContentTabs}
         pageTitle={namePageTitle}
