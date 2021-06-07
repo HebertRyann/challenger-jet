@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useState } from 'react'
 
 export type TypeTabs = {
+  default?: boolean
   name: string
   label: string
   Component: JSX.Element
@@ -33,10 +34,13 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
   const [tabs, setTabs] = useState<TypeTabs[]>([])
   const [currentTab, setCurrentTab] = useState<TypeCurrentTab>({ key: '' })
 
-  const addTab = (newTab: TypeTabs): void => {
-    tabs.push(newTab)
-    setTabs([...tabs])
-  }
+  const addTab = useCallback((newTab: TypeTabs) => {
+    if (newTab.default) setCurrentTab({ key: newTab.name })
+    setTabs(prevState => {
+      prevState.push(newTab)
+      return prevState
+    })
+  }, [])
 
   const removeTab = (keyTab: string): void => {
     try {
