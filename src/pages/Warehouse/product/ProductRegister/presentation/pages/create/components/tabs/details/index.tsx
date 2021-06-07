@@ -6,9 +6,8 @@ import { useProduct } from '../../../../../providers/product/ProductProvider'
 import { Container } from './styles'
 
 export const DetailsTab = (): JSX.Element => {
-  const { loadTypeProducts } = useProduct()
-  const productTypes = loadTypeProducts()
   const { register } = useFormContext()
+  const { loadTypeProducts } = useProduct()
 
   return (
     <Container className="row">
@@ -22,7 +21,7 @@ export const DetailsTab = (): JSX.Element => {
             required: true
           })}
         >
-          {productTypes.map(({ key, name, label }) => (
+          {loadTypeProducts().map(({ key, name, label }) => (
             <option key={key} value={key + '+' + name}>
               {label}
             </option>
