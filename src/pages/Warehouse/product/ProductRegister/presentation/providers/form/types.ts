@@ -15,6 +15,9 @@ type DetailsType = {
   height: string
   length: string
   thickness: string
+  descriptionAndDetails: string
+  technicalSpecification: string
+  wayOfUse: string
 }
 
 export type FormState = {
