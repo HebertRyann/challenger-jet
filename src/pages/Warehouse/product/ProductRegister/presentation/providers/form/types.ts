@@ -33,4 +33,5 @@ type StockType = {
 export type FormState = {
   overview: OverViewFormTypes
   details: DetailsType
+  stock: StockType
 }

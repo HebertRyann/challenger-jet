@@ -24,8 +24,8 @@ export const InputForm = ({
     <NewInput
       {...rest}
       isNumber={isNumber}
-      className={error ? 'form-control error' : 'form-control'}
       key={Math.random()}
+      error={{ isError: !!error }}
       {...register(name, { required })}
     />
   )

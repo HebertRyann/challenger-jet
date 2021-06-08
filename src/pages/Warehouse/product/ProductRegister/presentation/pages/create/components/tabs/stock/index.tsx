@@ -3,10 +3,16 @@ import { TooltipComponent } from '../../../../../../../../../../components/Toolt
 import { Container, Th } from './styles'
 import { InputForm } from '../../form/input'
 import { useFormApplication } from '../../../../../providers/form/FormProvider'
+import { useProduct } from '../../../../../providers/product/ProductProvider'
+import { NewSelect } from '../../../../../../../../../../components/NewSelect'
+import { getError } from '../../../../../utils/getErrors'
+import { useFormContext } from 'react-hook-form'
 
 export const StockTab = (): JSX.Element => {
   const { errors, getValues } = useFormApplication()
   const typeProduct = getValues('overview.typeProduct')
+  const { loadUnitMensured } = useProduct()
+  const { register } = useFormContext()
 
   const isSaleOrResale = (): boolean => {
     const productType = typeProduct?.split('+')[1]
@@ -54,6 +60,22 @@ export const StockTab = (): JSX.Element => {
 
           <tr>
             <td>
+              <NewSelect
+                className={`form-control ${getError(
+                  errors?.stock?.unitMensuredSelect
+                )}`}
+                {...register('stock.unitMensuredSelect', {
+                  required: true
+                })}
+              >
+                {loadUnitMensured().map(({ id, name }) => (
+                  <option key={id} value={id + '+' + name}>
+                    {name}
+                  </option>
+                ))}
+              </NewSelect>
+            </td>
+            <td>
               <InputForm
                 isNumber
                 name={'stock.currentStock'}
@@ -67,14 +89,6 @@ export const StockTab = (): JSX.Element => {
                 name={'stock.repositionPoint'}
                 required
                 error={errors?.stock?.repositionPoint}
-              />
-            </td>
-            <td>
-              <InputForm
-                isNumber
-                name={'stock.thickness'}
-                required
-                error={errors?.stock?.thickness}
               />
             </td>
             {isSaleOrResale() && (
