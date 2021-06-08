@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 import { useTabs, TabsProvider } from '../../../../../../../hooks/tabs'
 import { TabsModel } from '../../../domain/models/tabs'
+import { DetailsTab } from '../../pages/create/components/tabs/details'
+import { OverviewTab } from '../../pages/create/components/tabs/overview'
 import {
   Container,
   ContentItem,
-  RenderComponent,
   TabHeaderContainer,
   TabName,
   TabPanelContainer
@@ -15,7 +16,7 @@ type TypeContentProps = {
 }
 
 const TabComponent = ({ tabList }: TypeContentProps): JSX.Element => {
-  const { addTab, loadCurrentTab, changeCurrentTab } = useTabs()
+  const { addTab, changeCurrentTab, loadCurrentTab } = useTabs()
 
   useEffect(() => {
     tabList.forEach(({ name, isDefault, label, isEnable, Component }) => {
@@ -23,9 +24,7 @@ const TabComponent = ({ tabList }: TypeContentProps): JSX.Element => {
     })
   }, [addTab, tabList])
 
-  const onClickNameTab = (name: string) => {
-    changeCurrentTab(name)
-  }
+  const onClickNameTab = (name: string) => changeCurrentTab(name)
 
   return (
     <TabsProvider>
@@ -48,14 +47,16 @@ const TabComponent = ({ tabList }: TypeContentProps): JSX.Element => {
           <TabPanelContainer>
             <>
               <hr />
-              {tabList.map(({ Component, name }) => (
-                <RenderComponent
-                  key={Math.random()}
-                  isActive={loadCurrentTab().key === name}
-                >
-                  {Component}
-                </RenderComponent>
-              ))}
+              <div
+                className={`${loadCurrentTab().key !== 'overview' && 'hidden'}`}
+              >
+                <OverviewTab />
+              </div>
+              <div
+                className={`${loadCurrentTab().key !== 'details' && 'hidden'}`}
+              >
+                <DetailsTab />
+              </div>
             </>
           </TabPanelContainer>
         </ContentItem>
