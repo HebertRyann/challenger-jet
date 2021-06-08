@@ -38,7 +38,7 @@ const TableHeader: React.FC<TableHeadProps> = ({ headers, onSorting }) => {
           const className = classSort + classAction
           return (
             <th
-              key={name}
+              key={Math.random()}
               onClick={() => (sortable ? onSortingChange(field) : null)}
               className={className}
             >

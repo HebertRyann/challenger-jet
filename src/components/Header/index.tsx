@@ -45,7 +45,7 @@ const Header: React.FC = () => {
               className={
                 !submenu ? 'menu-dropdown classic-menu-dropdown' : className
               }
-              key={menu.id}
+              key={Math.random()}
             >
               <Link to={menu.url ? menu.url : '#!'}>{menu.name}</Link>
               {menu.children && (

@@ -28,7 +28,7 @@ const PaginationComponent: React.FC<TablePaginationProps> = ({
     for (let i = 1; i <= totalPages; i++) {
       pages.push(
         <Pagination.Item
-          key={i}
+          key={Math.random()}
           active={i === currentPage}
           onClick={() => onPageChange(i)}
         >

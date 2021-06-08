@@ -21,8 +21,8 @@ const ToastContainer: React.FC<TostContanierProps> = ({ messages }) => {
   )
   return (
     <Contanier>
-      {messagesWithTransitions.map(({ item, key, props }) => (
-        <Toast key={key} style={props} message={item} />
+      {messagesWithTransitions.map(({ item, props }) => (
+        <Toast key={Math.random()} style={props} message={item} />
       ))}
     </Contanier>
   )

@@ -53,7 +53,7 @@ export const Content = (): JSX.Element => {
             <>
               {tabs.map(({ Component, name }) => (
                 <RenderComponent
-                  key={name}
+                  key={Math.random()}
                   isActive={name === loadCurrentTab().key}
                 >
                   {Component}

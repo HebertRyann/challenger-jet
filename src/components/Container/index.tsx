@@ -81,7 +81,7 @@ const Container: React.FC<ContainerProps> = ({
           {breadcrumb && (
             <ul className="page-breadcrumb breadcrumb">
               {breadcrumb.map((bread, i) => (
-                <li key={bread.name}>
+                <li key={Math.random()}>
                   {(bread.to && <Link to={bread.to}>{bread.name}</Link>) ||
                     bread.name}
                   {breadcrumb.length !== i + 1 && (

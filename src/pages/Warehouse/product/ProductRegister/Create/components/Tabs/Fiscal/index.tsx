@@ -182,10 +182,10 @@ export const Fiscal = ({ ncmLoader, cfopLoader }: TypeFiscal): JSX.Element => {
         <div className="form-content col-md-12">
           <TabHeaderContainerFiscal>
             {allTabsData.map(
-              ({ label, name, isEnable }, index) =>
+              ({ label, name, isEnable }) =>
                 isEnable && (
                   <TabNameFiscal
-                    key={index}
+                    key={Math.random()}
                     onClick={() => changeCurrentTab(name)}
                     isActive={name === loadCurrentTab().key}
                   >
@@ -197,7 +197,10 @@ export const Fiscal = ({ ncmLoader, cfopLoader }: TypeFiscal): JSX.Element => {
           <TabPanelContainerFiscal>
             <hr />
             {tabs.map(({ Component, name }) => (
-              <RenderComponent isActive={name === loadCurrentTab().key}>
+              <RenderComponent
+                key={Math.random()}
+                isActive={name === loadCurrentTab().key}
+              >
                 {Component}
               </RenderComponent>
             ))}

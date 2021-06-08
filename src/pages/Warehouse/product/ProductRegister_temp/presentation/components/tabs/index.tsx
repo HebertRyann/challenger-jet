@@ -37,7 +37,7 @@ export const Tab = ({ tabList }: TypeContentProps): JSX.Element => {
                 isEnable && (
                   <TabName
                     onClick={() => onClickNameTab(name)}
-                    key={index}
+                    key={Math.random()}
                     isActive={loadCurrentTab().key === name}
                   >
                     {label}
