@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent'
 import { CategoryCostModel } from '../../../../../../domain/models/categoryCost'
@@ -12,14 +12,9 @@ export const OverviewTab = (): JSX.Element => {
     useProduct()
   const { register } = useFormContext()
   const { errors } = useFormApplication()
-  const [categoryCost, setCategoryCost] = useState('')
   const [subCategoryCost, setSubCategoryCost] = useState<CategoryCostModel[]>(
     []
   )
-
-  useEffect(() => {
-    console.log('teste')
-  }, [categoryCost])
 
   const getError = (error: any): string => {
     if (error) return 'error'
@@ -29,7 +24,6 @@ export const OverviewTab = (): JSX.Element => {
   const onChangeCategoryCost = useCallback(
     (parentId: string) => {
       const idParent = parentId.split('+')[0]
-      setCategoryCost(idParent)
       if (idParent) {
         const subcategoryCost = loadCategoriesCost().filter(
           ({ parent_id }) => parent_id?.toString() === idParent
@@ -52,7 +46,7 @@ export const OverviewTab = (): JSX.Element => {
             className={`form-control ${getError(
               errors?.overview?.selectTypeProduct
             )}`}
-            {...register('overview.selectTypeProduct' as const, {
+            {...register('overview.selectTypeProduct', {
               required: true
             })}
           >
@@ -75,7 +69,7 @@ export const OverviewTab = (): JSX.Element => {
             className={`form-control ${getError(
               errors?.overview?.groupProduct
             )}`}
-            {...register('overview.groupProduct' as const, {
+            {...register('overview.groupProduct', {
               required: true
             })}
           >
@@ -111,7 +105,7 @@ export const OverviewTab = (): JSX.Element => {
             className={`form-control ${getError(
               errors?.overview?.categoryCost
             )}`}
-            {...register('overview.categoryCost' as const, {
+            {...register('overview.categoryCost', {
               required: true
             })}
             onChange={({ target }) => onChangeCategoryCost(target.value)}
@@ -138,7 +132,7 @@ export const OverviewTab = (): JSX.Element => {
             className={`form-control ${getError(
               errors?.overview?.subcategoryCost
             )}`}
-            {...register('overview.subcategoryCost' as const, {
+            {...register('overview.subcategoryCost', {
               required: true
             })}
           >
@@ -151,6 +145,27 @@ export const OverviewTab = (): JSX.Element => {
                   {name}
                 </option>
               ))}
+          </select>
+        </div>
+        <div className="form-content col-md-3">
+          <TooltipComponent
+            label="Possui variação?"
+            message="selecione se existe variação"
+          />
+          {console.log()}
+          <select
+            className={`form-control ${getError(
+              errors?.overview?.hasVariation
+            )}`}
+            {...register('overview.hasVariation', {
+              required: true
+            })}
+          >
+            <option className="disable" selected={true} disabled>
+              selecione
+            </option>
+            <option value="s">sim</option>
+            <option value="n">não</option>
           </select>
         </div>
       </Container>

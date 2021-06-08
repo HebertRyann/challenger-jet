@@ -4,6 +4,7 @@ type OverViewFormTypes = {
   nameProduct: string
   categoryCost: string
   subcategoryCost: string
+  hasVariation: string
 }
 
 export type FormState = {
