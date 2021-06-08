@@ -59,7 +59,7 @@ export const HasComposition = (): JSX.Element => {
             <th>Subtotal</th>
           </tr>
           {compositionList &&
-            compositionList.map(({ amount, cost, name }) => (
+            compositionList.map(({ amount, cost, name, ...rest }) => (
               <tr key={name} className="items">
                 <td>{name}</td>
                 <td>{amount}</td>

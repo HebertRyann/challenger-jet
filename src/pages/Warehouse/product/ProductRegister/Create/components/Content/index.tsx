@@ -45,7 +45,7 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
   const [alert, setAlert] = useState<{
     active: boolean
     message?: string
-    component?:() => JSX.Element
+    component?: () => JSX.Element
   }>({
     active: false,
     message: ''
@@ -129,10 +129,10 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
         <ContentItem>
           <TabHeaderContainer>
             {tabs.map(
-              ({ label, name, isEnable }) =>
+              ({ label, name, isEnable }, index) =>
                 isEnable && (
                   <TabName
-                    key={Math.random()}
+                    key={index}
                     onClick={() => changeCurrentTab(name)}
                     isActive={name === loadCurrentTab().key}
                   >
@@ -146,10 +146,7 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
               <>
                 <hr />
                 {tabs.map(({ Component, name }) => (
-                  <RenderComponent
-                    key={Math.random()}
-                    isActive={name === loadCurrentTab().key}
-                  >
+                  <RenderComponent isActive={name === loadCurrentTab().key}>
                     {Component}
                   </RenderComponent>
                 ))}

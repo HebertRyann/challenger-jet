@@ -86,10 +86,10 @@ export const Fiscal = (): JSX.Element => {
         <div className="form-content col-md-12">
           <TabHeaderContainerFiscal>
             {allTabsData.map(
-              ({ label, name, isEnable }) =>
+              ({ label, name, isEnable }, index) =>
                 isEnable && (
                   <TabNameFiscal
-                    key={Math.random()}
+                    key={index}
                     onClick={() => changeCurrentTab(name)}
                     isActive={name === loadCurrentTab().key}
                   >
@@ -101,10 +101,7 @@ export const Fiscal = (): JSX.Element => {
           <TabPanelContainerFiscal>
             <hr />
             {tabs.map(({ Component, name }) => (
-              <RenderComponent
-                key={Math.random()}
-                isActive={name === loadCurrentTab().key}
-              >
+              <RenderComponent isActive={name === loadCurrentTab().key}>
                 {Component}
               </RenderComponent>
             ))}

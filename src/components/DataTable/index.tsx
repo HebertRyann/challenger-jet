@@ -201,7 +201,7 @@ const DataTable = ({
                   }
                 }
                 return !notHasChildren ? (
-                  <tr key={Math.random()}>
+                  <tr key={item.id}>
                     {headers.map(
                       header =>
                         (header.field !== 'actions' && (
@@ -269,7 +269,7 @@ const DataTable = ({
                   </tr>
                 ) : (
                   !item.parent_id && (
-                    <tr key={Math.random()}>
+                    <tr key={item.id}>
                       {headers.map(
                         header =>
                           (header.field !== 'actions' && (

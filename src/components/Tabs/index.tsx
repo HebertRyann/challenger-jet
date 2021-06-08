@@ -13,7 +13,7 @@ const Tabs: React.FC<Props> = ({ children }) => {
       <ul className="nav nav-tabs">
         {children.map((item, index) => (
           <TabTitle
-            key={Math.random()}
+            key={index}
             active={index === selectedTab}
             title={item.props.title}
             index={index}
