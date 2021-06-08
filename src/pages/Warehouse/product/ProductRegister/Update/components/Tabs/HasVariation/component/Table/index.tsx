@@ -66,9 +66,6 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                 )
             )}
             <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
-              Estoque atual
-            </Th>
-            <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
               <TooltipComponent
                 label="Reposição de estoque"
                 message="Reposição de estoque"
@@ -95,7 +92,6 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
             (
               {
                 unitMensured,
-                currentStock,
                 priceSale,
                 priceCost,
                 atributes,
