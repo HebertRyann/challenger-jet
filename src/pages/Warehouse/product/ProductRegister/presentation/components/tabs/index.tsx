@@ -15,7 +15,7 @@ type TypeContentProps = {
   tabList: TabsModel[]
 }
 
-const TabComponent = ({ tabList }: TypeContentProps): JSX.Element => {
+export const Tab = ({ tabList }: TypeContentProps): JSX.Element => {
   const { addTab, changeCurrentTab, loadCurrentTab } = useTabs()
 
   useEffect(() => {
@@ -61,14 +61,6 @@ const TabComponent = ({ tabList }: TypeContentProps): JSX.Element => {
           </TabPanelContainer>
         </ContentItem>
       </Container>
-    </TabsProvider>
-  )
-}
-
-export const Tab = ({ tabList }: TypeContentProps): JSX.Element => {
-  return (
-    <TabsProvider>
-      <TabComponent tabList={tabList} />
     </TabsProvider>
   )
 }

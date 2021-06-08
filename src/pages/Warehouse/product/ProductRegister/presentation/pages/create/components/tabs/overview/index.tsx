@@ -44,9 +44,9 @@ export const OverviewTab = (): JSX.Element => {
           />
           <select
             className={`form-control ${getError(
-              errors?.overview?.selectTypeProduct
+              errors?.overview?.typeProduct
             )}`}
-            {...register('overview.selectTypeProduct', {
+            {...register('overview.typeProduct', {
               required: true
             })}
           >

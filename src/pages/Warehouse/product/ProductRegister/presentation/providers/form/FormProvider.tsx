@@ -1,5 +1,9 @@
 import React, { createContext, useContext } from 'react'
-import { useForm, FormProvider as FormContextRHF } from 'react-hook-form'
+import {
+  useForm,
+  FormProvider as FormContextRHF,
+  useWatch
+} from 'react-hook-form'
 import { FormState } from './types'
 
 type FormContextType = {
@@ -17,6 +21,18 @@ export const FormProvider = ({ children }: FormProviderType): JSX.Element => {
   const methods = useForm()
   const { handleSubmit, control, formState } = methods
   const errors = formState.errors
+
+  const changeSelectProductType = useWatch({
+    control,
+    name: 'overview.typeProduct'
+  })
+
+  const changeSelectHasVariationType = useWatch({
+    control,
+    name: 'overview.hasVariation'
+  })
+
+  console.log(changeSelectProductType, changeSelectHasVariationType)
 
   const onSubmit = (data: FormState) => {
     console.log(data)

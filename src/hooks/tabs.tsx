@@ -78,20 +78,26 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
     [tabs]
   )
 
-  const disableTab = (keyTab: string) => {
-    try {
-      const result = tabs.filter(({ name }) => name === keyTab)
-      if (result) {
-        const indexTab = tabs.indexOf(result[0])
-        tabs[indexTab].isEnable = false
-        setTabs([...tabs])
-        return
+  const disableTab = useCallback(
+    (keyTab: string) => {
+      try {
+        const result = tabs.filter(({ name }) => name === keyTab)
+
+        if (result.length > 0) {
+          setTabs(prevSate => {
+            const indexTab = prevSate?.indexOf(result[0])
+            prevSate[indexTab].isEnable = false
+            return prevSate
+          })
+          return
+        }
+        throw new Error('No find tab with id')
+      } catch (error) {
+        console.error(error.message)
       }
-      throw new Error('No find tab with id')
-    } catch (error) {
-      console.error(error.message)
-    }
-  }
+    },
+    [tabs]
+  )
 
   const changeCurrentTab = useCallback((keyTab: string) => {
     setCurrentTab({ key: keyTab })

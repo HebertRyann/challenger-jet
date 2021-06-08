@@ -11,6 +11,7 @@ import { FormProvider } from '../../providers/form/FormProvider'
 import { makeLoadProdutctsType } from '../../../main/factories/products/load/makeLoadProdutctsType'
 import { makeLoadProdutctsGroups } from '../../../main/factories/products/load/makeLoadProdutctsGroups'
 import { makeLoadProdutctsCategoryCost } from '../../../main/factories/products/load/makeLoadProdutctsCategoryCost'
+import { TabsProvider } from '../../../../../../../hooks/tabs'
 
 const tabs: TabsModel[] = [
   {
@@ -30,9 +31,11 @@ const tabs: TabsModel[] = [
 
 const RenderContentTabs = (): JSX.Element => {
   return (
-    <FormProvider>
-      <Tab tabList={tabs} />
-    </FormProvider>
+    <TabsProvider>
+      <FormProvider>
+        <Tab tabList={tabs} />
+      </FormProvider>
+    </TabsProvider>
   )
 }
 
