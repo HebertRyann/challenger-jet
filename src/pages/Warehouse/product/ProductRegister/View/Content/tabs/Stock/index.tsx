@@ -9,8 +9,6 @@ import { PriceResponse } from '../../../domain/response/productResponse'
 import { useProduct } from '../../../provider/productProvider'
 import { Container } from './style'
 
-type Stock = {}
-
 export const Stock = (): JSX.Element => {
   const { getProduct } = useProduct()
   const { stocks } = getProduct()

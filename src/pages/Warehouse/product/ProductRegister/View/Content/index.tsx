@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Container,
   ContentItem,
@@ -15,11 +15,6 @@ export type TypeContentTabs = {
   label: string
   isEnable: boolean
   Component: JSX.Element
-}
-
-type Link = {
-  link: string
-  name: string
 }
 
 export const Content = (): JSX.Element => {
@@ -57,7 +52,10 @@ export const Content = (): JSX.Element => {
           <TabPanelContainer>
             <>
               {tabs.map(({ Component, name }) => (
-                <RenderComponent isActive={name === loadCurrentTab().key}>
+                <RenderComponent
+                  key={name}
+                  isActive={name === loadCurrentTab().key}
+                >
                   {Component}
                 </RenderComponent>
               ))}

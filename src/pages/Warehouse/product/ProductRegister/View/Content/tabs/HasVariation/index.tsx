@@ -14,11 +14,13 @@ import {
 } from '../../../../domain/products'
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent'
 
+export const labelHasVariation = 'Estoque/Variação'
+export const nameHasVariation = '@@tabs-view-has-variations'
+
 export const HasVariation = (): JSX.Element => {
   const { disableTab, activeTab } = useTabs()
   const { getProduct } = useProduct()
   const { stocks } = getProduct()
-  const prices: PriceResponse = {} as PriceResponse
 
   useEffect(() => {
     if (stocks) {
@@ -32,6 +34,15 @@ export const HasVariation = (): JSX.Element => {
       }
     }
   }, [getProduct()])
+
+  const isSaleOrResaleType = (): boolean => {
+    return (
+      getProduct().type?.replace(' ', '-') ===
+        formatProductTypeToLowerCase(RE_SALE) ||
+      getProduct().type?.replace(' ', '-') ===
+        formatProductTypeToLowerCase(SALE)
+    )
+  }
 
   const renderThAtributes = (): JSX.Element[] => {
     let atributesList: Atributes[] = []
@@ -60,15 +71,6 @@ export const HasVariation = (): JSX.Element => {
         {capitalizeFirstLetter(key)}
       </th>
     ))
-  }
-
-  const isSaleOrResaleType = (): boolean => {
-    return (
-      getProduct().type?.replace(' ', '-') ===
-        formatProductTypeToLowerCase(RE_SALE) ||
-      getProduct().type?.replace(' ', '-') ===
-        formatProductTypeToLowerCase(SALE)
-    )
   }
 
   if (getProduct().stocks) {
@@ -165,10 +167,10 @@ export const HasVariation = (): JSX.Element => {
               }
 
               return (
-                <tr className="items">
+                <tr key={Math.random()} className="items">
                   <td>{unitmensured.unit_mensured.name}</td>
                   {atributesList.map(({ value }) => (
-                    <td>{value}</td>
+                    <td key={Math.random()}>{value}</td>
                   ))}
                   <td>{current_stock}</td>
                   <td>{replacement_point}</td>
@@ -188,6 +190,3 @@ export const HasVariation = (): JSX.Element => {
   }
   return <div></div>
 }
-
-export const labelHasVariation = 'Estoque/Variação'
-export const nameHasVariation = '@@tabs-view-has-variations'

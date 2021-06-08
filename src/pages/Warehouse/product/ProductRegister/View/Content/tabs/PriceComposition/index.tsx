@@ -8,6 +8,8 @@ import { PriceCompositionView } from '../../../domain/response/productResponse'
 import { useProduct } from '../../../provider/productProvider'
 import { Container } from './style'
 import { useTabs } from '../../../../../../../../hooks/tabs'
+export const labelPriceComposition = 'Formação de preço'
+export const namePriceComposition = '@@tabs-view-PriceComposition'
 
 export const PriceComposition = (): JSX.Element => {
   const { getProduct } = useProduct()
@@ -59,6 +61,3 @@ export const PriceComposition = (): JSX.Element => {
     </Container>
   )
 }
-
-export const labelPriceComposition = 'Formação de preço'
-export const namePriceComposition = '@@tabs-view-PriceComposition'

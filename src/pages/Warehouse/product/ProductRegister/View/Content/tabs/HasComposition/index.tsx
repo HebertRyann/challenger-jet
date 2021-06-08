@@ -9,6 +9,9 @@ import { CompositonView } from '../../../domain/response/productResponse'
 import { useProduct } from '../../../provider/productProvider'
 import { Container } from './style'
 
+export const labelHasComposition = 'Composição'
+export const nameHasComposition = '@@tabs-view-has-composition'
+
 export const HasComposition = (): JSX.Element => {
   const { getProduct } = useProduct()
   let compositionList: CompositonView[] = []
@@ -57,7 +60,7 @@ export const HasComposition = (): JSX.Element => {
           </tr>
           {compositionList &&
             compositionList.map(({ amount, cost, name, ...rest }) => (
-              <tr className="items">
+              <tr key={name} className="items">
                 <td>{name}</td>
                 <td>{amount}</td>
                 <td>{cost}</td>
@@ -75,6 +78,3 @@ export const HasComposition = (): JSX.Element => {
     </Container>
   )
 }
-
-export const labelHasComposition = 'Composição'
-export const nameHasComposition = '@@tabs-view-has-composition'
