@@ -170,7 +170,7 @@ const ProductAtributesView: React.FC = () => {
                 <label htmlFor="id" className="control-label">
                   Tipo do produto
                 </label>
-                <p>
+                <p className="upp">
                   {product?.type?.toLocaleUpperCase() === 'CONSUMO'
                     ? 'USO E CONSUMO'
                     : product.type}
