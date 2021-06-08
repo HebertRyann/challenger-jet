@@ -1,9 +1,9 @@
-import { TypeProductModel } from '../../../models/typeProduct'
+import { UnitMensuredProductModel } from '../../../models/unitMensuredProduct'
 
 export interface LoadTypeProduct {
-  loadTypeProduct: () => Promise<LoadTypeProduct.LoadTypeProductResponse[]>
+  loadTypeProduct: () => Promise<LoadTypeProduct.Response[]>
 }
 
 export namespace LoadTypeProduct {
-  export type LoadTypeProductResponse = TypeProductModel
+  export type Response = UnitMensuredProductModel
 }
