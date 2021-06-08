@@ -267,13 +267,7 @@ const TabUpdateProvider = ({
 
   const validationAndSetErrorAllFieldsStock = useCallback(() => {
     let isError = false
-    // if (stocks.stockCurrent.value === '') {
-    //   isError = true;
-    //   setStocks(old => ({
-    //     ...old,
-    //     stockCurrent: { ...old.stockCurrent, error: { isError: true } },
-    //   }));
-    // }
+
     if (stocks.unitMensured.value.id === '') {
       isError = true
       setStocks(old => ({
@@ -669,10 +663,7 @@ const TabUpdateProvider = ({
           isError = true
           unitMensured.error.isError = true
         }
-        if (currentStock.value === '') {
-          isError = true
-          currentStock.error.isError = true
-        }
+
         if (
           overView.typeSelectProdut.value.name === SALE.name ||
           overView.typeSelectProdut.value.name === RE_SALE.name

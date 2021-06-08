@@ -34,7 +34,7 @@ import { SEMI_FINISHED, SALE, RE_SALE } from '../../domain/products'
 import { nameHasComposition } from '../Tabs/HasComposition'
 import { namePriceComposition } from '../Tabs/PriceComposition'
 import { nameFiscal } from '../Tabs/Fiscal'
-import { nameHasVariation } from '../../../View/Content/tabs/HasVariation'
+import { nameHasVariation } from '../../../Update/components/Tabs/HasVariation'
 import { nameStock } from '../Tabs/Stock'
 
 export type TypeContentTabs = {
@@ -54,16 +54,18 @@ type Link = {
   name: string
 }
 
+type ContentState = {
+  active: boolean
+  message?: string
+  component?: () => JSX.Element
+}
+
 export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
   const { activeLoading, disableLoading } = useLoading()
   const [tabs, setTabs] = useState<TypeContentTabs[]>([])
   const { addToast } = useToast()
   const [links, setLinks] = useState<Link[]>([{ link: '', name: '' }])
-  const [alert, setAlert] = useState<{
-    active: boolean
-    message?: string
-    component?: () => JSX.Element
-  }>({
+  const [alert, setAlert] = useState<ContentState>({
     active: false,
     message: ''
   })
@@ -79,7 +81,6 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
     disableTab
   } = useTabs()
   const {
-    overview,
     validation,
     save,
     addOverView,
@@ -111,7 +112,7 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
           compositionResult = JSON.parse(data.composition.toLowerCase())
         }
 
-        compositionResult.map(
+        compositionResult.forEach(
           ({ amount, cost, name, product_id, stock_id }) => {
             addHasComposition({
               amount: { error: { isError: false }, value: amount.toString() },
@@ -223,10 +224,20 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
 
       let hasVariation = false
 
-      if (data.stocks.length > 1) {
+      if (data.stocks.length > 1 || data.stocks[0]) {
+        console.log(data.stocks[0].atributes)
+        if (
+          data.stocks[0].atributes !== '[]' &&
+          data.stocks[0].atributes &&
+          data.stocks[0].atributes.length >= 1
+        ) {
+          hasVariation = true
+        }
+      }
+      if (hasVariation) {
         activeTab(nameHasVariation)
         disableTab(nameStock)
-        data.stocks.map(
+        data.stocks.forEach(
           ({
             current_stock,
             product_units_measured,
@@ -273,14 +284,9 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
             })
           }
         )
-        hasVariation = true
       } else {
         addStock({
           id: data.stocks[0]?.id.toString(),
-          // stockCurrent: {
-          //   error: { isError: false },
-          //   value: data.stocks[0].current_stock.toString(),
-          // },
           priceCost: {
             error: { isError: false },
             value: '0'
@@ -407,7 +413,7 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
   const handlerClickOnSaveButton = async () => {
     const tabsErrorList = validation.validate()
     setLinks([])
-    tabsErrorList.map(({ labelName, linkName }) => {
+    tabsErrorList.forEach(({ labelName, linkName }) => {
       setLinks(old => {
         return [
           ...old,
@@ -470,7 +476,10 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
               <>
                 <hr />
                 {tabs.map(({ Component, name }) => (
-                  <RenderComponent isActive={name === loadCurrentTab().key}>
+                  <RenderComponent
+                    key={name}
+                    isActive={name === loadCurrentTab().key}
+                  >
                     {Component}
                   </RenderComponent>
                 ))}
