@@ -5,7 +5,5 @@ export const Container = styled.div`
     display: none;
   }
 
-  & + & {
-    margin-top: 20px !important;
-  }
+  margin-top: 20px !important;
 `

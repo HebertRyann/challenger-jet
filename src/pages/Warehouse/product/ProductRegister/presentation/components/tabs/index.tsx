@@ -3,6 +3,7 @@ import { useTabs, TabsProvider } from '../../../../../../../hooks/tabs'
 import { TabsModel } from '../../../domain/models/tabs'
 import { DetailsTab } from '../../pages/create/components/tabs/details'
 import { OverviewTab } from '../../pages/create/components/tabs/overview'
+import { StockTab } from '../../pages/create/components/tabs/stock'
 import {
   Container,
   ContentItem,
@@ -46,7 +47,6 @@ export const Tab = ({ tabList }: TypeContentProps): JSX.Element => {
           </TabHeaderContainer>
           <TabPanelContainer>
             <>
-              <hr />
               <div
                 className={`${loadCurrentTab().key !== 'overview' && 'hidden'}`}
               >
@@ -56,6 +56,11 @@ export const Tab = ({ tabList }: TypeContentProps): JSX.Element => {
                 className={`${loadCurrentTab().key !== 'details' && 'hidden'}`}
               >
                 <DetailsTab />
+              </div>
+              <div
+                className={`${loadCurrentTab().key !== 'stock' && 'hidden'}`}
+              >
+                <StockTab />
               </div>
             </>
           </TabPanelContainer>

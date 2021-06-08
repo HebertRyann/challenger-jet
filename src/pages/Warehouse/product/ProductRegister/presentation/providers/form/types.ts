@@ -20,6 +20,16 @@ type DetailsType = {
   wayOfUse: string
 }
 
+type StockType = {
+  unitMensuredSelect: string
+  currentStock: string
+  repositionPoint: string
+  price?: {
+    cost: string
+    sale: string
+  }
+}
+
 export type FormState = {
   overview: OverViewFormTypes
   details: DetailsType

@@ -12,6 +12,7 @@ import { makeLoadProdutctsType } from '../../../main/factories/products/load/mak
 import { makeLoadProdutctsGroups } from '../../../main/factories/products/load/makeLoadProdutctsGroups'
 import { makeLoadProdutctsCategoryCost } from '../../../main/factories/products/load/makeLoadProdutctsCategoryCost'
 import { TabsProvider } from '../../../../../../../hooks/tabs'
+import { StockTab } from './components/tabs/stock'
 
 const tabs: TabsModel[] = [
   {
@@ -26,6 +27,12 @@ const tabs: TabsModel[] = [
     label: 'Detalhes',
     isEnable: true,
     Component: <DetailsTab />
+  },
+  {
+    name: 'stock',
+    label: 'Estoque',
+    isEnable: true,
+    Component: <StockTab />
   }
 ]
 
