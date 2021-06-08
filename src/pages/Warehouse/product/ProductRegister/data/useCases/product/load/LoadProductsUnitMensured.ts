@@ -1,13 +1,15 @@
-import { LoadTypeProduct } from '../../../../domain/useCases/product/load/LoadTypeProduct'
+import { LoadUnitMensuredProduct } from '../../../../domain/useCases/product/load/LoadUnitMensuredProduct'
 import { LoadProductUnitMensuredProvider } from '../../../protocols/provider/product/load/LoadProductUnitMensuredProvider'
 
-export class LoadProductsUnitMensured implements LoadTypeProduct {
+export class LoadProductsUnitMensured implements LoadUnitMensuredProduct {
   constructor(
     private readonly loadProductUnitMensuredProvider: LoadProductUnitMensuredProvider,
     private readonly url: string
   ) {}
 
-  async loadTypeProduct(): Promise<LoadTypeProduct.Response[]> {
+  async loadUnitMensuredProduct(): Promise<
+    LoadUnitMensuredProduct.LoadUnitMensuredProductResponse[]
+  > {
     const response =
       await this.loadProductUnitMensuredProvider.loadProductUnitMensured(
         this.url
