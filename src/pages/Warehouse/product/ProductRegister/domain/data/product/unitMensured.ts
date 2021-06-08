@@ -1,4 +1,4 @@
-type TypeMensured = { value: string; label: string }
+export type TypeMensured = { value: string; label: string }
 
 export const typeUnitMensuredDetails: TypeMensured[] = [
   {

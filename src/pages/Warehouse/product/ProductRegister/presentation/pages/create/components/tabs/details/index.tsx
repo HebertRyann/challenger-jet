@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { NewSelect } from '../../../../../../../../../../components/NewSelect'
 import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent'
 import {
   typeUnitMensuredWeight,
-  typeUnitMensuredDetails
+  typeUnitMensuredDetails,
+  TypeMensured
 } from '../../../../../../domain/data/product/unitMensured'
 import { Container } from './styles'
 import { InputFormController } from '../../form/input'
@@ -14,6 +15,11 @@ import { useFormApplication } from '../../../../../providers/form/FormProvider'
 export const DetailsTab = (): JSX.Element => {
   const { register } = useFormContext()
   const { errors } = useFormApplication()
+  const [selectWeight, setSelectWeight] = useState<TypeMensured[]>([])
+
+  useEffect(() => {
+    setSelectWeight(typeUnitMensuredWeight)
+  }, [])
 
   return (
     <>
@@ -28,7 +34,7 @@ export const DetailsTab = (): JSX.Element => {
               required: false
             })}
           >
-            {typeUnitMensuredWeight.map(({ label, value }) => (
+            {selectWeight.map(({ label, value }) => (
               <option key={Math.random()} value={value + '+' + label}>
                 {label}
               </option>

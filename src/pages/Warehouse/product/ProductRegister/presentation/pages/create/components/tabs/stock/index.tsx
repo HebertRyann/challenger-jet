@@ -77,7 +77,6 @@ export const StockTab = (): JSX.Element => {
             </td>
             <td>
               <InputForm
-                isNumber
                 name={'stock.currentStock'}
                 required
                 error={errors?.stock?.currentStock}
@@ -85,7 +84,6 @@ export const StockTab = (): JSX.Element => {
             </td>
             <td>
               <InputForm
-                isNumber
                 name={'stock.repositionPoint'}
                 required
                 error={errors?.stock?.repositionPoint}
@@ -94,7 +92,6 @@ export const StockTab = (): JSX.Element => {
             {isSaleOrResale() && (
               <td style={{ width: '150px' }}>
                 <InputForm
-                  isNumber
                   name={'stock.price.cost'}
                   error={errors?.stock?.price?.cost}
                 />
@@ -104,7 +101,6 @@ export const StockTab = (): JSX.Element => {
               <td style={{ width: '150px' }}>
                 <InputForm
                   disabled
-                  isNumber
                   name={'stock.price.sale'}
                   error={errors?.stock?.price?.sale}
                 />

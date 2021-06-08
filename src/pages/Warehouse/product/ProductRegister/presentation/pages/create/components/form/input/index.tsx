@@ -8,24 +8,21 @@ type InputType = InputHTMLAttributes<HTMLInputElement> & {
   name: string
   required?: boolean
   error?: boolean
-  isNumber?: boolean
 }
 
 export const InputForm = ({
   name,
   required,
   error,
-  isNumber,
   ...rest
 }: InputType): JSX.Element => {
   const { register } = useFormContext()
 
   return (
-    <NewInput
+    <input
       {...rest}
-      isNumber={isNumber}
+      className={error ? 'form-control error' : 'form-control'}
       key={Math.random()}
-      error={{ isError: !!error }}
       {...register(name, { required })}
     />
   )
