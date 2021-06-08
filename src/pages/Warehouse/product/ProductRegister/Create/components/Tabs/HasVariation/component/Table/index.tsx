@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import { Container, IconRemove } from './style'
+import { Container, IconRemove, Td, Th } from './style'
 import { NewInput } from '../../../../../../../../../../components/NewInput'
 import { NewSelect } from '../../../../../../../../../../components/NewSelect'
 import { useTabCreate } from '../../../../../providers/tabsProvider'
 import { SALE, RE_SALE } from '../../../../../../domain/products'
 import { ResponseEntiryWithIdNameWithChildren } from '../../../../../services/api'
 import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent'
-import ReactTooltip from 'react-tooltip'
 
 type TypeUnitMensured = {
   id: string
@@ -29,7 +28,6 @@ type TypeTableProps = {
 export const Table = (tableProps: TypeTableProps): JSX.Element => {
   const { unitMensuredList } = tableProps
   const atributesList = tableProps.atributes
-  const [alert, setAlert] = useState(false)
   const { variation, overview } = useTabCreate()
   const { typeSelectProdut } = overview.getData()
   const variationList = variation.getData()
@@ -44,12 +42,6 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
     changeCurrentReplacementPoint
   } = variation.setData
 
-  const handleClickOnSaveButton = () => {
-    if (variation.validate()) {
-      setAlert(true)
-    }
-  }
-
   const isTypeSaleOrResale = (): boolean =>
     typeSelectProdut.value.name === SALE.name ||
     typeSelectProdut.value.name === RE_SALE.name
@@ -59,69 +51,28 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
       <table className="table table-bordered margin-bottom-0">
         <tbody>
           <tr>
-            <th
-              style={
-                isTypeSaleOrResale()
-                  ? {
-                      position: 'relative',
-                      lineHeight: '50px'
-                    }
-                  : {}
-              }
-              rowSpan={isTypeSaleOrResale() ? 2 : 1}
-            >
+            <Th isTypeSaleOrResale={isTypeSaleOrResale()}>
               Unidade de medidas
-            </th>
-
+            </Th>
             {atributesList.map(
-              ({ name, parent_id }) =>
+              ({ name, parent_id, isChecked }) =>
                 parent_id === null && (
-                  <th
-                    style={
-                      isTypeSaleOrResale()
-                        ? {
-                            position: 'relative',
-                            lineHeight: '50px'
-                          }
-                        : {}
-                    }
-                    rowSpan={isTypeSaleOrResale() ? 2 : 1}
+                  <Th
+                    active={isChecked}
+                    isTypeSaleOrResale={isTypeSaleOrResale()}
                   >
                     {name}
-                  </th>
+                  </Th>
                 )
             )}
-            <th
-              style={
-                isTypeSaleOrResale()
-                  ? {
-                      position: 'relative',
-                      lineHeight: '50px'
-                    }
-                  : {}
-              }
-              rowSpan={isTypeSaleOrResale() ? 2 : 1}
-            >
-              Estoque atual
-            </th>
-
-            <th
-              style={
-                isTypeSaleOrResale()
-                  ? {
-                      position: 'relative',
-                      lineHeight: '50px'
-                    }
-                  : {}
-              }
-              rowSpan={isTypeSaleOrResale() ? 2 : 1}
-            >
+            <Th isTypeSaleOrResale={isTypeSaleOrResale()}>Estoque atual</Th>
+            <Th isTypeSaleOrResale={isTypeSaleOrResale()}>
               <TooltipComponent
                 label="Reposição de estoque"
                 message="Reposição de estoque"
                 bold
               />
-            </th>
+            </Th>
             {isTypeSaleOrResale() ? (
               <th align="center" style={{ textAlign: 'center' }} colSpan={2}>
                 Preço
@@ -159,7 +110,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
               },
               index
             ) => (
-              <tr>
+              <tr key={index}>
                 <td>
                   <NewSelect
                     isSelected={variationList[index]?.unitMensured?.value.name}
@@ -174,15 +125,20 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                     error={unitMensured.error}
                   >
                     {unitMensuredList.map(({ id, name }) => (
-                      <option value={`${id}+${name}`}>{name}</option>
+                      <option key={id} value={`${id}+${name}`}>
+                        {name}
+                      </option>
                     ))}
                   </NewSelect>
                 </td>
                 <>
                   {atributesList.map(
-                    ({ parent_id, childrenList, id }, indexAtribute) =>
+                    (
+                      { parent_id, childrenList, id, isChecked },
+                      indexAtribute
+                    ) =>
                       parent_id === null && (
-                        <td key={Math.random()}>
+                        <Td active={isChecked} key={Math.random()}>
                           <NewSelect
                             className="form-control"
                             name="Selecione"
@@ -218,13 +174,14 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                               })
                               .map(atributeChildren => (
                                 <option
+                                  key={Math.random()}
                                   value={`${index}+${indexAtribute}+${atributeChildren.id}+${atributeChildren.name}+${id}`}
                                 >
                                   {atributeChildren.name}
                                 </option>
                               ))}
                           </NewSelect>
-                        </td>
+                        </Td>
                       )
                   )}
                   <td>

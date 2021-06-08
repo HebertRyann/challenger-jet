@@ -1,10 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Footer } from '../../../footer'
 import { Container, FooterStyled, IconRemove } from './style'
 import { NewInput } from '../../../../../../../../../components/NewInput'
 import { useTabCreate } from '../../../../providers/tabsProvider'
-import { Alert } from '../../../../../../../../../components/Alert'
-import { useTabs } from '../../../../../../../../../hooks/tabs'
 import { loadProductByType } from '../../../../services/api/loadProductByType'
 import { nameHasComposition } from '..'
 import {
@@ -12,13 +9,14 @@ import {
   RE_SALE,
   SALE,
   SEMI_FINISHED,
-  formatProductTypeToLowerCase
- RAW_MATERIAL } from '../../../../domain/products';
+  formatProductTypeToLowerCase,
+  RAW_MATERIAL
+} from '../../../../domain/products'
 
 import { useLoading } from '../../../../../../../../../hooks/loading'
 import { SearchComponentHasComposition } from '../SearchComponent'
 import { useToast } from '../../../../../../../../../hooks/toast'
-import { number } from 'yup/lib/locale'
+import { useTabs } from '../../../../../../../../../hooks/tabs'
 
 type ProductByTypeSelected = {
   id: string
@@ -27,7 +25,6 @@ type ProductByTypeSelected = {
 
 export const Table = (): JSX.Element => {
   const { activeLoading, disableLoading } = useLoading()
-  const [alert, setAlert] = useState(false)
   const { addToast } = useToast()
   const [productListByTypeSelected, setProductListByTypeSelected] = useState<
     ProductByTypeSelected[]
@@ -36,11 +33,7 @@ export const Table = (): JSX.Element => {
     useState<ProductByTypeSelected[]>([])
 
   const { composition, overview } = useTabCreate()
-  const {
-    changeCurrentTabForNext,
-    changeCurrentTabForPrevious,
-    loadCurrentTab
-  } = useTabs()
+  const { loadCurrentTab } = useTabs()
   const products = composition.getData()
   const { typeSelectProdut } = overview.getData()
   const {
@@ -66,12 +59,6 @@ export const Table = (): JSX.Element => {
     setTotal(soma)
   }, [products])
 
-  const handleClickOnSaveButton = () => {
-    if (composition.validate()) {
-      setAlert(true)
-    }
-  }
-
   const formatProductName = (product: string): string =>
     product.replace(' ', '-').toLowerCase()
 
@@ -93,7 +80,7 @@ export const Table = (): JSX.Element => {
             ])
             setProductListByTypeSelectedSearch(productListByTypeSelected)
             disableLoading()
-            return;
+            return
           }
           if (
             formatProductName(typeSelectProdut.value.name) ===
@@ -154,7 +141,7 @@ export const Table = (): JSX.Element => {
     handlerChangeNameProduct(product.name, index)
     changeInputProductIdAndStockId(product.product_id, product.stock_id, index)
     setActiveSearch(false)
-  };
+  }
 
   return (
     <Container className="table-responsive">
@@ -171,6 +158,7 @@ export const Table = (): JSX.Element => {
             {products &&
               products.map(({ amount, cost, nameProduct, subtotal }, index) => (
                 <tr
+                  key={index}
                   style={{
                     height: '10px'
                   }}
@@ -278,4 +266,4 @@ export const Table = (): JSX.Element => {
       </FooterStyled>
     </Container>
   )
-};
+}
