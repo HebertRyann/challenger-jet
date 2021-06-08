@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Container, IconRemove, Td, Th } from './style'
+import React from 'react'
+import { Container, IconRemove } from './style'
 import { NewInput } from '../../../../../../../../../../components/NewInput'
 import { NewSelect } from '../../../../../../../../../../components/NewSelect'
 import { useTabCreate } from '../../../../../providers/tabsProvider'
@@ -51,28 +51,69 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
       <table className="table table-bordered margin-bottom-0">
         <tbody>
           <tr>
-            <Th isTypeSaleOrResale={isTypeSaleOrResale()}>
+            <th
+              style={
+                isTypeSaleOrResale()
+                  ? {
+                      position: 'relative',
+                      lineHeight: '50px'
+                    }
+                  : {}
+              }
+              rowSpan={isTypeSaleOrResale() ? 2 : 1}
+            >
               Unidade de medidas
-            </Th>
+            </th>
+
             {atributesList.map(
-              ({ name, parent_id, isChecked }) =>
+              ({ name, parent_id }) =>
                 parent_id === null && (
-                  <Th
-                    active={isChecked}
-                    isTypeSaleOrResale={isTypeSaleOrResale()}
+                  <th
+                    style={
+                      isTypeSaleOrResale()
+                        ? {
+                            position: 'relative',
+                            lineHeight: '50px'
+                          }
+                        : {}
+                    }
+                    rowSpan={isTypeSaleOrResale() ? 2 : 1}
                   >
                     {name}
-                  </Th>
+                  </th>
                 )
             )}
-            <Th isTypeSaleOrResale={isTypeSaleOrResale()}>Estoque atual</Th>
-            <Th isTypeSaleOrResale={isTypeSaleOrResale()}>
+            <th
+              style={
+                isTypeSaleOrResale()
+                  ? {
+                      position: 'relative',
+                      lineHeight: '50px'
+                    }
+                  : {}
+              }
+              rowSpan={isTypeSaleOrResale() ? 2 : 1}
+            >
+              Estoque atual
+            </th>
+
+            <th
+              style={
+                isTypeSaleOrResale()
+                  ? {
+                      position: 'relative',
+                      lineHeight: '50px'
+                    }
+                  : {}
+              }
+              rowSpan={isTypeSaleOrResale() ? 2 : 1}
+            >
               <TooltipComponent
                 label="Reposição de estoque"
                 message="Reposição de estoque"
                 bold
               />
-            </Th>
+            </th>
             {isTypeSaleOrResale() ? (
               <th align="center" style={{ textAlign: 'center' }} colSpan={2}>
                 Preço
@@ -133,12 +174,9 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                 </td>
                 <>
                   {atributesList.map(
-                    (
-                      { parent_id, childrenList, id, isChecked },
-                      indexAtribute
-                    ) =>
+                    ({ parent_id, childrenList, id }, indexAtribute) =>
                       parent_id === null && (
-                        <Td active={isChecked} key={Math.random()}>
+                        <td key={Math.random()}>
                           <NewSelect
                             className="form-control"
                             name="Selecione"
@@ -174,14 +212,14 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                               })
                               .map(atributeChildren => (
                                 <option
-                                  key={Math.random()}
+                                  key={index}
                                   value={`${index}+${indexAtribute}+${atributeChildren.id}+${atributeChildren.name}+${id}`}
                                 >
                                   {atributeChildren.name}
                                 </option>
                               ))}
                           </NewSelect>
-                        </Td>
+                        </td>
                       )
                   )}
                   <td>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Container, IconRemove } from './style'
+import React from 'react'
+import { Container, IconRemove, Td, Th } from './style'
 import { NewInput } from '../../../../../../../../../../components/NewInput'
 import { NewSelect } from '../../../../../../../../../../components/NewSelect'
 import { useTabCreate } from '../../../../../providers/tabsProvider'
@@ -51,86 +51,39 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
       <table className="table table-bordered margin-bottom-0">
         <tbody>
           <tr>
-            <th
-              style={
-                isTypeSaleOrResale()
-                  ? {
-                      position: 'relative',
-                      lineHeight: '50px'
-                    }
-                  : {}
-              }
-              rowSpan={isTypeSaleOrResale() ? 2 : 1}
-            >
+            <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
               Unidade de medidas
-            </th>
-
+            </Th>
             {atributesList.map(
-              ({ name, parent_id }) =>
+              ({ name, parent_id, isChecked }) =>
                 parent_id === null && (
-                  <th
-                    style={
-                      isTypeSaleOrResale()
-                        ? {
-                            position: 'relative',
-                            lineHeight: '50px'
-                          }
-                        : {}
-                    }
-                    rowSpan={isTypeSaleOrResale() ? 2 : 1}
+                  <Th
+                    active={isChecked}
+                    isTypeSaleOrResale={isTypeSaleOrResale()}
                   >
                     {name}
-                  </th>
+                  </Th>
                 )
             )}
-            {/* <th
-              style={
-                isTypeSaleOrResale()
-                  ? {
-                      position: 'relative',
-                      lineHeight: '50px',
-                    }
-                  : {}
-              }
-              rowSpan={isTypeSaleOrResale() ? 2 : 1}
-            >
+            <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
               Estoque atual
-            </th> */}
-            <th
-              style={
-                isTypeSaleOrResale()
-                  ? {
-                      position: 'relative',
-                      lineHeight: '50px'
-                    }
-                  : {}
-              }
-              rowSpan={isTypeSaleOrResale() ? 2 : 1}
-            >
+            </Th>
+            <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
               <TooltipComponent
                 label="Reposição de estoque"
                 message="Reposição de estoque"
                 bold
               />
-            </th>
+            </Th>
+
             {isTypeSaleOrResale() ? (
               <th align="center" style={{ textAlign: 'center' }} colSpan={2}>
                 Preço
               </th>
             ) : null}
-            <th
-              style={
-                isTypeSaleOrResale()
-                  ? {
-                      position: 'relative',
-                      lineHeight: '50px'
-                    }
-                  : {}
-              }
-              rowSpan={isTypeSaleOrResale() ? 2 : 1}
-            >
+            <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
               Ações
-            </th>
+            </Th>
           </tr>
           {isTypeSaleOrResale() && (
             <tr>
@@ -150,7 +103,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
               },
               index
             ) => (
-              <tr>
+              <tr key={index}>
                 <td>
                   <NewSelect
                     isSelected={variationList[index]?.unitMensured?.value.name}
@@ -165,15 +118,20 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                     error={unitMensured.error}
                   >
                     {unitMensuredList.map(({ id, name }) => (
-                      <option value={`${id}+${name}`}>{name}</option>
+                      <option key={id} value={`${id}+${name}`}>
+                        {name}
+                      </option>
                     ))}
                   </NewSelect>
                 </td>
                 <>
                   {atributesList.map(
-                    ({ parent_id, childrenList, id }, indexAtribute) =>
+                    (
+                      { parent_id, childrenList, id, isChecked },
+                      indexAtribute
+                    ) =>
                       parent_id === null && (
-                        <td key={Math.random()}>
+                        <Td key={Math.random()} active={isChecked}>
                           <NewSelect
                             className="form-control"
                             name="Selecione"
@@ -201,30 +159,24 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                               )
                             }}
                           >
-                            {childrenList.map(atributeChildren => (
-                              <option
-                                value={`${index}+${indexAtribute}+${atributeChildren.id}+${atributeChildren.name}+${id}`}
-                              >
-                                {atributeChildren.name}
-                              </option>
-                            ))}
+                            {childrenList
+                              .sort((a, b) => {
+                                if (a.name > b.name) return 1
+                                if (a.name < b.name) return -1
+                                return 0
+                              })
+                              .map(atributeChildren => (
+                                <option
+                                  key={indexAtribute}
+                                  value={`${index}+${indexAtribute}+${atributeChildren.id}+${atributeChildren.name}+${id}`}
+                                >
+                                  {atributeChildren.name}
+                                </option>
+                              ))}
                           </NewSelect>
-                        </td>
+                        </Td>
                       )
                   )}
-                  {/* <td>
-                    <NewInput
-                      name="currentStock"
-                      value={currentStock.value}
-                      error={currentStock.error}
-                      isNumber
-                      onChange={event =>
-                        changeCurrentStock(event.currentTarget.value, index)
-                      }
-                      className="form-control"
-                      type="text"
-                    />
-                  </td> */}
                   <td>
                     <NewInput
                       name="replacementPoint"
