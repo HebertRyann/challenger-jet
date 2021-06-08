@@ -2,13 +2,17 @@ import React, { createContext, useContext } from 'react'
 import {
   useForm,
   FormProvider as FormContextRHF,
-  useWatch
+  useWatch,
+  UseFormGetValues,
+  UseFormSetValue
 } from 'react-hook-form'
 import { FormState } from './types'
 
 type FormContextType = {
   control: any
   errors: any
+  getValues: UseFormGetValues<FormState>
+  setValue: UseFormSetValue<FormState>
 }
 
 const FormContext = createContext<FormContextType>({} as FormContextType)
@@ -18,8 +22,8 @@ type FormProviderType = {
 }
 
 export const FormProvider = ({ children }: FormProviderType): JSX.Element => {
-  const methods = useForm()
-  const { handleSubmit, control, formState } = methods
+  const methods = useForm<FormState>()
+  const { handleSubmit, control, formState, getValues, setValue } = methods
   const errors = formState.errors
 
   const changeSelectProductType = useWatch({
@@ -39,7 +43,7 @@ export const FormProvider = ({ children }: FormProviderType): JSX.Element => {
   }
 
   return (
-    <FormContext.Provider value={{ control, errors }}>
+    <FormContext.Provider value={{ control, errors, getValues, setValue }}>
       <div>
         <FormContextRHF {...methods}>
           <form onSubmit={handleSubmit(onSubmit)}>

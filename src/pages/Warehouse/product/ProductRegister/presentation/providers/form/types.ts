@@ -7,6 +7,17 @@ type OverViewFormTypes = {
   hasVariation: string
 }
 
+type DetailsType = {
+  weightSelect: string
+  weight: string
+  measure: string
+  width: string
+  height: string
+  length: string
+  thickness: string
+}
+
 export type FormState = {
   overview: OverViewFormTypes
+  details: DetailsType
 }

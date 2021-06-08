@@ -1,9 +1,11 @@
 import React, { useCallback, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { NewSelect } from '../../../../../../../../../../components/NewSelect'
 import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent'
 import { CategoryCostModel } from '../../../../../../domain/models/categoryCost'
 import { useFormApplication } from '../../../../../providers/form/FormProvider'
 import { useProduct } from '../../../../../providers/product/ProductProvider'
+import { getError } from '../../../../../utils/getErrors'
 import { InputForm } from '../../form/input'
 import { Container } from './styles'
 
@@ -15,11 +17,6 @@ export const OverviewTab = (): JSX.Element => {
   const [subCategoryCost, setSubCategoryCost] = useState<CategoryCostModel[]>(
     []
   )
-
-  const getError = (error: any): string => {
-    if (error) return 'error'
-    return ''
-  }
 
   const onChangeCategoryCost = useCallback(
     (parentId: string) => {
@@ -42,7 +39,7 @@ export const OverviewTab = (): JSX.Element => {
             label="Tipo do produto"
             message="Selecione o tipo do produto"
           />
-          <select
+          <NewSelect
             className={`form-control ${getError(
               errors?.overview?.typeProduct
             )}`}
@@ -50,22 +47,19 @@ export const OverviewTab = (): JSX.Element => {
               required: true
             })}
           >
-            <option className="disable" selected={true} disabled>
-              selecione
-            </option>
             {loadTypeProducts().map(({ key, name, label }) => (
               <option key={key} value={key + '+' + name}>
                 {label}
               </option>
             ))}
-          </select>
+          </NewSelect>
         </div>
         <div className="form-content col-md-3">
           <TooltipComponent
             label="Grupo do produto"
             message="selecione o grupo do produto"
           />
-          <select
+          <NewSelect
             className={`form-control ${getError(
               errors?.overview?.groupProduct
             )}`}
@@ -73,15 +67,12 @@ export const OverviewTab = (): JSX.Element => {
               required: true
             })}
           >
-            <option className="disable" selected={true} disabled>
-              selecione
-            </option>
             {loadGroupProduct().map(({ name, id }) => (
               <option key={id} value={id + '+' + name}>
                 {name}
               </option>
             ))}
-          </select>
+          </NewSelect>
         </div>
         <div className="form-content col-md-6">
           <TooltipComponent
@@ -101,7 +92,7 @@ export const OverviewTab = (): JSX.Element => {
             label="Categoria de custo"
             message="Selecione a categoria de custo"
           />
-          <select
+          <NewSelect
             className={`form-control ${getError(
               errors?.overview?.categoryCost
             )}`}
@@ -110,9 +101,6 @@ export const OverviewTab = (): JSX.Element => {
             })}
             onChange={({ target }) => onChangeCategoryCost(target.value)}
           >
-            <option className="disable" selected={true} disabled>
-              selecione
-            </option>
             {loadCategoriesCost()
               .filter(({ parent_id }) => parent_id === null)
               .map(({ id, name }) => (
@@ -120,15 +108,14 @@ export const OverviewTab = (): JSX.Element => {
                   {name}
                 </option>
               ))}
-          </select>
+          </NewSelect>
         </div>
         <div className="form-content col-md-3">
           <TooltipComponent
             label="Subcategoria de custo"
             message="selecione o subcategoria de custo"
           />
-          {console.log()}
-          <select
+          <NewSelect
             className={`form-control ${getError(
               errors?.overview?.subcategoryCost
             )}`}
@@ -136,23 +123,20 @@ export const OverviewTab = (): JSX.Element => {
               required: true
             })}
           >
-            <option className="disable" selected={true} disabled>
-              selecione
-            </option>
-            {subCategoryCost.length >= 0 &&
-              subCategoryCost.map(({ name, id }) => (
-                <option key={id} value={id + '+' + name}>
-                  {name}
-                </option>
-              ))}
-          </select>
+            {subCategoryCost.length >= 0
+              ? subCategoryCost.map(({ name, id }) => (
+                  <option key={id} value={id + '+' + name}>
+                    {name}
+                  </option>
+                ))
+              : []}
+          </NewSelect>
         </div>
         <div className="form-content col-md-3">
           <TooltipComponent
             label="Possui variação?"
             message="selecione se existe variação"
           />
-          {console.log()}
           <select
             className={`form-control ${getError(
               errors?.overview?.hasVariation
