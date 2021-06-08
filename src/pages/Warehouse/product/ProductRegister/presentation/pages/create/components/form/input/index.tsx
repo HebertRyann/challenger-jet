@@ -1,24 +1,29 @@
-import React from 'react'
+import React, { InputHTMLAttributes } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { NewInput } from '../../../../../../../../../../components/NewInput'
 import { useFormApplication } from '../../../../../providers/form/FormProvider'
 import { genericMaskNumber } from '../../../../../utils/mask'
 
-type InputType = {
+type InputType = InputHTMLAttributes<HTMLInputElement> & {
   name: string
   required?: boolean
   error?: boolean
+  isNumber?: boolean
 }
 
 export const InputForm = ({
   name,
   required,
-  error
+  error,
+  isNumber,
+  ...rest
 }: InputType): JSX.Element => {
   const { register } = useFormContext()
 
   return (
-    <input
+    <NewInput
+      {...rest}
+      isNumber={isNumber}
       className={error ? 'form-control error' : 'form-control'}
       key={Math.random()}
       {...register(name, { required })}

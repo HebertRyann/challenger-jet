@@ -10,3 +10,9 @@ export const Container = styled.div`
     padding: 5px 10px;
   }
 `
+
+export const Th = styled.th.attrs(({ isSale }: { isSale: boolean }) => {
+  return isSale ? { rowSpan: 2 } : { rowSpan: 1 }
+})<{
+  isSale?: boolean
+}>``
