@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, IconRemove } from './style'
+import { Container, IconRemove, Td, Th } from './style'
 import { NewInput } from '../../../../../../../../../../components/NewInput'
 import { NewSelect } from '../../../../../../../../../../components/NewSelect'
 import { useTabCreate } from '../../../../../providers/tabsProvider'
@@ -51,87 +51,40 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
       <table className="table table-bordered margin-bottom-0">
         <tbody>
           <tr>
-            <th
-              style={
-                isTypeSaleOrResale()
-                  ? {
-                      position: 'relative',
-                      lineHeight: '50px'
-                    }
-                  : {}
-              }
-              rowSpan={isTypeSaleOrResale() ? 2 : 1}
-            >
+            <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
               Unidade de medidas
-            </th>
+            </Th>
 
             {atributesList.map(
-              ({ name, parent_id }) =>
+              ({ name, parent_id, isChecked }) =>
                 parent_id === null && (
-                  <th
-                    style={
-                      isTypeSaleOrResale()
-                        ? {
-                            position: 'relative',
-                            lineHeight: '50px'
-                          }
-                        : {}
-                    }
-                    rowSpan={isTypeSaleOrResale() ? 2 : 1}
+                  <Th
+                    active={!!isChecked}
+                    isTypeSaleOrResale={isTypeSaleOrResale()}
                   >
                     {name}
-                  </th>
+                  </Th>
                 )
             )}
-            <th
-              style={
-                isTypeSaleOrResale()
-                  ? {
-                      position: 'relative',
-                      lineHeight: '50px'
-                    }
-                  : {}
-              }
-              rowSpan={isTypeSaleOrResale() ? 2 : 1}
-            >
+            <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
               Estoque atual
-            </th>
+            </Th>
 
-            <th
-              style={
-                isTypeSaleOrResale()
-                  ? {
-                      position: 'relative',
-                      lineHeight: '50px'
-                    }
-                  : {}
-              }
-              rowSpan={isTypeSaleOrResale() ? 2 : 1}
-            >
+            <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
               <TooltipComponent
                 label="Reposição de estoque"
                 message="Reposição de estoque"
                 bold
               />
-            </th>
+            </Th>
             {isTypeSaleOrResale() ? (
               <th align="center" style={{ textAlign: 'center' }} colSpan={2}>
                 Preço
               </th>
             ) : null}
-            <th
-              style={
-                isTypeSaleOrResale()
-                  ? {
-                      position: 'relative',
-                      lineHeight: '50px'
-                    }
-                  : {}
-              }
-              rowSpan={isTypeSaleOrResale() ? 2 : 1}
-            >
+            <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
               Ações
-            </th>
+            </Th>
           </tr>
           {isTypeSaleOrResale() && (
             <tr>
@@ -174,9 +127,12 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                 </td>
                 <>
                   {atributesList.map(
-                    ({ parent_id, childrenList, id }, indexAtribute) =>
+                    (
+                      { parent_id, childrenList, id, isChecked },
+                      indexAtribute
+                    ) =>
                       parent_id === null && (
-                        <td key={Math.random()}>
+                        <Td active={isChecked} key={Math.random()}>
                           <NewSelect
                             className="form-control"
                             name="Selecione"
@@ -219,7 +175,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                                 </option>
                               ))}
                           </NewSelect>
-                        </td>
+                        </Td>
                       )
                   )}
                   <td>
