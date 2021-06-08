@@ -11,6 +11,7 @@ import { FormProvider } from '../../providers/form/FormProvider'
 import { makeLoadProdutctsType } from '../../../main/factories/products/load/makeLoadProdutctsType'
 import { makeLoadProdutctsGroups } from '../../../main/factories/products/load/makeLoadProdutctsGroups'
 import { makeLoadProdutctsCategoryCost } from '../../../main/factories/products/load/makeLoadProdutctsCategoryCost'
+import { makeLoadProdutctsUnitMensured } from '../../../main/factories/products/load/makeLoadProdutctsUnitMensured'
 import { TabsProvider } from '../../../../../../../hooks/tabs'
 import { StockTab } from './components/tabs/stock'
 
@@ -52,6 +53,7 @@ export const CreateProductPage = (): JSX.Element => {
       loadTypeProduct={makeLoadProdutctsType()}
       loadGroupProducts={makeLoadProdutctsGroups()}
       loadCategoryCost={makeLoadProdutctsCategoryCost()}
+      loadUnitMensureds={makeLoadProdutctsUnitMensured()}
     >
       <Container
         Content={RenderContentTabs}

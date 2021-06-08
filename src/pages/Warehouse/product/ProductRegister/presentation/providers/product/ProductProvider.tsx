@@ -3,14 +3,17 @@ import { useLoading } from '../../../../../../../hooks/loading'
 import { TypeProductModel } from '../../../domain/models/typeProduct'
 import { GroupProductModel } from '../../../domain/models/groupProduct'
 import { CategoryCostModel } from '../../../domain/models/categoryCost'
+import { UnitMensuredProductModel } from '../../../domain/models/unitMensuredProduct'
 import { LoadTypeProduct } from '../../../domain/useCases/product/load/LoadTypeProduct'
 import { LoadGroupProduct } from '../../../domain/useCases/product/load/LoadGroupProduct'
 import { LoadCategoryCost } from '../../../domain/useCases/product/load/LoadCategoryCostProduct'
+import { LoadUnitMensuredProduct } from '../../../domain/useCases/product/load/LoadUnitMensuredProduct'
 
 type ProductContextType = {
   loadTypeProducts: () => TypeProductModel[]
   loadGroupProduct: () => GroupProductModel[]
   loadCategoriesCost: () => CategoryCostModel[]
+  loadUnitMensured: () => UnitMensuredProductModel[]
   loadSubCategoryCost: () => Promise<void>
 }
 
@@ -23,17 +26,22 @@ type ProductProvider = {
   loadTypeProduct: LoadTypeProduct
   loadGroupProducts: LoadGroupProduct
   loadCategoryCost: LoadCategoryCost
+  loadUnitMensureds: LoadUnitMensuredProduct
 }
 
 export const ProductProvider = ({
   children,
   loadTypeProduct,
   loadGroupProducts,
-  loadCategoryCost
+  loadCategoryCost,
+  loadUnitMensureds
 }: ProductProvider): JSX.Element => {
   const [productType, setProducTypes] = useState<TypeProductModel[]>([])
   const [groupProduct, setGroupProduct] = useState<GroupProductModel[]>([])
   const [categoriesCost, setCategoriesCost] = useState<CategoryCostModel[]>([])
+  const [unitMensured, setUnitMensured] = useState<UnitMensuredProductModel[]>(
+    []
+  )
   const { activeLoading, disableLoading } = useLoading()
 
   useEffect(() => {
@@ -45,6 +53,8 @@ export const ProductProvider = ({
       setGroupProduct(groupProduct)
       const categoriesCost = await loadCategoryCost.loadTypeCategoryCost()
       setCategoriesCost(categoriesCost)
+      const mensureds = await loadUnitMensureds.loadUnitMensuredProduct()
+      setUnitMensured(mensureds)
       disableLoading()
     })()
   }, [
@@ -52,7 +62,8 @@ export const ProductProvider = ({
     disableLoading,
     loadCategoryCost,
     loadGroupProducts,
-    loadTypeProduct
+    loadTypeProduct,
+    loadUnitMensureds
   ])
 
   const loadTypeProducts = () => productType
@@ -65,13 +76,16 @@ export const ProductProvider = ({
     return Promise.resolve()
   }
 
+  const loadUnitMensured = () => unitMensured
+
   return (
     <ProductContext.Provider
       value={{
         loadCategoriesCost,
         loadGroupProduct,
         loadSubCategoryCost,
-        loadTypeProducts
+        loadTypeProducts,
+        loadUnitMensured
       }}
     >
       {children}
