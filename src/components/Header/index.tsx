@@ -47,7 +47,7 @@ const Header: React.FC = () => {
               }
               key={menu.id}
             >
-              <a href={menu.url ? menu.url : '#!'}>{menu.name}</a>
+              <Link to={menu.url ? menu.url : '#!'}>{menu.name}</Link>
               {menu.children && (
                 <ul className="dropdown-menu pull-left">
                   {createMenu(menu.children, true)}
