@@ -1,9 +1,9 @@
 import { GroupProductModel } from '../../../models/groupProduct'
 
 export interface LoadGroupProduct {
-  loadGroupProduct: () => Promise<LoadGroupProduct.LoadGroupProductResponse[]>
+  loadGroupProduct: () => Promise<LoadGroupProduct.Response[]>
 }
 
 export namespace LoadGroupProduct {
-  export type LoadGroupProductResponse = GroupProductModel
+  export type Response = GroupProductModel
 }

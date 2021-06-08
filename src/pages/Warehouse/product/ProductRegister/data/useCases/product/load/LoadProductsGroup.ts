@@ -7,9 +7,7 @@ export class LoadProductsGroup implements LoadGroupProduct {
     private readonly url: string
   ) {}
 
-  async loadGroupProduct(): Promise<
-    LoadGroupProduct.LoadGroupProductResponse[]
-  > {
+  async loadGroupProduct(): Promise<LoadGroupProduct.Response[]> {
     try {
       const response = await this.loadGroupProductProvider.loadGroupProducts(
         this.url

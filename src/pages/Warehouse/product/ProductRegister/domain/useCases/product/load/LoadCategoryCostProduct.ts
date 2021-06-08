@@ -1,11 +1,9 @@
 import { CategoryCostModel } from '../../../models/categoryCost'
 
 export interface LoadCategoryCost {
-  loadTypeCategoryCost: () => Promise<
-    LoadCategoryCost.LoadCategoryCostProductResponse[]
-  >
+  loadTypeCategoryCost: () => Promise<LoadCategoryCost.Response[]>
 }
 
 export namespace LoadCategoryCost {
-  export type LoadCategoryCostProductResponse = CategoryCostModel
+  export type Response = CategoryCostModel
 }

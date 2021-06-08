@@ -6,7 +6,7 @@ export class LoadProductsType implements LoadTypeProduct {
     private readonly loadProductTypeProvider: LoadProductTypeProvider
   ) {}
 
-  async loadTypeProduct(): Promise<LoadTypeProduct.LoadTypeProductResponse[]> {
+  async loadTypeProduct(): Promise<LoadTypeProduct.Response[]> {
     const response = await this.loadProductTypeProvider.loadProductTypes()
     return response
   }

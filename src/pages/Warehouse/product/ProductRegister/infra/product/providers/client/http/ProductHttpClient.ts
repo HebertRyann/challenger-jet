@@ -26,11 +26,9 @@ export class ProductHttpClient
 
   async loadProductCategoryCost(
     url: string
-  ): Promise<LoadCategoryCostProvider.LoadCategoryCostProviderResponse[]> {
+  ): Promise<LoadCategoryCostProvider.Response[]> {
     try {
-      const { data } = await api.get<
-        LoadCategoryCostProvider.LoadCategoryCostProviderResponse[]
-      >(url)
+      const { data } = await api.get<LoadCategoryCostProvider.Response[]>(url)
       return data
     } catch (error) {
       console.error(error)
@@ -40,11 +38,9 @@ export class ProductHttpClient
 
   async loadGroupProducts(
     url: string
-  ): Promise<LoadGroupProductProvider.LoadGroupProductProviderResponse[]> {
+  ): Promise<LoadGroupProductProvider.Response[]> {
     try {
-      const { data } = await api.get<
-        LoadGroupProductProvider.LoadGroupProductProviderResponse[]
-      >(url)
+      const { data } = await api.get<LoadGroupProductProvider.Response[]>(url)
 
       return data
     } catch (error) {

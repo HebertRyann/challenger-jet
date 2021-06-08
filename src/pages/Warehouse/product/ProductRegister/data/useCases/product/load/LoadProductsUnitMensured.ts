@@ -7,9 +7,7 @@ export class LoadProductsUnitMensured implements LoadUnitMensuredProduct {
     private readonly url: string
   ) {}
 
-  async loadUnitMensuredProduct(): Promise<
-    LoadUnitMensuredProduct.LoadUnitMensuredProductResponse[]
-  > {
+  async loadUnitMensuredProduct(): Promise<LoadUnitMensuredProduct.Response[]> {
     const response =
       await this.loadProductUnitMensuredProvider.loadProductUnitMensured(
         this.url

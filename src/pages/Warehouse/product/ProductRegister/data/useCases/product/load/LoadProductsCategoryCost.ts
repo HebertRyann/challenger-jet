@@ -7,9 +7,7 @@ export class LoadCategoryCostProduct implements LoadCategoryCost {
     private readonly url: string
   ) {}
 
-  async loadTypeCategoryCost(): Promise<
-    LoadCategoryCost.LoadCategoryCostProductResponse[]
-  > {
+  async loadTypeCategoryCost(): Promise<LoadCategoryCost.Response[]> {
     const response =
       await this.loadCategoryCostProvider.loadProductCategoryCost(this.url)
     return response

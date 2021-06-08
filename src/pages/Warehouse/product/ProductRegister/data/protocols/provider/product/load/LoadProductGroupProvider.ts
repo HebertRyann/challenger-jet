@@ -3,9 +3,9 @@ import { GroupProductModel } from '../../../../../domain/models/groupProduct'
 export interface LoadGroupProductProvider {
   loadGroupProducts: (
     url: string
-  ) => Promise<LoadGroupProductProvider.LoadGroupProductProviderResponse[]>
+  ) => Promise<LoadGroupProductProvider.Response[]>
 }
 
 export namespace LoadGroupProductProvider {
-  export type LoadGroupProductProviderResponse = GroupProductModel
+  export type Response = GroupProductModel
 }

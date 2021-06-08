@@ -1,11 +1,9 @@
 import { TypeProductModel } from '../../../../../domain/models/typeProduct'
 
 export interface LoadProductTypeProvider {
-  loadProductTypes: () => Promise<
-    LoadProductTypeProvider.LoadProductTypeProviderResponse[]
-  >
+  loadProductTypes: () => Promise<LoadProductTypeProvider.Response[]>
 }
 
 export namespace LoadProductTypeProvider {
-  export type LoadProductTypeProviderResponse = TypeProductModel
+  export type Response = TypeProductModel
 }
