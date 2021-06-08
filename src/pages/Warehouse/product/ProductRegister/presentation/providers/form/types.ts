@@ -10,7 +10,7 @@ type OverViewFormTypes = {
 type DetailsType = {
   weightSelect: string
   weight: string
-  measure: string
+  measureSelect: string
   width: string
   height: string
   length: string
