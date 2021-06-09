@@ -63,10 +63,7 @@ import {
   AtributesList,
   TypeGenericValueWithError
 } from './domain.types'
-import {
-  convertValueMaskInNumber,
-  convertValueWithMaskInNumber
-} from '../../../../../../utlis/mask'
+import { convertValueWithMaskInNumber } from '../../../../../../utlis/mask'
 import { useAuth } from '../../../../../../hooks/auth'
 interface TabCreateContext {
   overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps>
@@ -190,34 +187,6 @@ const TabCreateProvider = ({
   const validationAndSetErrorAllFieldsDetails = useCallback(() => {
     let isError = false
 
-    // if (detail.weight.value === '') {
-    //   isError = true;
-    //   setDetail(old => ({
-    //     ...old,
-    //     weight: { ...old.weight, error: { isError: true } },
-    //   }));
-    // }
-    // if (detail.width.value === '') {
-    //   isError = true;
-    //   setDetail(old => ({
-    //     ...old,
-    //     width: { ...old.width, error: { isError: true } },
-    //   }));
-    // }
-    // if (detail.height.value === '') {
-    //   isError = true;
-    //   setDetail(old => ({
-    //     ...old,
-    //     height: { ...old.height, error: { isError: true } },
-    //   }));
-    // }
-    // if (detail.length.value === '') {
-    //   isError = true;
-    //   setDetail(old => ({
-    //     ...old,
-    //     length: { ...old.length, error: { isError: true } },
-    //   }));
-    // }
     if (detail.descriptionAndDetails.value === '') {
       isError = true
       setDetail(old => ({
@@ -399,7 +368,7 @@ const TabCreateProvider = ({
       const tempState: TypeProduct[] = JSON.parse(
         JSON.stringify(compositionState)
       )
-      tempState.map(({ nameProduct }, key) => {
+      tempState.forEach(({ nameProduct }, key) => {
         if (key === index) {
           nameProduct.value = name
           nameProduct.error.isError = false
@@ -412,7 +381,7 @@ const TabCreateProvider = ({
       const tempState: TypeProduct[] = JSON.parse(
         JSON.stringify(compositionState)
       )
-      tempState.map(({ cost, amount, subtotal }, key) => {
+      tempState.forEach(({ cost, amount, subtotal }, key) => {
         if (key === index) {
           amount.value = newAmount
           amount.error.isError = false
@@ -428,7 +397,7 @@ const TabCreateProvider = ({
       const tempState: TypeProduct[] = JSON.parse(
         JSON.stringify(compositionState)
       )
-      tempState.map(({ cost, amount, subtotal }, key) => {
+      tempState.forEach(({ cost, amount, subtotal }, key) => {
         if (key === index) {
           cost.value = newCost
           cost.error.isError = false
@@ -440,6 +409,7 @@ const TabCreateProvider = ({
       setCompositionState([...tempState])
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const changeInputSubTotal = (subtotal: string, index: number) => {}
 
     const changeInputProductIdAndStockId = (
@@ -447,7 +417,7 @@ const TabCreateProvider = ({
       newStockId: number,
       index: number
     ) => {
-      producIdAndStockId.map((_, key) => {
+      producIdAndStockId.forEach((_, key) => {
         if (key === index) {
           producIdAndStockId[key].productId = newProductId
           producIdAndStockId[key].stockId = newStockId
@@ -481,7 +451,7 @@ const TabCreateProvider = ({
         JSON.stringify(compositionState)
       )
 
-      tempState.map(({ amount, cost, nameProduct, subtotal }) => {
+      tempState.forEach(({ amount, cost, nameProduct, subtotal }) => {
         if (amount.value === '') {
           isError = true
           amount.error.isError = true
@@ -511,19 +481,42 @@ const TabCreateProvider = ({
 
   const getDataVariation = (): TypeHasVariation[] => variationState
 
-  const changeAtributes = useCallback(
-    (atribute: AtributesList, x: number, y: number) => {
-      const tempState: TypeHasVariation[] = JSON.parse(
-        JSON.stringify(variationState)
-      )
-      if (tempState[x].atributes[y]) {
-        tempState[x].atributes[y].error.isError = false
-        tempState[x].atributes[y].value = atribute
-        setVariationState([...tempState])
-      }
-    },
-    [variationState]
-  )
+  const changeAtributes = (atribute: AtributesList, x: number, y: number) => {
+    setVariationState(prevState => {
+      prevState.map(stateValue => {
+        let update = false
+        stateValue.atributes.forEach(({ value }) => {
+          if (value.keyParent === atribute.keyParent) {
+            prevState[x].atributes[y].value = atribute
+            prevState[x].atributes[y].error.isError = false
+            update = true
+            // eslint-disable-next-line no-useless-return
+            return
+          }
+        })
+        if (!update) {
+          for (let i = 0; i <= y; i++) {
+            if (prevState[x].atributes.length <= y) {
+              prevState[x].atributes.push({
+                error: { isError: false },
+                value: {
+                  id: '',
+                  name: '',
+                  keyParent: ''
+                }
+              })
+            }
+          }
+
+          prevState[x].atributes[y].value = atribute
+          prevState[x].atributes[y].error.isError = false
+        }
+        return stateValue
+      })
+
+      return prevState
+    })
+  }
 
   const addVariation = useCallback(() => {
     const temp: TypeGenericValueWithError<AtributesList>[] = []
@@ -568,7 +561,7 @@ const TabCreateProvider = ({
       const tempState: TypeHasVariation[] = JSON.parse(
         JSON.stringify(variationState)
       )
-      tempState.map(({ unitMensured }, key) => {
+      tempState.forEach(({ unitMensured }, key) => {
         if (key === index) {
           unitMensured.value = newUnitMensured
           unitMensured.error.isError = false
@@ -581,7 +574,7 @@ const TabCreateProvider = ({
       const tempState: TypeHasVariation[] = JSON.parse(
         JSON.stringify(variationState)
       )
-      tempState.map(({ currentStock }, key) => {
+      tempState.forEach(({ currentStock }, key) => {
         if (key === index) {
           currentStock.value = newCurrentStock
           currentStock.error.isError = false
@@ -594,7 +587,7 @@ const TabCreateProvider = ({
       const tempState: TypeHasVariation[] = JSON.parse(
         JSON.stringify(variationState)
       )
-      tempState.map(({ replacementPoint }, key) => {
+      tempState.forEach(({ replacementPoint }, key) => {
         if (key === index) {
           replacementPoint.value = newReplacement
           replacementPoint.error.isError = false
@@ -607,7 +600,7 @@ const TabCreateProvider = ({
       const tempState: TypeHasVariation[] = JSON.parse(
         JSON.stringify(variationState)
       )
-      tempState.map(({ priceCost, priceSale }, key) => {
+      tempState.forEach(({ priceCost, priceSale }, key) => {
         if (key === index) {
           priceCost.value = newPriceCost
           priceCost.error.isError = false
@@ -624,7 +617,7 @@ const TabCreateProvider = ({
       const tempState: TypeHasVariation[] = JSON.parse(
         JSON.stringify(variationState)
       )
-      tempState.map(({ replacementPoint }, key) => {
+      tempState.forEach(({ replacementPoint }, key) => {
         if (key === index) {
           replacementPoint.value = newReplacementPoint
           replacementPoint.error.isError = false
@@ -637,7 +630,7 @@ const TabCreateProvider = ({
       const tempState: TypeHasVariation[] = JSON.parse(
         JSON.stringify(variationState)
       )
-      tempState.map((_, index) => {
+      tempState.forEach((_, index) => {
         tempState[index].atributes.push({
           error: { isError: false },
           value: { id: '', name: '', keyParent: '' }
@@ -646,19 +639,21 @@ const TabCreateProvider = ({
       setVariationState([...tempState])
     }
 
-    const removeAtributes = () => {
-      const tempState: TypeHasVariation[] = JSON.parse(
-        JSON.stringify(variationState)
-      )
-      tempState.map((_, index) => {
-        tempState[index].atributes = [
-          {
-            error: { isError: false },
-            value: { id: '', name: '', keyParent: '' }
-          }
-        ]
+    const removeAtributes = (keyParent: string) => {
+      setVariationState(prevState => {
+        prevState.forEach(({ atributes }, x) => {
+          atributes.forEach(({ value }, y) => {
+            if (value.keyParent.toString() === keyParent.toString()) {
+              prevState[x].atributes[y].value = {
+                id: '',
+                keyParent: '',
+                name: ''
+              }
+            }
+          })
+        })
+        return prevState
       })
-      setVariationState([...tempState])
     }
 
     return {
@@ -681,7 +676,7 @@ const TabCreateProvider = ({
       JSON.stringify(variationState)
     )
 
-    tempState.map(
+    tempState.forEach(
       ({
         unitMensured,
         currentStock,
@@ -709,7 +704,7 @@ const TabCreateProvider = ({
           }
         }
         if (atributes.length > 0) {
-          atributes.map(({ value }, index) => {
+          atributes.forEach(({ value }, index) => {
             if (value.id === '') {
               atributes[index].error.isError = true
             }
@@ -1045,7 +1040,7 @@ const TabCreateProvider = ({
       const stock: TypeProductStock[] = []
 
       if (hasVariationActive) {
-        variationList.map(
+        variationList.forEach(
           ({
             currentStock,
             priceCost,
@@ -1057,7 +1052,7 @@ const TabCreateProvider = ({
             const atributesList: TypeAtributes[] = []
             atributes
               .filter(({ value }) => value.id !== '')
-              .map(({ value }) => {
+              .forEach(({ value }) => {
                 atributesList.push({
                   key: parseInt(value.keyParent),
                   value: parseInt(value.id)
@@ -1126,7 +1121,7 @@ const TabCreateProvider = ({
 
     const createRequestWithComposition = (): CompositionRequest[] => {
       const compositionRequest: CompositionRequest[] = []
-      compositionState.map(({ amount, cost, nameProduct }, index) => {
+      compositionState.forEach(({ amount, cost, nameProduct }, index) => {
         compositionRequest.push({
           amount: convertValueWithMaskInNumber(amount.value),
           cost: convertValueWithMaskInNumber(cost.value),

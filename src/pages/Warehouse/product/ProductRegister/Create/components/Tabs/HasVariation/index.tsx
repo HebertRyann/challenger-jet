@@ -27,35 +27,33 @@ export const HasVariation = ({
   atributes
 }: TypeHasVariationProps): JSX.Element => {
   const { variation } = useTabCreate()
-  const { addAtributes, removeAtributes } = variation.setData
+  const { removeAtributes } = variation.setData
   const [atributesList, setAtributesList] =
     useState<ResponseEntiryWithIdNameWithChildren[]>(atributes)
 
   const handlerClickCheckBox = useCallback(
-    (index: number) => {
+    (index: number, removeCheck: boolean, keyParent: string) => {
+      if (removeCheck) {
+        removeAtributes(keyParent)
+      }
+
       atributesList[index].isChecked = !atributesList[index].isChecked
       setAtributesList([...atributesList])
-      removeAtributes()
-      atributesList
-        .filter(({ isChecked }) => isChecked)
-        .forEach(() => {
-          addAtributes()
-        })
     },
-    [atributesList, variation.getData()]
+    [atributesList, removeAtributes]
   )
 
   return (
     <>
       <Container className="row">
         <div className="check-container form-content col-md-12">
-          {atributesList.map(({ id, name, isChecked }, index) => (
+          {atributesList.map(({ id, name, isChecked, parent_id }, index) => (
             <div key={id}>
               <input
                 type="checkbox"
                 checked={isChecked}
                 onChange={() => {
-                  handlerClickCheckBox(index)
+                  handlerClickCheckBox(index, !!isChecked, String(id))
                 }}
                 value={id}
               />

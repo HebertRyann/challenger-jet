@@ -225,7 +225,6 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
       let hasVariation = false
 
       if (data.stocks.length > 1 || data.stocks[0]) {
-        console.log(data.stocks[0].atributes)
         if (
           data.stocks[0].atributes !== '[]' &&
           data.stocks[0].atributes &&
@@ -254,7 +253,7 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
               atributes: atributesResponse.map(({ id, keyParent, name }) => {
                 return {
                   error: { isError: false },
-                  value: { id, keyParent, name }
+                  value: { id: '', keyParent, name: '' }
                 }
               }),
               currentStock: {
