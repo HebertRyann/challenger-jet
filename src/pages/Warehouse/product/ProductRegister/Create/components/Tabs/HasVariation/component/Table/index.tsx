@@ -162,14 +162,6 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                           >
                             {childrenList
                               .sort((a, b) => {
-<<<<<<< HEAD
-                                if (a.name > b.name) return 1;
-                                if (a.name < b.name) return -1;
-                                return 0;
-                              })
-                              .map(atributeChildren => (
-                                <option
-=======
                                 if (a.name > b.name) return 1
                                 if (a.name < b.name) return -1
                                 return 0
@@ -177,7 +169,6 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                               .map(atributeChildren => (
                                 <option
                                   key={index}
->>>>>>> remove-product-register
                                   value={`${index}+${indexAtribute}+${atributeChildren.id}+${atributeChildren.name}+${id}`}
                                 >
                                   {atributeChildren.name}
