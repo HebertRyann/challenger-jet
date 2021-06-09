@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { LoadAllCFOP } from '../../../../../../domain/useCases/FIscal/CFOP/Load'
 import { ContainerSearch } from './styles'
 
@@ -34,6 +34,7 @@ export const SearchComponentCFOP = ({
       <ul>
         {data.map(({ code, descriptions, ...rest }) => (
           <li
+            key={Math.random()}
             onClick={() =>
               handlerClickCurrentRow({ code, descriptions, ...rest })
             }

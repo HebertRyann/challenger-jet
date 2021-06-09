@@ -1,4 +1,5 @@
 import React from 'react'
+import { version } from '../../../../package.json'
 
 import '../../../assets/global/plugins/font-awesome/css/font-awesome.min.css'
 import '../../../assets/global/plugins/simple-line-icons/simple-line-icons.min.css'
@@ -33,7 +34,7 @@ const DefaultLayout: React.FC = ({ children }) => {
             <div className="page-footer">
               <div className="container-fluid">
                 {' '}
-                {new Date().getFullYear()} &copy; Multfluxo
+                {new Date().getFullYear()} &copy; Multfluxo - Versão: {version}
               </div>
             </div>
             <div className="scroll-to-top">
