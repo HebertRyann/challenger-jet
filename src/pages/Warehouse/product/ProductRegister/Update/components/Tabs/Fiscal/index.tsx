@@ -1,27 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { Container } from './style';
-import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
-import { useTabs } from '../../../../../../../../hooks/tabs';
-import { makeTabsFiscal } from './tabs';
-import { useTabCreate } from '../../../providers/tabsProvider';
+import React, { useEffect, useState } from 'react'
 import {
+  Container,
   TabHeaderContainerFiscal,
   TabNameFiscal,
   TabPanelContainerFiscal,
-  RenderComponent,
-} from './style';
-import { Footer } from '../../footer';
-import { NewInput } from '../../../../../../../../components/NewInput';
+  RenderComponent
+} from './style'
+import { TooltipComponent } from '../../../../../../../../components/TooltipComponent'
+import { useTabs } from '../../../../../../../../hooks/tabs'
+import { makeTabsFiscal } from './tabs'
+import { useTabCreate } from '../../../providers/tabsProvider'
 
-export const labelFiscal = 'Fiscal';
-export const nameFiscal = '@@tabs-fiscal';
+import { Footer } from '../../footer'
+import { NewInput } from '../../../../../../../../components/NewInput'
+
+export const labelFiscal = 'Fiscal'
+export const nameFiscal = '@@tabs-fiscal'
 
 export type TypeContentTabsFiscal = {
-  name: string;
-  label: string;
-  isEnable: boolean;
-  Component: JSX.Element;
-};
+  name: string
+  label: string
+  isEnable: boolean
+  Component: JSX.Element
+}
 
 export const Fiscal = (): JSX.Element => {
   const {
@@ -30,24 +31,24 @@ export const Fiscal = (): JSX.Element => {
     loadCurrentTab,
     changeCurrentTab,
     changeCurrentTabForNext,
-    changeCurrentTabForPrevious,
-  } = useTabs();
-  const { fiscal } = useTabCreate();
-  const { ncm, cfop } = fiscal.getData();
-  const { changeNCM, changeCFOP } = fiscal.setData;
-  const [tabs, setTabs] = useState<TypeContentTabsFiscal[]>([]);
+    changeCurrentTabForPrevious
+  } = useTabs()
+  const { fiscal } = useTabCreate()
+  const { ncm, cfop } = fiscal.getData()
+  const { changeNCM, changeCFOP } = fiscal.setData
+  const [tabs, setTabs] = useState<TypeContentTabsFiscal[]>([])
 
   useEffect(() => {
     function load() {
-      const tabs = makeTabsFiscal();
-      tabs.map(tab => addTab(tab));
-      changeCurrentTab(tabs[0].name);
-      setTabs(loadTabs());
+      const tabs = makeTabsFiscal()
+      tabs.map(tab => addTab(tab))
+      changeCurrentTab(tabs[0].name)
+      setTabs(loadTabs())
     }
-    load();
-  }, []);
+    load()
+  }, [])
 
-  const allTabsData = loadTabs();
+  const allTabsData = loadTabs()
   return (
     <>
       <Container className="row">
@@ -94,7 +95,7 @@ export const Fiscal = (): JSX.Element => {
                   >
                     {label}
                   </TabNameFiscal>
-                ),
+                )
             )}
           </TabHeaderContainerFiscal>
           <TabPanelContainerFiscal>
@@ -109,5 +110,5 @@ export const Fiscal = (): JSX.Element => {
         </div>
       </Container>
     </>
-  );
-};
+  )
+}

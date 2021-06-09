@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components';
-import { FaQuestionCircle } from 'react-icons/fa';
+import styled, { css } from 'styled-components'
+import { FaQuestionCircle } from 'react-icons/fa'
 
 export const Container = styled.div<{ bold?: boolean }>`
   position: relative;
@@ -16,10 +16,10 @@ export const Container = styled.div<{ bold?: boolean }>`
   > div {
     margin-left: 15px;
     cursor: help;
-    a {
+    span {
       cursor: help;
     }
   }
-`;
+`
 
-export const JokerIcon = styled(FaQuestionCircle)``;
+export const JokerIcon = styled(FaQuestionCircle)``

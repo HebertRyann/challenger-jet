@@ -1,50 +1,41 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Footer } from '../../../footer';
-import { Container, FooterStyled, IconRemove } from './style';
-import { NewInput } from '../../../../../../../../../components/NewInput';
-import { useTabCreate } from '../../../../providers/tabsProvider';
-import { Alert } from '../../../../../../../../../components/Alert';
-import { useTabs } from '../../../../../../../../../hooks/tabs';
-import { loadProductByType } from '../../../../services/api/loadProductByType';
-import { nameHasComposition } from '..';
+import React, { useCallback, useEffect, useState } from 'react'
+import { Container, FooterStyled, IconRemove } from './style'
+import { NewInput } from '../../../../../../../../../components/NewInput'
+import { useTabCreate } from '../../../../providers/tabsProvider'
+import { loadProductByType } from '../../../../services/api/loadProductByType'
+import { nameHasComposition } from '..'
 import {
   CONSUMER,
   RE_SALE,
   SALE,
   SEMI_FINISHED,
   formatProductTypeToLowerCase,
-} from '../../../../domain/products';
-import { RAW_MATERIAL } from '../../../../domain/products';
-import { useLoading } from '../../../../../../../../../hooks/loading';
-import { SearchComponentHasComposition } from '../SearchComponent';
-import { useToast } from '../../../../../../../../../hooks/toast';
-import { number } from 'yup/lib/locale';
+  RAW_MATERIAL
+} from '../../../../domain/products'
+
+import { useLoading } from '../../../../../../../../../hooks/loading'
+import { SearchComponentHasComposition } from '../SearchComponent'
+import { useToast } from '../../../../../../../../../hooks/toast'
+import { useTabs } from '../../../../../../../../../hooks/tabs'
 
 type ProductByTypeSelected = {
-  id: string;
-  name: string;
-};
+  id: string
+  name: string
+}
 
 export const Table = (): JSX.Element => {
-  const { activeLoading, disableLoading } = useLoading();
-  const [alert, setAlert] = useState(false);
-  const { addToast } = useToast();
+  const { activeLoading, disableLoading } = useLoading()
+  const { addToast } = useToast()
   const [productListByTypeSelected, setProductListByTypeSelected] = useState<
     ProductByTypeSelected[]
-  >([]);
-  const [
-    productListByTypeSelectedSearch,
-    setProductListByTypeSelectedSearch,
-  ] = useState<ProductByTypeSelected[]>([]);
+  >([])
+  const [productListByTypeSelectedSearch, setProductListByTypeSelectedSearch] =
+    useState<ProductByTypeSelected[]>([])
 
-  const { composition, overview } = useTabCreate();
-  const {
-    changeCurrentTabForNext,
-    changeCurrentTabForPrevious,
-    loadCurrentTab,
-  } = useTabs();
-  const products = composition.getData();
-  const { typeSelectProdut } = overview.getData();
+  const { composition, overview } = useTabCreate()
+  const { loadCurrentTab } = useTabs()
+  const products = composition.getData()
+  const { typeSelectProdut } = overview.getData()
   const {
     removeComposition,
     addComposition,
@@ -52,111 +43,105 @@ export const Table = (): JSX.Element => {
     changeInputAmount,
     changeInputCost,
     changeInputProductIdAndStockId,
-    loadInputProductIdAndStockId,
-  } = composition.setData;
+    loadInputProductIdAndStockId
+  } = composition.setData
 
-  const [total, setTotal] = useState(0);
-  const [activeSearch, setActiveSearch] = useState(false);
+  const [total, setTotal] = useState(0)
+  const [activeSearch, setActiveSearch] = useState(false)
 
   useEffect(() => {
-    let soma = 0;
+    let soma = 0
     for (let i = 0; i < products.length; i++) {
       const subtotal =
-        Number(products[i].amount.value) * Number(products[i].cost.value);
-      soma += subtotal;
+        Number(products[i].amount.value) * Number(products[i].cost.value)
+      soma += subtotal
     }
-    setTotal(soma);
-  }, [products]);
-
-  const handleClickOnSaveButton = () => {
-    if (composition.validate()) {
-      setAlert(true);
-    }
-  };
+    setTotal(soma)
+  }, [products])
 
   const formatProductName = (product: string): string =>
-    product.replace(' ', '-').toLowerCase();
+    product.replace(' ', '-').toLowerCase()
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       try {
         if (loadCurrentTab().key === nameHasComposition) {
           if (typeSelectProdut.value.name === SEMI_FINISHED.name) {
-            activeLoading();
+            activeLoading()
             const productsTypeRawMaterial = await loadProductByType(
-              formatProductTypeToLowerCase(RAW_MATERIAL),
-            );
+              formatProductTypeToLowerCase(RAW_MATERIAL)
+            )
             const productsTypeConsumer = await loadProductByType(
-              formatProductTypeToLowerCase(CONSUMER),
-            );
+              formatProductTypeToLowerCase(CONSUMER)
+            )
             setProductListByTypeSelected([
               ...productsTypeRawMaterial,
-              ...productsTypeConsumer,
-            ]);
-            setProductListByTypeSelectedSearch(productListByTypeSelected);
-            disableLoading();
-            return;
+              ...productsTypeConsumer
+            ])
+            setProductListByTypeSelectedSearch(productListByTypeSelected)
+            disableLoading()
+            return
           }
           if (
             formatProductName(typeSelectProdut.value.name) ===
             formatProductTypeToLowerCase(SALE)
           ) {
-            activeLoading();
+            activeLoading()
             const productsTypeReSale = await loadProductByType(
-              formatProductTypeToLowerCase(RE_SALE),
-            );
-            setProductListByTypeSelected(productsTypeReSale);
-            setProductListByTypeSelectedSearch(productListByTypeSelected);
-            disableLoading();
+              formatProductTypeToLowerCase(RE_SALE)
+            )
+            setProductListByTypeSelected(productsTypeReSale)
+            setProductListByTypeSelectedSearch(productListByTypeSelected)
+            disableLoading()
           }
         }
       } catch (error) {
-        disableLoading();
-        addToast({ title: 'Lista de produto não carregada' });
+        disableLoading()
+        addToast({ title: 'Lista de produto não carregada' })
       }
-    })();
-  }, [typeSelectProdut.value, loadCurrentTab().key]);
+    })()
+  }, [typeSelectProdut.value, loadCurrentTab().key])
 
   const handlerChangeNameProduct = useCallback(
     (value: string, index: number) => {
-      changeInputNameProduct(value, index);
+      changeInputNameProduct(value, index)
       if (value.length) {
         const matchList = productListByTypeSelected.filter(({ id, name }) => {
-          const regex = new RegExp(`^${value}`, 'gi');
+          const regex = new RegExp(`^${value}`, 'gi')
 
-          return name.match(regex);
-        });
+          return name.match(regex)
+        })
 
         if (value === '') {
-          setProductListByTypeSelectedSearch([]);
-          setActiveSearch(false);
+          setProductListByTypeSelectedSearch([])
+          setActiveSearch(false)
         }
 
         if (matchList.length > 0) {
-          setProductListByTypeSelectedSearch(matchList);
-          setActiveSearch(true);
+          setProductListByTypeSelectedSearch(matchList)
+          setActiveSearch(true)
         } else {
-          setActiveSearch(false);
-          setProductListByTypeSelectedSearch(productListByTypeSelected);
+          setActiveSearch(false)
+          setProductListByTypeSelectedSearch(productListByTypeSelected)
         }
-        return;
+        return
       }
-      setActiveSearch(false);
+      setActiveSearch(false)
     },
-    [productListByTypeSelected, productListByTypeSelectedSearch, products],
-  );
+    [productListByTypeSelected, productListByTypeSelectedSearch, products]
+  )
 
   const handlerClickRowSearch = ({
     product,
-    index,
+    index
   }: {
-    product: any;
-    index: number;
+    product: any
+    index: number
   }) => {
-    handlerChangeNameProduct(product.name, index);
-    changeInputProductIdAndStockId(product.product_id, product.stock_id, index);
-    setActiveSearch(false);
-  };
+    handlerChangeNameProduct(product.name, index)
+    changeInputProductIdAndStockId(product.product_id, product.stock_id, index)
+    setActiveSearch(false)
+  }
 
   return (
     <Container className="table-responsive">
@@ -173,8 +158,9 @@ export const Table = (): JSX.Element => {
             {products &&
               products.map(({ amount, cost, nameProduct, subtotal }, index) => (
                 <tr
+                  key={index}
                   style={{
-                    height: '10px',
+                    height: '10px'
                   }}
                 >
                   <td>
@@ -279,5 +265,5 @@ export const Table = (): JSX.Element => {
         </div>
       </FooterStyled>
     </Container>
-  );
-};
+  )
+}

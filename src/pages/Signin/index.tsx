@@ -1,62 +1,62 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { FormHandles } from '@unform/core';
-import { Form } from '@unform/web';
-import * as Yup from 'yup';
-import { useHistory } from 'react-router-dom';
-import { useAuth } from '../../hooks/auth';
-import { useToast } from '../../hooks/toast';
-import getValidationErros from '../../utlis/getValidationErros';
-import logoImg from '../../assets/logo-multfluxo.png';
-import { Contanier, Content } from './styles';
-import Input from '../../components/Input';
+import React, { useCallback, useRef } from 'react'
+import { FormHandles } from '@unform/core'
+import { Form } from '@unform/web'
+import * as Yup from 'yup'
+import { useHistory } from 'react-router-dom'
+import { useAuth } from '../../hooks/auth'
+import { useToast } from '../../hooks/toast'
+import getValidationErros from '../../utlis/getValidationErros'
+import logoImg from '../../assets/logo-multfluxo.png'
+import { Contanier, Content } from './styles'
+import Input from '../../components/Input'
 
 interface SingInFormData {
-  username: string;
-  password: string;
+  username: string
+  password: string
 }
 
 const SignUp: React.FC = () => {
-  const formRef = useRef<FormHandles>(null);
+  const formRef = useRef<FormHandles>(null)
 
-  const { signIn } = useAuth();
-  const { addToast } = useToast();
-  const history = useHistory();
+  const { signIn } = useAuth()
+  const { addToast } = useToast()
+  const history = useHistory()
 
   const handleSubmit = useCallback(
     async (data: SingInFormData) => {
       try {
-        formRef.current?.setErrors({});
+        formRef.current?.setErrors({})
 
         const schema = Yup.object().shape({
           username: Yup.string().required('Usuário obrigatório'),
-          password: Yup.string().min(6, 'Senha obrigatório'),
-        });
+          password: Yup.string().min(6, 'Senha obrigatório')
+        })
 
         await schema.validate(data, {
-          abortEarly: false,
-        });
+          abortEarly: false
+        })
 
         await signIn({
           username: data.username,
-          password: data.password,
-        });
+          password: data.password
+        })
 
-        history.push('/dashboard');
+        history.push('/dashboard')
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
-          const erros = getValidationErros(err);
-          formRef.current?.setErrors(erros);
-          return;
+          const erros = getValidationErros(err)
+          formRef.current?.setErrors(erros)
+          return
         }
         addToast({
           type: 'error',
           title: 'Erro na autenticação',
-          description: 'Confira seus dados de acesso.',
-        });
+          description: 'Confira seus dados de acesso.'
+        })
       }
     },
-    [signIn, addToast, history],
-  );
+    [signIn, addToast, history]
+  )
 
   return (
     <Contanier>
@@ -109,6 +109,6 @@ const SignUp: React.FC = () => {
         </div>
       </Content>
     </Contanier>
-  );
-};
-export default SignUp;
+  )
+}
+export default SignUp

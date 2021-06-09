@@ -1,167 +1,116 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { FormCategory } from '../components/Form';
-import Container from '../../../../../components/Container';
-import api from '../../../../../services/api';
-import { useToast } from '../../../../../hooks/toast';
-import Modal from '../../../../../components/Modal';
-import { useLoading } from '../../../../../hooks/loading';
-import { Alert } from '../../../../../components/Alert';
-import { useUpdateDataTable } from '../../../../../hooks/dataTable';
-import { nameActions, namePageTitle } from '../domain/info';
-import { apiDelete, apiList } from '../domain/api';
-import { breadcrumbView } from '../domain/breadcrumb';
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useParams, useLocation, useHistory } from 'react-router-dom'
+import { FormCategory } from '../components/Form'
+import Container from '../../../../../components/Container'
+import api from '../../../../../services/api'
+import { useToast } from '../../../../../hooks/toast'
+import Modal from '../../../../../components/Modal'
+import { useLoading } from '../../../../../hooks/loading'
+import { Alert } from '../../../../../components/Alert'
+import { useUpdateDataTable } from '../../../../../hooks/dataTable'
+import { nameActions, namePageTitle } from '../domain/info'
+import { apiDelete, apiList } from '../domain/api'
+import { breadcrumbView } from '../domain/breadcrumb'
 import {
   toolsViewCreate,
   toolsViewDelete,
   toolsViewUpdate,
-  toolsViewList,
-} from '../domain/tools';
-import { Content } from './Content';
-import { TabsProvider } from '../../../../../hooks/tabs';
-import { ProductProvider, useProduct } from './provider/productProvider';
-import { ProductResponse } from './domain/response/productResponse';
-import { Wrapper } from './styles';
+  toolsViewList
+} from '../domain/tools'
+import { Content } from './Content'
+import { TabsProvider } from '../../../../../hooks/tabs'
+import { ProductProvider, useProduct } from './provider/productProvider'
+import { ProductResponse } from './domain/response/productResponse'
+import { Wrapper } from './styles'
 interface ProductCategorytData {
-  id: number;
-  parent_id: number | null;
-  name: string;
-  created_at: string;
-  updated_at: string;
+  id: number
+  parent_id: number | null
+  name: string
+  created_at: string
+  updated_at: string
 }
 
 const ProductAtributesView: React.FC = () => {
-  let { id } = useParams<{ id: string }>();
-  const history = useHistory();
-  const location = useLocation<{ id: string; value: string }>();
-  const { updateDataTable } = useUpdateDataTable();
+  const { id } = useParams<{ id: string }>()
+  const history = useHistory()
+  const location = useLocation<{ id: string; value: string }>()
+  const { updateDataTable } = useUpdateDataTable()
 
-  const { addToast } = useToast();
-  const [alert, setIsActiveAlert] = useState<{
-    isActive: boolean;
-    id: number;
-    name: string;
-  }>({
-    id: 0,
-    isActive: false,
-    name: '',
-  });
+  const { addToast } = useToast()
 
-  const [
-    currentItemUpdate,
-    setCurrentItemUpdate,
-  ] = useState<ProductCategorytData>({} as ProductCategorytData);
-  const { setProduct, getProduct } = useProduct();
-  const [modalEdit, setModalEdit] = useState(false);
-  const [modalCreate, setModalCreate] = useState(false);
+  const [currentItemUpdate] = useState<ProductCategorytData>(
+    {} as ProductCategorytData
+  )
+  const { setProduct, getProduct } = useProduct()
+  const [modalEdit, setModalEdit] = useState(false)
+  const [modalCreate, setModalCreate] = useState(false)
 
   const handleClickOnClose = useCallback(() => {
-    setModalCreate(false);
-    setModalEdit(false);
-    updateDataTable();
-  }, [modalCreate, modalEdit]);
+    setModalCreate(false)
+    setModalEdit(false)
+    updateDataTable()
+  }, [modalCreate, modalEdit])
 
-  const refModal = useRef(null);
-  const { disableLoading, activeLoading } = useLoading();
+  const refModal = useRef(null)
+  const { disableLoading, activeLoading } = useLoading()
 
   useEffect(() => {
     async function loadCategory(): Promise<void> {
-      activeLoading();
+      activeLoading()
+
       try {
         const response = await api.get<ProductResponse>(
-          apiList(location.state.id),
-        );
-        const { data } = response;
-        setProduct(data);
-        disableLoading();
+          apiList(location.state.id)
+        )
+        const { data } = response
+
+        setProduct(data)
+        disableLoading()
       } catch (err) {
-        disableLoading();
+        disableLoading()
         addToast({
           type: 'error',
           title: 'Error ao carregar a categoria',
           description:
-            'Houve um error ao carregar a categoria, tente novamente mais tarde!',
-        });
+            'Houve um error ao carregar a categoria, tente novamente mais tarde!'
+        })
       }
     }
-    loadCategory();
-  }, [id, addToast]);
+    loadCategory()
+  }, [id, addToast])
 
-  const handlerClickButtonCancellAlert = useCallback(() => {
-    setIsActiveAlert({
-      id: 0,
-      isActive: false,
-      name: '',
-    });
-    addToast({
-      type: 'info',
-      title: 'Operação cancelada.',
-    });
-  }, [alert]);
+  const [alertRemoveParent, setAlertRemoveParent] = useState(false)
 
-  const handlerClickButtonConfirmAlert = useCallback(
-    async (id: string) => {
-      try {
-        await api.delete(apiDelete(id));
-        setIsActiveAlert({
-          id: 0,
-          isActive: false,
-          name: '',
-        });
-        addToast({
-          type: 'success',
-          title: 'Produto removido com sucesso.',
-        });
-      } catch (err) {
-        setIsActiveAlert({
-          id: 0,
-          isActive: false,
-          name: '',
-        });
-        addToast({
-          type: 'error',
-          title: 'O produto não removido, pois ainda está sendo usada.',
-        });
-      }
-    },
-    [alert],
-  );
-
-  const [alertRemoveParent, setAlertRemoveParent] = useState(false);
-
-  const handleOnClickRemoveParent = useCallback(
-    ({ id, name }: { id: string; name: string }) => {
-      setAlertRemoveParent(true);
-    },
-    [alertRemoveParent],
-  );
+  const handleOnClickRemoveParent = useCallback(() => {
+    setAlertRemoveParent(true)
+  }, [alertRemoveParent])
 
   const handlerOnClickButtonConfirmRemoveParent = useCallback(
     async (id: number) => {
       try {
-        await api.delete(apiDelete(String(id)));
-        setAlertRemoveParent(false);
+        await api.delete(apiDelete(String(id)))
+        setAlertRemoveParent(false)
         addToast({
           type: 'success',
-          title: 'Atributo removido com sucesso.',
-        });
-        history.goBack();
+          title: 'Atributo removido com sucesso.'
+        })
+        history.goBack()
       } catch (err) {
-        setAlertRemoveParent(false);
+        setAlertRemoveParent(false)
         addToast({
           type: 'error',
-          title: 'Produto não pode ser removido, pois ainda está em uso.',
-        });
+          title: 'Produto não pode ser removido, pois ainda está em uso.'
+        })
       }
     },
-    [alertRemoveParent],
-  );
+    [alertRemoveParent]
+  )
 
   const handlerOnClickButtonCancelRemoveParent = useCallback(() => {
-    setAlertRemoveParent(false);
-  }, []);
+    setAlertRemoveParent(false)
+  }, [])
 
-  const product = getProduct();
+  const product = getProduct()
 
   return (
     <Wrapper>
@@ -172,13 +121,10 @@ const ProductAtributesView: React.FC = () => {
         tools={[
           toolsViewUpdate(String(id)),
           toolsViewDelete(() => {
-            handleOnClickRemoveParent({
-              id: String(product?.id),
-              name: String(product?.name),
-            });
+            handleOnClickRemoveParent()
           }),
           toolsViewCreate(),
-          toolsViewList(),
+          toolsViewList()
         ]}
       >
         <div className="form-body">
@@ -222,7 +168,7 @@ const ProductAtributesView: React.FC = () => {
                 <label htmlFor="id" className="control-label">
                   Tipo do produto
                 </label>
-                <p>
+                <p className="upp">
                   {product?.type?.toLocaleUpperCase() === 'CONSUMO'
                     ? 'USO E CONSUMO'
                     : product.type}
@@ -274,7 +220,7 @@ const ProductAtributesView: React.FC = () => {
             typeForm={'create'}
             isOpenInModal={{
               handleOnClose: handleClickOnClose,
-              idParent: Number(id),
+              idParent: Number(id)
             }}
           />
         }
@@ -289,11 +235,11 @@ const ProductAtributesView: React.FC = () => {
             valueInput={currentItemUpdate.name}
             typeForm={{
               idUpdate: currentItemUpdate.id,
-              inputValue: currentItemUpdate.name,
+              inputValue: currentItemUpdate.name
             }}
             isOpenInModal={{
               handleOnClose: handleClickOnClose,
-              idParent: Number(id),
+              idParent: Number(id)
             }}
           />
         }
@@ -307,13 +253,13 @@ const ProductAtributesView: React.FC = () => {
         isActive={alertRemoveParent}
       />
     </Wrapper>
-  );
-};
+  )
+}
 
-const ProductHOC = () => (
+const ProductHOC = (): JSX.Element => (
   <ProductProvider>
     <ProductAtributesView />
   </ProductProvider>
-);
+)
 
-export default ProductHOC;
+export default ProductHOC

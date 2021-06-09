@@ -1,9 +1,9 @@
-import React from 'react';
-import Container from '../../../../../components/Container';
-import { FormCategory } from '../components/Form';
-import { namePageTitle, nameActions } from '../domain/info';
-import { breadcrumbCreate } from '../domain/breadcrumb';
-import { toolsCreate } from '../domain/tools/create';
+import React from 'react'
+import Container from '../../../../../components/Container'
+import { FormCategory } from '../components/Form'
+import { namePageTitle, nameActions } from '../domain/info'
+import { breadcrumbCreate } from '../domain/breadcrumb'
+import { toolsCreate } from '../domain/tools/create'
 
 const ProductAtributesCreate = (): JSX.Element => (
   <Container
@@ -16,6 +16,6 @@ const ProductAtributesCreate = (): JSX.Element => (
       <FormCategory typeForm="create" />
     </div>
   </Container>
-);
+)
 
-export default ProductAtributesCreate;
+export default ProductAtributesCreate

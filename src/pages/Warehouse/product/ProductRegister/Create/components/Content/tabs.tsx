@@ -1,85 +1,84 @@
-import React from 'react';
-import { TypeContentTabs } from './index';
+import React from 'react'
+import { TypeContentTabs } from './index'
 
 import {
   DataOverview,
   labelDataOverview,
   nameDataOverview,
-  TypeEntityWithIdAndName,
-} from '../Tabs/DataOverview';
+  TypeEntityWithIdAndName
+} from '../Tabs/DataOverview'
 
-import { Details, nameDetails, labelDetails } from '../Tabs/Details';
+import { Details, nameDetails, labelDetails } from '../Tabs/Details'
 
-import { Fiscal, labelFiscal, nameFiscal } from '../Tabs/Fiscal';
+import { Fiscal, labelFiscal, nameFiscal } from '../Tabs/Fiscal'
 
 import {
   HasVariation,
   labelHasVariation,
-  nameHasVariation,
-} from '../Tabs/HasVariation';
+  nameHasVariation
+} from '../Tabs/HasVariation'
 
 import {
   HasComposition,
   labelHasComposition,
-  nameHasComposition,
-} from '../Tabs/HasComposition';
+  nameHasComposition
+} from '../Tabs/HasComposition'
 
-import { Stock, labelStock, nameStock } from '../Tabs/Stock';
+import { Stock, labelStock, nameStock } from '../Tabs/Stock'
 
 import {
   PriceComposition,
   labelPriceComposition,
-  namePriceComposition,
-} from '../Tabs/PriceComposition';
+  namePriceComposition
+} from '../Tabs/PriceComposition'
 
-import { TabsProvider } from '../../../../../../../hooks/tabs';
+import { TabsProvider } from '../../../../../../../hooks/tabs'
 import {
   loadCategoryFinance,
   loadUnitMensured,
   loadCategoryData,
   ResponseEntityOnlyIdAndName,
   ResponseEntiryWithIdNameWithChildren,
-  loadAtributes,
-} from '../../services/api';
-import { makeLoadAllNCM } from '../../../main/factories/Fiscal/Load/ncm/makeLoadAllNCM';
-import { makeLoadAllCfop } from '../../../main/factories/Fiscal/Load/cfop/makeLoadAllCfop';
+  loadAtributes
+} from '../../services/api'
+import { makeLoadAllNCM } from '../../../main/factories/Fiscal/Load/ncm/makeLoadAllNCM'
+import { makeLoadAllCfop } from '../../../main/factories/Fiscal/Load/cfop/makeLoadAllCfop'
 
 export const makeTabs = async (): Promise<TypeContentTabs[]> => {
   const loadCategoryFinances = async (): Promise<TypeEntityWithIdAndName[]> => {
-    const result = await loadCategoryFinance();
-    return result;
-  };
-  const categoryFinances = await loadCategoryFinances();
+    const result = await loadCategoryFinance()
+    return result
+  }
+  const categoryFinances = await loadCategoryFinances()
 
   const loadUnitMensureds = async (): Promise<
     ResponseEntityOnlyIdAndName[]
   > => {
-    const result = await loadUnitMensured();
-    return result;
-  };
+    const result = await loadUnitMensured()
+    return result
+  }
 
-  const unitMensureds = await loadUnitMensureds();
+  const unitMensureds = await loadUnitMensureds()
 
   const loadCategoryPorducts = async (): Promise<TypeEntityWithIdAndName[]> => {
-    const result = await loadCategoryData();
-    return result;
-  };
-  const categoryPorducts = await loadCategoryPorducts();
+    const result = await loadCategoryData()
+    return result
+  }
+  const categoryPorducts = await loadCategoryPorducts()
 
   const loadAtributesList = async () => {
-    const resultData = await loadAtributes();
-    const resultList: ResponseEntiryWithIdNameWithChildren[] = resultData.filter(
-      ({ parent_id }) => parent_id === null,
-    );
+    const resultData = await loadAtributes()
+    const resultList: ResponseEntiryWithIdNameWithChildren[] =
+      resultData.filter(({ parent_id }) => parent_id === null)
     resultList.map(({ id }, index) => {
       resultList[index].childrenList = resultData.filter(
-        ({ parent_id }) => parent_id === id,
-      );
-    });
-    return resultList;
-  };
+        ({ parent_id }) => parent_id === id
+      )
+    })
+    return resultList
+  }
 
-  const atributes = await loadAtributesList();
+  const atributes = await loadAtributesList()
 
   return [
     {
@@ -91,25 +90,25 @@ export const makeTabs = async (): Promise<TypeContentTabs[]> => {
           categoryFinances={categoryFinances}
           categoryProducts={categoryPorducts}
         />
-      ),
+      )
     },
     {
       label: labelDetails,
       name: nameDetails,
       isEnable: true,
-      Component: <Details />,
+      Component: <Details />
     },
     {
       label: labelPriceComposition,
       name: namePriceComposition,
       isEnable: false,
-      Component: <PriceComposition />,
+      Component: <PriceComposition />
     },
     {
       label: labelStock,
       name: nameStock,
       isEnable: true,
-      Component: <Stock unitMensureds={unitMensureds} />,
+      Component: <Stock unitMensureds={unitMensureds} />
     },
     {
       label: labelHasVariation,
@@ -117,7 +116,7 @@ export const makeTabs = async (): Promise<TypeContentTabs[]> => {
       isEnable: false,
       Component: (
         <HasVariation atributes={atributes} unitMensureds={unitMensureds} />
-      ),
+      )
     },
     {
       label: labelFiscal,
@@ -127,13 +126,13 @@ export const makeTabs = async (): Promise<TypeContentTabs[]> => {
         <TabsProvider>
           <Fiscal ncmLoader={makeLoadAllNCM()} cfopLoader={makeLoadAllCfop()} />
         </TabsProvider>
-      ),
+      )
     },
     {
       label: labelHasComposition,
       name: nameHasComposition,
       isEnable: false,
-      Component: <HasComposition />,
-    },
-  ];
-};
+      Component: <HasComposition />
+    }
+  ]
+}

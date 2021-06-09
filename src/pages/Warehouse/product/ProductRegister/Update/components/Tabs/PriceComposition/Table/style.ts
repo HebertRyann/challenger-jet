@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const ContainerInput = styled.div`
   background-color: green !important;
@@ -11,4 +11,4 @@ export const ContainerInput = styled.div`
     }
     text-align: end;
   }
-`;
+`

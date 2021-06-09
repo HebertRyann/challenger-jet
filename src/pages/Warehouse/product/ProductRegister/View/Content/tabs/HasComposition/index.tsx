@@ -1,18 +1,21 @@
-import React, { useEffect } from 'react';
-import { useTabs } from '../../../../../../../../hooks/tabs';
+import React, { useEffect } from 'react'
+import { useTabs } from '../../../../../../../../hooks/tabs'
 import {
   formatProductTypeToLowerCase,
   SALE,
-  SEMI_FINISHED,
-} from '../../../../domain/products';
-import { CompositonView } from '../../../domain/response/productResponse';
-import { useProduct } from '../../../provider/productProvider';
-import { Container } from './style';
+  SEMI_FINISHED
+} from '../../../../domain/products'
+import { CompositonView } from '../../../domain/response/productResponse'
+import { useProduct } from '../../../provider/productProvider'
+import { Container } from './style'
+
+export const labelHasComposition = 'Composição'
+export const nameHasComposition = '@@tabs-view-has-composition'
 
 export const HasComposition = (): JSX.Element => {
-  const { getProduct } = useProduct();
-  let compositionList: CompositonView[] = [];
-  const { activeTab } = useTabs();
+  const { getProduct } = useProduct()
+  let compositionList: CompositonView[] = []
+  const { activeTab } = useTabs()
 
   useEffect(() => {
     if (compositionList[0]?.name !== '') {
@@ -22,28 +25,28 @@ export const HasComposition = (): JSX.Element => {
         getProduct().type?.replace(' ', '-') ===
           formatProductTypeToLowerCase(SALE)
       ) {
-        activeTab(nameHasComposition);
+        activeTab(nameHasComposition)
       }
     }
-  }, [getProduct()]);
+  }, [getProduct()])
 
-  const { composition } = getProduct();
+  const { composition } = getProduct()
 
   if (composition) {
-    compositionList = JSON.parse(composition.toLowerCase());
+    compositionList = JSON.parse(composition.toLowerCase())
   }
 
   const productWithAtributes = () =>
     compositionList?.map(composition => {
-      return composition;
-    });
+      return composition
+    })
 
-  productWithAtributes();
+  productWithAtributes()
 
-  let total = compositionList.reduce(
+  const total = compositionList.reduce(
     (sum, { amount, cost }) => sum + cost * amount,
-    0,
-  );
+    0
+  )
 
   return (
     <Container>
@@ -57,7 +60,7 @@ export const HasComposition = (): JSX.Element => {
           </tr>
           {compositionList &&
             compositionList.map(({ amount, cost, name, ...rest }) => (
-              <tr className="items">
+              <tr key={name} className="items">
                 <td>{name}</td>
                 <td>{amount}</td>
                 <td>{cost}</td>
@@ -73,8 +76,5 @@ export const HasComposition = (): JSX.Element => {
         </tbody>
       </table>
     </Container>
-  );
-};
-
-export const labelHasComposition = 'Composição';
-export const nameHasComposition = '@@tabs-view-has-composition';
+  )
+}

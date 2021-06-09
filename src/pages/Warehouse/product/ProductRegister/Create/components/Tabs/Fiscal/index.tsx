@@ -1,128 +1,129 @@
-import React, { useEffect, useState } from 'react';
-import { Container } from './style';
-import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
-import { useTabs } from '../../../../../../../../hooks/tabs';
-import { makeTabsFiscal } from './tabs';
-import { useTabCreate } from '../../../providers/tabsProvider';
+import React, { useEffect, useState } from 'react'
 import {
+  Container,
   TabHeaderContainerFiscal,
   TabNameFiscal,
   TabPanelContainerFiscal,
-  RenderComponent,
-} from './style';
-import { NewInput } from '../../../../../../../../components/NewInput';
-import { SearchComponentNcm } from './SearchComponent/SearchComponentNcm';
-import { SearchComponentCFOP } from './SearchComponent/SearchComponentCfop';
-import { LoadAllNCM } from '../../../../domain/useCases/FIscal/NCM/Load';
-import { LoadAllCFOP } from '../../../../domain/useCases/FIscal/CFOP/Load';
+  RenderComponent
+} from './style'
+import { TooltipComponent } from '../../../../../../../../components/TooltipComponent'
+import { useTabs } from '../../../../../../../../hooks/tabs'
+import { makeTabsFiscal } from './tabs'
+import { useTabCreate } from '../../../providers/tabsProvider'
 
-export const labelFiscal = 'Fiscal';
-export const nameFiscal = '@@tabs-fiscal';
+import { NewInput } from '../../../../../../../../components/NewInput'
+import { SearchComponentNcm } from './SearchComponent/SearchComponentNcm'
+import { SearchComponentCFOP } from './SearchComponent/SearchComponentCfop'
+import { LoadAllNCM } from '../../../../domain/useCases/FIscal/NCM/Load'
+import { LoadAllCFOP } from '../../../../domain/useCases/FIscal/CFOP/Load'
+
+export const labelFiscal = 'Fiscal'
+export const nameFiscal = '@@tabs-fiscal'
 
 export type TypeContentTabsFiscal = {
-  name: string;
-  label: string;
-  isEnable: boolean;
-  Component: JSX.Element;
-};
+  name: string
+  label: string
+  isEnable: boolean
+  Component: JSX.Element
+}
 
 type TypeFiscal = {
-  ncmLoader: LoadAllNCM;
-  cfopLoader: LoadAllCFOP;
-};
+  ncmLoader: LoadAllNCM
+  cfopLoader: LoadAllCFOP
+}
 
 export const Fiscal = ({ ncmLoader, cfopLoader }: TypeFiscal): JSX.Element => {
-  const { loadTabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs();
-  const { fiscal } = useTabCreate();
-  const { ncm, cfop } = fiscal.getData();
-  const { changeNCM, changeCFOP } = fiscal.setData;
-  const [tabs, setTabs] = useState<TypeContentTabsFiscal[]>([]);
-  const [loadingNcm, setLoadingNcm] = useState(false);
-  const [loadingCfop, setLoadingCfop] = useState(false);
-  const [dataNcmList, setDataNcmList] = useState<LoadAllNCM.NCMResponse[]>([]);
+  const { loadTabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs()
+  const { fiscal } = useTabCreate()
+  const { ncm, cfop } = fiscal.getData()
+  const { changeNCM, changeCFOP } = fiscal.setData
+  const [tabs, setTabs] = useState<TypeContentTabsFiscal[]>([])
+  const [loadingNcm, setLoadingNcm] = useState(false)
+  const [loadingCfop, setLoadingCfop] = useState(false)
+  const [dataNcmList, setDataNcmList] = useState<LoadAllNCM.NCMResponse[]>([])
   const [dataNcmListSearch, setDataNcmListSearch] = useState<
     LoadAllNCM.NCMResponse[]
-  >([]);
+  >([])
   const [dataCFOPListSearch, setDataCFOPListSearch] = useState<
     LoadAllCFOP.CFOPResponse[]
-  >([]);
+  >([])
   const [dataCFOPList, setDataCFOPList] = useState<LoadAllCFOP.CFOPResponse[]>(
-    [],
-  );
-  const [activeSearch, setActiveSearch] = useState(false);
-  const [activeSearchCFOP, setActiveSearchCFOP] = useState(false);
+    []
+  )
+  const [activeSearch, setActiveSearch] = useState(false)
+  const [activeSearchCFOP, setActiveSearchCFOP] = useState(false)
 
   useEffect(() => {
     function load() {
-      const tabs = makeTabsFiscal();
-      tabs.map(tab => addTab(tab));
-      changeCurrentTab(tabs[0].name);
-      setTabs(loadTabs());
+      const tabs = makeTabsFiscal()
+      tabs.map(tab => addTab(tab))
+      changeCurrentTab(tabs[0].name)
+      setTabs(loadTabs())
     }
-    load();
-  }, []);
+    load()
+  }, [])
 
-  const allTabsData = loadTabs();
+  const allTabsData = loadTabs()
 
   const handlerChangeInputNCM = async (value: string) => {
-    changeNCM(value);
+    changeNCM(value)
     if (value.length > 0) {
       if (dataNcmList.length === 0) {
-        setLoadingNcm(true);
-        const result = await ncmLoader.loadAllNCM();
-        setDataNcmList(result);
-        setLoadingNcm(false);
+        setLoadingNcm(true)
+        const result = await ncmLoader.loadAllNCM()
+        setDataNcmList(result)
+        setLoadingNcm(false)
       }
       const matchList = dataNcmList.filter(({ code }) => {
-        const codeMatch = code.toString();
-        const regex = new RegExp(`^${value}`, 'gi');
-        return code.match(codeMatch);
-      });
+        const codeMatch = code.toString()
+        const regex = new RegExp(`^${value}`, 'gi')
+        return code.match(codeMatch)
+      })
       if (matchList.length > 0) {
-        setActiveSearch(true);
-        setDataNcmListSearch(matchList);
+        setActiveSearch(true)
+        setDataNcmListSearch(matchList)
       } else {
-        setActiveSearch(false);
+        setActiveSearch(false)
       }
     } else {
-      setActiveSearch(false);
+      setActiveSearch(false)
     }
-  };
+  }
 
   const handlerOnClickRowSearchNCM = (value: LoadAllNCM.NCMResponse) => {
-    changeNCM(value.code.toString());
-    setActiveSearch(false);
-  };
+    changeNCM(value.code.toString())
+    setActiveSearch(false)
+  }
 
   const handlerChangeInputCFOP = async (value: string) => {
-    changeCFOP(value);
+    changeCFOP(value)
     if (value.length > 0) {
       if (dataCFOPList.length === 0) {
-        setLoadingCfop(true);
-        const result = await cfopLoader.loadAllCFOP();
-        setDataCFOPList(result);
-        setLoadingCfop(false);
+        setLoadingCfop(true)
+        const result = await cfopLoader.loadAllCFOP()
+        setDataCFOPList(result)
+        setLoadingCfop(false)
       }
       const matchList = dataCFOPList.filter(({ code }) => {
-        const codeFilter = code.toString();
-        const regex = new RegExp(`^${value}`, 'gi');
-        return codeFilter.match(regex);
-      });
+        const codeFilter = code.toString()
+        const regex = new RegExp(`^${value}`, 'gi')
+        return codeFilter.match(regex)
+      })
       if (matchList.length > 0) {
-        setActiveSearchCFOP(true);
-        setDataCFOPListSearch(matchList);
+        setActiveSearchCFOP(true)
+        setDataCFOPListSearch(matchList)
       } else {
-        setActiveSearchCFOP(false);
+        setActiveSearchCFOP(false)
       }
     } else {
-      setActiveSearchCFOP(false);
+      setActiveSearchCFOP(false)
     }
-  };
+  }
 
   const handlerOnClickRowSearchCFOP = (value: LoadAllCFOP.CFOPResponse) => {
-    changeCFOP(value.code.toString());
-    setActiveSearchCFOP(false);
-  };
+    changeCFOP(value.code.toString())
+    setActiveSearchCFOP(false)
+  }
 
   return (
     <>
@@ -190,7 +191,7 @@ export const Fiscal = ({ ncmLoader, cfopLoader }: TypeFiscal): JSX.Element => {
                   >
                     {label}
                   </TabNameFiscal>
-                ),
+                )
             )}
           </TabHeaderContainerFiscal>
           <TabPanelContainerFiscal>
@@ -205,5 +206,5 @@ export const Fiscal = ({ ncmLoader, cfopLoader }: TypeFiscal): JSX.Element => {
         </div>
       </Container>
     </>
-  );
-};
+  )
+}

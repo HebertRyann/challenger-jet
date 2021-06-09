@@ -1,6 +1,16 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components'
+import loadingSvg from '../../assets/image/svg/loading.svg'
 
 export const Container = styled.div<{ isActive: boolean }>`
+  .loading {
+    background-image: url(${loadingSvg});
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 100%;
+    height: 50%;
+  }
+
   position: fixed;
   top: 0;
   left: 0;
@@ -41,4 +51,4 @@ export const Container = styled.div<{ isActive: boolean }>`
     css`
       display: none;
     `}
-`;
+`

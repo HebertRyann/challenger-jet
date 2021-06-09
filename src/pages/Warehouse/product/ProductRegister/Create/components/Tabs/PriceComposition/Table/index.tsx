@@ -1,18 +1,18 @@
-import React, { useCallback, useState } from 'react';
-import { TooltipComponent } from '../../../../../../../../../components/TooltipComponent';
-import { NewInput } from '../../../../../../../../../components/NewInput';
-import { numericMask } from '../../../../../../../../../utlis/mask';
-import { ContainerInput } from './style';
-import { useTabCreate } from '../../../../providers/tabsProvider';
-import { Footer } from '../../../footer';
-import { Alert } from '../../../../../../../../../components/Alert';
-import { useTabs } from '../../../../../../../../../hooks/tabs';
-import { namePriceComposition } from '..';
+import React, { useCallback, useState } from 'react'
+import { TooltipComponent } from '../../../../../../../../../components/TooltipComponent'
+import { NewInput } from '../../../../../../../../../components/NewInput'
+import { numericMask } from '../../../../../../../../../utlis/mask'
+import { ContainerInput } from './style'
+import { useTabCreate } from '../../../../providers/tabsProvider'
+import { Footer } from '../../../footer'
+import { Alert } from '../../../../../../../../../components/Alert'
+import { useTabs } from '../../../../../../../../../hooks/tabs'
+import { namePriceComposition } from '..'
 
 export const Table = (): JSX.Element => {
-  const { changeCurrentTabForNext, changeCurrentTabForPrevious } = useTabs();
-  const { priceComposition } = useTabCreate();
-  const { cost, dif, ipi, profit, simpleNational } = priceComposition.getData();
+  const { changeCurrentTabForNext, changeCurrentTabForPrevious } = useTabs()
+  const { priceComposition } = useTabCreate()
+  const { cost, dif, ipi, profit, simpleNational } = priceComposition.getData()
 
   return (
     <>
@@ -29,7 +29,7 @@ export const Table = (): JSX.Element => {
             onChange={e =>
               priceComposition.setData({
                 ...priceComposition.getData(),
-                profit: { error: { isError: false }, value: e.target.value },
+                profit: { error: { isError: false }, value: e.target.value }
               })
             }
             className="form-control"
@@ -51,8 +51,8 @@ export const Table = (): JSX.Element => {
                 ...priceComposition.getData(),
                 simpleNational: {
                   error: { isError: false },
-                  value: e.target.value,
-                },
+                  value: e.target.value
+                }
               })
             }
             className="form-control"
@@ -72,7 +72,7 @@ export const Table = (): JSX.Element => {
             onChange={e =>
               priceComposition.setData({
                 ...priceComposition.getData(),
-                ipi: { error: { isError: false }, value: e.target.value },
+                ipi: { error: { isError: false }, value: e.target.value }
               })
             }
             className="form-control"
@@ -92,7 +92,7 @@ export const Table = (): JSX.Element => {
             onChange={e =>
               priceComposition.setData({
                 ...priceComposition.getData(),
-                cost: { error: { isError: false }, value: e.target.value },
+                cost: { error: { isError: false }, value: e.target.value }
               })
             }
             className="form-control"
@@ -112,7 +112,7 @@ export const Table = (): JSX.Element => {
             onChange={e =>
               priceComposition.setData({
                 ...priceComposition.getData(),
-                dif: { error: { isError: false }, value: e.target.value },
+                dif: { error: { isError: false }, value: e.target.value }
               })
             }
             className="form-control"
@@ -122,5 +122,5 @@ export const Table = (): JSX.Element => {
         </ContainerInput>
       </div>
     </>
-  );
-};
+  )
+}

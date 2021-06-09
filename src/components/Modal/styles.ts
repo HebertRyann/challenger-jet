@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components';
-import { MdClose } from 'react-icons/md';
+import styled, { css } from 'styled-components'
+import { MdClose } from 'react-icons/md'
 
 export const Container = styled.div<{ openModal: boolean }>`
   position: fixed;
@@ -75,6 +75,6 @@ export const Container = styled.div<{ openModal: boolean }>`
       }
     }
   }
-`;
+`
 
-export const CloseIcon = styled(MdClose)``;
+export const CloseIcon = styled(MdClose)``

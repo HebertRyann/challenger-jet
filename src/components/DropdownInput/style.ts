@@ -1,6 +1,6 @@
-import styled, { css } from 'styled-components';
-import { MdSearch } from 'react-icons/md';
-import { FiChevronDown } from 'react-icons/fi';
+import styled, { css } from 'styled-components'
+import { MdSearch } from 'react-icons/md'
+import { FiChevronDown } from 'react-icons/fi'
 
 export const ContainerDropdown = styled.div<{ isError: boolean | undefined }>`
   > label {
@@ -30,7 +30,7 @@ export const ContainerDropdown = styled.div<{ isError: boolean | undefined }>`
   }
   background-color: #fff;
   z-index: 1;
-`;
+`
 
 export const Content = styled.div<{ isActive: boolean }>`
   display: none;
@@ -111,23 +111,23 @@ export const Content = styled.div<{ isActive: boolean }>`
       }
     }
   }
-`;
+`
 
 export const IconArrowDown = styled(FiChevronDown).attrs(() => ({
   size: '16px',
-  color: '#555',
+  color: '#555'
 }))`
   position: absolute;
   top: 0;
   right: 3px;
   height: 100%;
-`;
+`
 
 export const IconSearch = styled(MdSearch).attrs(() => ({
   size: '18px',
-  color: '#555',
+  color: '#555'
 }))`
   position: absolute;
   top: 35%;
   right: 20px;
-`;
+`

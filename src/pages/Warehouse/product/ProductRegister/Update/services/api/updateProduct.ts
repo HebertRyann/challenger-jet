@@ -3,27 +3,26 @@ import {
   PriceCompositionAndFiscal,
   TypeProductStock,
   TypeProductDataOverView,
-  ResultOnSaveProdut,
-} from '../../providers/domain.types';
-import api from '../../../../../../../services/api';
+  ResultOnSaveProdut
+} from '../../providers/domain.types'
+import api from '../../../../../../../services/api'
 type UpdateProductParams = {
-  composition?: CompositionRequest[];
-  price_composition_fiscal?: PriceCompositionAndFiscal;
-  stock: TypeProductStock[];
-  details_overview: TypeProductDataOverView;
-  id: string;
-};
+  composition?: CompositionRequest[]
+  price_composition_fiscal?: PriceCompositionAndFiscal
+  stock: TypeProductStock[]
+  details_overview: TypeProductDataOverView
+  id: string
+}
 
 export const updateProduct = async (
-  params: UpdateProductParams,
+  params: UpdateProductParams
 ): Promise<ResultOnSaveProdut> => {
   const { status, data } = await api.put(
     `/product/update/${params.details_overview.id}`,
     {
-      params,
-    },
-  );
+      params
+    }
+  )
 
-
-  return { code: status, data };
-};
+  return { code: status, data }
+}

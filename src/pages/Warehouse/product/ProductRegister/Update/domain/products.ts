@@ -1,8 +1,8 @@
 export type TypeProduct = {
-  id: number;
-  name: string;
-  label?: string;
-};
+  id: number
+  name: string
+  label?: string
+}
 
 export const formatProductTypeToLowerCase = (
   product:
@@ -11,50 +11,50 @@ export const formatProductTypeToLowerCase = (
     | typeof SALE
     | typeof RE_SALE
     | typeof LOCATION
-    | typeof CONSUMER,
+    | typeof CONSUMER
 ) => {
-  return product.name.replace(' ', '-').toLowerCase();
-};
+  return product.name.replace(' ', '-').toLowerCase()
+}
 
 const formatProductTypeUppercase = (product: string) => {
-  return product.replace('-', ' ').toLocaleLowerCase();
-};
+  return product.replace('-', ' ').toLocaleLowerCase()
+}
 
 export const RAW_MATERIAL: TypeProduct = {
   id: 1,
   name: 'materia-prima',
-  label: 'MATERIA PRIMA',
-};
+  label: 'MATERIA PRIMA'
+}
 
 export const SEMI_FINISHED: TypeProduct = {
   id: 2,
   name: 'semi-acabado',
-  label: 'SEMI ACABADO',
-};
+  label: 'SEMI ACABADO'
+}
 
 export const SALE: TypeProduct = {
   id: 3,
   name: 'venda',
-  label: 'VENDA',
-};
+  label: 'VENDA'
+}
 
 export const RE_SALE: TypeProduct = {
   id: 4,
   name: 'revenda',
-  label: 'REVENDA',
-};
+  label: 'REVENDA'
+}
 
 export const LOCATION: TypeProduct = {
   id: 5,
   name: 'locação',
-  label: 'LOCAÇÃO',
-};
+  label: 'LOCAÇÃO'
+}
 
 export const CONSUMER: TypeProduct = {
   id: 6,
   name: 'consumo',
-  label: 'USO E CONSUMO',
-};
+  label: 'USO E CONSUMO'
+}
 
 export const typeProducts: TypeProduct[] = [
   LOCATION,
@@ -62,5 +62,5 @@ export const typeProducts: TypeProduct[] = [
   RE_SALE,
   SEMI_FINISHED,
   CONSUMER,
-  SALE,
-];
+  SALE
+]

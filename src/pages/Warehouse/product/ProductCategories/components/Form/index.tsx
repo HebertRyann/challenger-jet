@@ -1,215 +1,208 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import * as Yup from 'yup';
-import api from '../../../../../../services/api';
-import getValidationErrors from '../../../../../../utlis/getValidationErros';
-import FormComponent from '../../../../../../components/Form';
-import Input from '../../../../../../components/Input';
-import Button from '../../../../../../components/Button';
-import { FormHandles } from '@unform/core';
-import { useHistory } from 'react-router-dom';
-import { useToast } from '../../../../../../hooks/toast';
-import { useLoading } from '../../../../../../hooks/loading';
-import { useUpdateDataTable } from '../../../../../../hooks/dataTable';
-import { FormDataProtocol } from '../../domain/protocols';
-import { apiCreate, apiUpdate } from '../../domain/api';
-import { nameActions } from '../../domain/info';
+import React, { useEffect, useRef, useState } from 'react'
+import * as Yup from 'yup'
+import api from '../../../../../../services/api'
+import getValidationErrors from '../../../../../../utlis/getValidationErros'
+import FormComponent from '../../../../../../components/Form'
+import Input from '../../../../../../components/Input'
+import Button from '../../../../../../components/Button'
+import { FormHandles } from '@unform/core'
+import { useHistory } from 'react-router-dom'
+import { useToast } from '../../../../../../hooks/toast'
+import { useLoading } from '../../../../../../hooks/loading'
+import { useUpdateDataTable } from '../../../../../../hooks/dataTable'
+import { FormDataProtocol } from '../../domain/protocols'
+import { apiCreate, apiUpdate } from '../../domain/api'
+import { nameActions } from '../../domain/info'
 
 type IsOpenInModalProps = {
-  idParent: number;
-  handleOnClose: () => void;
-};
+  idParent: number
+  handleOnClose: () => void
+}
 
 type TypesFormProps = {
-  valueInput?: string;
-  isOpenInModal?: false | IsOpenInModalProps;
+  valueInput?: string
+  isOpenInModal?: false | IsOpenInModalProps
   typeForm:
     | 'create'
     | {
-        idUpdate: number;
-        inputValue: string;
-        idParentUpdate?: string;
-      };
-};
+        idUpdate: number
+        inputValue: string
+        idParentUpdate?: string
+      }
+}
 
 export const FormCategory = ({
   isOpenInModal,
   typeForm,
-  valueInput,
+  valueInput
 }: TypesFormProps): JSX.Element => {
-  const formRef = useRef<FormHandles>(null);
-  const { addToast } = useToast();
-  const history = useHistory();
-  const [id, setId] = useState<any>(0);
-  const { updateDataTable } = useUpdateDataTable();
+  const formRef = useRef<FormHandles>(null)
+  const [inputValue, setInputValue] = useState<string>('')
+
+  const { addToast } = useToast()
+  const history = useHistory()
+  const { updateDataTable } = useUpdateDataTable()
   useEffect(() => {
     if (valueInput !== undefined) {
-      setInputValue(valueInput);
+      setInputValue(valueInput)
     }
     if (typeForm.valueOf() !== 'create') {
-      setId(typeForm);
-      let obj = typeForm as {
-        idUpdate: number;
-        inputValue: string;
-        idParentUpdate?: string;
-      };
-      formRef.current?.setFieldValue('id', obj.idUpdate);
-      formRef.current?.setFieldValue('name', obj.inputValue);
+      const obj = typeForm as {
+        idUpdate: number
+        inputValue: string
+        idParentUpdate?: string
+      }
+      formRef.current?.setFieldValue('id', obj.idUpdate)
+      formRef.current?.setFieldValue('name', obj.inputValue)
     }
-  }, [valueInput, isOpenInModal, typeForm]);
+  }, [valueInput, isOpenInModal, typeForm])
 
-  const { activeLoading, disableLoading } = useLoading();
+  const { activeLoading, disableLoading } = useLoading()
 
-  const onSubmitForm = useCallback(
-    async (data: FormDataProtocol) => {
-      try {
-        formRef.current?.setErrors({});
+  const onSubmitForm = async (data: FormDataProtocol) => {
+    try {
+      formRef.current?.setErrors({})
 
-        const schema = Yup.object().shape({
-          name: Yup.string().required('Nome obrigatório'),
-        });
+      const schema = Yup.object().shape({
+        name: Yup.string().required('Nome obrigatório')
+      })
 
-        await schema.validate(data, {
-          abortEarly: false,
-        });
+      await schema.validate(data, {
+        abortEarly: false
+      })
 
-        if (typeForm === 'create') {
-          if (isOpenInModal) {
-            const { handleOnClose, idParent } = isOpenInModal;
-            const dataCreate: { name: string; parent_id: number } = {
-              name: data.name,
-              parent_id: idParent,
-            };
-            activeLoading();
-            try {
-              await api.post(apiCreate(), dataCreate);
-              handleOnClose();
-              disableLoading();
-              updateDataTable();
-            } catch (error) {
-              addToast({
-                type: 'error',
-                title: 'Erro ao adicionar o registro',
-                description:
-                  'Ocorreu um erro ao fazer cadastro, por favor, tente novamente.',
-              });
-              handleOnClose();
-              disableLoading();
-              updateDataTable();
-            }
-          } else {
-            try {
-              const dataCreate: { name: string } = {
-                name: data.name,
-              };
-              activeLoading();
-              await api.post(apiCreate(), dataCreate);
-              disableLoading();
-              history.push(nameActions.read.to);
-            } catch (error) {
-              addToast({
-                type: 'error',
-                title: 'Erro ao adicionar o registro',
-                description:
-                  'Ocorreu um erro ao fazer cadastro, por favor, tente novamente.',
-              });
-              disableLoading();
-              updateDataTable();
-            }
+      if (typeForm === 'create') {
+        if (isOpenInModal) {
+          const { handleOnClose, idParent } = isOpenInModal
+          const dataCreate: { name: string; parent_id: number } = {
+            name: data.name,
+            parent_id: idParent
+          }
+          activeLoading()
+          try {
+            await api.post(apiCreate(), dataCreate)
+            handleOnClose()
+            disableLoading()
+            updateDataTable()
+          } catch (error) {
+            addToast({
+              type: 'error',
+              title: 'Erro ao adicionar o registro',
+              description:
+                'Ocorreu um erro ao fazer cadastro, por favor, tente novamente.'
+            })
+            handleOnClose()
+            disableLoading()
+            updateDataTable()
           }
         } else {
-          if (isOpenInModal) {
-            const { handleOnClose } = isOpenInModal;
-            const id = data.id;
-            let dataUpdate: { name: string } = {
-              name: data.name,
-            };
-
-            try {
-              activeLoading();
-              await api.put(apiUpdate(String(id)), dataUpdate);
-              updateDataTable();
-              disableLoading();
-              handleOnClose();
-              addToast({
-                type: 'success',
-                title: 'Registro atualizado',
-                description: 'Registro alterado com sucesso',
-              });
-            } catch (error) {
-              disableLoading();
-              handleOnClose();
-              addToast({
-                type: 'error',
-                title: 'Erro ao atualizar o registro',
-                description:
-                  'Ocorreu um erro ao fazer a atualização, por favor, tente novamente.',
-              });
+          try {
+            const dataCreate: { name: string } = {
+              name: data.name
             }
-          } else {
-            let dataUpdate: { name: string } = {
-              name: data.name,
-            };
-            const id = data.id;
-
-            try {
-              activeLoading();
-              await api.put(apiUpdate(String(id)), dataUpdate);
-              updateDataTable();
-              disableLoading();
-              history.push(nameActions.read.to);
-              addToast({
-                type: 'success',
-                title: 'Registro atualizado',
-                description: 'Registro alterado com sucesso',
-              });
-            } catch (error) {
-              history.push(nameActions.read.to);
-              addToast({
-                type: 'error',
-                title: 'Erro ao atualizar o registro',
-                description:
-                  'Ocorreu um erro ao fazer a atualização, por favor, tente novamente.',
-              });
-            }
+            activeLoading()
+            await api.post(apiCreate(), dataCreate)
+            disableLoading()
+            history.push(nameActions.read.to)
+          } catch (error) {
+            addToast({
+              type: 'error',
+              title: 'Erro ao adicionar o registro',
+              description:
+                'Ocorreu um erro ao fazer cadastro, por favor, tente novamente.'
+            })
+            disableLoading()
+            updateDataTable()
           }
         }
-        disableLoading();
-      } catch (err) {
-        if (err instanceof Yup.ValidationError) {
-          const errors = getValidationErrors(err);
-          formRef.current?.setErrors(errors);
-          return;
-        }
+      } else {
+        if (isOpenInModal) {
+          const { handleOnClose } = isOpenInModal
+          const id = data.id
+          const dataUpdate: { name: string } = {
+            name: data.name
+          }
 
-        if (typeForm === 'create') {
-          addToast({
-            type: 'error',
-            title: 'Erro no cadastro',
-            description:
-              'Ocorreu um erro ao fazer cadastro, por favor, tente novamente.',
-          });
-          if (isOpenInModal) isOpenInModal.handleOnClose();
-          return;
+          try {
+            activeLoading()
+            await api.put(apiUpdate(String(id)), dataUpdate)
+            updateDataTable()
+            disableLoading()
+            handleOnClose()
+            addToast({
+              type: 'success',
+              title: 'Registro atualizado',
+              description: 'Registro alterado com sucesso'
+            })
+          } catch (error) {
+            disableLoading()
+            handleOnClose()
+            addToast({
+              type: 'error',
+              title: 'Erro ao atualizar o registro',
+              description:
+                'Ocorreu um erro ao fazer a atualização, por favor, tente novamente.'
+            })
+          }
+        } else {
+          const dataUpdate: { name: string } = {
+            name: data.name
+          }
+          const id = data.id
+
+          try {
+            activeLoading()
+            await api.put(apiUpdate(String(id)), dataUpdate)
+            updateDataTable()
+            disableLoading()
+            history.push(nameActions.read.to)
+            addToast({
+              type: 'success',
+              title: 'Registro atualizado',
+              description: 'Registro alterado com sucesso'
+            })
+          } catch (error) {
+            history.push(nameActions.read.to)
+            addToast({
+              type: 'error',
+              title: 'Erro ao atualizar o registro',
+              description:
+                'Ocorreu um erro ao fazer a atualização, por favor, tente novamente.'
+            })
+          }
         }
       }
-    },
-    [addToast, history],
-  );
+      disableLoading()
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        const errors = getValidationErrors(err)
+        formRef.current?.setErrors(errors)
+        return
+      }
 
-  const [inputValue, setInputValue] = useState<string>('');
+      if (typeForm === 'create') {
+        addToast({
+          type: 'error',
+          title: 'Erro no cadastro',
+          description:
+            'Ocorreu um erro ao fazer cadastro, por favor, tente novamente.'
+        })
+        if (isOpenInModal) isOpenInModal.handleOnClose()
+      }
+    }
+  }
 
   useEffect(() => {
     if (typeForm !== 'create') {
-      setInputValue(typeForm.inputValue);
+      setInputValue(typeForm.inputValue)
     }
-  }, []);
+  }, [typeForm])
 
-  const handleChangeInputValue = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setInputValue(event.currentTarget.value);
-    },
-    [inputValue],
-  );
+  const handleChangeInputValue = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setInputValue(event.currentTarget.value)
+  }
 
   return (
     <FormComponent formRef={formRef} onSubmitForm={onSubmitForm}>
@@ -247,5 +240,5 @@ export const FormCategory = ({
         </div>
       </>
     </FormComponent>
-  );
-};
+  )
+}

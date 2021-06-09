@@ -1,5 +1,5 @@
-import { LoadAllNCM } from '../../../../../../domain/useCases/FIscal/NCM/Load';
+import { LoadAllNCM } from '../../../../../../domain/useCases/FIscal/NCM/Load'
 
 export interface HttpClientLoadNCM {
-  loadAllNCM: () => Promise<LoadAllNCM.NCMResponse[]>;
+  loadAllNCM: () => Promise<LoadAllNCM.NCMResponse[]>
 }

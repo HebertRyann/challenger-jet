@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div<{ isError?: boolean }>`
   position: relative;
@@ -19,7 +19,7 @@ export const Container = styled.div<{ isError?: boolean }>`
     color: #d43f3a !important;
   }
   overflow: hidden;
-`;
+`
 
 export const ContainerInput = styled.div`
   display: flex;
@@ -40,7 +40,7 @@ export const ContainerInput = styled.div`
     right: 10px;
     width: 20px;
   }
-`;
+`
 
 export const ContainerSearch = styled.div<{ active: boolean }>`
   display: none;
@@ -74,4 +74,4 @@ export const ContainerSearch = styled.div<{ active: boolean }>`
       margin-bottom: 0;
     }
   }
-`;
+`

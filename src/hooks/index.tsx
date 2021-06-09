@@ -1,9 +1,9 @@
-import React from 'react';
+import React from 'react'
 
-import { AuthProvider } from './auth';
-import { ToastProvider } from './toast';
-import { LoadingProvider } from './loading';
-import { DataTableProvider } from './dataTable';
+import { AuthProvider } from './auth'
+import { ToastProvider } from './toast'
+import { LoadingProvider } from './loading'
+import { DataTableProvider } from './dataTable'
 
 const AppProvider: React.FC = ({ children }) => (
   <AuthProvider>
@@ -13,6 +13,6 @@ const AppProvider: React.FC = ({ children }) => (
       </LoadingProvider>
     </ToastProvider>
   </AuthProvider>
-);
+)
 
-export default AppProvider;
+export default AppProvider

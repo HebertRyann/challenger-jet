@@ -1,36 +1,32 @@
-import React, { useState } from 'react';
-import { Container } from './style';
-import { NewInput } from '../../../../../../../../../../components/NewInput';
-import { NewSelect } from '../../../../../../../../../../components/NewSelect';
-import { useTabCreate } from '../../../../../providers/tabsProvider';
-import { useTabs } from '../../../../../../../../../../hooks/tabs';
-import { RE_SALE, SALE } from '../../../../../../domain/products';
-import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent';
+import React, { useState } from 'react'
+import { Container } from './style'
+import { NewInput } from '../../../../../../../../../../components/NewInput'
+import { NewSelect } from '../../../../../../../../../../components/NewSelect'
+import { useTabCreate } from '../../../../../providers/tabsProvider'
+import { useTabs } from '../../../../../../../../../../hooks/tabs'
+import { RE_SALE, SALE } from '../../../../../../domain/products'
+import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent'
 
 type TypeUnitMensured = {
-  id: string;
-  name: string;
-};
+  id: string
+  name: string
+}
 
 type TypeTableProps = {
-  unitMensured: TypeUnitMensured[];
-};
+  unitMensured: TypeUnitMensured[]
+}
 
 export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
-  const { overview } = useTabCreate();
-  const { typeSelectProdut } = overview.getData();
-  const { stock } = useTabCreate();
-  const {
-    stockCurrent,
-    priceCost,
-    priceSale,
-    replacementPoint,
-  } = stock.getData();
-  const unitMensureds = stock.getData().unitMensured;
+  const { overview } = useTabCreate()
+  const { typeSelectProdut } = overview.getData()
+  const { stock } = useTabCreate()
+  const { stockCurrent, priceCost, priceSale, replacementPoint } =
+    stock.getData()
+  const unitMensureds = stock.getData().unitMensured
 
   const isTypeSaleOrResale = (): boolean =>
     typeSelectProdut.value.name === SALE.name ||
-    typeSelectProdut.value.name === RE_SALE.name;
+    typeSelectProdut.value.name === RE_SALE.name
 
   return (
     <Container className="table-responsive">
@@ -42,7 +38,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                 isTypeSaleOrResale()
                   ? {
                       position: 'relative',
-                      lineHeight: '50px',
+                      lineHeight: '50px'
                     }
                   : {}
               }
@@ -55,7 +51,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                 isTypeSaleOrResale()
                   ? {
                       position: 'relative',
-                      lineHeight: '50px',
+                      lineHeight: '50px'
                     }
                   : {}
               }
@@ -68,7 +64,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                 isTypeSaleOrResale()
                   ? {
                       position: 'relative',
-                      lineHeight: '50px',
+                      lineHeight: '50px'
                     }
                   : {}
               }
@@ -98,16 +94,16 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
               <NewSelect
                 error={unitMensureds.error}
                 onChange={event => {
-                  const id = event.target.value.split('+')[0];
-                  const name = event.target.value.split('+')[1];
+                  const id = event.target.value.split('+')[0]
+                  const name = event.target.value.split('+')[1]
                   if (id && name) {
                     stock.setData({
                       ...stock.getData(),
                       unitMensured: {
                         error: { isError: false },
-                        value: { id, name },
-                      },
-                    });
+                        value: { id, name }
+                      }
+                    })
                   }
                 }}
                 className="select form-control"
@@ -117,7 +113,7 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                   ({ id, name }) => (
                     <option value={`${id}+${name}`}>{name}</option>
                   ),
-                  [],
+                  []
                 )}
               </NewSelect>
             </td>
@@ -129,9 +125,9 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                     ...stock.getData(),
                     stockCurrent: {
                       error: { isError: false },
-                      value: event.currentTarget.value,
-                    },
-                  });
+                      value: event.currentTarget.value
+                    }
+                  })
                 }}
                 error={stockCurrent.error}
                 name="stock"
@@ -147,9 +143,9 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                     ...stock.getData(),
                     replacementPoint: {
                       error: { isError: false },
-                      value: event.currentTarget.value,
-                    },
-                  });
+                      value: event.currentTarget.value
+                    }
+                  })
                 }}
                 error={replacementPoint.error}
                 value={replacementPoint.value}
@@ -174,9 +170,9 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                           ...stock.getData(),
                           priceCost: {
                             error: { isError: false },
-                            value: event.currentTarget.value,
-                          },
-                        });
+                            value: event.currentTarget.value
+                          }
+                        })
                       }}
                       type="text"
                     />
@@ -202,5 +198,5 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
         </tbody>
       </table>
     </Container>
-  );
-};
+  )
+}

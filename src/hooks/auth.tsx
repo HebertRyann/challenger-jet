@@ -1,91 +1,91 @@
-import React, { createContext, useCallback, useState, useContext } from 'react';
+import React, { createContext, useCallback, useState, useContext } from 'react'
 
-import api from '../services/api';
+import api from '../services/api'
 
 interface User {
-  id: string;
-  name: string;
-  email: string;
-  avatar_url: string;
+  id: string
+  name: string
+  email: string
+  avatar_url: string
 }
 
 interface Menu {
-  id: number;
-  parent_id?: number;
-  method?: string;
-  name: string;
-  url?: string;
-  permission: boolean;
-  children?: Menu[];
+  id: number
+  parent_id?: number
+  method?: string
+  name: string
+  url?: string
+  permission: boolean
+  children?: Menu[]
 }
 
 interface AuthState {
-  token: string;
-  user: User;
-  menus: Menu[];
+  token: string
+  user: User
+  menus: Menu[]
 }
 
 interface SingInCredentials {
-  username: string;
-  password: string;
+  username: string
+  password: string
 }
 
 interface AuthContextData {
-  user: User;
-  menus: Menu[];
-  signIn(credentials: SingInCredentials): Promise<void>;
-  signOut(): void;
-  userLogged(): boolean;
+  user: User
+  menus: Menu[]
+  signIn(credentials: SingInCredentials): Promise<void>
+  signOut(): void
+  userLogged(): boolean
 }
 
-const AuthContext = createContext<AuthContextData>({} as AuthContextData);
+const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
 export const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<AuthState>(() => {
-    const token = localStorage.getItem('@Multfluxo:token');
-    const user = localStorage.getItem('@Multfluxo:user');
-    const menus = localStorage.getItem('@Multfluxo:menus');
+    const token = localStorage.getItem('@Multfluxo:token')
+    const user = localStorage.getItem('@Multfluxo:user')
+    const menus = localStorage.getItem('@Multfluxo:menus')
 
     if (token && user && menus) {
-      api.defaults.headers.authorization = `Bearer ${token}`;
-      return { token, user: JSON.parse(user), menus: JSON.parse(menus) };
+      api.defaults.headers.authorization = `Bearer ${token}`
+      return { token, user: JSON.parse(user), menus: JSON.parse(menus) }
     }
 
-    return {} as AuthState;
-  });
+    return {} as AuthState
+  })
 
   const signIn = useCallback(async ({ username, password }) => {
     const response = await api.post('sessions', {
       username,
-      password,
-    });
+      password
+    })
 
-    const { token, user, menus } = response.data;
+    const { token, user, menus } = response.data
 
-    localStorage.setItem('@Multfluxo:token', token);
-    localStorage.setItem('@Multfluxo:user', JSON.stringify(user));
-    localStorage.setItem('@Multfluxo:menus', JSON.stringify(menus));
+    localStorage.setItem('@Multfluxo:token', token)
+    localStorage.setItem('@Multfluxo:user', JSON.stringify(user))
+    localStorage.setItem('@Multfluxo:menus', JSON.stringify(menus))
 
-    api.defaults.headers.authorization = `Bearer ${token}`;
+    api.defaults.headers.authorization = `Bearer ${token}`
 
-    setData({ token, user, menus });
-  }, []);
+    setData({ token, user, menus })
+  }, [])
 
   const userLogged = useCallback(() => {
-    const token = localStorage.getItem('@Multfluxo:token');
+    const token = localStorage.getItem('@Multfluxo:token')
     if (token) {
-      return true;
+      return true
     }
-    return false;
-  }, []);
+    return false
+  }, [])
 
   const signOut = useCallback(() => {
-    localStorage.removeItem('@Multfluxo:token');
-    localStorage.removeItem('@Multfluxo:user');
-    localStorage.removeItem('@Multfluxo:menus');
+    localStorage.removeItem('@Multfluxo:token')
+    localStorage.removeItem('@Multfluxo:user')
+    localStorage.removeItem('@Multfluxo:menus')
 
-    setData({} as AuthState);
-  }, []);
+    setData({} as AuthState)
+  }, [])
 
   return (
     <AuthContext.Provider
@@ -94,20 +94,20 @@ export const AuthProvider: React.FC = ({ children }) => {
         menus: data.menus,
         signIn,
         signOut,
-        userLogged,
+        userLogged
       }}
     >
       {children}
     </AuthContext.Provider>
-  );
-};
+  )
+}
 
 export function useAuth(): AuthContextData {
-  const context = useContext(AuthContext);
+  const context = useContext(AuthContext)
 
   if (!context) {
-    throw new Error('useAuth must be used within an AutProvider');
+    throw new Error('useAuth must be used within an AutProvider')
   }
 
-  return context;
+  return context
 }

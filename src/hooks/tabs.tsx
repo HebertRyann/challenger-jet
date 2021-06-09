@@ -1,130 +1,141 @@
-import React, { createContext, useCallback, useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useState } from 'react'
 
 export type TypeTabs = {
-  name: string;
-  label: string;
-  Component: JSX.Element;
-  isEnable: boolean;
-};
+  default?: boolean
+  name: string
+  label: string
+  Component: JSX.Element
+  isEnable: boolean
+}
 
 type TypeCurrentTab = {
-  key: string;
-};
+  key: string
+}
 
 type TypeTabsContext = {
-  addTab: (newTab: TypeTabs) => void;
-  removeTab: (keyTab: string) => void;
-  loadTabs: () => TypeTabs[];
-  activeTab: (keyTab: string) => void;
-  disableTab: (keyTab: string) => void;
-  changeCurrentTab: (keyTab: string) => void;
-  changeCurrentTabForNext: () => void;
-  loadCurrentTab: () => TypeCurrentTab;
-  changeCurrentTabForPrevious: () => void;
-};
+  addTab: (newTab: TypeTabs) => void
+  removeTab: (keyTab: string) => void
+  loadTabs: () => TypeTabs[]
+  activeTab: (keyTab: string) => void
+  disableTab: (keyTab: string) => void
+  changeCurrentTab: (keyTab: string) => void
+  changeCurrentTabForNext: () => void
+  loadCurrentTab: () => TypeCurrentTab
+  changeCurrentTabForPrevious: () => void
+}
 
 type TypeTabsProvider = {
-  children: JSX.Element;
-};
+  children: JSX.Element
+}
 
-const TabsContext = createContext<TypeTabsContext>({} as TypeTabsContext);
+const TabsContext = createContext<TypeTabsContext>({} as TypeTabsContext)
 
 const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
-  const [tabs, setTabs] = useState<TypeTabs[]>([]);
-  const [currentTab, setCurrentTab] = useState<TypeCurrentTab>({ key: '' });
+  const [tabs, setTabs] = useState<TypeTabs[]>([])
+  const [currentTab, setCurrentTab] = useState<TypeCurrentTab>({ key: '' })
 
-  const addTab = (newTab: TypeTabs): void => {
-    tabs.push(newTab);
-    setTabs([...tabs]);
-  };
+  const addTab = useCallback((newTab: TypeTabs) => {
+    if (newTab.default) setCurrentTab({ key: newTab.name })
+    setTabs(prevState => {
+      prevState.push(newTab)
+      return prevState
+    })
+  }, [])
 
   const removeTab = (keyTab: string): void => {
     try {
-      const result = tabs.filter(({ name }) => name === keyTab);
+      const result = tabs.filter(({ name }) => name === keyTab)
       if (!result) {
         const resultTabsWithouRemoveTab = tabs.filter(
-          ({ name }) => keyTab !== name,
-        );
-        setTabs(resultTabsWithouRemoveTab);
-        return;
+          ({ name }) => keyTab !== name
+        )
+        setTabs(resultTabsWithouRemoveTab)
+        return
       }
-      throw new Error('No find tab with id');
+      throw new Error('No find tab with id')
     } catch (error) {
-      console.error(error.message);
+      console.error(error.message)
     }
-  };
+  }
 
-  const loadTabs = (): TypeTabs[] => tabs;
+  const loadTabs = (): TypeTabs[] => tabs
 
   const activeTab = useCallback(
     (keyTab: string) => {
       try {
-        const result = tabs.filter(({ name }) => name === keyTab);
+        const result = tabs.filter(({ name }) => name === keyTab)
         if (result) {
-          const indexTab = tabs.indexOf(result[0]);
-          tabs[indexTab].isEnable = true;
-          setTabs([...tabs]);
-          return;
+          const indexTab = tabs.indexOf(result[0])
+          tabs[indexTab].isEnable = true
+          setTabs([...tabs])
+          return
         }
-        throw new Error('No find tab with id');
+        throw new Error('No find tab with id')
       } catch (error) {
-        console.error(error.message);
+        console.error(error.message)
       }
     },
-    [tabs],
-  );
+    [tabs]
+  )
 
-  const disableTab = (keyTab: string) => {
-    try {
-      const result = tabs.filter(({ name }) => name === keyTab);
-      if (result) {
-        const indexTab = tabs.indexOf(result[0]);
-        tabs[indexTab].isEnable = false;
-        setTabs([...tabs]);
-        return;
+  const disableTab = useCallback(
+    (keyTab: string) => {
+      try {
+        const result = tabs.filter(({ name }) => name === keyTab)
+
+        if (result.length > 0) {
+          setTabs(prevSate => {
+            const indexTab = prevSate?.indexOf(result[0])
+            prevSate[indexTab].isEnable = false
+            return prevSate
+          })
+          return
+        }
+        throw new Error('No find tab with id')
+      } catch (error) {
+        console.error(error.message)
       }
-      throw new Error('No find tab with id');
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+    },
+    [tabs]
+  )
 
-  const changeCurrentTab = (keyTab: string): void =>
-    setCurrentTab({ key: keyTab });
+  const changeCurrentTab = useCallback((keyTab: string) => {
+    setCurrentTab({ key: keyTab })
+  }, [])
 
-  const loadCurrentTab = (): TypeCurrentTab => currentTab;
+  const loadCurrentTab = (): TypeCurrentTab => currentTab
 
   const changeCurrentTabForNext = () => {
     if (loadCurrentTab().key) {
       const index = tabs
         .filter(({ isEnable }) => isEnable)
-        .findIndex(({ name }) => name === loadCurrentTab().key);
+        .findIndex(({ name }) => name === loadCurrentTab().key)
       const nextTab = tabs
         .filter(({ isEnable }) => isEnable)
         .find((tab, nextIndex) => {
-          return nextIndex === index + 1 ? tab : null;
-        });
+          return nextIndex === index + 1 ? tab : null
+        })
       if (nextTab) {
-        setCurrentTab({ key: nextTab.name });
+        setCurrentTab({ key: nextTab.name })
       }
     }
-  };
+  }
 
   const changeCurrentTabForPrevious = () => {
     if (loadCurrentTab().key) {
       const index = tabs
         .filter(({ isEnable }) => isEnable)
-        .findIndex(({ name }) => name === loadCurrentTab().key);
+        .findIndex(({ name }) => name === loadCurrentTab().key)
       const nextTab = tabs
         .filter(({ isEnable }) => isEnable)
         .find((tab, nextIndex) => {
-          return nextIndex === index - 1 ? tab : null;
-        });
+          return nextIndex === index - 1 ? tab : null
+        })
       if (nextTab) {
-        setCurrentTab({ key: nextTab.name });
+        setCurrentTab({ key: nextTab.name })
       }
     }
-  };
+  }
 
   return (
     <TabsContext.Provider
@@ -137,22 +148,22 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
         changeCurrentTab,
         loadCurrentTab,
         changeCurrentTabForPrevious,
-        changeCurrentTabForNext,
+        changeCurrentTabForNext
       }}
     >
       {children}
     </TabsContext.Provider>
-  );
-};
+  )
+}
 
-const useTabs = () => {
-  const context = useContext(TabsContext);
+const useTabs = (): TypeTabsContext => {
+  const context = useContext(TabsContext)
 
   if (!context) {
-    throw new Error('useTabs must be used witin a TabsProvider');
+    throw new Error('useTabs must be used witin a TabsProvider')
   }
 
-  return context;
-};
+  return context
+}
 
-export { TabsProvider, useTabs };
+export { TabsProvider, useTabs }

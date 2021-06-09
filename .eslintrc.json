@@ -1,94 +1,48 @@
 {
   "env": {
     "browser": true,
-    "es6": true
+    "es2021": true,
+    "node": false,
+    "jest": true
   },
   "extends": [
+    "prettier",
+    "plugin:react-hooks/recommended",
     "plugin:react/recommended",
-    "airbnb",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:react-hooks/recommended"
+    "standard",
+    "plugin:@typescript-eslint/recommended"
   ],
-  "globals": {
-    "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
-  },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 2018,
+    "ecmaVersion": 12,
     "sourceType": "module"
   },
   "plugins": [
     "react",
-    "react-hooks",
     "@typescript-eslint",
-    "prettier",
-    "import-helpers"
+    "prettier"
   ],
   "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": "error",
+    "@typescript-eslint/no-namespace": "off",
+    "brace-style": "off",
+    "indent": "off",
+    "no-useless-constructor": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-extra-semi": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "camelcase": "off",
+    "multiline-ternary": "off",
     "prettier/prettier": "error",
+    "space-before-function-paren": "off",
     "react/prop-types": "off",
-    "react/jsx-props-no-spreading": "off",
-    "import/prefer-default-export": "off",
-    "react-hooks/rules-of-hooks": "error",
-    "@typescript-eslint/camelcase": "off",
-    "no-param-reassign": "off",
-    "jsx-a11y/label-has-associated-control": "off",
-    "react-hooks/exhaustive-deps": "warn",
-    "no-unused-expressions": "off",
-    "react/jsx-filename-extension": [
-      1,
-      {
-        "extensions": [
-          ".tsx"
-        ]
-      }
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": [
+      "error"
     ],
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "ts": "never",
-        "tsx": "never"
-      }
-    ],
-    "@typescript-eslint/explicit-function-return-type": [
-      "error",
-      {
-        "allowExpressions": true
-      }
-    ],
-    "import-helpers/order-imports": [
-      "warn",
-      {
-        "newlinesBetween": "always",
-        "groups": [
-          [
-            "/^react/",
-            "module"
-          ],
-          "/assets/",
-          "/services/",
-          [
-            "parent",
-            "index"
-          ],
-          "sibling"
-        ],
-        "alphabetize": {
-          "ignoreCase": true
-        }
-      }
-    ]
-  },
-  "settings": {
-    "import/resolver": {
-      "typescript": {}
-    }
+    "react/react-in-jsx-scope": "off"
   }
 }

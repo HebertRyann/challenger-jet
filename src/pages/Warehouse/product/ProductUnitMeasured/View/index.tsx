@@ -1,100 +1,92 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams, useLocation, useHistory } from 'react-router-dom';
-import Container from '../../../../../components/Container';
-import Tabs from '../../../../../components/Tabs';
-import Tab from '../../../../../components/Tabs/Tab';
-import DataTable from '../../../../../components/DataTable';
-import api from '../../../../../services/api';
-import { useToast } from '../../../../../hooks/toast';
-import { useLoading } from '../../../../../hooks/loading';
-import { Alert } from '../../../../../components/Alert';
-import { nameActions, nameEntity, namePageTitle } from '../domain/info';
-import { apiDelete, apiList } from '../domain/api';
-import { breadcrumbView } from '../domain/breadcrumb';
+import React, { useEffect, useState } from 'react'
+import { useParams, useLocation, useHistory } from 'react-router-dom'
+import Container from '../../../../../components/Container'
+import Tabs from '../../../../../components/Tabs'
+import Tab from '../../../../../components/Tabs/Tab'
+import DataTable from '../../../../../components/DataTable'
+import api from '../../../../../services/api'
+import { useToast } from '../../../../../hooks/toast'
+import { useLoading } from '../../../../../hooks/loading'
+import { Alert } from '../../../../../components/Alert'
+import { nameActions, nameEntity, namePageTitle } from '../domain/info'
+import { apiDelete, apiList } from '../domain/api'
+import { breadcrumbView } from '../domain/breadcrumb'
 import {
   toolsViewCreate,
   toolsViewDelete,
   toolsViewUpdate,
-  toolsViewList,
-} from '../domain/tools';
+  toolsViewList
+} from '../domain/tools'
 
 interface ProductCategorytData {
-  id: number;
-  parent_id: number | null;
-  name: string;
-  created_at: string;
-  updated_at: string;
+  id: number
+  parent_id: number | null
+  name: string
+  created_at: string
+  updated_at: string
 }
 
 const View = (): JSX.Element => {
-  let { id } = useParams<{ id: string }>();
-  const history = useHistory();
-  const location = useLocation<{ id: string; value: string }>();
-  const [
-    productCategory,
-    setProductCategory,
-  ] = useState<ProductCategorytData | null>(null);
-  const { addToast } = useToast();
-  const searchParametersAuditLog = [{ entity: nameEntity, entity_id: id }];
+  const { id } = useParams<{ id: string }>()
+  const history = useHistory()
+  const location = useLocation<{ id: string; value: string }>()
+  const [productCategory, setProductCategory] =
+    useState<ProductCategorytData | null>(null)
+  const { addToast } = useToast()
+  const searchParametersAuditLog = [{ entity: nameEntity, entity_id: id }]
 
-  const { disableLoading, activeLoading } = useLoading();
+  const { disableLoading, activeLoading } = useLoading()
 
   useEffect(() => {
     async function loadCategory(): Promise<void> {
-      activeLoading();
+      activeLoading()
       try {
         const response = await api.get<ProductCategorytData>(
-          apiList(location.state.id),
-        );
-        const { data } = response;
-        setProductCategory(data);
-        disableLoading();
+          apiList(location.state.id)
+        )
+        const { data } = response
+        setProductCategory(data)
+        disableLoading()
       } catch (err) {
-        disableLoading();
+        disableLoading()
         addToast({
           type: 'error',
           title: 'Error ao carregar a categoria',
           description:
-            'Houve um error ao carregar a categoria, tente novamente mais tarde!',
-        });
+            'Houve um error ao carregar a categoria, tente novamente mais tarde!'
+        })
       }
     }
-    loadCategory();
-  }, [id, addToast]);
+    loadCategory()
+  }, [id, addToast, activeLoading, location.state.id, disableLoading])
 
-  const [alertRemoveParent, setAlertRemoveParent] = useState(false);
+  const [alertRemoveParent, setAlertRemoveParent] = useState(false)
 
-  const handleOnClickRemoveParent = useCallback(
-    ({ id, name }: { id: string; name: string }) => {
-      setAlertRemoveParent(true);
-    },
-    [alertRemoveParent],
-  );
+  const handleOnClickRemoveParent = () => {
+    setAlertRemoveParent(true)
+  }
 
-  const handlerOnClickButtonConfirmRemoveParent = useCallback(
-    async (id: number) => {
-      try {
-        await api.delete(apiDelete(String(id)));
-        setAlertRemoveParent(false);
-        addToast({
-          type: 'success',
-          title: 'Atributo removido com sucesso.',
-        });
-        history.goBack();
-      } catch (err) {
-        setAlertRemoveParent(false);
-        addToast({
-          type: 'error',
-          title: 'Atributo não removido, pois ainda está sendo usada.',
-        });
-      }
-    },
-    [alertRemoveParent],
-  );
+  const handlerOnClickButtonConfirmRemoveParent = async (id: number) => {
+    try {
+      await api.delete(apiDelete(String(id)))
+      setAlertRemoveParent(false)
+      addToast({
+        type: 'success',
+        title: 'Atributo removido com sucesso.'
+      })
+      history.goBack()
+    } catch (err) {
+      setAlertRemoveParent(false)
+      addToast({
+        type: 'error',
+        title: 'Atributo não removido, pois ainda está sendo usada.'
+      })
+    }
+  }
 
-  const handlerOnClickButtonCancelRemoveParent = useCallback(() => {
-    setAlertRemoveParent(false);
-  }, []);
+  const handlerOnClickButtonCancelRemoveParent = () => {
+    setAlertRemoveParent(false)
+  }
 
   return (
     <>
@@ -105,13 +97,10 @@ const View = (): JSX.Element => {
         tools={[
           toolsViewUpdate(String(id)),
           toolsViewDelete(() => {
-            handleOnClickRemoveParent({
-              id: String(productCategory?.id),
-              name: String(productCategory?.name),
-            });
+            handleOnClickRemoveParent()
           }),
           toolsViewCreate(),
-          toolsViewList(),
+          toolsViewList()
         ]}
       >
         <div className="form-body">
@@ -154,7 +143,7 @@ const View = (): JSX.Element => {
             <div className="col-md-12">
               <Tabs>
                 {[
-                  <Tab title="Histórico">
+                  <Tab key={Math.random()} title="Histórico">
                     <div className="portlet light">
                       <div className="portlet-title">
                         <div className="caption">Listagem</div>
@@ -162,13 +151,14 @@ const View = (): JSX.Element => {
                       </div>
                       <div className="portlet-body form">
                         <DataTable
+                          format={{ orderBy: '' }}
                           source="auditLogs"
                           entity="AuditLog"
                           searchParameters={searchParametersAuditLog}
                         />
                       </div>
                     </div>
-                  </Tab>,
+                  </Tab>
                 ]}
               </Tabs>
             </div>
@@ -184,7 +174,7 @@ const View = (): JSX.Element => {
         isActive={alertRemoveParent}
       />
     </>
-  );
-};
+  )
+}
 
-export default View;
+export default View

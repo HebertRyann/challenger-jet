@@ -1,23 +1,23 @@
-import React from 'react';
-import { TypeContentTabs } from './index';
-import { Details, labelDetails, nameDetails } from './tabs/Details';
-import { Stock, labelStock, nameStock } from './tabs/Stock';
-import { Fiscal, labelFiscal, nameFiscal } from './tabs/Fiscal';
+import React from 'react'
+import { TypeContentTabs } from './index'
+import { Details, labelDetails, nameDetails } from './tabs/Details'
+import { Stock, labelStock, nameStock } from './tabs/Stock'
+import { Fiscal, labelFiscal, nameFiscal } from './tabs/Fiscal'
 import {
   PriceComposition,
   labelPriceComposition,
-  namePriceComposition,
-} from './tabs/PriceComposition';
+  namePriceComposition
+} from './tabs/PriceComposition'
 import {
   HasVariation,
   labelHasVariation,
-  nameHasVariation,
-} from './tabs/HasVariation';
+  nameHasVariation
+} from './tabs/HasVariation'
 import {
   HasComposition,
   labelHasComposition,
-  nameHasComposition,
-} from './tabs/HasComposition';
+  nameHasComposition
+} from './tabs/HasComposition'
 
 export const makeTabs = async (): Promise<TypeContentTabs[]> => {
   return [
@@ -25,37 +25,37 @@ export const makeTabs = async (): Promise<TypeContentTabs[]> => {
       label: labelDetails,
       name: nameDetails,
       isEnable: true,
-      Component: <Details />,
+      Component: <Details />
     },
     {
       label: labelStock,
       name: nameStock,
       isEnable: true,
-      Component: <Stock />,
+      Component: <Stock />
     },
     {
       label: labelHasVariation,
       name: nameHasVariation,
       isEnable: false,
-      Component: <HasVariation />,
+      Component: <HasVariation />
     },
     {
       label: labelHasComposition,
       name: nameHasComposition,
       isEnable: false,
-      Component: <HasComposition />,
+      Component: <HasComposition />
     },
     {
       label: labelPriceComposition,
       name: namePriceComposition,
       isEnable: false,
-      Component: <PriceComposition />,
+      Component: <PriceComposition />
     },
     {
       label: labelFiscal,
       name: nameFiscal,
       isEnable: false,
-      Component: <Fiscal />,
-    },
-  ];
-};
+      Component: <Fiscal />
+    }
+  ]
+}

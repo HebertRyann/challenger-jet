@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const Container = styled.div`
   .check-container {
@@ -20,4 +20,4 @@ export const Container = styled.div`
   > footer {
     margin: 20px;
   }
-`;
+`

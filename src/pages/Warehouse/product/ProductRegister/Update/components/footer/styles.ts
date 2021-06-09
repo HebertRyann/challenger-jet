@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const Container = styled.div`
   margin-top: 60px;
@@ -13,7 +13,7 @@ export const Container = styled.div`
   & button + button {
     margin-left: 10px;
   }
-`;
+`
 
 export const ContainerFooter = styled.footer`
   margin-top: 10px;
@@ -21,4 +21,4 @@ export const ContainerFooter = styled.footer`
   justify-content: flex-end;
   align-items: center;
   width: 100%;
-`;
+`

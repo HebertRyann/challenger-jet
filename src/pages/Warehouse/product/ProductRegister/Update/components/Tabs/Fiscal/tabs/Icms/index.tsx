@@ -1,15 +1,15 @@
-import React from 'react';
-import { NewSelect } from '../../../../../../../../../../components/NewSelect';
-import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent';
-import { useTabCreate } from '../../../../../providers/tabsProvider';
-import { dataIcms } from './icms';
-export const nameFiscalIcms = '@@tabs-fiscal-icms';
-export const labelFiscalIcms = 'ICMS';
+import React from 'react'
+import { NewSelect } from '../../../../../../../../../../components/NewSelect'
+import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent'
+import { useTabCreate } from '../../../../../providers/tabsProvider'
+import { dataIcms } from './icms'
+export const nameFiscalIcms = '@@tabs-fiscal-icms'
+export const labelFiscalIcms = 'ICMS'
 
 export const Icms = (): JSX.Element => {
-  const { fiscal } = useTabCreate();
-  const { changeIcmsTaxeIssue, changeIcmsOrigem } = fiscal.setData;
-  const { icms } = fiscal.getData();
+  const { fiscal } = useTabCreate()
+  const { changeIcmsTaxeIssue, changeIcmsOrigem } = fiscal.setData
+  const { icms } = fiscal.getData()
   return (
     <div className="row">
       <div className="form-content col-md-6">
@@ -19,10 +19,10 @@ export const Icms = (): JSX.Element => {
         />
         <NewSelect
           onChange={event => {
-            const split = event.target.value.split('+');
-            const id = split[0];
-            const name = split[1];
-            changeIcmsTaxeIssue({ id, name });
+            const split = event.target.value.split('+')
+            const id = split[0]
+            const name = split[1]
+            changeIcmsTaxeIssue({ id, name })
           }}
           error={icms.taxesIssue.error}
         >
@@ -35,10 +35,10 @@ export const Icms = (): JSX.Element => {
         <TooltipComponent label="Origem" message="Origem do produto" />
         <NewSelect
           onChange={event => {
-            const split = event.target.value.split('+');
-            const id = split[0];
-            const name = split[1];
-            changeIcmsOrigem({ id, name });
+            const split = event.target.value.split('+')
+            const id = split[0]
+            const name = split[1]
+            changeIcmsOrigem({ id, name })
           }}
           error={icms.origem.error}
         >
@@ -48,5 +48,5 @@ export const Icms = (): JSX.Element => {
         </NewSelect>
       </div>
     </div>
-  );
-};
+  )
+}

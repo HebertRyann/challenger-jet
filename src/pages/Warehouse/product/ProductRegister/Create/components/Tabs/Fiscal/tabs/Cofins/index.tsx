@@ -1,36 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { NewSelect } from '../../../../../../../../../../components/NewSelect';
-import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent';
-import { useTabCreate } from '../../../../../providers/tabsProvider';
-import { LoadTaxSituations } from '../../../../../../domain/useCases/FIscal/TaxSituations/Load';
-import { LoadNatureOperations } from '../../../../../../domain/useCases/FIscal/NatureOperations/Load';
-import { useTabs } from '../../../../../../../../../../hooks/tabs';
+import React, { useEffect, useState } from 'react'
+import { NewSelect } from '../../../../../../../../../../components/NewSelect'
+import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent'
+import { useTabCreate } from '../../../../../providers/tabsProvider'
+import { LoadTaxSituations } from '../../../../../../domain/useCases/FIscal/TaxSituations/Load'
+import { LoadNatureOperations } from '../../../../../../domain/useCases/FIscal/NatureOperations/Load'
+import { useTabs } from '../../../../../../../../../../hooks/tabs'
 
 type TypeConfins = {
-  taxSituationsLoader: LoadTaxSituations;
-};
+  taxSituationsLoader: LoadTaxSituations
+}
 
 export const Confins = ({ taxSituationsLoader }: TypeConfins): JSX.Element => {
-  const { fiscal } = useTabCreate();
-  const { changeCofinsTaxeIssue } = fiscal.setData;
-  const { cofins } = fiscal.getData();
-  const { loadCurrentTab } = useTabs();
+  const { fiscal } = useTabCreate()
+  const { changeCofinsTaxeIssue } = fiscal.setData
+  const { cofins } = fiscal.getData()
+  const { loadCurrentTab } = useTabs()
   const [taxSituations, setTaxSituations] = useState<
     LoadTaxSituations.LoadTaxSituationsResponse[]
-  >([]);
-  const [loadingData, setLoadingData] = useState(false);
+  >([])
+  const [loadingData, setLoadingData] = useState(false)
 
   useEffect(() => {
-    (async () => {
-      const curretTab = loadCurrentTab();
+    ;(async () => {
+      const curretTab = loadCurrentTab()
       if (curretTab.key === nameFiscalConfins && taxSituations.length < 1) {
-        setLoadingData(true);
-        const response = await taxSituationsLoader.loadTaxSituations();
-        setTaxSituations(response);
-        setLoadingData(false);
+        setLoadingData(true)
+        const response = await taxSituationsLoader.loadTaxSituations()
+        setTaxSituations(response)
+        setLoadingData(false)
       }
-    })();
-  }, [loadCurrentTab()]);
+    })()
+  }, [loadCurrentTab()])
 
   return (
     <div className="row">
@@ -41,10 +41,10 @@ export const Confins = ({ taxSituationsLoader }: TypeConfins): JSX.Element => {
         />
         <NewSelect
           onChange={event => {
-            const split = event.target.value.split('+');
-            const id = split[0];
-            const name = split[1];
-            changeCofinsTaxeIssue({ id, name });
+            const split = event.target.value.split('+')
+            const id = split[0]
+            const name = split[1]
+            changeCofinsTaxeIssue({ id, name })
           }}
           loading={loadingData}
           error={cofins.taxesIssue.error}
@@ -57,8 +57,8 @@ export const Confins = ({ taxSituationsLoader }: TypeConfins): JSX.Element => {
         </NewSelect>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export const labelFiscalConfins = 'Confins';
-export const nameFiscalConfins = '@@tabs-fiscal-cofins';
+export const labelFiscalConfins = 'Confins'
+export const nameFiscalConfins = '@@tabs-fiscal-cofins'

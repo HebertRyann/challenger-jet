@@ -1,60 +1,72 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Container } from './styles';
-import { ResponseEntiryWithIdNameWithChildren } from '../../../services/api';
-import { Table } from './component/Table';
-import { useTabCreate } from '../../../providers/tabsProvider';
+import React, { useCallback, useEffect, useState } from 'react'
+import { Container } from './styles'
+import { ResponseEntiryWithIdNameWithChildren } from '../../../services/api'
+import { Table } from './component/Table'
+import { useTabCreate } from '../../../providers/tabsProvider'
 
 type TypeAtributes = {
-  id: string;
-  name: string;
-  parent_id: string | null;
-  childrenList: ResponseEntiryWithIdNameWithChildren[];
-  isChecked?: boolean;
-};
+  id: string
+  name: string
+  parent_id: string | null
+  childrenList: ResponseEntiryWithIdNameWithChildren[]
+  isChecked?: boolean
+}
 
 type TypeUnitMensured = {
-  id: string;
-  name: string;
-};
+  id: string
+  name: string
+}
 
 type TypeHasVariationProps = {
-  unitMensureds: TypeUnitMensured[];
-  atributes: TypeAtributes[];
-};
+  unitMensureds: TypeUnitMensured[]
+  atributes: TypeAtributes[]
+}
 
 export const HasVariation = ({
   unitMensureds,
-  atributes,
+  atributes
 }: TypeHasVariationProps): JSX.Element => {
-  const { variation } = useTabCreate();
-  const { addAtributes, removeAtributes } = variation.setData;
-  const [atributesList, setAtributesList] = useState<
-    ResponseEntiryWithIdNameWithChildren[]
-  >(atributes);
+  const { variation } = useTabCreate()
+  const { addAtributes, removeAtributes } = variation.setData
+  const [atributesList, setAtributesList] =
+    useState<ResponseEntiryWithIdNameWithChildren[]>(atributes)
 
   useEffect(() => {
     variation.getData()[0].atributes.forEach(result => {
-      atributesList.forEach((atribute, index) => {
-        if (atribute.id.toString() === result.value.keyParent) {
-          atributesList[index].isChecked = true;
-        }
-      });
-    });
-  }, [variation.getData()]);
+      setAtributesList(prevState => {
+        prevState.forEach((atribute, index) => {
+          if (atribute.id.toString() === result.value.keyParent) {
+            prevState[index].isChecked = true
+          }
+        })
+        return prevState
+      })
+    })
+  }, [variation])
+
+  useEffect(() => {
+    atributesList.forEach(({ id }, y) => {
+      variation.getData().forEach(({ atributes }, x) => {
+        atributes.forEach(({ value }) => {
+          if (value.keyParent.toString() === id.toString()) {
+            addAtributes(value, x, y)
+          }
+        })
+      })
+    })
+  }, [addAtributes, atributesList, variation])
 
   const handlerClickCheckBox = useCallback(
-    (index: number) => {
-      atributesList[index].isChecked = !atributesList[index].isChecked;
-      setAtributesList([...atributesList]);
-      removeAtributes();
-      atributesList
-        .filter(({ isChecked }) => isChecked)
-        .map(() => {
-          addAtributes();
-        });
+    (index: number, removeCheck: boolean, keyParent: string) => {
+      if (removeCheck) {
+        removeAtributes(keyParent)
+      }
+
+      atributesList[index].isChecked = !atributesList[index].isChecked
+      setAtributesList([...atributesList])
     },
-    [atributesList, variation.getData()],
-  );
+    [atributesList, removeAtributes]
+  )
 
   return (
     <>
@@ -66,7 +78,7 @@ export const HasVariation = ({
                 type="checkbox"
                 checked={isChecked}
                 onChange={() => {
-                  handlerClickCheckBox(index);
+                  handlerClickCheckBox(index, !!isChecked, String(id))
                 }}
                 value={id}
               />
@@ -76,14 +88,11 @@ export const HasVariation = ({
         </div>
       </Container>
       <div className="row">
-        <Table
-          unitMensuredList={unitMensureds}
-          atributes={atributesList.filter(({ isChecked }) => isChecked)}
-        />
+        <Table unitMensuredList={unitMensureds} atributes={atributesList} />
       </div>
     </>
-  );
-};
+  )
+}
 
-export const labelHasVariation = 'Variação/Estoque';
-export const nameHasVariation = '@@tabs-has-variation';
+export const labelHasVariation = 'Variação/Estoque'
+export const nameHasVariation = '@@tabs-has-variation'

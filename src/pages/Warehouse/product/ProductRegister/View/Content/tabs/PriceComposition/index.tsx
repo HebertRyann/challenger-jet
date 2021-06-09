@@ -1,22 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'
 import {
   formatProductTypeToLowerCase,
   RE_SALE,
-  SALE,
-} from '../../../../domain/products';
-import { PriceCompositionView } from '../../../domain/response/productResponse';
-import { useProduct } from '../../../provider/productProvider';
-import { Container } from './style';
-import { useTabs } from '../../../../../../../../hooks/tabs';
+  SALE
+} from '../../../../domain/products'
+import { PriceCompositionView } from '../../../domain/response/productResponse'
+import { useProduct } from '../../../provider/productProvider'
+import { Container } from './style'
+import { useTabs } from '../../../../../../../../hooks/tabs'
+export const labelPriceComposition = 'Formação de preço'
+export const namePriceComposition = '@@tabs-view-PriceComposition'
 
 export const PriceComposition = (): JSX.Element => {
-  const { getProduct } = useProduct();
-  const { price_composition } = getProduct();
-  let priceCompositionList: PriceCompositionView = {} as PriceCompositionView;
-  const { activeTab } = useTabs();
+  const { getProduct } = useProduct()
+  const { price_composition } = getProduct()
+  let priceCompositionList: PriceCompositionView = {} as PriceCompositionView
+  const { activeTab } = useTabs()
 
   if (price_composition) {
-    priceCompositionList = JSON.parse(price_composition.toLowerCase());
+    priceCompositionList = JSON.parse(price_composition.toLowerCase())
   }
 
   useEffect(() => {
@@ -26,9 +28,9 @@ export const PriceComposition = (): JSX.Element => {
       getProduct().type?.replace(' ', '-') ===
         formatProductTypeToLowerCase(SALE)
     ) {
-      activeTab(namePriceComposition);
+      activeTab(namePriceComposition)
     }
-  }, [getProduct()]);
+  }, [getProduct()])
 
   return (
     <Container>
@@ -57,8 +59,5 @@ export const PriceComposition = (): JSX.Element => {
         </div>
       </div>
     </Container>
-  );
-};
-
-export const labelPriceComposition = 'Formação de preço';
-export const namePriceComposition = '@@tabs-view-PriceComposition';
+  )
+}

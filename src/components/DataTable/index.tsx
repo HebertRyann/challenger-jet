@@ -1,42 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import api from '../../services/api';
-import TableHeader from './Header';
-import Pagination from './Pagination';
-import Search from './Search';
-import '../../assets/global/plugins/datatables/datatables.min.css';
+import React, { useCallback, useEffect, useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import api from '../../services/api'
+import TableHeader from './Header'
+import Pagination from './Pagination'
+import Search from './Search'
+import '../../assets/global/plugins/datatables/datatables.min.css'
+import { LinkContainer } from './style'
 interface Action {
-  name: string;
-  icon: string;
-  title: string;
+  name: string
+  icon: string
+  title: string
 }
 
 interface Header {
-  name: string;
-  field: string;
-  sortable: boolean;
+  name: string
+  field: string
+  sortable: boolean
 }
 
 interface SearchParameters {
-  [key: string]: string;
+  [key: string]: string
 }
 
 interface DataTableProps {
   onActions?: {
-    onClickButtonEdit?: <T>(currentValue: T | any) => void;
-    onClickButtonRemove?: <T>(currentValue: T | any) => void;
-    onClickButtonList?: <T>(currentValue: T | any) => void;
-  };
-  entity: string;
-  source: string;
-  headers?: Header[];
-  actions?: Action[];
-  notHasChildren?: boolean;
-  onlyParent?: boolean;
-  searchParameters?: SearchParameters[];
-  format?: {
-    orderBy: string;
-  };
+    onClickButtonEdit?: <T>(currentValue: T | any) => void
+    onClickButtonRemove?: <T>(currentValue: T | any) => void
+    onClickButtonList?: <T>(currentValue: T | any) => void
+  }
+  entity: string
+  source: string
+  headers?: Header[]
+  actions?: Action[]
+  notHasChildren?: boolean
+  onlyParent?: boolean
+  searchParameters?: SearchParameters[]
+  format: {
+    orderBy: string
+  }
 }
 
 const DataTable = ({
@@ -44,114 +45,116 @@ const DataTable = ({
   entity,
   source,
   notHasChildren,
-  format,
   onlyParent,
   headers = [
     { name: 'Data', field: 'created_at', sortable: true },
-    { name: 'Descrição', field: 'descriptions', sortable: true },
+    { name: 'Descrição', field: 'descriptions', sortable: true }
   ],
   actions,
-  searchParameters,
-}: DataTableProps) => {
-  const [items, setItems] = useState<any[]>([]);
-  const [totalItems, setTotalItems] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [ItemsPerPage, setItemsPerPage] = useState(50);
-  const [search, setSearch] = useState('');
-  const [sorting, setSorting] = useState({ field: '', order: '' });
+  format
+}: DataTableProps): JSX.Element => {
+  const [items, setItems] = useState<any[]>([])
+  const [filterItems, setFilterItems] = useState([])
+  const [totalItems, setTotalItems] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [ItemsPerPage, setItemsPerPage] = useState(50)
+  const history = useHistory()
 
   const handlerOnClickButtonList = (currentValue: any) => {
     if (typeof onActions?.onClickButtonList === 'function') {
-      onActions.onClickButtonList(currentValue);
+      onActions.onClickButtonList(currentValue)
     } else {
       history.push(`/${source}/view/${currentValue.id}`, {
         id: currentValue.id,
-        value: currentValue.name,
-      });
+        value: currentValue.name
+      })
     }
-  };
+  }
 
   const handlerOnClickButtonEdit = (currentValue: any) => {
     if (onActions?.onClickButtonEdit) {
-      onActions.onClickButtonEdit(currentValue);
+      onActions.onClickButtonEdit(currentValue)
     } else {
       history.push(`/${source}/update/${currentValue.id}`, {
         id: currentValue.id,
-        value: currentValue.name,
-      });
+        value: currentValue.name
+      })
     }
-  };
+  }
 
   const handlerOnClickButtonRemove = (currentValue: any) => {
-    if (onActions?.onClickButtonRemove)
-      onActions.onClickButtonRemove(currentValue);
-  };
+    if (onActions?.onClickButtonRemove) {
+      onActions.onClickButtonRemove(currentValue)
+    }
+  }
+
+  const loadParams = useCallback(() => {
+    const params = {
+      entity,
+      source,
+      keyword: '',
+      page: currentPage,
+      perPage: ItemsPerPage,
+      orderByField: '',
+      searchParameters: '',
+      onlyParent,
+      orderBy: format.orderBy
+    }
+
+    return params
+  }, [ItemsPerPage, currentPage, entity, format, onlyParent, source])
 
   useEffect(() => {
-    const getData = async () => {
-      const response = await api.get('dataTable', {
-        params: {
-          entity,
-          source,
-          keyword: search,
-          page: currentPage,
-          perPage: ItemsPerPage,
-          orderByField: sorting.field,
-          orderBySort: sorting.order,
-          searchParameters,
-          orderBy: format?.orderBy,
-          onlyParent,
-        },
-      });
-      setItems(response.data.items);
-      setTotalItems(response.data.totalItens);
-      setCurrentPage(response.data.page);
-    };
-    getData();
-  }, [
-    entity,
-    source,
-    searchParameters,
-    currentPage,
-    search,
-    sorting,
-    ItemsPerPage,
-  ]);
-
-  useEffect(() => {
-    const result = items.sort(() => -1);
-    setItems([...result]);
-  }, [sorting.order]);
+    ;(async () => {
+      try {
+        const params = loadParams()
+        const response = await api.get('dataTable', { params })
+        setItems(response.data.items)
+        setFilterItems(response.data.items)
+        setTotalItems(response.data.totalItens)
+        setCurrentPage(response.data.page)
+      } catch (error) {
+        console.error(error)
+      }
+    })()
+  }, [loadParams])
 
   const firstItem =
-    totalItems === 0 ? totalItems : ItemsPerPage * (currentPage - 1) + 1;
-  const lastItem =
-    firstItem + ItemsPerPage - 1 >= totalItems
-      ? totalItems
-      : firstItem + ItemsPerPage - 1;
-
-  const history = useHistory();
+    totalItems === 0 ? totalItems : ItemsPerPage * (currentPage - 1) + 1
 
   const getTotalItems = (initialValue: number): number => {
-    let sum = 0;
+    let sum = 0
     if (initialValue > 1) {
-      return items.length + initialValue - 1;
+      return items.length + initialValue - 1
     } else {
-      if (!!notHasChildren) {
+      if (notHasChildren) {
         sum = items.reduce((sum, value) => {
           if (!value.parent_id) {
-            return sum + 1;
+            return sum + 1
           }
-          return sum;
-        }, 0);
-        if (initialValue === 1) {
-        }
+          return sum
+        }, 0)
       } else {
-        sum = items.length;
+        sum = items.length
       }
     }
-    return sum;
-  };
+    return sum
+  }
+
+  const onSearchItem = (value: string) => {
+    if (value.length === 0) {
+      setItems(filterItems)
+      return
+    }
+    if (items && items.length > 0) {
+      const itemsFilter = items.filter(({ name }) =>
+        name.toLowerCase().includes(value.toLowerCase())
+      )
+      setItems(itemsFilter)
+      return
+    }
+    setItems(filterItems)
+  }
 
   return (
     <div className="dataTables_wrapper no-footer">
@@ -175,12 +178,7 @@ const DataTable = ({
           <div className="dataTables_filter">
             <label>
               Pesquisar
-              <Search
-                onSearch={value => {
-                  setSearch(value);
-                  setCurrentPage(1);
-                }}
-              />
+              <Search onSearch={value => onSearchItem(value)} />
             </label>
           </div>
         </div>
@@ -189,14 +187,17 @@ const DataTable = ({
         <table className="dataTable table table-striped table-bordered table-hover dt-responsive dtr-inline">
           <TableHeader
             headers={headers}
-            onSorting={(field, order) => setSorting({ field, order })}
+            onSorting={() => {
+              const itemSorted = items.sort(() => -1)
+              setItems([...itemSorted])
+            }}
           />
           <tbody>
             {(items.length > 0 &&
               items.map(item => {
                 if (item?.type) {
                   if (item.type === 'CONSUMO') {
-                    item.type = 'USO E CONSUMO';
+                    item.type = 'USO E CONSUMO'
                   }
                 }
                 return !notHasChildren ? (
@@ -207,7 +208,7 @@ const DataTable = ({
                           <td key={`${header.field}-${item.id}`}>
                             <p
                               style={{
-                                textAlign: 'left',
+                                textAlign: 'left'
                               }}
                             >
                               {item[header.field]}
@@ -225,9 +226,10 @@ const DataTable = ({
                                   <span className={action.icon} />
                                 </Link>
                               ))) || (
-                              <>
+                              <LinkContainer>
                                 {!item.parent_id && (
-                                  <a
+                                  <div
+                                    className="link"
                                     key={Math.random()}
                                     title="Visualizar"
                                     onClick={() =>
@@ -235,32 +237,34 @@ const DataTable = ({
                                     }
                                   >
                                     <span className="fa fa-search" />
-                                  </a>
+                                  </div>
                                 )}
                                 <div>
-                                  <a
+                                  <div
+                                    className="link"
                                     key={Math.random()}
                                     title="Editar"
                                     onClick={() => {
-                                      handlerOnClickButtonEdit(item);
+                                      handlerOnClickButtonEdit(item)
                                     }}
                                   >
                                     <span className="fa fa-edit" />
-                                  </a>
-                                  <a
+                                  </div>
+                                  <div
                                     key={Math.random()}
                                     title="Remover"
+                                    className="link"
                                     onClick={() => {
-                                      handlerOnClickButtonRemove(item);
+                                      handlerOnClickButtonRemove(item)
                                     }}
                                   >
                                     <span className="fa fa-remove" />
-                                  </a>
+                                  </div>
                                 </div>
-                              </>
+                              </LinkContainer>
                             )}
                           </td>
-                        ),
+                        )
                     )}
                   </tr>
                 ) : (
@@ -272,7 +276,7 @@ const DataTable = ({
                             <td key={`${header.field}-${item.id}`}>
                               <p
                                 style={{
-                                  textAlign: 'left',
+                                  textAlign: 'left'
                                 }}
                               >
                                 {item[header.field]}
@@ -290,35 +294,37 @@ const DataTable = ({
                                     <span className={action.icon} />
                                   </Link>
                                 ))) || (
-                                <>
+                                <LinkContainer>
                                   {!item.parent_id && (
-                                    <a
+                                    <div
+                                      className="link"
                                       key={Math.random()}
                                       title="Visualizar"
                                       onClick={() => {
-                                        handlerOnClickButtonList(item);
+                                        handlerOnClickButtonList(item)
                                       }}
                                     >
                                       <span className="fa fa-search" />
-                                    </a>
+                                    </div>
                                   )}
-                                  <a
+                                  <div
+                                    className="link"
                                     key={Math.random()}
                                     title="Editar"
                                     onClick={() => {
-                                      handlerOnClickButtonEdit(item);
+                                      handlerOnClickButtonEdit(item)
                                     }}
                                   >
                                     <span className="fa fa-edit" />
-                                  </a>
-                                </>
+                                  </div>
+                                </LinkContainer>
                               )}
                             </td>
-                          ),
+                          )
                       )}
                     </tr>
                   )
-                );
+                )
               })) || (
               <tr>
                 <td colSpan={headers.length}>Nenhum registro encontrado</td>
@@ -347,7 +353,7 @@ const DataTable = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default DataTable;
+export default DataTable

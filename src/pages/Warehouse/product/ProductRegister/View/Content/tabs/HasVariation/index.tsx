@@ -1,47 +1,58 @@
-import React, { useEffect } from 'react';
-import { useTabs } from '../../../../../../../../hooks/tabs';
-import { useProduct } from '../../../provider/productProvider';
-import { Container } from './styles';
-import { nameStock } from '../../tabs/Stock';
+import React, { useEffect } from 'react'
+import { useTabs } from '../../../../../../../../hooks/tabs'
+import { useProduct } from '../../../provider/productProvider'
+import { Container } from './styles'
+import { nameStock } from '../../tabs/Stock'
 import {
   Atributes,
-  PriceResponse,
-} from '../../../domain/response/productResponse';
+  PriceResponse
+} from '../../../domain/response/productResponse'
 import {
   formatProductTypeToLowerCase,
   RE_SALE,
-  SALE,
-} from '../../../../domain/products';
-import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
+  SALE
+} from '../../../../domain/products'
+import { TooltipComponent } from '../../../../../../../../components/TooltipComponent'
+
+export const labelHasVariation = 'Estoque/Variação'
+export const nameHasVariation = '@@tabs-view-has-variations'
 
 export const HasVariation = (): JSX.Element => {
-  const { disableTab, activeTab } = useTabs();
-  const { getProduct } = useProduct();
-  const { stocks } = getProduct();
-  let prices: PriceResponse = {} as PriceResponse;
+  const { disableTab, activeTab } = useTabs()
+  const { getProduct } = useProduct()
+  const { stocks } = getProduct()
 
   useEffect(() => {
     if (stocks) {
       if (stocks.length > 1) {
-        disableTab(nameStock);
-        activeTab(nameHasVariation);
+        disableTab(nameStock)
+        activeTab(nameHasVariation)
       }
       if (stocks[0].atributes) {
-        disableTab(nameStock);
-        activeTab(nameHasVariation);
+        disableTab(nameStock)
+        activeTab(nameHasVariation)
       }
     }
-  }, [getProduct()]);
+  }, [getProduct()])
+
+  const isSaleOrResaleType = (): boolean => {
+    return (
+      getProduct().type?.replace(' ', '-') ===
+        formatProductTypeToLowerCase(RE_SALE) ||
+      getProduct().type?.replace(' ', '-') ===
+        formatProductTypeToLowerCase(SALE)
+    )
+  }
 
   const renderThAtributes = (): JSX.Element[] => {
-    let atributesList: Atributes[] = [];
+    let atributesList: Atributes[] = []
 
     if (stocks[0].atributes) {
-      atributesList = JSON.parse(stocks[0].atributes);
+      atributesList = JSON.parse(stocks[0].atributes)
     }
 
     const capitalizeFirstLetter = (value: string) =>
-      value?.[0].toUpperCase() + value?.toLowerCase().substring(1);
+      value?.[0].toUpperCase() + value?.toLowerCase().substring(1)
 
     return atributesList.map(({ key }) => (
       <th
@@ -49,7 +60,7 @@ export const HasVariation = (): JSX.Element => {
           isSaleOrResaleType()
             ? {
                 position: 'relative',
-                lineHeight: '50px',
+                lineHeight: '50px'
               }
             : {}
         }
@@ -59,17 +70,8 @@ export const HasVariation = (): JSX.Element => {
       >
         {capitalizeFirstLetter(key)}
       </th>
-    ));
-  };
-
-  const isSaleOrResaleType = (): boolean => {
-    return (
-      getProduct().type?.replace(' ', '-') ===
-        formatProductTypeToLowerCase(RE_SALE) ||
-      getProduct().type?.replace(' ', '-') ===
-        formatProductTypeToLowerCase(SALE)
-    );
-  };
+    ))
+  }
 
   if (getProduct().stocks) {
     return (
@@ -81,7 +83,7 @@ export const HasVariation = (): JSX.Element => {
                 isSaleOrResaleType()
                   ? {
                       position: 'relative',
-                      lineHeight: '50px',
+                      lineHeight: '50px'
                     }
                   : {}
               }
@@ -96,7 +98,7 @@ export const HasVariation = (): JSX.Element => {
                 isSaleOrResaleType()
                   ? {
                       position: 'relative',
-                      lineHeight: '50px',
+                      lineHeight: '50px'
                     }
                   : {}
               }
@@ -110,7 +112,7 @@ export const HasVariation = (): JSX.Element => {
                 isSaleOrResaleType()
                   ? {
                       position: 'relative',
-                      lineHeight: '50px',
+                      lineHeight: '50px'
                     }
                   : {}
               }
@@ -143,32 +145,32 @@ export const HasVariation = (): JSX.Element => {
               replacement_point,
               details,
               atributes,
-              prices,
+              prices
             }) => {
-              let pricesStocks = {} as PriceResponse;
+              let pricesStocks = {} as PriceResponse
               let unitmensured: { unit_mensured: { name: string } } = {
-                unit_mensured: { name: '' },
-              };
+                unit_mensured: { name: '' }
+              }
 
-              let atributesList: Atributes[] = [];
+              let atributesList: Atributes[] = []
 
               if (details) {
-                unitmensured = JSON.parse(details);
+                unitmensured = JSON.parse(details)
               }
 
               if (atributes) {
-                atributesList = JSON.parse(atributes);
+                atributesList = JSON.parse(atributes)
               }
 
               if (isSaleOrResaleType() && prices) {
-                pricesStocks = JSON.parse(prices.toLowerCase());
+                pricesStocks = JSON.parse(prices.toLowerCase())
               }
 
               return (
-                <tr className="items">
+                <tr key={Math.random()} className="items">
                   <td>{unitmensured.unit_mensured.name}</td>
                   {atributesList.map(({ value }) => (
-                    <td>{value}</td>
+                    <td key={Math.random()}>{value}</td>
                   ))}
                   <td>{current_stock}</td>
                   <td>{replacement_point}</td>
@@ -179,15 +181,12 @@ export const HasVariation = (): JSX.Element => {
                     </>
                   )}
                 </tr>
-              );
-            },
+              )
+            }
           )}
         </tbody>
       </Container>
-    );
+    )
   }
-  return <div></div>;
-};
-
-export const labelHasVariation = 'Estoque/Variação';
-export const nameHasVariation = '@@tabs-view-has-variations';
+  return <div></div>
+}

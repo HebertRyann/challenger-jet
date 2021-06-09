@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { TooltipComponent } from '../../../../../../../../components/TooltipComponent';
-import { Container, TextArea } from './style';
-import { NewInput } from '../../../../../../../../components/NewInput';
-import { genericMaskWithTwoZero } from '../../../../../../../../utlis/mask';
-import { useTabCreate } from '../../../providers/tabsProvider';
-import { NewSelect } from '../../../../../../../../components/NewSelect';
+import React, { useState } from 'react'
+import { TooltipComponent } from '../../../../../../../../components/TooltipComponent'
+import { Container, TextArea } from './style'
+import { NewInput } from '../../../../../../../../components/NewInput'
+import { genericMaskWithTwoZero } from '../../../../../../../../utlis/mask'
+import { useTabCreate } from '../../../providers/tabsProvider'
+import { NewSelect } from '../../../../../../../../components/NewSelect'
 import {
   typeUnitMensuredDetails,
-  typeUnitMensuredWeight,
-} from '../../../../domain/details/measureds';
+  typeUnitMensuredWeight
+} from '../../../../domain/details/measureds'
 
 export const Details = (): JSX.Element => {
-  const { details } = useTabCreate();
+  const { details } = useTabCreate()
   const {
     weight,
     width,
@@ -20,8 +20,8 @@ export const Details = (): JSX.Element => {
     thickness,
     descriptionAndDetails,
     technicalSpecification,
-    wayOfUse,
-  } = details.getData();
+    wayOfUse
+  } = details.getData()
 
   return (
     <Container>
@@ -34,18 +34,18 @@ export const Details = (): JSX.Element => {
           <NewSelect
             error={{ isError: false }}
             onChange={event => {
-              const split = event.target.value.split('+');
+              const split = event.target.value.split('+')
               details.setData({
                 ...details.getData(),
                 measureWeight: {
                   error: { isError: false },
-                  value: split[1],
-                },
-              });
+                  value: split[1]
+                }
+              })
             }}
           >
             {typeUnitMensuredWeight.map(({ label, value }) => {
-              return <option value={`${label}+${value}`}>{label}</option>;
+              return <option value={`${label}+${value}`}>{label}</option>
             })}
           </NewSelect>
         </div>
@@ -57,7 +57,7 @@ export const Details = (): JSX.Element => {
             onChange={e =>
               details.setData({
                 ...details.getData(),
-                weight: { error: { isError: false }, value: e.target.value },
+                weight: { error: { isError: false }, value: e.target.value }
               })
             }
             error={weight.error}
@@ -76,18 +76,18 @@ export const Details = (): JSX.Element => {
           <NewSelect
             error={{ isError: false }}
             onChange={event => {
-              const split = event.target.value.split('+');
+              const split = event.target.value.split('+')
               details.setData({
                 ...details.getData(),
                 measure: {
                   error: { isError: false },
-                  value: split[1],
-                },
-              });
+                  value: split[1]
+                }
+              })
             }}
           >
             {typeUnitMensuredDetails.map(({ label, value }) => {
-              return <option value={`${label}+${value}`}>{label}</option>;
+              return <option value={`${label}+${value}`}>{label}</option>
             })}
           </NewSelect>
         </div>
@@ -103,7 +103,7 @@ export const Details = (): JSX.Element => {
             onChange={e =>
               details.setData({
                 ...details.getData(),
-                width: { error: { isError: false }, value: e.target.value },
+                width: { error: { isError: false }, value: e.target.value }
               })
             }
             error={width.error}
@@ -127,7 +127,7 @@ export const Details = (): JSX.Element => {
             onChange={e =>
               details.setData({
                 ...details.getData(),
-                height: { error: { isError: false }, value: e.target.value },
+                height: { error: { isError: false }, value: e.target.value }
               })
             }
             error={height.error}
@@ -149,7 +149,7 @@ export const Details = (): JSX.Element => {
             onChange={e =>
               details.setData({
                 ...details.getData(),
-                length: { error: { isError: false }, value: e.target.value },
+                length: { error: { isError: false }, value: e.target.value }
               })
             }
             error={length.error}
@@ -167,7 +167,7 @@ export const Details = (): JSX.Element => {
             onChange={e =>
               details.setData({
                 ...details.getData(),
-                thickness: { error: { isError: false }, value: e.target.value },
+                thickness: { error: { isError: false }, value: e.target.value }
               })
             }
             error={weight.error}
@@ -190,8 +190,8 @@ export const Details = (): JSX.Element => {
                   ...details.getData(),
                   descriptionAndDetails: {
                     error: { isError: false },
-                    value: e.target.value,
-                  },
+                    value: e.target.value
+                  }
                 })
               }
               className="form-control"
@@ -210,8 +210,8 @@ export const Details = (): JSX.Element => {
                   ...details.getData(),
                   technicalSpecification: {
                     error: { isError: false },
-                    value: e.target.value,
-                  },
+                    value: e.target.value
+                  }
                 })
               }
               className="form-control"
@@ -230,8 +230,8 @@ export const Details = (): JSX.Element => {
                   ...details.getData(),
                   wayOfUse: {
                     error: { isError: false },
-                    value: e.target.value,
-                  },
+                    value: e.target.value
+                  }
                 })
               }
               className="form-control"
@@ -240,8 +240,8 @@ export const Details = (): JSX.Element => {
         </div>
       </div>
     </Container>
-  );
-};
+  )
+}
 
-export const labelDetails = 'Detalhe e medida';
-export const nameDetails = '@@tabs-details';
+export const labelDetails = 'Detalhe e medida'
+export const nameDetails = '@@tabs-details'

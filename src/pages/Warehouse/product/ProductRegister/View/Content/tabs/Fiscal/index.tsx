@@ -1,20 +1,23 @@
-import React, { useEffect } from 'react';
-import { useTabs } from '../../../../../../../../hooks/tabs';
+import React, { useEffect } from 'react'
+import { useTabs } from '../../../../../../../../hooks/tabs'
 import {
   formatProductTypeToLowerCase,
   RE_SALE,
-  SALE,
-} from '../../../../domain/products';
-import { FiscalView } from '../../../domain/response/productResponse';
-import { useProduct } from '../../../provider/productProvider';
-import { Container } from './style';
+  SALE
+} from '../../../../domain/products'
+import { FiscalView } from '../../../domain/response/productResponse'
+import { useProduct } from '../../../provider/productProvider'
+import { Container } from './style'
+
+export const labelFiscal = 'Fiscal'
+export const nameFiscal = '@@tabs-view-fiscal'
 
 export const Fiscal = (): JSX.Element => {
-  const { getProduct } = useProduct();
-  const { fiscal } = getProduct();
-  const { activeTab } = useTabs();
+  const { getProduct } = useProduct()
+  const { fiscal } = getProduct()
+  const { activeTab } = useTabs()
 
-  let fiscalList: FiscalView = {} as FiscalView;
+  let fiscalList: FiscalView = {} as FiscalView
 
   useEffect(() => {
     if (
@@ -23,12 +26,12 @@ export const Fiscal = (): JSX.Element => {
       getProduct().type?.replace(' ', '-') ===
         formatProductTypeToLowerCase(SALE)
     ) {
-      activeTab(nameFiscal);
+      activeTab(nameFiscal)
     }
-  }, [getProduct()]);
+  }, [getProduct()])
 
   if (fiscal) {
-    fiscalList = JSON.parse(fiscal.toLowerCase());
+    fiscalList = JSON.parse(fiscal.toLowerCase())
   }
 
   return (
@@ -89,8 +92,5 @@ export const Fiscal = (): JSX.Element => {
         </tbody>
       </table>
     </Container>
-  );
-};
-
-export const labelFiscal = 'Fiscal';
-export const nameFiscal = '@@tabs-view-fiscal';
+  )
+}

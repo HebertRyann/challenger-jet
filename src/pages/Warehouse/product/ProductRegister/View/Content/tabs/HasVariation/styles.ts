@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const Container = styled.table`
   .title {
@@ -9,4 +9,4 @@ export const Container = styled.table`
       text-align: start !important;
     }
   }
-`;
+`

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components'
 
 export const ContainerSearch = styled.div<{ active: boolean }>`
   display: none;
@@ -36,4 +36,4 @@ export const ContainerSearch = styled.div<{ active: boolean }>`
       background-color: #f5f5f5;
     }
   }
-`;
+`

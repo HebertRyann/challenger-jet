@@ -1,33 +1,33 @@
-import React from 'react';
-import { useHistory } from 'react-router';
-import { ToolsContainerProps } from '../../../../../../../components/Container';
+import React from 'react'
+import { useHistory } from 'react-router'
+import { ToolsContainerProps } from '../../../../../../../components/Container'
 
 type HeaderCreateProductProps = {
-  tools: ToolsContainerProps[];
-};
+  tools: ToolsContainerProps[]
+}
 
 export const HeaderCreateProduct = ({
-  tools,
+  tools
 }: HeaderCreateProductProps): JSX.Element => {
-  const history = useHistory();
+  const history = useHistory()
 
   const handleClickAction = ({
     hasParams,
     icon,
     name,
     to,
-    handleOnClick,
+    handleOnClick
   }: ToolsContainerProps) => {
     if (!handleOnClick) {
       history.push(`${to}`, {
         id: hasParams ? hasParams.id : '',
-        value: hasParams ? hasParams.value : '',
-      });
+        value: hasParams ? hasParams.value : ''
+      })
     }
     if (handleOnClick !== undefined) {
-      handleOnClick({ hasParams, icon, name, to, handleOnClick });
+      handleOnClick({ hasParams, icon, name, to, handleOnClick })
     }
-  };
+  }
 
   return (
     <div className="portlet-title">
@@ -37,11 +37,11 @@ export const HeaderCreateProduct = ({
         {tools.map(tool => (
           <div
             style={{
-              cursor: 'pointer',
+              cursor: 'pointer'
             }}
             key={Math.random()}
             onClick={() => {
-              handleClickAction(tool);
+              handleClickAction(tool)
             }}
           >
             <i style={{ marginRight: '5px' }} className={tool.icon} />
@@ -50,5 +50,5 @@ export const HeaderCreateProduct = ({
         ))}
       </div>
     </div>
-  );
-};
+  )
+}

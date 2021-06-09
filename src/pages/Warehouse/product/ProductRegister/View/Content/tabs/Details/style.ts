@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div<{ isEmpty: boolean }>`
   margin-top: 30px;
@@ -6,7 +6,7 @@ export const Container = styled.div<{ isEmpty: boolean }>`
     font-weight: bold;
   }
 
-  .col-md-3{
+  .col-md-3 {
     margin-bottom: 20px;
   }
 
@@ -37,4 +37,4 @@ export const Container = styled.div<{ isEmpty: boolean }>`
         margin-top: -40px;
       }
     `}
-`;
+`

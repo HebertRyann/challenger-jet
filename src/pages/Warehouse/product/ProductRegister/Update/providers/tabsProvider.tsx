@@ -1,17 +1,17 @@
-import React, { createContext, useCallback, useContext, useState } from 'react';
-import { updateProduct } from '../services/api/updateProduct';
+import React, { createContext, useCallback, useContext, useState } from 'react'
+import { updateProduct } from '../services/api/updateProduct'
 import {
   RAW_MATERIAL,
   SALE,
   SEMI_FINISHED,
   RE_SALE,
   LOCATION,
-  CONSUMER,
-} from '../domain/products';
+  CONSUMER
+} from '../domain/products'
 import {
   labelDataOverview,
-  nameDataOverview,
-} from '../components/Tabs/DataOverview';
+  nameDataOverview
+} from '../components/Tabs/DataOverview'
 import {
   initialStateComposition,
   initialStateDetails,
@@ -19,23 +19,23 @@ import {
   initialStateOverview,
   initialStatePriceComposition,
   initialStateStock,
-  intialStateHasVariation,
-} from './initialStates';
-import { labelDetails, nameDetails } from '../components/Tabs/Details';
-import { labelFiscal, nameFiscal } from '../components/Tabs/Fiscal';
+  intialStateHasVariation
+} from './initialStates'
+import { labelDetails, nameDetails } from '../components/Tabs/Details'
+import { labelFiscal, nameFiscal } from '../components/Tabs/Fiscal'
 import {
   labelHasComposition,
-  nameHasComposition,
-} from '../components/Tabs/HasComposition';
+  nameHasComposition
+} from '../components/Tabs/HasComposition'
 import {
   labelHasVariation,
-  nameHasVariation,
-} from '../components/Tabs/HasVariation';
+  nameHasVariation
+} from '../components/Tabs/HasVariation'
 import {
   labelPriceComposition,
-  namePriceComposition,
-} from '../components/Tabs/PriceComposition';
-import { labelStock, nameStock } from '../components/Tabs/Stock';
+  namePriceComposition
+} from '../components/Tabs/PriceComposition'
+import { labelStock, nameStock } from '../components/Tabs/Stock'
 import {
   TypeDataOverViewProps,
   TypeDetailsProps,
@@ -61,242 +61,226 @@ import {
   PriceCompositionAndFiscal,
   CompositionRequest,
   AtributesList,
-  TypeGenericValueWithError,
-} from './domain.types';
-import {
-  convertValueMaskInNumber,
-  convertValueWithMaskInNumber,
-} from '../../../../../../utlis/mask';
+  TypeGenericValueWithError
+} from './domain.types'
+import { convertValueWithMaskInNumber } from '../../../../../../utlis/mask'
 interface TabCreateContext {
-  overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps>;
-  details: TypeGetAndSetAndValidateAba<TypeDetailsProps>;
-  stock: TypeGetAndSetAndValidateAba<TypeStockProps>;
-  priceComposition: TypeGetAndSetAndValidateAba<TypePriceCompositionProps>;
-  fiscal: TypeGetAndSetFiscal<TypeFiscal>;
-  composition: TypeGetAndSetComposition<TypeProduct[]>;
-  variation: TypeGetAndSetHasVariation<TypeHasVariation[]>;
-  validation: TypeValitionResolve;
-  save: () => Promise<ResultOnSaveProdut>;
-  addOverView: (overview: TypeDataOverViewProps) => void;
-  addDetails: (details: TypeDetailsProps) => void;
-  addStock: (stock: TypeStockProps) => void;
-  addHasVariation: (hasVariation: TypeHasVariation) => void;
-  addHasComposition: (hasComposition: TypeProduct) => void;
-  addPriceComposition: (priceComposition: TypePriceCompositionProps) => void;
-  addFiscal: (fiscal: TypeFiscal) => void;
+  overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps>
+  details: TypeGetAndSetAndValidateAba<TypeDetailsProps>
+  stock: TypeGetAndSetAndValidateAba<TypeStockProps>
+  priceComposition: TypeGetAndSetAndValidateAba<TypePriceCompositionProps>
+  fiscal: TypeGetAndSetFiscal<TypeFiscal>
+  composition: TypeGetAndSetComposition<TypeProduct[]>
+  variation: TypeGetAndSetHasVariation<TypeHasVariation[]>
+  validation: TypeValitionResolve
+  save: () => Promise<ResultOnSaveProdut>
+  addOverView: (overview: TypeDataOverViewProps) => void
+  addDetails: (details: TypeDetailsProps) => void
+  addStock: (stock: TypeStockProps) => void
+  addHasVariation: (hasVariation: TypeHasVariation) => void
+  addHasComposition: (hasComposition: TypeProduct) => void
+  addPriceComposition: (priceComposition: TypePriceCompositionProps) => void
+  addFiscal: (fiscal: TypeFiscal) => void
 }
 
-const TabCreateContext = createContext<TabCreateContext>(
-  {} as TabCreateContext,
-);
+const TabCreateContext = createContext<TabCreateContext>({} as TabCreateContext)
 
 const TabUpdateProvider = ({
-  children,
+  children
 }: {
-  children: JSX.Element;
+  children: JSX.Element
 }): JSX.Element => {
-  const [overView, setOverView] = useState<TypeDataOverViewProps>(
-    initialStateOverview,
-  );
+  const [overView, setOverView] =
+    useState<TypeDataOverViewProps>(initialStateOverview)
   const [producIdAndStockId, setProducIdAndStockId] = useState<
     { productId: number; stockId: number }[]
-  >([{ productId: 0, stockId: 0 }]);
-  const [detail, setDetail] = useState<TypeDetailsProps>(initialStateDetails);
-  const [stocks, setStocks] = useState<TypeStockProps>(initialStateStock);
-  const [
-    priceCompositionState,
-    setPriceCompositionState,
-  ] = useState<TypePriceCompositionProps>(initialStatePriceComposition);
+  >([{ productId: 0, stockId: 0 }])
+  const [detail, setDetail] = useState<TypeDetailsProps>(initialStateDetails)
+  const [stocks, setStocks] = useState<TypeStockProps>(initialStateStock)
+  const [priceCompositionState, setPriceCompositionState] =
+    useState<TypePriceCompositionProps>(initialStatePriceComposition)
 
-  const [fiscalState, setFiscalState] = useState<TypeFiscal>(
-    initialStateFiscal,
-  );
+  const [fiscalState, setFiscalState] = useState<TypeFiscal>(initialStateFiscal)
 
   const [compositionState, setCompositionState] = useState<TypeProduct[]>(
-    initialStateComposition,
-  );
+    initialStateComposition
+  )
 
   const [variationState, setVariationState] = useState<TypeHasVariation[]>(
-    intialStateHasVariation,
-  );
+    intialStateHasVariation
+  )
 
   const setDataOverView = (newOverView: TypeDataOverViewProps) =>
-    setOverView(newOverView);
+    setOverView(newOverView)
 
   const getDataOverView = (): TypeDataOverViewProps => {
-    return overView;
-  };
+    return overView
+  }
 
   const validationAndSetErrorAllFieldsDataOverView = useCallback(() => {
-    let isError = false;
+    let isError = false
 
     if (overView.typeSelectProdut.value.name === '') {
-      isError = true;
+      isError = true
       setOverView(old => ({
         ...old,
         typeSelectProdut: {
           error: { isError: true },
-          value: old.typeSelectProdut.value,
-        },
-      }));
+          value: old.typeSelectProdut.value
+        }
+      }))
     }
     if (overView.categoryCost.value.id === '') {
-      isError = true;
+      isError = true
       setOverView(old => ({
         ...old,
         categoryCost: {
           error: { isError: true },
-          value: old.categoryCost.value,
-        },
-      }));
+          value: old.categoryCost.value
+        }
+      }))
     }
     if (overView.subCategoryCost.value.id === '') {
-      isError = true;
+      isError = true
       setOverView(old => ({
         ...old,
         subCategoryCost: {
           error: { isError: true },
-          value: old.subCategoryCost.value,
-        },
-      }));
+          value: old.subCategoryCost.value
+        }
+      }))
     }
     if (overView.groupProduct.value.id === '') {
-      isError = true;
+      isError = true
       setOverView(old => ({
         ...old,
         groupProduct: {
           error: { isError: true },
-          value: old.groupProduct.value,
-        },
-      }));
+          value: old.groupProduct.value
+        }
+      }))
     }
     if (overView.nameProduct.value === '') {
-      isError = true;
+      isError = true
       setOverView(old => ({
         ...old,
         nameProduct: {
           error: { isError: true },
-          value: old.nameProduct.value,
-        },
-      }));
+          value: old.nameProduct.value
+        }
+      }))
     }
 
     if (overView.hasVariation.value.name === '') {
-      isError = true;
+      isError = true
       setOverView(old => ({
         ...old,
         hasVariation: {
           error: { isError: true },
-          value: old.hasVariation.value,
-        },
-      }));
+          value: old.hasVariation.value
+        }
+      }))
     }
 
-    return isError;
-  }, [overView]);
+    return isError
+  }, [overView])
 
-  const setDetails = (details: TypeDetailsProps) => setDetail(details);
+  const setDetails = (details: TypeDetailsProps) => setDetail(details)
 
-  const getDetails = (): TypeDetailsProps => detail;
+  const getDetails = (): TypeDetailsProps => detail
 
   const validationAndSetErrorAllFieldsDetails = useCallback(() => {
-    let isError = false;
+    let isError = false
 
     if (detail.weight.value === '') {
-      isError = true;
+      isError = true
       setDetail(old => ({
         ...old,
-        weight: { ...old.weight, error: { isError: true } },
-      }));
+        weight: { ...old.weight, error: { isError: true } }
+      }))
     }
     if (detail.width.value === '') {
-      isError = true;
+      isError = true
       setDetail(old => ({
         ...old,
-        width: { ...old.width, error: { isError: true } },
-      }));
+        width: { ...old.width, error: { isError: true } }
+      }))
     }
     if (detail.height.value === '') {
-      isError = true;
+      isError = true
       setDetail(old => ({
         ...old,
-        height: { ...old.height, error: { isError: true } },
-      }));
+        height: { ...old.height, error: { isError: true } }
+      }))
     }
     if (detail.length.value === '') {
-      isError = true;
+      isError = true
       setDetail(old => ({
         ...old,
-        length: { ...old.length, error: { isError: true } },
-      }));
+        length: { ...old.length, error: { isError: true } }
+      }))
     }
     if (detail.descriptionAndDetails.value === '') {
-      isError = true;
+      isError = true
       setDetail(old => ({
         ...old,
         descriptionAndDetails: {
           ...old.descriptionAndDetails,
-          error: { isError: true },
-        },
-      }));
+          error: { isError: true }
+        }
+      }))
     }
     if (detail.technicalSpecification.value === '') {
-      isError = true;
+      isError = true
       setDetail(old => ({
         ...old,
         technicalSpecification: {
           ...old.technicalSpecification,
-          error: { isError: true },
-        },
-      }));
+          error: { isError: true }
+        }
+      }))
     }
     if (detail.wayOfUse.value === '') {
-      isError = true;
+      isError = true
       setDetail(old => ({
         ...old,
-        wayOfUse: { ...old.wayOfUse, error: { isError: true } },
-      }));
+        wayOfUse: { ...old.wayOfUse, error: { isError: true } }
+      }))
     }
-    return isError;
-  }, [detail]);
+    return isError
+  }, [detail])
 
   const overview: TypeGetAndSetAndValidateAba<TypeDataOverViewProps> = {
     getData: getDataOverView,
     setData: setDataOverView,
-    validate: validationAndSetErrorAllFieldsDataOverView,
-  };
+    validate: validationAndSetErrorAllFieldsDataOverView
+  }
   const details: TypeGetAndSetAndValidateAba<TypeDetailsProps> = {
     getData: getDetails,
     setData: setDetails,
-    validate: validationAndSetErrorAllFieldsDetails,
-  };
+    validate: validationAndSetErrorAllFieldsDetails
+  }
 
-  const setStock = (stock: TypeStockProps) => setStocks(stock);
+  const setStock = (stock: TypeStockProps) => setStocks(stock)
 
-  const getStock = (): TypeStockProps => stocks;
+  const getStock = (): TypeStockProps => stocks
 
   const validationAndSetErrorAllFieldsStock = useCallback(() => {
-    let isError = false;
-    // if (stocks.stockCurrent.value === '') {
-    //   isError = true;
-    //   setStocks(old => ({
-    //     ...old,
-    //     stockCurrent: { ...old.stockCurrent, error: { isError: true } },
-    //   }));
-    // }
+    let isError = false
+
     if (stocks.unitMensured.value.id === '') {
-      isError = true;
+      isError = true
       setStocks(old => ({
         ...old,
-        unitMensured: { ...old.unitMensured, error: { isError: true } },
-      }));
+        unitMensured: { ...old.unitMensured, error: { isError: true } }
+      }))
     }
     if (stocks.replacementPoint.value === '') {
-      isError = true;
+      isError = true
       setStocks(old => ({
         ...old,
-        replacementPoint: { ...old.replacementPoint, error: { isError: true } },
-      }));
+        replacementPoint: { ...old.replacementPoint, error: { isError: true } }
+      }))
     }
 
     if (
@@ -304,166 +288,165 @@ const TabUpdateProvider = ({
       overView.typeSelectProdut.value.name === RE_SALE.name
     ) {
       if (stocks.priceCost?.value === '') {
-        isError = true;
+        isError = true
         setStocks(old => ({
           ...old,
-          priceCost: { ...old?.priceCost, error: { isError: true } },
-        }));
+          priceCost: { ...old?.priceCost, error: { isError: true } }
+        }))
       }
     }
 
-    return isError;
-  }, [stocks, overView.typeSelectProdut]);
+    return isError
+  }, [stocks, overView.typeSelectProdut])
 
   const stock: TypeGetAndSetAndValidateAba<TypeStockProps> = {
     setData: setStock,
     getData: getStock,
-    validate: validationAndSetErrorAllFieldsStock,
-  };
+    validate: validationAndSetErrorAllFieldsStock
+  }
 
   const getDataPriceComposition = (): TypePriceCompositionProps =>
-    priceCompositionState;
+    priceCompositionState
 
   const setDataPriceComposition = (
-    priceComposition: TypePriceCompositionProps,
-  ) => setPriceCompositionState(priceComposition);
+    priceComposition: TypePriceCompositionProps
+  ) => setPriceCompositionState(priceComposition)
 
   const validationAndSetErrorAllFieldsPriceComposition = useCallback(() => {
-    let isError = false;
+    let isError = false
     if (priceCompositionState.cost.value === '') {
-      isError = true;
+      isError = true
       setPriceCompositionState(old => ({
         ...old,
-        cost: { ...old.cost, error: { isError: true } },
-      }));
+        cost: { ...old.cost, error: { isError: true } }
+      }))
     }
     if (priceCompositionState.dif.value === '') {
-      isError = true;
+      isError = true
       setPriceCompositionState(old => ({
         ...old,
-        dif: { ...old.dif, error: { isError: true } },
-      }));
+        dif: { ...old.dif, error: { isError: true } }
+      }))
     }
     if (priceCompositionState.ipi.value === '') {
-      isError = true;
+      isError = true
       setPriceCompositionState(old => ({
         ...old,
-        ipi: { ...old.ipi, error: { isError: true } },
-      }));
+        ipi: { ...old.ipi, error: { isError: true } }
+      }))
     }
     if (priceCompositionState.profit.value === '') {
-      isError = true;
+      isError = true
       setPriceCompositionState(old => ({
         ...old,
-        profit: { ...old.profit, error: { isError: true } },
-      }));
+        profit: { ...old.profit, error: { isError: true } }
+      }))
     }
-    return isError;
-  }, [priceCompositionState]);
+    return isError
+  }, [priceCompositionState])
 
-  const priceComposition: TypeGetAndSetAndValidateAba<TypePriceCompositionProps> = {
-    getData: getDataPriceComposition,
-    setData: setDataPriceComposition,
-    validate: validationAndSetErrorAllFieldsPriceComposition,
-  };
+  const priceComposition: TypeGetAndSetAndValidateAba<TypePriceCompositionProps> =
+    {
+      getData: getDataPriceComposition,
+      setData: setDataPriceComposition,
+      validate: validationAndSetErrorAllFieldsPriceComposition
+    }
 
-  const getDataComposition = (): TypeProduct[] => compositionState;
+  const getDataComposition = (): TypeProduct[] => compositionState
 
   const setDataComposition = (): ResolverComposition => {
     const addComposition = () => {
-      setCompositionState([...compositionState, initialStateComposition[0]]);
+      setCompositionState([...compositionState, initialStateComposition[0]])
       setProducIdAndStockId([
         ...producIdAndStockId,
-        { productId: 0, stockId: 0 },
-      ]);
-    };
+        { productId: 0, stockId: 0 }
+      ])
+    }
 
     const removeComposition = (index: number) => {
-      const productWithOutIndex = compositionState[index];
-      const productAndStockIdWithOutIndex = producIdAndStockId[index];
+      const productWithOutIndex = compositionState[index]
+      const productAndStockIdWithOutIndex = producIdAndStockId[index]
       const result = compositionState.filter(
-        product => product !== productWithOutIndex,
-      );
+        product => product !== productWithOutIndex
+      )
       const resultProductAndStockIdWithOutIndex = producIdAndStockId.filter(
-        product => product !== productAndStockIdWithOutIndex,
-      );
+        product => product !== productAndStockIdWithOutIndex
+      )
       if (result.length === 0) {
-        setCompositionState(initialStateComposition);
+        setCompositionState(initialStateComposition)
       } else {
-        setCompositionState([...result]);
+        setCompositionState([...result])
       }
       if (resultProductAndStockIdWithOutIndex.length === 0) {
-        setProducIdAndStockId([{ productId: 0, stockId: 0 }]);
+        setProducIdAndStockId([{ productId: 0, stockId: 0 }])
       } else {
-        setProducIdAndStockId([...resultProductAndStockIdWithOutIndex]);
+        setProducIdAndStockId([...resultProductAndStockIdWithOutIndex])
       }
-    };
+    }
 
     const changeInputNameProduct = (name: string, index: number) => {
-      let tempState: TypeProduct[] = JSON.parse(
-        JSON.stringify(compositionState),
-      );
-      tempState.map(({ nameProduct }, key) => {
+      const tempState: TypeProduct[] = JSON.parse(
+        JSON.stringify(compositionState)
+      )
+      tempState.forEach(({ nameProduct }, key) => {
         if (key === index) {
-          nameProduct.value = name;
-          nameProduct.error.isError = false;
+          nameProduct.value = name
+          nameProduct.error.isError = false
         }
-      });
-      setCompositionState([...tempState]);
-    };
+      })
+      setCompositionState([...tempState])
+    }
 
     const changeInputAmount = (newAmount: string, index: number) => {
-      let tempState: TypeProduct[] = JSON.parse(
-        JSON.stringify(compositionState),
-      );
-      tempState.map(({ cost, amount, subtotal }, key) => {
+      const tempState: TypeProduct[] = JSON.parse(
+        JSON.stringify(compositionState)
+      )
+      tempState.forEach(({ cost, amount, subtotal }, key) => {
         if (key === index) {
-          amount.value = newAmount;
-          amount.error.isError = false;
+          amount.value = newAmount
+          amount.error.isError = false
           if (cost.value !== '') {
-            subtotal.error.isError = false;
+            subtotal.error.isError = false
           }
         }
-      });
-      setCompositionState([...tempState]);
-    };
+      })
+      setCompositionState([...tempState])
+    }
 
     const changeInputCost = (newCost: string, index: number) => {
-      let tempState: TypeProduct[] = JSON.parse(
-        JSON.stringify(compositionState),
-      );
-      tempState.map(({ cost, amount, subtotal }, key) => {
+      const tempState: TypeProduct[] = JSON.parse(
+        JSON.stringify(compositionState)
+      )
+      tempState.forEach(({ cost, amount, subtotal }, key) => {
         if (key === index) {
-          cost.value = newCost;
-          cost.error.isError = false;
+          cost.value = newCost
+          cost.error.isError = false
           if (amount.value !== '') {
-            subtotal.error.isError = false;
+            subtotal.error.isError = false
           }
         }
-      });
-      setCompositionState([...tempState]);
-    };
-
-    const changeInputSubTotal = (subtotal: string, index: number) => {};
+      })
+      setCompositionState([...tempState])
+    }
 
     const changeInputProductIdAndStockId = (
       newProductId: number,
       newStockId: number,
-      index: number,
+      index: number
     ) => {
-      producIdAndStockId.map((_, key) => {
+      producIdAndStockId.forEach((_, key) => {
         if (key === index) {
-          producIdAndStockId[key].productId = newProductId;
-          producIdAndStockId[key].stockId = newStockId;
+          producIdAndStockId[key].productId = newProductId
+          producIdAndStockId[key].stockId = newStockId
         }
-      });
-      setProducIdAndStockId([...producIdAndStockId]);
-    };
+      })
+      setProducIdAndStockId([...producIdAndStockId])
+    }
 
     const loadInputProductIdAndStockId = (): {
-      productId: number;
-      stockId: number;
-    }[] => producIdAndStockId;
+      productId: number
+      stockId: number
+    }[] => producIdAndStockId
 
     return {
       loadInputProductIdAndStockId,
@@ -472,61 +455,124 @@ const TabUpdateProvider = ({
       removeComposition,
       changeInputAmount,
       changeInputCost,
-      changeInputNameProduct,
-      changeInputSubTotal,
-    };
-  };
+      changeInputNameProduct
+    }
+  }
 
   const validationAndSetErrorAllFieldsComposition = useCallback(() => {
-    let isError = false;
+    let isError = false
     const tempState: TypeProduct[] = JSON.parse(
-      JSON.stringify(compositionState),
-    );
+      JSON.stringify(compositionState)
+    )
 
-    tempState.map(({ amount, cost, nameProduct, subtotal }) => {
+    tempState.forEach(({ amount, cost, nameProduct, subtotal }) => {
       if (amount.value === '') {
-        isError = true;
-        amount.error.isError = true;
+        isError = true
+        amount.error.isError = true
       }
       if (cost.value === '') {
-        isError = true;
-        cost.error.isError = true;
-        subtotal.error.isError = true;
+        isError = true
+        cost.error.isError = true
+        subtotal.error.isError = true
       }
       if (nameProduct.value === '') {
-        isError = true;
-        nameProduct.error.isError = true;
-        subtotal.error.isError = true;
+        isError = true
+        nameProduct.error.isError = true
+        subtotal.error.isError = true
       }
-    });
-    setCompositionState(tempState);
-    return isError;
-  }, [compositionState]);
+    })
+    setCompositionState(tempState)
+    return isError
+  }, [compositionState])
 
   const composition: TypeGetAndSetComposition<TypeProduct[]> = {
     getData: getDataComposition,
     setData: setDataComposition(),
-    validate: validationAndSetErrorAllFieldsComposition,
-  };
+    validate: validationAndSetErrorAllFieldsComposition
+  }
 
-  const getDataVariation = (): TypeHasVariation[] => variationState;
+  const getDataVariation = (): TypeHasVariation[] => variationState
 
-  const changeAtributes = useCallback(
-    (atribute: AtributesList, x: number, y: number) => {
-      let tempState: TypeHasVariation[] = JSON.parse(
-        JSON.stringify(variationState),
-      );
-      if (tempState[x].atributes[y]) {
-        tempState[x].atributes[y].error.isError = false;
-        tempState[x].atributes[y].value = atribute;
-        setVariationState([...tempState]);
-      }
-    },
-    [variationState],
-  );
+  const changeAtributes = (atribute: AtributesList, x: number, y: number) => {
+    setVariationState(prevState => {
+      prevState.map(stateValue => {
+        let update = false
+        stateValue.atributes.forEach(({ value }) => {
+          if (value.keyParent === atribute.keyParent) {
+            prevState[x].atributes[y].value = atribute
+            prevState[x].atributes[y].error.isError = false
+            update = true
+            // eslint-disable-next-line no-useless-return
+            return
+          }
+        })
+        if (!update) {
+          for (let i = 0; i <= y; i++) {
+            if (prevState[x].atributes.length <= y) {
+              prevState[x].atributes.push({
+                error: { isError: false },
+                value: {
+                  id: '',
+                  name: '',
+                  keyParent: ''
+                }
+              })
+            }
+          }
+
+          prevState[x].atributes[y].value = atribute
+          prevState[x].atributes[y].error.isError = false
+        }
+        return stateValue
+      })
+
+      return prevState
+    })
+  }
+
+  const addAtributes = (atribute: AtributesList, x: number, y: number) => {
+    // setVariationState(prevState => {
+    //   prevState.map(stateValue => {
+    //     for (let i = 0; i <= y; i++) {
+    //       if (prevState[x].atributes.length <= y) {
+    //         prevState[x].atributes.push({
+    //           error: { isError: false },
+    //           value: {
+    //             id: '',
+    //             name: '',
+    //             keyParent: ''
+    //           }
+    //         })
+    //       }
+    //     }
+    //     return stateValue
+    //   })
+    //   prevState.forEach(({ atributes }, index) => {
+    //     if (index === x) {
+    //       atributes.forEach((_, indexAtribute) => {
+    //         if (indexAtribute !== y) {
+    //           console.log(indexAtribute)
+    //           prevState[index].atributes[indexAtribute].value = {
+    //             id: '',
+    //             name: '',
+    //             keyParent: ''
+    //           }
+    //           prevState[index].atributes[indexAtribute].error.isError = false
+    //         }
+    //       })
+    //     }
+    //   })
+    //   // if (){
+    //   // }
+    //   // prevState[x].atributes[y].value = { id: '', name: '', keyParent: '' }
+    //   // prevState[x].atributes[y].error.isError = false
+    //   console.log(variationState[x].atributes)
+    //   return prevState
+    // })
+  }
 
   const addVariation = useCallback(() => {
-    const temp: TypeGenericValueWithError<AtributesList>[] = [];
+    const temp: TypeGenericValueWithError<AtributesList>[] = []
 
     for (let index = 0; index < variationState[0].atributes.length; index++) {
       temp.push({
@@ -534,132 +580,108 @@ const TabUpdateProvider = ({
         value: {
           id: '',
           keyParent: '',
-          name: '',
-        },
-      });
+          name: ''
+        }
+      })
     }
 
-    const tempAtrbutes = intialStateHasVariation[0];
-    tempAtrbutes.atributes = temp;
-    setVariationState([...variationState, tempAtrbutes]);
-  }, [variationState]);
+    const tempAtrbutes = intialStateHasVariation[0]
+    tempAtrbutes.atributes = temp
+    setVariationState([...variationState, tempAtrbutes])
+  }, [variationState])
 
   const removeVariation = useCallback(
     (index: number) => {
-      const variationWithOutIndex = variationState[index];
-      const indexRemove = variationState.indexOf(variationWithOutIndex);
+      const variationWithOutIndex = variationState[index]
+      const indexRemove = variationState.indexOf(variationWithOutIndex)
       if (indexRemove >= 0) {
-        variationState.splice(indexRemove, 1);
+        variationState.splice(indexRemove, 1)
         if (variationState.length === 0) {
-          setVariationState(intialStateHasVariation);
+          setVariationState(intialStateHasVariation)
         } else {
-          setVariationState([...variationState]);
+          setVariationState([...variationState])
         }
       }
     },
-    [variationState],
-  );
+    [variationState]
+  )
 
   const setDataVariation = (): ResolverHasVariation => {
     const changeUnitMensured = (
       newUnitMensured: FieldWithIdName,
-      index: number,
+      index: number
     ) => {
-      let tempState: TypeHasVariation[] = JSON.parse(
-        JSON.stringify(variationState),
-      );
-      tempState.map(({ unitMensured }, key) => {
+      const tempState: TypeHasVariation[] = JSON.parse(
+        JSON.stringify(variationState)
+      )
+      tempState.forEach(({ unitMensured }, key) => {
         if (key === index) {
-          unitMensured.value = newUnitMensured;
-          unitMensured.error.isError = false;
+          unitMensured.value = newUnitMensured
+          unitMensured.error.isError = false
         }
-      });
-      setVariationState([...tempState]);
-    };
-
-    const changeCurrentStock = (newCurrentStock: string, index: number) => {
-      let tempState: TypeHasVariation[] = JSON.parse(
-        JSON.stringify(variationState),
-      );
-      tempState.map(({ currentStock }, key) => {
-        if (key === index) {
-          currentStock.value = newCurrentStock;
-          currentStock.error.isError = false;
-        }
-      });
-      setVariationState([...tempState]);
-    };
+      })
+      setVariationState([...tempState])
+    }
 
     const changePriceSale = (newReplacement: string, index: number) => {
-      let tempState: TypeHasVariation[] = JSON.parse(
-        JSON.stringify(variationState),
-      );
-      tempState.map(({ replacementPoint }, key) => {
+      const tempState: TypeHasVariation[] = JSON.parse(
+        JSON.stringify(variationState)
+      )
+      tempState.forEach(({ replacementPoint }, key) => {
         if (key === index) {
-          replacementPoint.value = newReplacement;
-          replacementPoint.error.isError = false;
+          replacementPoint.value = newReplacement
+          replacementPoint.error.isError = false
         }
-      });
-      setVariationState([...tempState]);
-    };
+      })
+      setVariationState([...tempState])
+    }
 
     const changePriceCost = (newPriceCost: string, index: number) => {
-      let tempState: TypeHasVariation[] = JSON.parse(
-        JSON.stringify(variationState),
-      );
-      tempState.map(({ priceCost, priceSale }, key) => {
+      const tempState: TypeHasVariation[] = JSON.parse(
+        JSON.stringify(variationState)
+      )
+      tempState.forEach(({ priceCost, priceSale }, key) => {
         if (key === index) {
-          priceCost.value = newPriceCost;
-          priceCost.error.isError = false;
-          priceSale.error.isError = false;
+          priceCost.value = newPriceCost
+          priceCost.error.isError = false
+          priceSale.error.isError = false
         }
-      });
-      setVariationState([...tempState]);
-    };
+      })
+      setVariationState([...tempState])
+    }
 
     const changeCurrentReplacementPoint = (
       newReplacementPoint: string,
-      index: number,
+      index: number
     ) => {
-      let tempState: TypeHasVariation[] = JSON.parse(
-        JSON.stringify(variationState),
-      );
-      tempState.map(({ replacementPoint }, key) => {
+      const tempState: TypeHasVariation[] = JSON.parse(
+        JSON.stringify(variationState)
+      )
+      tempState.forEach(({ replacementPoint }, key) => {
         if (key === index) {
-          replacementPoint.value = newReplacementPoint;
-          replacementPoint.error.isError = false;
+          replacementPoint.value = newReplacementPoint
+          replacementPoint.error.isError = false
         }
-      });
-      setVariationState([...tempState]);
-    };
+      })
+      setVariationState([...tempState])
+    }
 
-    const addAtributes = () => {
-      let tempState: TypeHasVariation[] = JSON.parse(
-        JSON.stringify(variationState),
-      );
-      tempState.map((_, index) => {
-        tempState[index].atributes.push({
-          error: { isError: false },
-          value: { id: '', name: '', keyParent: '' },
-        });
-      });
-      setVariationState([...tempState]);
-    };
-
-    const removeAtributes = () => {
-      let tempState: TypeHasVariation[] = JSON.parse(
-        JSON.stringify(variationState),
-      );
-      tempState.map((_, index) => {
-        tempState[index].atributes = [
-          {
-            error: { isError: false },
-            value: { id: '', name: '', keyParent: '' },
-          },
-        ];
-      });
-      setVariationState([...tempState]);
-    };
+    const removeAtributes = (keyParent: string) => {
+      setVariationState(prevState => {
+        prevState.forEach(({ atributes }, x) => {
+          atributes.forEach(({ value }, y) => {
+            if (value.keyParent.toString() === keyParent.toString()) {
+              prevState[x].atributes[y].value = {
+                id: '',
+                keyParent: '',
+                name: ''
+              }
+            }
+          })
+        })
+        return prevState
+      })
+    }
 
     return {
       addAtributes,
@@ -671,106 +693,103 @@ const TabUpdateProvider = ({
       // changeCurrentStock,
       changePriceCost,
       changePriceSale,
-      changeUnitMensured,
-    };
-  };
+      changeUnitMensured
+    }
+  }
 
   const validationAndSetErrorAllFieldsVariation = useCallback(() => {
-    let isError = false;
+    let isError = false
     const tempState: TypeHasVariation[] = JSON.parse(
-      JSON.stringify(variationState),
-    );
+      JSON.stringify(variationState)
+    )
 
-    tempState.map(
+    tempState.forEach(
       ({
         unitMensured,
         currentStock,
         priceCost,
         priceSale,
         atributes,
-        replacementPoint,
+        replacementPoint
       }) => {
         if (unitMensured.value.id === '') {
-          isError = true;
-          unitMensured.error.isError = true;
+          isError = true
+          unitMensured.error.isError = true
         }
-        if (currentStock.value === '') {
-          isError = true;
-          currentStock.error.isError = true;
-        }
+
         if (
           overView.typeSelectProdut.value.name === SALE.name ||
           overView.typeSelectProdut.value.name === RE_SALE.name
         ) {
           if (priceCost.value === '') {
-            isError = true;
-            priceCost.error.isError = true;
-            priceSale.error.isError = true;
+            isError = true
+            priceCost.error.isError = true
+            priceSale.error.isError = true
           }
         }
         if (atributes.length > 0) {
-          atributes.map(({ value }, index) => {
+          atributes.forEach(({ value }, index) => {
             if (value.id === '') {
-              atributes[index].error.isError = true;
+              atributes[index].error.isError = true
             }
-          });
+          })
         }
         if (replacementPoint.value === '') {
-          isError = true;
-          replacementPoint.error.isError = true;
+          isError = true
+          replacementPoint.error.isError = true
         }
-      },
-    );
+      }
+    )
 
-    setVariationState(tempState);
+    setVariationState(tempState)
 
-    return isError;
-  }, [variationState, overView.typeSelectProdut]);
+    return isError
+  }, [variationState, overView.typeSelectProdut])
 
   const variation: TypeGetAndSetHasVariation<TypeHasVariation[]> = {
     getData: getDataVariation,
     setData: setDataVariation(),
-    validate: validationAndSetErrorAllFieldsVariation,
-  };
+    validate: validationAndSetErrorAllFieldsVariation
+  }
 
-  const getDataFiscal = (): TypeFiscal => fiscalState;
+  const getDataFiscal = (): TypeFiscal => fiscalState
 
   const setDataFiscal = (): ResolverFiscal => {
     const changeNCM = (value: string) => {
-      fiscalState.ncm.value = value;
-      fiscalState.ncm.error.isError = false;
-      setFiscalState({ ...fiscalState });
-    };
+      fiscalState.ncm.value = value
+      fiscalState.ncm.error.isError = false
+      setFiscalState({ ...fiscalState })
+    }
     const changeCFOP = (value: string) => {
-      fiscalState.cfop.value = value;
-      fiscalState.cfop.error.isError = false;
-      setFiscalState({ ...fiscalState });
-    };
+      fiscalState.cfop.value = value
+      fiscalState.cfop.error.isError = false
+      setFiscalState({ ...fiscalState })
+    }
     const changeCofinsTaxeIssue = (value: FieldWithIdName) => {
-      fiscalState.cofins.taxesIssue.value = value;
-      fiscalState.cofins.taxesIssue.error.isError = false;
-      setFiscalState({ ...fiscalState });
-    };
+      fiscalState.cofins.taxesIssue.value = value
+      fiscalState.cofins.taxesIssue.error.isError = false
+      setFiscalState({ ...fiscalState })
+    }
     const changeIcmsOrigem = (value: FieldWithIdName) => {
-      fiscalState.icms.origem.value = value;
-      fiscalState.icms.origem.error.isError = false;
-      setFiscalState({ ...fiscalState });
-    };
+      fiscalState.icms.origem.value = value
+      fiscalState.icms.origem.error.isError = false
+      setFiscalState({ ...fiscalState })
+    }
     const changeIcmsTaxeIssue = (value: FieldWithIdName) => {
-      fiscalState.icms.taxesIssue.value = value;
-      fiscalState.icms.taxesIssue.error.isError = false;
-      setFiscalState({ ...fiscalState });
-    };
+      fiscalState.icms.taxesIssue.value = value
+      fiscalState.icms.taxesIssue.error.isError = false
+      setFiscalState({ ...fiscalState })
+    }
     const changeIpiTaxeIssue = (value: FieldWithIdName) => {
-      fiscalState.ipi.taxesIssue.value = value;
-      fiscalState.ipi.taxesIssue.error.isError = false;
-      setFiscalState({ ...fiscalState });
-    };
+      fiscalState.ipi.taxesIssue.value = value
+      fiscalState.ipi.taxesIssue.error.isError = false
+      setFiscalState({ ...fiscalState })
+    }
     const changePisTaxeIssue = (value: FieldWithIdName) => {
-      fiscalState.pis.taxesIssue.value = value;
-      fiscalState.pis.taxesIssue.error.isError = false;
-      setFiscalState({ ...fiscalState });
-    };
+      fiscalState.pis.taxesIssue.value = value
+      fiscalState.pis.taxesIssue.error.isError = false
+      setFiscalState({ ...fiscalState })
+    }
 
     return {
       changeCFOP,
@@ -779,117 +798,117 @@ const TabUpdateProvider = ({
       changeIcmsTaxeIssue,
       changeIpiTaxeIssue,
       changeNCM,
-      changePisTaxeIssue,
-    };
-  };
+      changePisTaxeIssue
+    }
+  }
 
   const validationAndSetErrorAllFieldsFiscal = useCallback(() => {
-    let isError = false;
+    let isError = false
 
     if (fiscalState.ncm.value === '') {
-      isError = true;
+      isError = true
       setFiscalState(old => ({
         ...old,
-        ncm: { ...old.ncm, error: { isError: true } },
-      }));
+        ncm: { ...old.ncm, error: { isError: true } }
+      }))
     }
 
     if (fiscalState.cfop.value === '') {
-      isError = true;
+      isError = true
       setFiscalState(old => ({
         ...old,
-        cfop: { ...old.cfop, error: { isError: true } },
-      }));
+        cfop: { ...old.cfop, error: { isError: true } }
+      }))
     }
 
     if (fiscalState.icms.taxesIssue.value.id === '') {
-      isError = true;
+      isError = true
       setFiscalState(old => ({
         ...old,
         icms: {
           ...old.icms,
           taxesIssue: {
             ...old.icms.taxesIssue,
-            error: { isError: true },
-          },
-        },
-      }));
+            error: { isError: true }
+          }
+        }
+      }))
     }
 
     if (fiscalState.icms.origem.value.id === '') {
-      isError = true;
+      isError = true
       setFiscalState(old => ({
         ...old,
         icms: {
           ...old.icms,
           origem: {
             ...old.icms.origem,
-            error: { isError: true },
-          },
-        },
-      }));
+            error: { isError: true }
+          }
+        }
+      }))
     }
 
     if (fiscalState.ipi.taxesIssue.value.id === '') {
-      isError = true;
+      isError = true
       setFiscalState(old => ({
         ...old,
         ipi: {
           ...old.ipi,
           taxesIssue: {
             ...old.ipi.taxesIssue,
-            error: { isError: true },
-          },
-        },
-      }));
+            error: { isError: true }
+          }
+        }
+      }))
     }
 
     if (fiscalState.pis.taxesIssue.value.id === '') {
-      isError = true;
+      isError = true
       setFiscalState(old => ({
         ...old,
         pis: {
           ...old.pis,
           taxesIssue: {
             ...old.pis.taxesIssue,
-            error: { isError: true },
-          },
-        },
-      }));
+            error: { isError: true }
+          }
+        }
+      }))
     }
 
     if (fiscalState.cofins.taxesIssue.value.id === '') {
-      isError = true;
+      isError = true
       setFiscalState(old => ({
         ...old,
         cofins: {
           ...old.cofins,
           taxesIssue: {
             ...old.cofins.taxesIssue,
-            error: { isError: true },
-          },
-        },
-      }));
+            error: { isError: true }
+          }
+        }
+      }))
     }
 
-    return isError;
-  }, [fiscalState]);
+    return isError
+  }, [fiscalState])
 
   const fiscal: TypeGetAndSetFiscal<TypeFiscal> = {
     getData: getDataFiscal,
     setData: setDataFiscal(),
-    validate: validationAndSetErrorAllFieldsFiscal,
-  };
+    validate: validationAndSetErrorAllFieldsFiscal
+  }
 
   const validation: TypeValitionResolve = {
     validate: useCallback(() => {
-      const resultList: TypeValidationResult[] = [];
-      const valueSelectedTypeProduct = overView.typeSelectProdut.value.name;
-      const hasVariation = overView.hasVariation.value.hasVariation;
+      const resultList: TypeValidationResult[] = []
+      const valueSelectedTypeProduct = overView.typeSelectProdut.value.name
+      const hasVariation = overView.hasVariation.value.hasVariation
 
       if (overView.typeSelectProdut.value.name === '') {
-        overview.validate();
-        return [{ labelName: labelDataOverview, linkName: nameDataOverview }];
+        overview.validate()
+        return [{ labelName: labelDataOverview, linkName: nameDataOverview }]
       }
 
       const validateHasVariationOrStock = () => {
@@ -897,80 +916,80 @@ const TabUpdateProvider = ({
           if (variation.validate()) {
             resultList.push({
               labelName: labelHasVariation,
-              linkName: nameHasVariation,
-            });
+              linkName: nameHasVariation
+            })
           }
         } else {
           if (stock.validate()) {
             resultList.push({
               labelName: labelStock,
-              linkName: nameStock,
-            });
+              linkName: nameStock
+            })
           }
         }
-      };
+      }
 
       const validateDataOverViewAndDetailsAndStockOrHasVariation = () => {
         if (overview.validate()) {
           resultList.push({
             labelName: labelDataOverview,
-            linkName: nameDataOverview,
-          });
+            linkName: nameDataOverview
+          })
         }
         if (details.validate()) {
-          resultList.push({ labelName: labelDetails, linkName: nameDetails });
+          resultList.push({ labelName: labelDetails, linkName: nameDetails })
         }
-        validateHasVariationOrStock();
-      };
+        validateHasVariationOrStock()
+      }
 
       const validateIsPriceFormationAndFiscal = () => {
         if (priceComposition.validate()) {
           resultList.push({
             labelName: labelPriceComposition,
-            linkName: namePriceComposition,
-          });
+            linkName: namePriceComposition
+          })
         }
         if (fiscal.validate()) {
           resultList.push({
             labelName: labelFiscal,
-            linkName: nameFiscal,
-          });
+            linkName: nameFiscal
+          })
         }
-      };
+      }
 
       if (valueSelectedTypeProduct === SALE.name) {
-        validateDataOverViewAndDetailsAndStockOrHasVariation();
-        validateIsPriceFormationAndFiscal();
+        validateDataOverViewAndDetailsAndStockOrHasVariation()
+        validateIsPriceFormationAndFiscal()
 
         if (composition.validate()) {
           resultList.push({
             labelName: labelHasComposition,
-            linkName: nameHasComposition,
-          });
+            linkName: nameHasComposition
+          })
         }
       }
       if (valueSelectedTypeProduct === SEMI_FINISHED.name) {
-        validateDataOverViewAndDetailsAndStockOrHasVariation();
+        validateDataOverViewAndDetailsAndStockOrHasVariation()
         if (composition.validate()) {
           resultList.push({
             labelName: labelHasComposition,
-            linkName: nameHasComposition,
-          });
+            linkName: nameHasComposition
+          })
         }
       }
       if (valueSelectedTypeProduct === RE_SALE.name) {
-        validateDataOverViewAndDetailsAndStockOrHasVariation();
-        validateIsPriceFormationAndFiscal();
+        validateDataOverViewAndDetailsAndStockOrHasVariation()
+        validateIsPriceFormationAndFiscal()
       }
       if (
         valueSelectedTypeProduct === LOCATION.name ||
         valueSelectedTypeProduct === CONSUMER.name ||
         valueSelectedTypeProduct === RAW_MATERIAL.name
       ) {
-        validateDataOverViewAndDetailsAndStockOrHasVariation();
+        validateDataOverViewAndDetailsAndStockOrHasVariation()
       }
 
-      return resultList;
+      return resultList
     }, [
       overView,
       detail,
@@ -980,13 +999,13 @@ const TabUpdateProvider = ({
       compositionState,
       variationState,
       overView.typeSelectProdut.value.id,
-      overView.hasVariation,
-    ]),
-  };
+      overView.hasVariation
+    ])
+  }
 
   const save = async (): Promise<ResultOnSaveProdut> => {
-    const typeProduct = overView.typeSelectProdut.value.name;
-    const hasVariationActive = overView.hasVariation.value?.hasVariation;
+    const typeProduct = overView.typeSelectProdut.value.name
+    const hasVariationActive = overView.hasVariation.value?.hasVariation
     const {
       categoryCost,
       groupProduct,
@@ -994,8 +1013,8 @@ const TabUpdateProvider = ({
       nameProduct,
       subCategoryCost,
       typeSelectProdut,
-      id,
-    } = overView;
+      id
+    } = overView
     const {
       descriptionAndDetails,
       height,
@@ -1006,20 +1025,20 @@ const TabUpdateProvider = ({
       width,
       measure,
       measureWeight,
-      thickness,
-    } = detail;
+      thickness
+    } = detail
     const {
       priceCost,
       priceSale,
       // stockCurrent,
       unitMensured,
-      replacementPoint,
-    } = stocks;
-    const variationList = variationState;
+      replacementPoint
+    } = stocks
+    const variationList = variationState
 
     const createRequestWithOverViewDetailsStockOrVariation = (): {
-      overview_and_details: TypeProductDataOverView;
-      stock: TypeProductStock[];
+      overview_and_details: TypeProductDataOverView
+      stock: TypeProductStock[]
     } => {
       const overview_and_details: TypeProductDataOverView = {
         id: Number(id),
@@ -1033,7 +1052,7 @@ const TabUpdateProvider = ({
           measure_weight: measureWeight.value,
           description_details: descriptionAndDetails.value,
           technical_specification: technicalSpecification.value,
-          way_use: wayOfUse.value,
+          way_use: wayOfUse.value
         },
         type: typeSelectProdut.value.name.toLowerCase().replace(' ', '-'),
         category_cost_id: parseInt(categoryCost.value.id),
@@ -1041,13 +1060,13 @@ const TabUpdateProvider = ({
         subcategory_cost_id: parseInt(subCategoryCost.value.id),
         has_variation: !!hasVariation.value.hasVariation,
 
-        name: nameProduct.value,
-      };
+        name: nameProduct.value
+      }
 
-      const stock: TypeProductStock[] = [];
+      const stock: TypeProductStock[] = []
 
       if (hasVariationActive) {
-        variationList.map(
+        variationList.forEach(
           ({
             currentStock,
             priceCost,
@@ -1055,17 +1074,17 @@ const TabUpdateProvider = ({
             unitMensured,
             atributes,
             replacementPoint,
-            id,
+            id
           }) => {
-            const atributesList: TypeAtributes[] = [];
+            const atributesList: TypeAtributes[] = []
             atributes
               .filter(({ value }) => value.id !== '')
-              .map(({ value }) => {
+              .forEach(({ value }) => {
                 atributesList.push({
                   key: parseInt(value.keyParent),
-                  value: parseInt(value.id),
-                });
-              });
+                  value: parseInt(value.id)
+                })
+              })
             stock.push({
               id: Number(id),
               replacement_point: parseFloat(replacementPoint.value),
@@ -1073,10 +1092,10 @@ const TabUpdateProvider = ({
               price_cost: convertValueWithMaskInNumber(priceCost.value),
               price_sale: convertValueWithMaskInNumber(priceSale.value),
               unit_mensured_id: parseInt(unitMensured.value.id),
-              atributes: atributesList,
-            });
-          },
-        );
+              atributes: atributesList
+            })
+          }
+        )
       } else {
         stock.push({
           id: Number(id),
@@ -1085,146 +1104,152 @@ const TabUpdateProvider = ({
           price_sale: convertValueWithMaskInNumber(priceSale.value),
           unit_mensured_id: parseInt(unitMensured.value.id),
           // current_stock: Number(stockCurrent.value),
-          atributes: [],
-        });
+          atributes: []
+        })
       }
       return {
         overview_and_details,
-        stock,
-      };
-    };
+        stock
+      }
+    }
 
-    const createRequestWithPriceCompositionAndFiscal = (): PriceCompositionAndFiscal => {
-      const { cfop, cofins, icms, ipi, ncm, pis } = fiscalState;
-      const { cost, dif, profit, simpleNational } = priceCompositionState;
-      const ipiPriceComposition = priceCompositionState.ipi;
+    const createRequestWithPriceCompositionAndFiscal =
+      (): PriceCompositionAndFiscal => {
+        const { cfop, cofins, icms, ipi, ncm, pis } = fiscalState
+        const { cost, dif, profit, simpleNational } = priceCompositionState
+        const ipiPriceComposition = priceCompositionState.ipi
 
-      const priceCompositionAndFiscal: PriceCompositionAndFiscal = {
-        price_composition: {
-          dif: convertValueWithMaskInNumber(dif.value),
-          fixed_cost: convertValueWithMaskInNumber(cost.value),
-          ipi: convertValueWithMaskInNumber(ipiPriceComposition.value),
-          margin_profit: convertValueWithMaskInNumber(profit.value),
-          simple_national: convertValueWithMaskInNumber(simpleNational.value),
-        },
-        fiscal: {
-          cfop: convertValueWithMaskInNumber(cfop.value),
-          ncm: convertValueWithMaskInNumber(ncm.value),
-          icms_tax_origem: convertValueWithMaskInNumber(icms.origem.value.id),
-          icms_tax_situation: convertValueWithMaskInNumber(
-            icms.taxesIssue.value.id,
-          ),
-          ipi_tax_situation: convertValueWithMaskInNumber(
-            ipi.taxesIssue.value.id,
-          ),
-          pis_tax_situation: convertValueWithMaskInNumber(
-            pis.taxesIssue.value.id,
-          ),
-          cofins_tax_situation: convertValueWithMaskInNumber(
-            cofins.taxesIssue.value.id,
-          ),
-        },
-      };
-      return priceCompositionAndFiscal;
-    };
+        const priceCompositionAndFiscal: PriceCompositionAndFiscal = {
+          price_composition: {
+            dif: convertValueWithMaskInNumber(dif.value),
+            fixed_cost: convertValueWithMaskInNumber(cost.value),
+            ipi: convertValueWithMaskInNumber(ipiPriceComposition.value),
+            margin_profit: convertValueWithMaskInNumber(profit.value),
+            simple_national: convertValueWithMaskInNumber(simpleNational.value)
+          },
+          fiscal: {
+            cfop: convertValueWithMaskInNumber(cfop.value),
+            ncm: convertValueWithMaskInNumber(ncm.value),
+            icms_tax_origem: convertValueWithMaskInNumber(icms.origem.value.id),
+            icms_tax_situation: convertValueWithMaskInNumber(
+              icms.taxesIssue.value.id
+            ),
+            ipi_tax_situation: convertValueWithMaskInNumber(
+              ipi.taxesIssue.value.id
+            ),
+            pis_tax_situation: convertValueWithMaskInNumber(
+              pis.taxesIssue.value.id
+            ),
+            cofins_tax_situation: convertValueWithMaskInNumber(
+              cofins.taxesIssue.value.id
+            )
+          }
+        }
+        return priceCompositionAndFiscal
+      }
 
     const createRequestWithComposition = (): CompositionRequest[] => {
-      const compositionRequest: CompositionRequest[] = [];
-      compositionState.map(({ amount, cost, nameProduct }, index) => {
+      const compositionRequest: CompositionRequest[] = []
+      compositionState.forEach(({ amount, cost, nameProduct }, index) => {
         compositionRequest.push({
           amount: convertValueWithMaskInNumber(amount.value),
           cost: convertValueWithMaskInNumber(cost.value),
           name: nameProduct.value,
           product_id: producIdAndStockId[index].productId,
-          stock_id: producIdAndStockId[index].stockId,
-        });
-      });
-      return compositionRequest;
-    };
+          stock_id: producIdAndStockId[index].stockId
+        })
+      })
+      return compositionRequest
+    }
 
     if (typeProduct === SALE.name || typeProduct === RE_SALE.name) {
       if (typeProduct === SALE.name) {
         return await updateProduct({
           id,
-          details_overview: createRequestWithOverViewDetailsStockOrVariation()
-            .overview_and_details,
+          details_overview:
+            createRequestWithOverViewDetailsStockOrVariation()
+              .overview_and_details,
           stock: createRequestWithOverViewDetailsStockOrVariation().stock,
-          price_composition_fiscal: createRequestWithPriceCompositionAndFiscal(),
-          composition: createRequestWithComposition(),
-        });
+          price_composition_fiscal:
+            createRequestWithPriceCompositionAndFiscal(),
+          composition: createRequestWithComposition()
+        })
       }
       return await updateProduct({
-        details_overview: createRequestWithOverViewDetailsStockOrVariation()
-          .overview_and_details,
+        details_overview:
+          createRequestWithOverViewDetailsStockOrVariation()
+            .overview_and_details,
         stock: createRequestWithOverViewDetailsStockOrVariation().stock,
         price_composition_fiscal: createRequestWithPriceCompositionAndFiscal(),
-        id,
-      });
+        id
+      })
     }
     if (typeProduct === SEMI_FINISHED.name) {
       return await updateProduct({
         id,
-        details_overview: createRequestWithOverViewDetailsStockOrVariation()
-          .overview_and_details,
+        details_overview:
+          createRequestWithOverViewDetailsStockOrVariation()
+            .overview_and_details,
         stock: createRequestWithOverViewDetailsStockOrVariation().stock,
-        composition: createRequestWithComposition(),
-      });
+        composition: createRequestWithComposition()
+      })
     }
     if (typeProduct !== '') {
       return await updateProduct({
         id,
-        details_overview: createRequestWithOverViewDetailsStockOrVariation()
-          .overview_and_details,
-        stock: createRequestWithOverViewDetailsStockOrVariation().stock,
-      });
+        details_overview:
+          createRequestWithOverViewDetailsStockOrVariation()
+            .overview_and_details,
+        stock: createRequestWithOverViewDetailsStockOrVariation().stock
+      })
     }
     return {
-      code: 500,
-    };
-  };
+      code: 500
+    }
+  }
 
   const addOverView = (overView: TypeDataOverViewProps) => {
-    setDataOverView(overView);
-  };
+    setDataOverView(overView)
+  }
 
   const addDetails = (details: TypeDetailsProps) => {
-    setDetail(details);
-  };
+    setDetail(details)
+  }
 
   const addStock = (stockParams: TypeStockProps) => {
-    setStock(stockParams);
-  };
+    setStock(stockParams)
+  }
 
   const addHasVariation = (hasVariation: TypeHasVariation) => {
     setVariationState(prevState => [
       ...prevState.filter(({ currentStock }) => currentStock.value !== ''),
-      hasVariation,
-    ]);
-  };
+      hasVariation
+    ])
+  }
 
   const addHasComposition = (composition: TypeProduct) => {
     setProducIdAndStockId(prevState => [
       ...prevState.filter(
-        ({ productId, stockId }) => productId !== 0 && stockId !== 0,
+        ({ productId, stockId }) => productId !== 0 && stockId !== 0
       ),
       {
         productId: Number(composition?.product_id),
-        stockId: Number(composition?.stock_id),
-      },
-    ]);
+        stockId: Number(composition?.stock_id)
+      }
+    ])
     setCompositionState(prevState => [
       ...prevState.filter(({ nameProduct }) => nameProduct.value !== ''),
-      composition,
-    ]);
-  };
+      composition
+    ])
+  }
 
   const addPriceComposition = (priceComposition: TypePriceCompositionProps) => {
-    setPriceCompositionState(priceComposition);
-  };
+    setPriceCompositionState(priceComposition)
+  }
 
   const addFiscal = (fiscalParams: TypeFiscal) => {
-    setFiscalState(fiscalParams);
-  };
+    setFiscalState(fiscalParams)
+  }
 
   return (
     <TabCreateContext.Provider
@@ -1244,22 +1269,22 @@ const TabUpdateProvider = ({
         variation,
         addHasVariation,
         validation: validation,
-        save,
+        save
       }}
     >
       {children}
     </TabCreateContext.Provider>
-  );
-};
-
-function useTabCreate(): TabCreateContext {
-  const context = useContext(TabCreateContext);
-
-  if (!context) {
-    throw new Error('useTabCreate must be used witin a TabUpdateProvider');
-  }
-
-  return context;
+  )
 }
 
-export { TabUpdateProvider, useTabCreate };
+function useTabCreate(): TabCreateContext {
+  const context = useContext(TabCreateContext)
+
+  if (!context) {
+    throw new Error('useTabCreate must be used witin a TabUpdateProvider')
+  }
+
+  return context
+}
+
+export { TabUpdateProvider, useTabCreate }
