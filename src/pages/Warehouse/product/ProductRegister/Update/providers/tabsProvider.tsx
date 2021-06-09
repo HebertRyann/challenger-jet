@@ -493,19 +493,83 @@ const TabUpdateProvider = ({
 
   const getDataVariation = (): TypeHasVariation[] => variationState
 
-  const changeAtributes = useCallback(
-    (atribute: AtributesList, x: number, y: number) => {
-      const tempState: TypeHasVariation[] = JSON.parse(
-        JSON.stringify(variationState)
-      )
-      if (tempState[x].atributes[y]) {
-        tempState[x].atributes[y].error.isError = false
-        tempState[x].atributes[y].value = atribute
-        setVariationState([...tempState])
-      }
-    },
-    [variationState]
-  )
+  const changeAtributes = (atribute: AtributesList, x: number, y: number) => {
+    setVariationState(prevState => {
+      prevState.map(stateValue => {
+        let update = false
+        stateValue.atributes.forEach(({ value }) => {
+          if (value.keyParent === atribute.keyParent) {
+            prevState[x].atributes[y].value = atribute
+            prevState[x].atributes[y].error.isError = false
+            update = true
+            // eslint-disable-next-line no-useless-return
+            return
+          }
+        })
+        if (!update) {
+          for (let i = 0; i <= y; i++) {
+            if (prevState[x].atributes.length <= y) {
+              prevState[x].atributes.push({
+                error: { isError: false },
+                value: {
+                  id: '',
+                  name: '',
+                  keyParent: ''
+                }
+              })
+            }
+          }
+
+          prevState[x].atributes[y].value = atribute
+          prevState[x].atributes[y].error.isError = false
+        }
+        return stateValue
+      })
+
+      return prevState
+    })
+  }
+
+  const addAtributes = (atribute: AtributesList, x: number, y: number) => {
+    // setVariationState(prevState => {
+    //   prevState.map(stateValue => {
+    //     for (let i = 0; i <= y; i++) {
+    //       if (prevState[x].atributes.length <= y) {
+    //         prevState[x].atributes.push({
+    //           error: { isError: false },
+    //           value: {
+    //             id: '',
+    //             name: '',
+    //             keyParent: ''
+    //           }
+    //         })
+    //       }
+    //     }
+    //     return stateValue
+    //   })
+    //   prevState.forEach(({ atributes }, index) => {
+    //     if (index === x) {
+    //       atributes.forEach((_, indexAtribute) => {
+    //         if (indexAtribute !== y) {
+    //           console.log(indexAtribute)
+    //           prevState[index].atributes[indexAtribute].value = {
+    //             id: '',
+    //             name: '',
+    //             keyParent: ''
+    //           }
+    //           prevState[index].atributes[indexAtribute].error.isError = false
+    //         }
+    //       })
+    //     }
+    //   })
+    //   // if (){
+    //   // }
+    //   // prevState[x].atributes[y].value = { id: '', name: '', keyParent: '' }
+    //   // prevState[x].atributes[y].error.isError = false
+    //   console.log(variationState[x].atributes)
+    //   return prevState
+    // })
+  }
 
   const addVariation = useCallback(() => {
     const temp: TypeGenericValueWithError<AtributesList>[] = []
@@ -602,32 +666,21 @@ const TabUpdateProvider = ({
       setVariationState([...tempState])
     }
 
-    const addAtributes = () => {
-      const tempState: TypeHasVariation[] = JSON.parse(
-        JSON.stringify(variationState)
-      )
-      tempState.forEach((_, index) => {
-        tempState[index].atributes.push({
-          error: { isError: false },
-          value: { id: '', name: '', keyParent: '' }
+    const removeAtributes = (keyParent: string) => {
+      setVariationState(prevState => {
+        prevState.forEach(({ atributes }, x) => {
+          atributes.forEach(({ value }, y) => {
+            if (value.keyParent.toString() === keyParent.toString()) {
+              prevState[x].atributes[y].value = {
+                id: '',
+                keyParent: '',
+                name: ''
+              }
+            }
+          })
         })
+        return prevState
       })
-      setVariationState([...tempState])
-    }
-
-    const removeAtributes = () => {
-      const tempState: TypeHasVariation[] = JSON.parse(
-        JSON.stringify(variationState)
-      )
-      tempState.forEach((_, index) => {
-        tempState[index].atributes = [
-          {
-            error: { isError: false },
-            value: { id: '', name: '', keyParent: '' }
-          }
-        ]
-      })
-      setVariationState([...tempState])
     }
 
     return {

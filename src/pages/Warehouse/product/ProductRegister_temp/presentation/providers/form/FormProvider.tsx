@@ -36,8 +36,6 @@ export const FormProvider = ({ children }: FormProviderType): JSX.Element => {
     name: 'overview.hasVariation'
   })
 
-  console.log(changeSelectProductType, changeSelectHasVariationType)
-
   const onSubmit = (data: FormState) => {
     console.log(data)
   }

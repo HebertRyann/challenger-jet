@@ -125,8 +125,8 @@ export type ResolverHasVariation = {
   changePriceSale: (priceSale: string, index: number) => void
   changePriceCost: (priceCost: string, index: number) => void
   changeAtributes: (variation: AtributesList, x: number, y: number) => void
-  addAtributes: () => void
-  removeAtributes: () => void
+  addAtributes: (atribute: AtributesList, x: number, y: number) => void
+  removeAtributes: (keyParent: string) => void
   addVariation: () => void
   removeVariation: (index: number) => void
 }

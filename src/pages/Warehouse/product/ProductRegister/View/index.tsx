@@ -57,14 +57,12 @@ const ProductAtributesView: React.FC = () => {
   useEffect(() => {
     async function loadCategory(): Promise<void> {
       activeLoading()
-      console.log('aki')
 
       try {
         const response = await api.get<ProductResponse>(
           apiList(location.state.id)
         )
         const { data } = response
-        console.log(data)
 
         setProduct(data)
         disableLoading()

@@ -33,26 +33,39 @@ export const HasVariation = ({
 
   useEffect(() => {
     variation.getData()[0].atributes.forEach(result => {
-      atributesList.forEach((atribute, index) => {
-        if (atribute.id.toString() === result.value.keyParent) {
-          atributesList[index].isChecked = true
-        }
+      setAtributesList(prevState => {
+        prevState.forEach((atribute, index) => {
+          if (atribute.id.toString() === result.value.keyParent) {
+            prevState[index].isChecked = true
+          }
+        })
+        return prevState
       })
     })
-  }, [variation.getData()])
+  }, [variation])
+
+  useEffect(() => {
+    atributesList.forEach(({ id }, y) => {
+      variation.getData().forEach(({ atributes }, x) => {
+        atributes.forEach(({ value }) => {
+          if (value.keyParent.toString() === id.toString()) {
+            addAtributes(value, x, y)
+          }
+        })
+      })
+    })
+  }, [addAtributes, atributesList, variation])
 
   const handlerClickCheckBox = useCallback(
-    (index: number) => {
+    (index: number, removeCheck: boolean, keyParent: string) => {
+      if (removeCheck) {
+        removeAtributes(keyParent)
+      }
+
       atributesList[index].isChecked = !atributesList[index].isChecked
       setAtributesList([...atributesList])
-      removeAtributes()
-      atributesList
-        .filter(({ isChecked }) => isChecked)
-        .forEach(() => {
-          addAtributes()
-        })
     },
-    [atributesList, variation.getData()]
+    [atributesList, removeAtributes]
   )
 
   return (
@@ -65,7 +78,7 @@ export const HasVariation = ({
                 type="checkbox"
                 checked={isChecked}
                 onChange={() => {
-                  handlerClickCheckBox(index)
+                  handlerClickCheckBox(index, !!isChecked, String(id))
                 }}
                 value={id}
               />
