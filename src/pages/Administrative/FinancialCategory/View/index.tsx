@@ -101,7 +101,7 @@ const ProductAtributesView: React.FC = () => {
       }
     }
     loadCategory()
-  }, [activeLoading, addToast, disableLoading, location.state.id])
+  }, [activeLoading, addToast, disableLoading])
 
   const handlerOnClickButtonRemoveInCurrentRow = ({
     id,
@@ -248,6 +248,7 @@ const ProductAtributesView: React.FC = () => {
                         source={nameSource}
                         entity={nameEntity}
                         headers={headers}
+                        parentId={id}
                         searchParameters={searchProductAtributes}
                         onActions={{
                           onClickButtonEdit:
@@ -267,6 +268,7 @@ const ProductAtributesView: React.FC = () => {
                     </div>
                     <div className="portlet-body form">
                       <DataTable
+                        entityId={id}
                         format={{ orderBy: '' }}
                         source="auditLogs"
                         entity="AuditLog"

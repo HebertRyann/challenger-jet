@@ -151,6 +151,7 @@ const View = (): JSX.Element => {
                       </div>
                       <div className="portlet-body form">
                         <DataTable
+                          entityId={id}
                           format={{ orderBy: '' }}
                           source="auditLogs"
                           entity="AuditLog"
