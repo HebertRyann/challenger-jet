@@ -244,6 +244,7 @@ const ProductAtributesView: React.FC = () => {
                     </div>
                     <div className="portlet-body form">
                       <DataTable
+                        parentId={id}
                         source={nameSource}
                         entity={nameEntity}
                         headers={headers}

@@ -34,6 +34,7 @@ interface DataTableProps {
   actions?: Action[]
   notHasChildren?: boolean
   onlyParent?: boolean
+  parentId?: string
   searchParameters?: SearchParameters[]
   format: {
     orderBy: string
@@ -51,7 +52,8 @@ const DataTable = ({
     { name: 'Descrição', field: 'descriptions', sortable: true }
   ],
   actions,
-  format
+  format,
+  parentId
 }: DataTableProps): JSX.Element => {
   const [items, setItems] = useState<any[]>([])
   const [filterItems, setFilterItems] = useState([])
@@ -98,11 +100,22 @@ const DataTable = ({
       orderByField: '',
       searchParameters: '',
       onlyParent,
-      orderBy: format.orderBy
+      orderBy: format.orderBy,
+      parentId
     }
 
+    if (!parentId) Object.assign(params, { parentId: '' })
+
     return params
-  }, [ItemsPerPage, currentPage, entity, format, onlyParent, source])
+  }, [
+    ItemsPerPage,
+    currentPage,
+    entity,
+    format.orderBy,
+    onlyParent,
+    parentId,
+    source
+  ])
 
   useEffect(() => {
     ;(async () => {
