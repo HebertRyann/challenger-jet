@@ -15,7 +15,7 @@ const Dashboard = (): JSX.Element => (
     <ControlPanel className="page-content-inner">
       {controlsData.map(({ name, items }) => (
         <div key={name}>
-          <h3>{name}</h3>
+          <h4>{name}</h4>
           <div className="row">
             {items.map(
               ({
