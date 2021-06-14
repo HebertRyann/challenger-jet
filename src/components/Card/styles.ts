@@ -16,11 +16,12 @@ export const Container = styled.div<{ link?: boolean }>`
   section {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
   h3 {
     color: #707273;
     margin: 0px;
+    margin-bottom: 4px;
     font-size: 30px;
     font-weight: 400;
   }
