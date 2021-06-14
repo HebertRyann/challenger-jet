@@ -13,24 +13,35 @@ const Dashboard = (): JSX.Element => (
       </div>
     </div>
     <ControlPanel className="page-content-inner">
-      <h4>Produção</h4>
-      <div className="row">
-        {controlsData.map(
-          ({ icon, link, number, text, textFooter, valueSubtitleFooter }) => (
-            <Card
-              key={Math.random()}
-              number={number}
-              text={text}
-              textFooter={textFooter}
-              isProgress={10}
-              valueSubtitleFooter={valueSubtitleFooter}
-              width="col-lg-2 col-md-3 col-sm-6 col-xs-12"
-              icon={icon}
-              link={link}
-            />
-          )
-        )}
-      </div>
+      {controlsData.map(({ name, items }) => (
+        <div key={name}>
+          <h3>{name}</h3>
+          <div className="row">
+            {items.map(
+              ({
+                icon,
+                link,
+                number,
+                text,
+                textFooter,
+                valueSubtitleFooter
+              }) => (
+                <Card
+                  key={Math.random()}
+                  number={number}
+                  text={text}
+                  textFooter={textFooter}
+                  isProgress={0}
+                  valueSubtitleFooter={valueSubtitleFooter}
+                  width="col-lg-2 col-md-3 col-sm-6 col-xs-12"
+                  icon={icon}
+                  link={link}
+                />
+              )
+            )}
+          </div>
+        </div>
+      ))}
     </ControlPanel>
   </>
 )

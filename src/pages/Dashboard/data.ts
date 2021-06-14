@@ -1,50 +1,110 @@
 import {
-  faMoneyBillWaveAlt,
-  faIndustry,
-  faChartBar,
-  faBalanceScale,
-  faSitemap
+  faCheck,
+  faSearch,
+  faForward,
+  faCubes,
+  faCube,
+  faSync,
+  faEnvelopeOpenText,
+  faShippingFast,
+  faUserCog,
+  faMoneyBillWave
 } from '@fortawesome/free-solid-svg-icons'
 
 export const controlsData = [
   {
-    number: 1,
-    text: 'financeiro',
-    textFooter: 'pendente',
-    valueSubtitleFooter: 0,
-    link: 'financialCategories',
-    icon: faMoneyBillWaveAlt
+    name: 'ALMOXARIFADO',
+    items: [
+      {
+        number: 0,
+        text: 'separar pedido',
+        textFooter: 'pendente',
+        valueSubtitleFooter: 0,
+        link: 'financialCategories',
+        icon: faForward
+      },
+      {
+        number: 0,
+        text: 'separar requisição',
+        textFooter: 'pendente',
+        valueSubtitleFooter: 0,
+        link: 'financialCategories',
+        icon: faEnvelopeOpenText
+      },
+      {
+        number: 0,
+        text: 'estoque',
+        textFooter: 'pendente',
+        valueSubtitleFooter: 0,
+        link: 'financialCategories',
+        icon: faCube
+      },
+      {
+        number: 0,
+        text: 'produtos em estoque',
+        textFooter: 'pendente',
+        valueSubtitleFooter: 0,
+        link: 'financialCategories',
+        icon: faCubes
+      }
+    ]
   },
   {
-    number: 1,
-    text: 'atributos',
-    textFooter: 'pendente',
-    valueSubtitleFooter: 0,
-    link: 'financialCategories',
-    icon: faIndustry
+    name: 'EXPEDIÇÃO',
+    items: [
+      {
+        number: 0,
+        text: 'conferência',
+        textFooter: 'pendente',
+        valueSubtitleFooter: 0,
+        link: 'financialCategories',
+        icon: faSearch
+      },
+      {
+        number: 0,
+        text: 'aguardando coleta',
+        textFooter: 'pendente',
+        valueSubtitleFooter: 0,
+        link: 'financialCategories',
+        icon: faSync
+      },
+      {
+        number: 0,
+        text: 'pedido coletado',
+        textFooter: 'pendente',
+        valueSubtitleFooter: 0,
+        link: 'financialCategories',
+        icon: faCheck
+      }
+    ]
   },
   {
-    number: 1,
-    text: 'estoque',
-    textFooter: 'pendente',
-    valueSubtitleFooter: 0,
-    link: 'financialCategories',
-    icon: faChartBar
-  },
-  {
-    number: 1,
-    text: 'unidade de medida',
-    textFooter: 'pendente',
-    valueSubtitleFooter: 0,
-    link: 'financialCategories',
-    icon: faBalanceScale
-  },
-  {
-    number: 1,
-    text: 'grupo produto',
-    textFooter: 'pendente',
-    valueSubtitleFooter: 0,
-    link: 'financialCategories',
-    icon: faSitemap
+    name: 'RECEBIMENTO',
+    items: [
+      {
+        number: 0,
+        text: 'aguardando compra',
+        textFooter: 'pendente',
+        valueSubtitleFooter: 0,
+        link: 'financialCategories',
+        icon: faMoneyBillWave
+      },
+      {
+        number: 0,
+        text: 'aguardando frete',
+        textFooter: 'pendente',
+        valueSubtitleFooter: 0,
+        link: 'financialCategories',
+        icon: faShippingFast
+      },
+      {
+        number: 0,
+        text: 'aguardando serviço',
+        textFooter: 'pendente',
+        valueSubtitleFooter: 0,
+        link: 'financialCategories',
+        icon: faUserCog
+      }
+    ]
   }
 ]
