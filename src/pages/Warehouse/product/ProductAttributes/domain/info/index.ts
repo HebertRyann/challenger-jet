@@ -12,7 +12,7 @@ type PortletTitleCrudType = {
 }
 
 const nameEntity = 'ProductAttribute'
-const nameSource = 'ProductAttributes'
+const nameSource = 'productAttributes'
 const namePageTitle = 'Atributos de produto'
 
 const nameActionPageMain: TypeActionNameWithTo = {

@@ -101,7 +101,7 @@ const ProductAtributesView: React.FC = () => {
       }
     }
     loadCategory()
-  }, [id, addToast, activeLoading, location.state.id, disableLoading])
+  }, [id, addToast, activeLoading, disableLoading])
 
   const handlerOnClickButtonRemoveInCurrentRow = ({
     id,
