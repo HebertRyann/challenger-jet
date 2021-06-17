@@ -18,7 +18,7 @@ import {
   nameSource
 } from '../domain/info'
 import { apiDelete, apiList } from '../domain/api'
-import { headers } from '../domain/headers/subMenuHeaders'
+import { headers } from '../domain/headers'
 import { breadcrumbView } from '../domain/breadcrumb'
 import {
   toolsViewCreate,
