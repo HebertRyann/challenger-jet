@@ -203,6 +203,46 @@ const MenuView = (): JSX.Element => {
                 <p>{menu?.name}</p>
               </div>
             </div>
+            {menu?.type && (
+              <div className="col-md-3">
+                <div className="form-group">
+                  <label htmlFor="name" className="control-label">
+                    Type
+                  </label>
+                  <p>{menu?.type}</p>
+                </div>
+              </div>
+            )}
+            {menu?.controller && (
+              <div className="col-md-3">
+                <div className="form-group">
+                  <label htmlFor="name" className="control-label">
+                    Controller
+                  </label>
+                  <p>{menu?.controller}</p>
+                </div>
+              </div>
+            )}
+            {menu?.method && (
+              <div className="col-md-3">
+                <div className="form-group">
+                  <label htmlFor="name" className="control-label">
+                    Method
+                  </label>
+                  <p>{menu?.method}</p>
+                </div>
+              </div>
+            )}
+            {menu?.action && (
+              <div className="col-md-3">
+                <div className="form-group">
+                  <label htmlFor="name" className="control-label">
+                    Action
+                  </label>
+                  <p>{menu?.action}</p>
+                </div>
+              </div>
+            )}
             <div className="col-md-3">
               <div className="form-group">
                 <label htmlFor="created" className="control-label">
