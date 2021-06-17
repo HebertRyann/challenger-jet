@@ -217,45 +217,41 @@ export const FormMenu = ({
               value={name}
               onChange={e => setName(e.target.value)}
             />
-            {isOpenInModal && (
-              <>
-                <CustomSelect>
-                  <label htmlFor="">Type</label>
-                  <NewSelect
-                    value={type}
-                    onChange={e => setType(e.target.value as 'cake' | 'front')}
-                    name="type"
-                    id="type"
-                  >
-                    <option selected value="cake">
-                      cake
-                    </option>
-                    <option value="front">front</option>
-                  </NewSelect>
-                </CustomSelect>
-                <Input
-                  name="controller"
-                  className="form-control"
-                  label="Controller"
-                  value={controller}
-                  onChange={e => setController(e.target.value)}
-                />
-                <Input
-                  name="method"
-                  className="form-control"
-                  label="Method"
-                  value={method}
-                  onChange={e => setMethod(e.target.value)}
-                />
-                <Input
-                  name="action"
-                  className="form-control"
-                  label="Action"
-                  value={action}
-                  onChange={e => setAction(e.target.value)}
-                />
-              </>
-            )}
+            <CustomSelect>
+              <label htmlFor="">Type</label>
+              <NewSelect
+                value={type}
+                onChange={e => setType(e.target.value as 'cake' | 'front')}
+                name="type"
+                id="type"
+              >
+                <option selected value="cake">
+                  cake
+                </option>
+                <option value="front">front</option>
+              </NewSelect>
+            </CustomSelect>
+            <Input
+              name="controller"
+              className="form-control"
+              label="Controller"
+              value={controller}
+              onChange={e => setController(e.target.value)}
+            />
+            <Input
+              name="method"
+              className="form-control"
+              label="Method"
+              value={method}
+              onChange={e => setMethod(e.target.value)}
+            />
+            <Input
+              name="action"
+              className="form-control"
+              label="Action"
+              value={action}
+              onChange={e => setAction(e.target.value)}
+            />
           </div>
         </div>
         {isOpenInModal && typeForm === 'create' ? (
