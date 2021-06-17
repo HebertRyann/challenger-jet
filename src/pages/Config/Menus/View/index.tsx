@@ -224,7 +224,7 @@ const MenuView = (): JSX.Element => {
           <div className="row">
             <div className="col-md-12">
               <Tabs>
-                <Tab title="Subcategoria">
+                <Tab title="Submenus">
                   <div className="portlet light">
                     <div className="portlet-title">
                       <div className="caption">Listagem</div>
