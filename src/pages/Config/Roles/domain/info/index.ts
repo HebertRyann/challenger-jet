@@ -16,7 +16,7 @@ const nameSource = 'roles'
 const namePageTitle = 'Grupos de Usuário'
 
 const nameActionPageMain: TypeActionNameWithTo = {
-  name: 'Grupo',
+  name: 'Grupos de Usuário',
   to: '/roles',
   icon: ''
 }
