@@ -8,6 +8,7 @@ import { ProductUnitMeasuredRouter } from './products/unitMeasured/ProductUnitMe
 import { ProductRegisterRouter } from './products/register/prouctRegisterRouter'
 import { FinancialCategoriesRouter } from './administrative/financialCategories/FinancialCategoryRouter'
 import { MenuRouter } from './config/MenuRouter'
+import { RolesRouter } from './config/RolesRouter'
 
 const Routes = (): JSX.Element => (
   <Switch>
@@ -21,6 +22,7 @@ const Routes = (): JSX.Element => (
       <FinancialCategoriesRouter />
       <ProductRegisterRouter />
       <MenuRouter />
+      <RolesRouter />
     </React.Fragment>
   </Switch>
 )
