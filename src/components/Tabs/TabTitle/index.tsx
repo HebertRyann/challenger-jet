@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import * as S from './style'
 
 type Props = {
   title: string
@@ -19,11 +19,9 @@ const TabTitle: React.FC<Props> = ({
   }, [setSelectedTab, index])
 
   return (
-    <li className={active ? 'active' : ''}>
-      <Link to="#!" onClick={onClick}>
-        {title}
-      </Link>
-    </li>
+    <S.Li active={active}>
+      <span onClick={onClick}>{title}</span>
+    </S.Li>
   )
 }
 
