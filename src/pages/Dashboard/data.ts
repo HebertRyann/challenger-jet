@@ -1,14 +1,12 @@
 import {
-  faCheck,
   faSearch,
-  faForward,
   faCubes,
   faCube,
-  faSync,
   faEnvelopeOpenText,
   faShippingFast,
-  faUserCog,
-  faMoneyBillWave
+  faEdit,
+  faInbox,
+  faTruck,
 } from '@fortawesome/free-solid-svg-icons'
 
 export const controlsData = [
@@ -20,15 +18,15 @@ export const controlsData = [
         text: 'separar pedido',
         textFooter: 'pendente',
         valueSubtitleFooter: 0,
-        link: 'financialCategories',
-        icon: faForward
+        link: '#',
+        icon: faInbox
       },
       {
         number: 0,
         text: 'separar requisição',
         textFooter: 'pendente',
         valueSubtitleFooter: 0,
-        link: 'financialCategories',
+        link: '#',
         icon: faEnvelopeOpenText
       },
       {
@@ -36,7 +34,7 @@ export const controlsData = [
         text: 'estoque',
         textFooter: 'pendente',
         valueSubtitleFooter: 0,
-        link: 'financialCategories',
+        link: '#',
         icon: faCube
       },
       {
@@ -44,7 +42,7 @@ export const controlsData = [
         text: 'produtos em estoque',
         textFooter: 'pendente',
         valueSubtitleFooter: 0,
-        link: 'financialCategories',
+        link: '#',
         icon: faCubes
       }
     ]
@@ -57,7 +55,7 @@ export const controlsData = [
         text: 'conferência',
         textFooter: 'pendente',
         valueSubtitleFooter: 0,
-        link: 'financialCategories',
+        link: '#',
         icon: faSearch
       },
       {
@@ -65,45 +63,29 @@ export const controlsData = [
         text: 'aguardando coleta',
         textFooter: 'pendente',
         valueSubtitleFooter: 0,
-        link: 'financialCategories',
-        icon: faSync
+        link: '#',
+        icon: faShippingFast
       },
-      {
-        number: 0,
-        text: 'pedido coletado',
-        textFooter: 'pendente',
-        valueSubtitleFooter: 0,
-        link: 'financialCategories',
-        icon: faCheck
-      }
-    ]
-  },
-  {
-    name: 'RECEBIMENTO',
-    items: [
       {
         number: 0,
         text: 'aguardando compra',
         textFooter: 'pendente',
         valueSubtitleFooter: 0,
-        link: 'financialCategories',
-        icon: faMoneyBillWave
+        link: '#',
+        icon: faTruck
       },
+    ]
+  },
+  {
+    name: 'COMPRA',
+    items: [
       {
         number: 0,
-        text: 'aguardando frete',
+        text: 'requisição',
         textFooter: 'pendente',
         valueSubtitleFooter: 0,
-        link: 'financialCategories',
-        icon: faShippingFast
-      },
-      {
-        number: 0,
-        text: 'aguardando serviço',
-        textFooter: 'pendente',
-        valueSubtitleFooter: 0,
-        link: 'financialCategories',
-        icon: faUserCog
+        link: '#',
+        icon: faEdit
       }
     ]
   }
