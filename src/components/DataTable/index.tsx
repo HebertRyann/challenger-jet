@@ -56,7 +56,8 @@ const DataTable = ({
   actions,
   format,
   parentId,
-  entityId
+  entityId,
+  searchParameters
 }: DataTableProps): JSX.Element => {
   const [items, setItems] = useState<any[]>([])
   const [filterItems, setFilterItems] = useState([])
@@ -101,7 +102,7 @@ const DataTable = ({
       page: currentPage,
       perPage: ItemsPerPage,
       orderByField: '',
-      searchParameters: '',
+      searchParameters,
       onlyParent,
       orderBy: format.orderBy,
       parentId,
@@ -120,6 +121,7 @@ const DataTable = ({
     format.orderBy,
     onlyParent,
     parentId,
+    searchParameters,
     source
   ])
 
@@ -128,7 +130,6 @@ const DataTable = ({
       try {
         const params = loadParams()
         const response = await api.get('dataTable', { params })
-        console.log(response.data.items)
 
         setItems(response.data.items)
         setFilterItems(response.data.items)
