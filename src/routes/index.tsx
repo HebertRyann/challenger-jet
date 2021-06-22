@@ -9,6 +9,7 @@ import { ProductRegisterRouter } from './products/register/prouctRegisterRouter'
 import { FinancialCategoriesRouter } from './administrative/financialCategories/FinancialCategoryRouter'
 import { MenuRouter } from './config/MenuRouter'
 import { RolesRouter } from './config/RolesRouter'
+import { UsersRouter } from './config/UsersRouter'
 
 const Routes = (): JSX.Element => (
   <Switch>
@@ -23,6 +24,7 @@ const Routes = (): JSX.Element => (
       <ProductRegisterRouter />
       <MenuRouter />
       <RolesRouter />
+      <UsersRouter />
     </React.Fragment>
   </Switch>
 )
