@@ -233,7 +233,11 @@ const DataTable = ({
                                 textAlign: 'left'
                               }}
                             >
-                              {item[header.field]}
+                              {typeof item[header.field] === 'boolean'
+                                ? item[header.field]
+                                  ? 'Sim'
+                                  : 'Não'
+                                : item[header.field]}
                             </p>
                           </td>
                         )) || (
@@ -301,7 +305,11 @@ const DataTable = ({
                                   textAlign: 'left'
                                 }}
                               >
-                                {item[header.field]}
+                                {typeof item[header.field] === 'boolean'
+                                  ? item[header.field]
+                                    ? 'Sim'
+                                    : 'Nâo'
+                                  : item[header.field]}
                               </p>
                             </td>
                           )) || (
