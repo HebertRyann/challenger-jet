@@ -55,7 +55,7 @@ export const FormUser = ({
   const [email, setEmail] = useState<string>()
   const [username, setUsername] = useState<string>()
   const [password, setPassword] = useState<string>()
-  const [active, setActive] = useState<boolean>()
+  const [active, setActive] = useState<boolean | undefined>(true)
 
   const [roles, setRoles] = useState<Role[]>([])
 
@@ -76,13 +76,12 @@ export const FormUser = ({
   async function getRoles() {
     const roles = (await api.get('/roles/')).data
     setRoles(roles)
+    setRoleId(roles[0].id)
   }
 
   useEffect(() => {
-    if (initialValues?.role_id) {
-      getRoles()
-    }
-  }, [initialValues?.role_id])
+    getRoles()
+  }, [])
 
   const onSubmitForm = async () => {
     const data = {
