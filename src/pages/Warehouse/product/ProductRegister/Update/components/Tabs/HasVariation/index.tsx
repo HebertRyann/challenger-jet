@@ -26,7 +26,7 @@ export const HasVariation = ({
   unitMensureds,
   atributes
 }: TypeHasVariationProps): JSX.Element => {
-  const { variation } = useTabCreate()
+  const { variation, updateHasVariation } = useTabCreate()
   const { addAtributes, removeAtributes } = variation.setData
   const [atributesList, setAtributesList] =
     useState<ResponseEntiryWithIdNameWithChildren[]>(atributes)
@@ -55,6 +55,10 @@ export const HasVariation = ({
       })
     })
   }, [addAtributes, atributesList, variation])
+
+  useEffect(() => {
+    updateHasVariation(atributesList)
+  }, [atributesList, updateHasVariation])
 
   const handlerClickCheckBox = useCallback(
     (index: number, removeCheck: boolean, keyParent: string) => {

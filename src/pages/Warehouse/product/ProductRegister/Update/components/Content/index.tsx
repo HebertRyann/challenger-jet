@@ -253,7 +253,7 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
               atributes: atributesResponse.map(({ id, keyParent, name }) => {
                 return {
                   error: { isError: false },
-                  value: { id: '', keyParent, name: '' }
+                  value: { id, keyParent, name }
                 }
               }),
               currentStock: {

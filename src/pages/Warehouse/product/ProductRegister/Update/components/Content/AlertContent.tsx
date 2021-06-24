@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 
 import { useTabs } from '../../../../../../../hooks/tabs'
 
@@ -33,6 +33,7 @@ export const AlertContent = ({
         .filter(({ link }) => link !== '')
         .map(({ link, name }, index) => (
           <div
+            key={index}
             onClick={() => {
               handlerClickAlertConfirm(link)
             }}
