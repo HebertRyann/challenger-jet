@@ -6,6 +6,8 @@ interface User {
   id: string
   name: string
   email: string
+  username: string
+  password: string
   avatar_url: string
 }
 
@@ -36,6 +38,7 @@ interface AuthContextData {
   signIn(credentials: SingInCredentials): Promise<void>
   signOut(): void
   userLogged(): boolean
+  updateUser(): void
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
@@ -79,6 +82,14 @@ export const AuthProvider: React.FC = ({ children }) => {
     return false
   }, [])
 
+  const updateUser = useCallback(async () => {
+    const user = await (await api.get('/profile/show')).data
+
+    setData({ token: data.token, user, menus: data.menus })
+
+    localStorage.setItem('@Multfluxo:user', JSON.stringify(user))
+  }, [data.menus, data.token])
+
   const signOut = useCallback(() => {
     localStorage.removeItem('@Multfluxo:token')
     localStorage.removeItem('@Multfluxo:user')
@@ -94,7 +105,8 @@ export const AuthProvider: React.FC = ({ children }) => {
         menus: data.menus,
         signIn,
         signOut,
-        userLogged
+        userLogged,
+        updateUser
       }}
     >
       {children}
