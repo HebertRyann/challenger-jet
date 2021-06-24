@@ -1,7 +1,7 @@
 import React from 'react'
 import { Switch } from 'react-router-dom'
 import Route from './Route'
-import { SignIn, SignUp, Dashboard } from './users/users-router'
+import { SignIn, SignUp, Dashboard, Profile } from './users/users-router'
 import { ProductCategoriesRouter } from './products/categories/categories-router'
 import { ProductAttributesRouter } from './products/attributes/ProductAtributesRouter'
 import { ProductUnitMeasuredRouter } from './products/unitMeasured/ProductUnitMeasured'
@@ -16,6 +16,7 @@ const Routes = (): JSX.Element => (
     <Route path="/" exact component={SignIn} />
     <Route path="/signup" component={SignUp} />
     <Route path="/dashboard" component={Dashboard} isPrivate />
+    <Route path="/profile" component={Profile} isPrivate />
     <React.Fragment>
       <ProductAttributesRouter />
       <ProductCategoriesRouter />
