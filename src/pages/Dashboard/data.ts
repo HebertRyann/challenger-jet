@@ -1,12 +1,11 @@
 import {
   faSearch,
   faCubes,
-  faCube,
-  faEnvelopeOpenText,
   faShippingFast,
   faEdit,
   faInbox,
-  faTruck,
+  faSignInAlt,
+  faArchive,
 } from '@fortawesome/free-solid-svg-icons'
 
 export const controlsData = [
@@ -27,19 +26,19 @@ export const controlsData = [
         textFooter: 'pendente',
         valueSubtitleFooter: 0,
         link: '#',
-        icon: faEnvelopeOpenText
+        icon: faArchive
       },
       {
         number: 0,
-        text: 'estoque',
+        text: 'produto sem estoque',
         textFooter: 'pendente',
         valueSubtitleFooter: 0,
         link: '#',
-        icon: faCube
+        icon: faCubes
       },
       {
         number: 0,
-        text: 'produtos em estoque',
+        text: 'reposição de produto',
         textFooter: 'pendente',
         valueSubtitleFooter: 0,
         link: '#',
@@ -68,16 +67,16 @@ export const controlsData = [
       },
       {
         number: 0,
-        text: 'aguardando compra',
+        text: 'recebimento de compra',
         textFooter: 'pendente',
         valueSubtitleFooter: 0,
         link: '#',
-        icon: faTruck
+        icon: faSignInAlt
       },
     ]
   },
   {
-    name: 'COMPRA',
+    name: 'COMPRAS',
     items: [
       {
         number: 0,
