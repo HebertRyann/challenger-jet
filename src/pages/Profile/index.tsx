@@ -4,6 +4,7 @@ import { FormAvatar } from './components/Avatar'
 import { FormProfile } from './components/Form'
 import { breadcrumbUpdate } from './domain/breadcrumb'
 import { useAuth } from '../../hooks/auth'
+import { ProfileContainer } from './styles'
 
 const ProfileUpdate = (): JSX.Element => {
   const { user } = useAuth()
@@ -23,7 +24,7 @@ const ProfileUpdate = (): JSX.Element => {
       portletTitle="Editar Perfil"
       breadcrumb={breadcrumbUpdate}
     >
-      <div className="form-body">
+      <ProfileContainer className="form-body">
         <FormAvatar avatarUrl={user.avatar_url} />
         <FormProfile
           typeForm="update"
@@ -31,7 +32,7 @@ const ProfileUpdate = (): JSX.Element => {
             ...user
           }}
         />
-      </div>
+      </ProfileContainer>
     </Container>
   )
 }

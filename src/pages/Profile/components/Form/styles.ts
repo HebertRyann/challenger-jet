@@ -25,3 +25,7 @@ export const FormProfileContainer = styled.div`
     margin-right: 1rem;
   }
 `
+
+export const FormProfileWrapper = styled.div`
+  padding: 2em;
+`
