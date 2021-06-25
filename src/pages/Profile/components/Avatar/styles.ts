@@ -6,7 +6,7 @@ export const AvatarContainer = styled.div`
   align-items: center;
   width: fit-content;
 
-  margin-bottom: 2rem;
+  padding: 2em;
 
   img {
     width: 200px;
@@ -25,6 +25,9 @@ export const AvatarContainer = styled.div`
 
     &:hover {
       background: #444;
+    }
+    span {
+      margin-left: 0.5em;
     }
   }
 `

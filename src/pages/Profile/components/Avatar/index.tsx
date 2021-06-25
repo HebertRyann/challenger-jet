@@ -6,6 +6,8 @@ import { apiUpdateAvatar } from '../../domain/api'
 import { useAuth } from '../../../../hooks/auth'
 import { AvatarContainer } from './styles'
 import AvatarImg from '../../../../assets/layouts/layout3/img/avatar.png'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCamera } from '@fortawesome/free-solid-svg-icons'
 
 type TypesFormProps = {
   avatarUrl?: string
@@ -54,7 +56,8 @@ export const FormAvatar = ({ avatarUrl }: TypesFormProps): JSX.Element => {
     <AvatarContainer>
       <img alt="" className="img-circle" src={avatarUrl || AvatarImg} />
       <label htmlFor="file">
-        <span>Trocar imagem</span>
+        <FontAwesomeIcon icon={faCamera} />
+        <span> Trocar imagem </span>
       </label>
       <input
         style={{ display: 'none' }}
