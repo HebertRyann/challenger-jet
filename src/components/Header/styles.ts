@@ -17,3 +17,10 @@ export const Contanier = styled.button`
     background: ${shade(0.2, '#ff9000')};
   }
 `
+
+export const AvatarCircle = styled.img`
+  width: 40px;
+  height: 40px;
+
+  object-fit: cover;
+`

@@ -4,6 +4,7 @@ import { useAuth } from '../../hooks/auth'
 import { useToast } from '../../hooks/toast'
 import logoImg from '../../assets/logo-multfluxo.png'
 import AvatarImg from '../../assets/layouts/layout3/img/avatar.png'
+import { AvatarCircle } from './styles'
 
 interface Menu {
   id: number
@@ -86,7 +87,7 @@ const Header: React.FC = () => {
             <ul className="nav navbar-nav pull-right">
               <li className="dropdown dropdown-user dropdown-dark">
                 <Link to="/profile" className="dropdown-toggle">
-                  <img
+                  <AvatarCircle
                     alt=""
                     className="img-circle"
                     src={user.avatar_url ? user.avatar_url : AvatarImg}
