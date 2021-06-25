@@ -7,6 +7,6 @@ export const ProfileContainer = styled.div`
   align-items: stretch;
 
   > div {
-    border: 2px #ddd solid;
+    background: #f1f1f1;
   }
 `
