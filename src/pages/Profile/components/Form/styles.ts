@@ -29,3 +29,6 @@ export const FormProfileContainer = styled.div`
 export const FormProfileWrapper = styled.div`
   padding: 2em;
 `
+export const CustomFormActions = styled.div`
+  padding-bottom: 0;
+`

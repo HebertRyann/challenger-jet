@@ -144,7 +144,7 @@ export const FormProfile = ({
               onChange={e => setPassword(e.target.value)}
             />
           </ChangePasswordContainer>
-          <div className="form-actions right">
+          <div className="form-actions right" style={{ paddingBottom: '0px' }}>
             <Button type="submit" className="btn dark btn-sm sbold uppercase">
               Salvar
             </Button>
