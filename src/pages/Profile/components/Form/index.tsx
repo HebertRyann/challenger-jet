@@ -50,11 +50,14 @@ export const FormProfile = ({
   }, [typeForm, initialValues])
 
   const onSubmitForm = async () => {
+    const pass = password === '' ? undefined : password
+    const oldPass = oldPassword === '' ? undefined : oldPassword
+
     const data = {
       name,
       email,
-      password,
-      old_password: oldPassword
+      password: pass,
+      old_password: oldPass
     }
 
     try {
@@ -81,11 +84,38 @@ export const FormProfile = ({
         })
         updateUser()
       } catch (error) {
+        const defaultMessage = error.response.data.message
+        let displayMessage
+        switch (defaultMessage) {
+          case 'Old password does not match.':
+            displayMessage = 'Senha atual incorreta!'
+            break
+          case 'You need to inform the old password to set a new password.':
+            displayMessage = 'Informe a senha atual para configurar uma nova!'
+            break
+          case 'E-mail already in use.':
+            displayMessage = 'Este email já está sendo utilizado!'
+            break
+          default:
+            displayMessage = 'Erro ao atualizar o perfil. Tente novamente!'
+        }
+
+        const validation = error.response.data.validation
+        let validationMessage
+        if (validation) {
+          validationMessage = validation.body.message
+          switch (validationMessage) {
+            case '"email" must be a valid email':
+              displayMessage = 'Email inválido'
+              break
+            default:
+              displayMessage = 'Erro ao atualizar o perfil. Tente novamente!'
+          }
+        }
         addToast({
           type: 'error',
           title: 'Erro ao atualizar o perfil',
-          description:
-            'Ocorreu um erro ao fazer a atualização, por favor, tente novamente.'
+          description: displayMessage
         })
       }
       disableLoading()
