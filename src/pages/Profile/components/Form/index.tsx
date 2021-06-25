@@ -119,7 +119,7 @@ export const FormProfile = ({
             <Input
               name="username"
               className="form-control"
-              label="Username"
+              label="Usuário"
               value={username}
               disabled={true}
               onChange={e => setUsername(e.target.value)}
