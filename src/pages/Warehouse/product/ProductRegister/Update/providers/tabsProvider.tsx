@@ -1182,38 +1182,35 @@ const TabUpdateProvider = ({
   }
 
   const updateHasVariation = (atribute: AtributeList[]) => {
-    setVariationState(prevState => {
-      prevState.map(({ atributes, ...rest }, i) => {
-        atributes.forEach(({ value }, x) => {
-          atribute.forEach(({ id }, index) => {
-            if (id.toString() === value.keyParent.toString()) {
-              if (atributes.length < atribute.length + 1) {
-                prevState[i].atributes.push({
-                  value: { id: '', keyParent: '', name: '' },
-                  error: { isError: false }
-                })
-                console.log('sdd')
-              }
-              const lastName = prevState[i].atributes[x].value.name
-              const lastId = prevState[i].atributes[x].value.id
-              const lastkey = prevState[i].atributes[x].value.keyParent
-              prevState[i].atributes[x].value = {
-                id: '',
-                name: '',
-                keyParent: ''
-              }
-              // prevState[i].atributes[index].value = {
-              //   id: lastId,
-              //   name: lastName,
-              //   keyParent: lastkey
-              // }
+    const list = Array(atribute.length)
 
-              console.log(index)
+    for (let index = 0; index < list.length; index++) {
+      list[index] = {
+        error: { isError: false },
+        value: {
+          id: '',
+          name: '',
+          keyParent: '',
+          nameParent: ''
+        }
+      }
+    }
+
+    setVariationState(prevState => {
+      prevState.forEach(variation => {
+        variation.atributes.forEach(att => {
+          atribute.forEach((at, index) => {
+            if (at.id.toString() === att.value.keyParent.toString()) {
+              list[index] = {
+                error: { isError: false },
+                value: att.value
+              }
             }
           })
         })
-        return { atribute, rest }
+        variation.atributes = list
       })
+
       return prevState
     })
   }
