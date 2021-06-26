@@ -72,7 +72,6 @@ export const FormMenu = ({
       method,
       action
     }
-    console.log('data', data)
 
     try {
       formRef.current?.setErrors({})
