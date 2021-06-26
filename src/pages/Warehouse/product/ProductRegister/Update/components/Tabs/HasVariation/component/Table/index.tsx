@@ -32,7 +32,6 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
   const { typeSelectProdut } = overview.getData()
   const variationList = variation.getData()
   const {
-    // changeCurrentStock,
     changePriceCost,
     changePriceSale,
     changeUnitMensured,

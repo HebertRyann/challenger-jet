@@ -61,7 +61,8 @@ import {
   PriceCompositionAndFiscal,
   CompositionRequest,
   AtributesList,
-  TypeGenericValueWithError
+  TypeGenericValueWithError,
+  AtributeList
 } from './domain.types'
 import { convertValueWithMaskInNumber } from '../../../../../../utlis/mask'
 interface TabCreateContext {
@@ -78,6 +79,7 @@ interface TabCreateContext {
   addDetails: (details: TypeDetailsProps) => void
   addStock: (stock: TypeStockProps) => void
   addHasVariation: (hasVariation: TypeHasVariation) => void
+  updateHasVariation: (atribute: AtributeList[]) => void
   addHasComposition: (hasComposition: TypeProduct) => void
   addPriceComposition: (priceComposition: TypePriceCompositionProps) => void
   addFiscal: (fiscal: TypeFiscal) => void
@@ -530,46 +532,7 @@ const TabUpdateProvider = ({
     })
   }
 
-  const addAtributes = (atribute: AtributesList, x: number, y: number) => {
-    // setVariationState(prevState => {
-    //   prevState.map(stateValue => {
-    //     for (let i = 0; i <= y; i++) {
-    //       if (prevState[x].atributes.length <= y) {
-    //         prevState[x].atributes.push({
-    //           error: { isError: false },
-    //           value: {
-    //             id: '',
-    //             name: '',
-    //             keyParent: ''
-    //           }
-    //         })
-    //       }
-    //     }
-    //     return stateValue
-    //   })
-    //   prevState.forEach(({ atributes }, index) => {
-    //     if (index === x) {
-    //       atributes.forEach((_, indexAtribute) => {
-    //         if (indexAtribute !== y) {
-    //           console.log(indexAtribute)
-    //           prevState[index].atributes[indexAtribute].value = {
-    //             id: '',
-    //             name: '',
-    //             keyParent: ''
-    //           }
-    //           prevState[index].atributes[indexAtribute].error.isError = false
-    //         }
-    //       })
-    //     }
-    //   })
-    //   // if (){
-    //   // }
-    //   // prevState[x].atributes[y].value = { id: '', name: '', keyParent: '' }
-    //   // prevState[x].atributes[y].error.isError = false
-    //   console.log(variationState[x].atributes)
-    //   return prevState
-    // })
-  }
+  const addAtributes = (atribute: AtributesList, x: number, y: number) => {}
 
   const addVariation = useCallback(() => {
     const temp: TypeGenericValueWithError<AtributesList>[] = []
@@ -991,15 +954,15 @@ const TabUpdateProvider = ({
 
       return resultList
     }, [
-      overView,
-      detail,
-      stocks,
-      priceCompositionState,
-      fiscalState,
-      compositionState,
-      variationState,
-      overView.typeSelectProdut.value.id,
-      overView.hasVariation
+      overView.typeSelectProdut.value.name,
+      overView.hasVariation.value.hasVariation,
+      overview,
+      variation,
+      stock,
+      details,
+      priceComposition,
+      fiscal,
+      composition
     ])
   }
 
@@ -1027,13 +990,7 @@ const TabUpdateProvider = ({
       measureWeight,
       thickness
     } = detail
-    const {
-      priceCost,
-      priceSale,
-      // stockCurrent,
-      unitMensured,
-      replacementPoint
-    } = stocks
+    const { priceCost, priceSale, unitMensured, replacementPoint } = stocks
     const variationList = variationState
 
     const createRequestWithOverViewDetailsStockOrVariation = (): {
@@ -1068,7 +1025,6 @@ const TabUpdateProvider = ({
       if (hasVariationActive) {
         variationList.forEach(
           ({
-            currentStock,
             priceCost,
             priceSale,
             unitMensured,
@@ -1088,7 +1044,6 @@ const TabUpdateProvider = ({
             stock.push({
               id: Number(id),
               replacement_point: parseFloat(replacementPoint.value),
-              // current_stock: Number(currentStock.value),
               price_cost: convertValueWithMaskInNumber(priceCost.value),
               price_sale: convertValueWithMaskInNumber(priceSale.value),
               unit_mensured_id: parseInt(unitMensured.value.id),
@@ -1103,7 +1058,6 @@ const TabUpdateProvider = ({
           price_cost: convertValueWithMaskInNumber(priceCost.value),
           price_sale: convertValueWithMaskInNumber(priceSale.value),
           unit_mensured_id: parseInt(unitMensured.value.id),
-          // current_stock: Number(stockCurrent.value),
           atributes: []
         })
       }
@@ -1227,6 +1181,43 @@ const TabUpdateProvider = ({
     ])
   }
 
+  const updateHasVariation = (atribute: AtributeList[]) => {
+    setVariationState(prevState => {
+      prevState.map(({ atributes, ...rest }, i) => {
+        atributes.forEach(({ value }, x) => {
+          atribute.forEach(({ id }, index) => {
+            if (id.toString() === value.keyParent.toString()) {
+              if (atributes.length < atribute.length + 1) {
+                prevState[i].atributes.push({
+                  value: { id: '', keyParent: '', name: '' },
+                  error: { isError: false }
+                })
+                console.log('sdd')
+              }
+              const lastName = prevState[i].atributes[x].value.name
+              const lastId = prevState[i].atributes[x].value.id
+              const lastkey = prevState[i].atributes[x].value.keyParent
+              prevState[i].atributes[x].value = {
+                id: '',
+                name: '',
+                keyParent: ''
+              }
+              // prevState[i].atributes[index].value = {
+              //   id: lastId,
+              //   name: lastName,
+              //   keyParent: lastkey
+              // }
+
+              console.log(index)
+            }
+          })
+        })
+        return { atribute, rest }
+      })
+      return prevState
+    })
+  }
+
   const addHasComposition = (composition: TypeProduct) => {
     setProducIdAndStockId(prevState => [
       ...prevState.filter(
@@ -1268,6 +1259,7 @@ const TabUpdateProvider = ({
         addHasComposition,
         variation,
         addHasVariation,
+        updateHasVariation,
         validation: validation,
         save
       }}

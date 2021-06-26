@@ -1,3 +1,5 @@
+import { ResponseEntiryWithIdNameWithChildren } from '../services/api'
+
 export type TypeGetAndSetAndValidateAba<T> = {
   getData: () => T
   setData: (data: T) => void
@@ -22,6 +24,14 @@ export type TypeErroProps = {
 export type HasVariation = {
   hasVariation?: boolean
   name: string
+}
+
+export type AtributeList = {
+  id: string
+  name: string
+  parent_id: string | null
+  childrenList: ResponseEntiryWithIdNameWithChildren[]
+  isChecked?: boolean
 }
 
 export type TypeGenericValueWithError<T> = {
