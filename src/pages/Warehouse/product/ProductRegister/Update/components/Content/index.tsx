@@ -250,10 +250,10 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
             }
             addHasVariation({
               id: id?.toString(),
-              atributes: atributesResponse.map(({ id, keyParent, name }) => {
+              atributes: atributesResponse.map(attr => {
                 return {
                   error: { isError: false },
-                  value: { id, keyParent, name }
+                  value: attr
                 }
               }),
               currentStock: {
