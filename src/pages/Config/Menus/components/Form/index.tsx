@@ -49,7 +49,7 @@ export const FormMenu = ({
   const [controller, setController] = useState<string>()
   const [method, setMethod] = useState<string>()
   const [action, setAction] = useState<string>()
-  const [type, setType] = useState<'cake' | 'front' | undefined>()
+  const [type, setType] = useState<'cake' | 'front'>('cake')
 
   useEffect(() => {
     if (typeForm !== 'create' && initialValues) {
@@ -58,7 +58,7 @@ export const FormMenu = ({
       setController(initialValues.controller)
       setMethod(initialValues.method)
       setAction(initialValues.action)
-      setType(initialValues.type)
+      initialValues.type && setType(initialValues.type)
     }
   }, [isOpenInModal, typeForm, initialValues])
 
