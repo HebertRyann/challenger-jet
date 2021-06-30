@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useParams, useLocation, useHistory } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import { FormMenu } from '../components/Form'
 import Container from '../../../../components/Container'
 import Tabs from '../../../../components/Tabs'
@@ -11,14 +11,8 @@ import Modal from '../../../../components/Modal'
 import { useLoading } from '../../../../hooks/loading'
 import { Alert } from '../../../../components/Alert'
 import { useUpdateDataTable } from '../../../../hooks/dataTable'
-import {
-  nameActions,
-  nameEntity,
-  namePageTitle,
-  nameSource
-} from '../domain/info'
+import { nameActions, namePageTitle } from '../domain/info'
 import { apiDelete, apiList } from '../domain/api'
-import { headers } from '../domain/headers'
 import { breadcrumbView } from '../domain/breadcrumb'
 import {
   toolsViewCreate,
@@ -26,6 +20,7 @@ import {
   toolsViewUpdate,
   toolsViewList
 } from '../domain/tools'
+import { MenuTable, MenuTableRow } from './styles'
 
 interface MenuData {
   id: number
@@ -42,9 +37,8 @@ interface MenuData {
 const MenuView = (): JSX.Element => {
   const { id } = useParams<{ id: string }>()
   const history = useHistory()
-  const location = useLocation<{ id: string; value: string }>()
   const { updateDataTable } = useUpdateDataTable()
-  const [menu, setMenu] = useState<MenuData | null>(null)
+  const [menu, setMenu] = useState<MenuData>()
   const { addToast } = useToast()
   const [alert, setIsActiveAlert] = useState<{
     isActive: boolean
@@ -62,6 +56,23 @@ const MenuView = (): JSX.Element => {
 
   const [modalEdit, setModalEdit] = useState(false)
   const [modalCreate, setModalCreate] = useState(false)
+  const [idParentCreate, setIdParentCreate] = useState<number>()
+
+  const [menuList, setMenuList] = useState<MenuData[]>()
+  const [currentMenuList, setCurrentMenuList] = useState<MenuData[]>()
+
+  useEffect(() => {
+    const menu = menuList?.find(menu => menu.id?.toString() === id)
+    if (menu) {
+      setMenu(menu)
+    }
+    const menuListItem = menuList?.filter(
+      menu => menu.parent_id?.toString() === id
+    )
+    if (menuListItem) {
+      setCurrentMenuList(menuListItem)
+    }
+  }, [id, menuList])
 
   const handleClickOnClose = () => {
     setModalCreate(false)
@@ -73,7 +84,8 @@ const MenuView = (): JSX.Element => {
     setModalEdit(true)
   }
 
-  const handleClickOnOpenModalCreate = () => {
+  const handleClickOnOpenModalCreate = (id: number) => {
+    setIdParentCreate(id)
     setModalCreate(true)
   }
 
@@ -81,25 +93,25 @@ const MenuView = (): JSX.Element => {
   const { disableLoading, activeLoading } = useLoading()
 
   useEffect(() => {
-    async function loadCategory(): Promise<void> {
+    async function loadMenu(): Promise<void> {
       activeLoading()
       try {
-        const response = await api.get<MenuData>(apiList(location.state.id))
+        const response = await api.get<MenuData[]>(apiList())
         const { data } = response
-        setMenu(data)
+        setMenuList(data)
         disableLoading()
       } catch (err) {
         disableLoading()
         addToast({
           type: 'error',
-          title: 'Error ao carregar a categoria',
+          title: 'Error ao carregar o menu',
           description:
-            'Houve um error ao carregar a categoria, tente novamente mais tarde!'
+            'Houve um error ao carregar o menu, tente novamente mais tarde!'
         })
       }
     }
-    loadCategory()
-  }, [activeLoading, addToast, disableLoading])
+    loadMenu()
+  }, [activeLoading, addToast, disableLoading, id])
 
   const handlerOnClickButtonRemoveInCurrentRow = ({ id, name }: MenuData) => {
     setIsActiveAlert({ id, name, isActive: true })
@@ -270,28 +282,100 @@ const MenuView = (): JSX.Element => {
                       <div className="caption">Listagem</div>
                       <div className="tools">
                         <div
-                          onClick={handleClickOnOpenModalCreate}
+                          onClick={() =>
+                            handleClickOnOpenModalCreate(Number(id))
+                          }
                           style={{ cursor: 'pointer' }}
                         >
                           <i className="fa fa-plus" /> Adicionar
                         </div>
                       </div>
                     </div>
-                    <div className="portlet-body form">
-                      <DataTable
-                        format={{ orderBy: 'name' }}
-                        source={nameSource}
-                        entity={nameEntity}
-                        headers={headers}
-                        parentId={id}
-                        onActions={{
-                          onClickButtonEdit:
-                            handlerOnClickButtonEditInCurrentRow,
-                          onClickButtonRemove:
-                            handlerOnClickButtonRemoveInCurrentRow
-                        }}
-                      />
-                    </div>
+                    <MenuTable>
+                      <thead>
+                        <tr>
+                          <th>Nome</th>
+                          <th>Type</th>
+                          <th>Controller</th>
+                          <th>Method</th>
+                          <th>Action</th>
+                          <th>Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {currentMenuList
+                          ?.filter(item => item.parent_id?.toString() === id)
+                          .map(menu => (
+                            <React.Fragment key={menu.id}>
+                              <MenuTableRow>
+                                <td>{menu.name}</td>
+                                <td>{menu.type}</td>
+                                <td>{menu.controller}</td>
+                                <td>{menu.method}</td>
+                                <td>{menu.action}</td>
+                                <td>
+                                  <button
+                                    onClick={() =>
+                                      handleClickOnOpenModalCreate(
+                                        Number(menu.id)
+                                      )
+                                    }
+                                  >
+                                    <i className="fa fa-plus" /> Adicionar
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      handlerOnClickButtonEditInCurrentRow(menu)
+                                    }
+                                  >
+                                    editar
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      handlerOnClickButtonRemoveInCurrentRow(
+                                        menu
+                                      )
+                                    }
+                                  >
+                                    excluir
+                                  </button>
+                                </td>
+                              </MenuTableRow>
+                              {menuList
+                                ?.filter(item => item.parent_id === menu.id)
+                                .map(final => (
+                                  <tr key={final.id}>
+                                    <td>{final.name}</td>
+                                    <td>{final.type}</td>
+                                    <td>{final.controller}</td>
+                                    <td>{final.method}</td>
+                                    <td>{final.action}</td>
+                                    <td>
+                                      <button
+                                        onClick={() =>
+                                          handlerOnClickButtonEditInCurrentRow(
+                                            final
+                                          )
+                                        }
+                                      >
+                                        Editar
+                                      </button>
+                                      <button
+                                        onClick={() =>
+                                          handlerOnClickButtonRemoveInCurrentRow(
+                                            final
+                                          )
+                                        }
+                                      >
+                                        excluir
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))}
+                            </React.Fragment>
+                          ))}
+                      </tbody>
+                    </MenuTable>
                   </div>
                 </Tab>
                 <Tab title="Histórico">
@@ -325,7 +409,7 @@ const MenuView = (): JSX.Element => {
             typeForm="create"
             isOpenInModal={{
               handleOnClose: handleClickOnClose,
-              idParent: Number(id)
+              idParent: Number(idParentCreate)
             }}
           />
         }
@@ -348,7 +432,7 @@ const MenuView = (): JSX.Element => {
             }}
             isOpenInModal={{
               handleOnClose: handleClickOnClose,
-              idParent: Number(id)
+              idParent: Number(idParentCreate)
             }}
           />
         }
