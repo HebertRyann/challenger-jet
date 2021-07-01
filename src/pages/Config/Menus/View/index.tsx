@@ -20,7 +20,7 @@ import {
   toolsViewUpdate,
   toolsViewList
 } from '../domain/tools'
-import { MenuTable, MenuTableRow } from './styles'
+import { MenuTable, MenuTableRow, LinkContainer } from './styles'
 
 interface MenuData {
   id: number
@@ -305,70 +305,76 @@ const MenuView = (): JSX.Element => {
                       <tbody>
                         {currentMenuList
                           ?.filter(item => item.parent_id?.toString() === id)
-                          .map(menu => (
-                            <React.Fragment key={menu.id}>
+                          .map(currentMenu => (
+                            <React.Fragment key={currentMenu.id}>
                               <MenuTableRow>
-                                <td>{menu.name}</td>
-                                <td>{menu.type}</td>
-                                <td>{menu.controller}</td>
-                                <td>{menu.method}</td>
-                                <td>{menu.action}</td>
+                                <td>{currentMenu.name}</td>
+                                <td>{currentMenu.type}</td>
+                                <td>{currentMenu.controller}</td>
+                                <td>{currentMenu.method}</td>
+                                <td>{currentMenu.action}</td>
                                 <td>
-                                  <button
-                                    onClick={() =>
-                                      handleClickOnOpenModalCreate(
-                                        Number(menu.id)
-                                      )
-                                    }
-                                  >
-                                    <i className="fa fa-plus" /> Adicionar
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      handlerOnClickButtonEditInCurrentRow(menu)
-                                    }
-                                  >
-                                    editar
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      handlerOnClickButtonRemoveInCurrentRow(
-                                        menu
-                                      )
-                                    }
-                                  >
-                                    excluir
-                                  </button>
+                                  <LinkContainer>
+                                    <div
+                                      onClick={() =>
+                                        handlerOnClickButtonEditInCurrentRow(
+                                          currentMenu
+                                        )
+                                      }
+                                    >
+                                      <i className="fa fa-edit" />
+                                    </div>
+                                    <div
+                                      onClick={() =>
+                                        handlerOnClickButtonRemoveInCurrentRow(
+                                          currentMenu
+                                        )
+                                      }
+                                    >
+                                      <i className="fa fa-remove" />
+                                    </div>
+                                    <div
+                                      onClick={() =>
+                                        handleClickOnOpenModalCreate(
+                                          Number(currentMenu.id)
+                                        )
+                                      }
+                                    >
+                                      <i className="fa fa-plus" />
+                                    </div>
+                                  </LinkContainer>
                                 </td>
                               </MenuTableRow>
                               {menuList
-                                ?.filter(item => item.parent_id === menu.id)
-                                .map(final => (
-                                  <tr key={final.id}>
-                                    <td>{final.name}</td>
-                                    <td>{final.type}</td>
-                                    <td>{final.controller}</td>
-                                    <td>{final.method}</td>
-                                    <td>{final.action}</td>
+                                ?.filter(i => i.parent_id === currentMenu.id)
+                                .map(subMenu => (
+                                  <tr key={subMenu.id}>
+                                    <td>{subMenu.name}</td>
+                                    <td>{subMenu.type}</td>
+                                    <td>{subMenu.controller}</td>
+                                    <td>{subMenu.method}</td>
+                                    <td>{subMenu.action}</td>
                                     <td>
-                                      <button
-                                        onClick={() =>
-                                          handlerOnClickButtonEditInCurrentRow(
-                                            final
-                                          )
-                                        }
-                                      >
-                                        Editar
-                                      </button>
-                                      <button
-                                        onClick={() =>
-                                          handlerOnClickButtonRemoveInCurrentRow(
-                                            final
-                                          )
-                                        }
-                                      >
-                                        excluir
-                                      </button>
+                                      <LinkContainer>
+                                        <div
+                                          onClick={() =>
+                                            handlerOnClickButtonEditInCurrentRow(
+                                              subMenu
+                                            )
+                                          }
+                                        >
+                                          <i className="fa fa-edit" />
+                                        </div>
+                                        <div
+                                          onClick={() =>
+                                            handlerOnClickButtonRemoveInCurrentRow(
+                                              subMenu
+                                            )
+                                          }
+                                        >
+                                          <i className="fa fa-remove" />
+                                        </div>
+                                      </LinkContainer>
                                     </td>
                                   </tr>
                                 ))}
