@@ -8,9 +8,19 @@ export const MenuTable = styled.table`
   }
 
   td {
-    padding: 1em;
+    padding: 0.5em;
   }
 `
 export const MenuTableRow = styled.tr`
-  background: #f1f1f1;
+  background: #dedede;
+`
+export const LinkContainer = styled.div`
+  display: flex;
+
+  > div {
+    padding: 0.5em;
+    margin: 0px 0.4em;
+
+    cursor: pointer;
+  }
 `
