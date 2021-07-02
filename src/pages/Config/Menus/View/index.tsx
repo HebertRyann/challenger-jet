@@ -333,15 +333,17 @@ const MenuView = (): JSX.Element => {
                                     >
                                       <i className="fa fa-remove" />
                                     </div>
-                                    <div
-                                      onClick={() =>
-                                        handleClickOnOpenModalCreate(
-                                          Number(currentMenu.id)
-                                        )
-                                      }
-                                    >
-                                      <i className="fa fa-plus" />
-                                    </div>
+                                    {!currentMenu.controller && (
+                                      <div
+                                        onClick={() =>
+                                          handleClickOnOpenModalCreate(
+                                            Number(currentMenu.id)
+                                          )
+                                        }
+                                      >
+                                        <i className="fa fa-plus" />
+                                      </div>
+                                    )}
                                   </LinkContainer>
                                 </td>
                               </MenuTableRow>
