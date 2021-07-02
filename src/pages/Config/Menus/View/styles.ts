@@ -9,12 +9,6 @@ export const MenuTable = styled.table`
     text-align: center;
   }
 
-  tbody {
-    tr:nth-child(2n) {
-      background: #fbfcfd;
-    }
-  }
-
   td,
   th,
   thead {
@@ -22,7 +16,9 @@ export const MenuTable = styled.table`
     border: 1px solid #e7ecf1;
   }
 `
-export const MenuTableRow = styled.tr``
+export const MenuTableRow = styled.tr`
+  background: #fbfcfd;
+`
 
 export const LinkContainer = styled.div`
   display: flex;
