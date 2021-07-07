@@ -14,6 +14,10 @@ export const Contanier = styled.div`
 `
 
 export const Content = styled.div`
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+  }
   body {
     background-color: #eff3f8 !important;
   }
@@ -37,6 +41,10 @@ export const Content = styled.div`
     padding-top: 10px;
     overflow: hidden;
     position: relative;
+
+    input + input {
+      margin-top: 2rem;
+    }
   }
 
   .content h3 {

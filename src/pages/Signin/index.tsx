@@ -1,6 +1,5 @@
 import React, { useCallback, useRef } from 'react'
 import { FormHandles } from '@unform/core'
-import { Form } from '@unform/web'
 import * as Yup from 'yup'
 import { useHistory } from 'react-router-dom'
 import { useAuth } from '../../hooks/auth'
@@ -8,14 +7,15 @@ import { useToast } from '../../hooks/toast'
 import getValidationErros from '../../utlis/getValidationErros'
 import logoImg from '../../assets/logo-multfluxo.png'
 import { Contanier, Content } from './styles'
-import Input from '../../components/Input'
+import { Input, Form } from '../../components/NewForm'
+import { ButtonPrimary } from '../../components/Button'
 
 interface SingInFormData {
   username: string
   password: string
 }
 
-const SignUp: React.FC = () => {
+const SignUp = (): JSX.Element => {
   const formRef = useRef<FormHandles>(null)
 
   const { signIn } = useAuth()
@@ -58,6 +58,11 @@ const SignUp: React.FC = () => {
     [signIn, addToast, history]
   )
 
+  const register = (name: string) => {
+    // Remove function
+  }
+  const onSubmit = (data: any) => console.log(data)
+
   return (
     <Contanier>
       <Content>
@@ -67,43 +72,40 @@ const SignUp: React.FC = () => {
           </a>
         </div>
         <div className="content">
-          <Form className="login-form" ref={formRef} onSubmit={handleSubmit}>
+          <Form onSubmit={onSubmit} className="login-form">
             <h3 className="form-title font-dark">Autenticação</h3>
-            <div className="form-group">
-              <Input
-                className="form-control form-control-solid placeholder-no-fix input"
-                type="text"
-                autoComplete="off"
-                placeholder="Usuário"
-                name="username"
-              />
-            </div>
-            <div className="form-group">
-              <Input
-                className="form-control form-control-solid placeholder-no-fix"
-                type="password"
-                autoComplete="off"
-                placeholder="Senha"
-                name="password"
-              />
-            </div>
+            <Input
+              register={register}
+              className="form-control form-control-solid placeholder-no-fix input"
+              autoComplete="off"
+              placeholder="Usuário"
+              name="username"
+            />
+            <Input
+              register={register}
+              className="form-control form-control-solid placeholder-no-fix"
+              type="password"
+              autoComplete="off"
+              placeholder="Senha"
+              name="password"
+            />
             <div className="form-actions">
-              <button type="submit" className="btn dark uppercase">
-                Entrar
-              </button>
-              <label
-                htmlFor="remember"
-                className="rememberme check mt-checkbox mt-checkbox-outline"
-              >
-                <input
-                  type="checkbox"
-                  name="remember"
-                  id="remember_me"
-                  value="1"
-                />
-                Me lembre
-                <span />
-              </label>
+              <ButtonPrimary type="submit">Entrar</ButtonPrimary>
+              <div>
+                <label
+                  htmlFor="remember"
+                  className="rememberme check mt-checkbox mt-checkbox-outline"
+                >
+                  <input
+                    type="checkbox"
+                    name="remember"
+                    id="remember_me"
+                    value="1"
+                  />
+                  Me lembre
+                  <span />
+                </label>
+              </div>
             </div>
           </Form>
         </div>
