@@ -32,12 +32,13 @@ export function Form({ defaultValues, children, onSubmit }: any) {
 
   function buildChildren(children: any): any {
     if (Array.isArray(children)) {
-      return children.map((child: ReactChild) => {
+      return children.map((child: ReactChild, index) => {
         if (!React.isValidElement(child)) {
           return child
         }
         if (child.props.children) {
           const childCopy = React.cloneElement(child, {
+            key: index,
             children: buildChildren(child.props.children)
           })
           return childCopy
