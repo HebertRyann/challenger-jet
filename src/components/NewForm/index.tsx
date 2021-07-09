@@ -24,17 +24,23 @@ export function Form({ defaultValues, children, onSubmit }: any) {
 }
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
-  register: (name: string) => void
+  register?: UseFormRegister<any>
   name: string
 }
 
 export function Input({ register, name, ...rest }: InputProps) {
-  return <input {...register(name)} {...rest} />
+  return <input {...(register && register(name))} {...rest} />
 }
 
-export function Select({ register, options, name, ...rest }: any) {
+type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
+  register?: UseFormRegister<any>
+  options: any[]
+  name: string
+}
+
+export function Select({ register, options, name, ...rest }: SelectProps) {
   return (
-    <select {...register(name)} {...rest}>
+    <select {...(register && register(name))} {...rest}>
       {options.map((value: any) => (
         <option key={Math.random()} value={value}>
           {value}
