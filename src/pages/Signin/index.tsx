@@ -22,7 +22,7 @@ const SignUp = (): JSX.Element => {
   const { addToast } = useToast()
   const history = useHistory()
 
-  const handleSubmit = useCallback(
+  const onSubmit = useCallback(
     async (data: SingInFormData) => {
       try {
         formRef.current?.setErrors({})
@@ -58,11 +58,6 @@ const SignUp = (): JSX.Element => {
     [signIn, addToast, history]
   )
 
-  const register = (name: string) => {
-    // Remove function
-  }
-  const onSubmit = (data: any) => console.log(data)
-
   return (
     <Contanier>
       <Content>
@@ -75,14 +70,12 @@ const SignUp = (): JSX.Element => {
           <Form onSubmit={onSubmit} className="login-form">
             <h3 className="form-title font-dark">Autenticação</h3>
             <Input
-              register={register}
               className="form-control form-control-solid placeholder-no-fix input"
               autoComplete="off"
               placeholder="Usuário"
               name="username"
             />
             <Input
-              register={register}
               className="form-control form-control-solid placeholder-no-fix"
               type="password"
               autoComplete="off"
