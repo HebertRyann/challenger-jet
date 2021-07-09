@@ -6,7 +6,11 @@ import React, {
 import { useForm, UseFormRegister } from 'react-hook-form'
 
 export function Form({ defaultValues, children, onSubmit }: any) {
-  const { handleSubmit, register } = useForm({ defaultValues })
+  const { handleSubmit, register, reset } = useForm({ defaultValues })
+
+  useEffect(() => {
+    reset(defaultValues)
+  }, [defaultValues, reset])
 
   type ReactChild = {
     props: {
