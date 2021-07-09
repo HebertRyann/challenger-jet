@@ -1,25 +1,61 @@
-import React, { InputHTMLAttributes } from 'react'
-import { useForm } from 'react-hook-form'
+import React, {
+  InputHTMLAttributes,
+  SelectHTMLAttributes,
+  useEffect
+} from 'react'
+import { useForm, UseFormRegister } from 'react-hook-form'
 
 export function Form({ defaultValues, children, onSubmit }: any) {
   const { handleSubmit, register } = useForm({ defaultValues })
 
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {Array.isArray(children)
-        ? children.map(child => {
-            return child.props.name
-              ? React.createElement(child.type, {
-                  ...{
-                    ...child.props,
-                    register,
-                    key: child.props.name
-                  }
-                })
-              : child
+  type ReactChild = {
+    props: {
+      children: any
+      type: { name: string }
+    }
+    type: any
+  }
+
+  function registeredInput(child: any) {
+    return React.createElement(child.type, {
+      ...{
+        ...child.props,
+        register,
+        key: child.props.name
+      }
+    })
+  }
+
+  function buildChildren(children: any): any {
+    if (Array.isArray(children)) {
+      return children.map((child: ReactChild) => {
+        if (!React.isValidElement(child)) {
+          return child
+        }
+        if (child.props.children) {
+          const childCopy = React.cloneElement(child, {
+            children: buildChildren(child.props.children)
           })
-        : children}
-    </form>
+          return childCopy
+        }
+        return child.type?.name === 'Input' || child.type?.name === 'Select'
+          ? registeredInput(child)
+          : child
+      })
+    }
+    if (children.props?.children) {
+      const childCopy = React.cloneElement(children, {
+        children: buildChildren(children.props.children)
+      })
+      return childCopy
+    }
+    return children.type?.name === 'Input' || children.type?.name === 'Select'
+      ? registeredInput(children)
+      : children
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>{buildChildren(children)}</form>
   )
 }
 
