@@ -11,6 +11,7 @@ import {
   UseFormRegister
 } from 'react-hook-form'
 
+import { IconBaseProps } from 'react-icons'
 import { FiAlertCircle } from 'react-icons/fi'
 import { Contanier, Error } from './styles'
 
@@ -64,11 +65,27 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string
   rules?: RegisterOptions
   error?: FieldError
+  label?: string
+  icon?: React.ComponentType<IconBaseProps>
 }
 
-export function Input({ register, name, rules, error, ...rest }: InputProps) {
+export function Input({
+  register,
+  name,
+  label,
+  icon: Icon,
+  rules,
+  error,
+  ...rest
+}: InputProps) {
   return (
     <Contanier>
+      {Icon && <Icon size={20} />}
+      {label && (
+        <label htmlFor={name} className="control-label">
+          {label}
+        </label>
+      )}
       <div>
         <input {...(register && register(name, rules))} {...rest} />
         {error?.message && (
@@ -77,7 +94,7 @@ export function Input({ register, name, rules, error, ...rest }: InputProps) {
           </Error>
         )}
         {error?.type === 'required' && (
-          <Error title={`O campo ${name} é obrigatório`}>
+          <Error title={`O campo ${label} é obrigatório`}>
             <FiAlertCircle color="#c53030" size={20} />
           </Error>
         )}

@@ -5,6 +5,7 @@ import Tooltip from '../Tooltip'
 export const Contanier = styled.div`
   border-radius: 10px;
   width: 100%;
+  margin-bottom: 1em;
 
   > label {
     font-weight: normal;
