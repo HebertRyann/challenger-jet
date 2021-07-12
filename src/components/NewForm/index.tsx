@@ -1,7 +1,8 @@
 import React, {
   InputHTMLAttributes,
   SelectHTMLAttributes,
-  useEffect
+  useEffect,
+  ReactElement
 } from 'react'
 import { useForm, UseFormRegister } from 'react-hook-form'
 
@@ -12,15 +13,7 @@ export function Form({ defaultValues, children, onSubmit }: any) {
     reset(defaultValues)
   }, [defaultValues, reset])
 
-  type ReactChild = {
-    props: {
-      children: any
-      type: { name: string }
-    }
-    type: any
-  }
-
-  function registeredInput(child: any) {
+  function registeredField(child: ReactElement) {
     return React.createElement(child.type, {
       ...{
         ...child.props,
@@ -30,33 +23,21 @@ export function Form({ defaultValues, children, onSubmit }: any) {
     })
   }
 
-  function buildChildren(children: any): any {
+  function buildChildren(children: ReactElement, key = 0): any {
     if (Array.isArray(children)) {
-      return children.map((child: ReactChild, index) => {
-        if (!React.isValidElement(child)) {
-          return child
-        }
-        if (child.props.children) {
-          const childCopy = React.cloneElement(child, {
-            key: index,
-            children: buildChildren(child.props.children)
-          })
-          return childCopy
-        }
-        return child.type?.name === 'Input' || child.type?.name === 'Select'
-          ? registeredInput(child)
-          : child
+      return children.map((child: ReactElement, index) => {
+        return buildChildren(child, index)
       })
     }
+
     if (children.props?.children) {
       const childCopy = React.cloneElement(children, {
+        key,
         children: buildChildren(children.props.children)
       })
       return childCopy
     }
-    return children.type?.name === 'Input' || children.type?.name === 'Select'
-      ? registeredInput(children)
-      : children
+    return children.props?.name ? registeredField(children) : children
   }
 
   return (
