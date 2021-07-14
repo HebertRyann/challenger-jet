@@ -7,7 +7,7 @@ import { useToast } from '../../hooks/toast'
 import getValidationErros from '../../utlis/getValidationErros'
 import logoImg from '../../assets/logo-multfluxo.png'
 import { Contanier, Content } from './styles'
-import { Input, Form } from '../../components/NewForm'
+import Form, { Input } from '../../components/Form'
 import { ButtonPrimary } from '../../components/Button'
 
 interface SingInFormData {
@@ -74,6 +74,7 @@ const SignUp = (): JSX.Element => {
               autoComplete="off"
               placeholder="Usuário"
               name="username"
+              rules={{ required: true }}
             />
             <Input
               className="form-control form-control-solid placeholder-no-fix"
@@ -81,6 +82,7 @@ const SignUp = (): JSX.Element => {
               autoComplete="off"
               placeholder="Senha"
               name="password"
+              rules={{ required: true }}
             />
             <div className="form-actions">
               <ButtonPrimary type="submit">Entrar</ButtonPrimary>
