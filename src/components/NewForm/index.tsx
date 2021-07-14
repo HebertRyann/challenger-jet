@@ -13,9 +13,9 @@ import {
 
 import { IconBaseProps } from 'react-icons'
 import { FiAlertCircle } from 'react-icons/fi'
-import { Contanier, Error } from './styles'
+import { Contanier, Error, SelectContanier } from './styles'
 
-export function Form({ defaultValues, children, onSubmit }: any) {
+export default function Form({ defaultValues, children, onSubmit }: any) {
   const {
     handleSubmit,
     register,
@@ -45,14 +45,14 @@ export function Form({ defaultValues, children, onSubmit }: any) {
       })
     }
 
-    if (children.props?.children) {
+    if (children?.props?.children) {
       const childCopy = React.cloneElement(children, {
         key,
         children: buildChildren(children.props.children)
       })
       return childCopy
     }
-    return children.props?.name ? registeredField(children) : children
+    return children?.props?.name ? registeredField(children) : children
   }
 
   return (
@@ -111,12 +111,12 @@ type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
 
 export function Select({ register, options, name, ...rest }: SelectProps) {
   return (
-    <select {...(register && register(name))} {...rest}>
-      {options.map((value: any) => (
-        <option key={Math.random()} value={value}>
-          {value}
-        </option>
-      ))}
-    </select>
+        <select {...(register && register(name))} {...rest}>
+          {options.map((value: any) => (
+            <option key={Math.random()} value={value}>
+              {value}
+            </option>
+          ))}
+        </select>
   )
 }
