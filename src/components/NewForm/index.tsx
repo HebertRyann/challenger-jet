@@ -105,7 +105,10 @@ export function Input({
 
 type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
   register?: UseFormRegister<any>
-  options: any[]
+  options: Array<{
+    value: string | number
+    name: string | number
+  }>
   name: string
   label: string
 }
@@ -126,9 +129,9 @@ export function Select({
       )}
       <div>
         <select {...(register && register(name))} {...rest}>
-          {options.map((value: any) => (
-            <option key={Math.random()} value={value}>
-              {value}
+          {options.map(option => (
+            <option key={Math.random()} value={option.value}>
+              {option.name}
             </option>
           ))}
         </select>
