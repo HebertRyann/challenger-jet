@@ -107,10 +107,24 @@ type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
   register?: UseFormRegister<any>
   options: any[]
   name: string
+  label: string
 }
 
-export function Select({ register, options, name, ...rest }: SelectProps) {
+export function Select({
+  register,
+  options,
+  name,
+  label,
+  ...rest
+}: SelectProps) {
   return (
+    <SelectContanier>
+      {label && (
+        <label htmlFor={name} className="control-label">
+          {label}
+        </label>
+      )}
+      <div>
         <select {...(register && register(name))} {...rest}>
           {options.map((value: any) => (
             <option key={Math.random()} value={value}>
@@ -118,5 +132,7 @@ export function Select({ register, options, name, ...rest }: SelectProps) {
             </option>
           ))}
         </select>
+      </div>
+    </SelectContanier>
   )
 }

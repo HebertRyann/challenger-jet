@@ -4,7 +4,6 @@ import Tooltip from '../Tooltip'
 
 export const Contanier = styled.div`
   border-radius: 10px;
-  width: 100%;
   margin-bottom: 1em;
 
   > label {
@@ -51,5 +50,19 @@ export const Error = styled(Tooltip)`
     &::before {
       border-color: #c53030 transparent;
     }
+  }
+`
+
+export const SelectContanier = styled.div`
+  border-radius: 10px;
+  margin-bottom: 1em;
+
+  > label {
+    font-weight: normal;
+  }
+
+  select {
+    width: 100%;
+    padding: 5px;
   }
 `
