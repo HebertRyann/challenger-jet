@@ -1,11 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
-import * as Yup from 'yup'
+import React from 'react'
 import api from '../../../../../../services/api'
-import getValidationErrors from '../../../../../../utlis/getValidationErros'
-import FormComponent from '../../../../../../components/Form'
-import Input from '../../../../../../components/Input'
+import Form, { Input } from '../../../../../../components/Form'
 import Button from '../../../../../../components/Button'
-import { FormHandles } from '@unform/core'
 import { useHistory } from 'react-router-dom'
 import { useToast } from '../../../../../../hooks/toast'
 import { useLoading } from '../../../../../../hooks/loading'
@@ -36,44 +32,14 @@ export const FormCategory = ({
   typeForm,
   valueInput
 }: TypesFormProps): JSX.Element => {
-  const formRef = useRef<FormHandles>(null)
   const { addToast } = useToast()
   const history = useHistory()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [id, setId] = useState<any>(0)
   const { updateDataTable } = useUpdateDataTable()
-  const [inputValue, setInputValue] = useState<string>('')
-
-  useEffect(() => {
-    if (valueInput !== undefined) {
-      setInputValue(valueInput)
-    }
-    if (typeForm.valueOf() !== 'create') {
-      setId(typeForm)
-      const obj = typeForm as {
-        idUpdate: number
-        inputValue: string
-        idParentUpdate?: string
-      }
-      formRef.current?.setFieldValue('id', obj.idUpdate)
-      formRef.current?.setFieldValue('name', obj.inputValue)
-    }
-  }, [valueInput, isOpenInModal, typeForm])
 
   const { activeLoading, disableLoading } = useLoading()
 
   const onSubmitForm = async (data: FormDataProtocol) => {
     try {
-      formRef.current?.setErrors({})
-
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Nome obrigatório')
-      })
-
-      await schema.validate(data, {
-        abortEarly: false
-      })
-
       if (typeForm === 'create') {
         if (isOpenInModal) {
           const { handleOnClose, idParent } = isOpenInModal
@@ -121,7 +87,7 @@ export const FormCategory = ({
       } else {
         if (isOpenInModal) {
           const { handleOnClose } = isOpenInModal
-          const id = data.id
+          const id = typeForm.idUpdate
           const dataUpdate: { name: string } = {
             name: data.name
           }
@@ -151,7 +117,7 @@ export const FormCategory = ({
           const dataUpdate: { name: string } = {
             name: data.name
           }
-          const id = data.id
+          const id = typeForm.idUpdate
 
           try {
             activeLoading()
@@ -177,12 +143,6 @@ export const FormCategory = ({
       }
       disableLoading()
     } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err)
-        formRef.current?.setErrors(errors)
-        return
-      }
-
       if (typeForm === 'create') {
         addToast({
           type: 'error',
@@ -195,30 +155,17 @@ export const FormCategory = ({
     }
   }
 
-  useEffect(() => {
-    if (typeForm !== 'create') {
-      setInputValue(typeForm.inputValue)
-    }
-  }, [typeForm])
-
-  const handleChangeInputValue = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setInputValue(event.currentTarget.value)
-  }
   return (
-    <FormComponent formRef={formRef} onSubmitForm={onSubmitForm}>
+    <Form onSubmit={onSubmitForm} defaultValues={{ name: valueInput }}>
       <>
         <div className="row">
           <div className="form-content col-md-3">
             <Input
-              onChange={handleChangeInputValue}
-              value={inputValue}
               name="name"
               className="form-control"
               label="Nome"
+              rules={{ required: true }}
             />
-            <Input name="id" style={{ display: 'none' }} />
           </div>
         </div>
         {isOpenInModal && typeForm === 'create' ? (
@@ -241,6 +188,6 @@ export const FormCategory = ({
           </Button>
         </div>
       </>
-    </FormComponent>
+    </Form>
   )
 }
