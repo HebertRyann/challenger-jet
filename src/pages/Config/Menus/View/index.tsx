@@ -111,7 +111,7 @@ const MenuView = (): JSX.Element => {
       }
     }
     loadMenu()
-  }, [activeLoading, addToast, disableLoading, id])
+  }, [activeLoading, addToast, disableLoading, id, updateDataTable])
 
   const handlerOnClickButtonRemoveInCurrentRow = ({ id, name }: MenuData) => {
     setIsActiveAlert({ id, name, isActive: true })

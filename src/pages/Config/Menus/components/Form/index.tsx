@@ -1,35 +1,34 @@
-import React, { useEffect, useRef, useState } from 'react'
-import * as Yup from 'yup'
-import api from '../../../../../services/api'
-import getValidationErrors from '../../../../../utlis/getValidationErros'
-import FormComponent from '../../../../../components/Form'
-import Input from '../../../../../components/Input'
-import Button from '../../../../../components/Button'
-import { FormHandles } from '@unform/core'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+
+import api from '../../../../../services/api'
 import { useToast } from '../../../../../hooks/toast'
 import { useLoading } from '../../../../../hooks/loading'
 import { useUpdateDataTable } from '../../../../../hooks/dataTable'
 import { apiCreate, apiUpdate } from '../../domain/api'
 import { nameActions } from '../../domain/info'
-import { NewSelect } from '../../../../../components/NewSelect'
-import { CustomSelect } from './styles'
+
+import Button from '../../../../../components/Button'
+import Form, { Input, Select } from '../../../../../components/Form'
+import { FormContent } from './styles'
 
 type IsOpenInModalProps = {
   idParent: number
   handleOnClose: () => void
 }
 
+type MenuData = {
+  name?: string
+  type?: 'cake' | 'front'
+  controller?: string
+  method?: string
+  action?: string
+}
+
 type TypesFormProps = {
   isOpenInModal?: false | IsOpenInModalProps
-  initialValues?: {
+  initialValues?: MenuData & {
     idUpdate: number
-    name?: string
-    type?: 'cake' | 'front'
-    controller?: string
-    method?: string
-    action?: string
-    idParentUpdate?: string
   }
   typeForm: 'create' | 'update'
 }
@@ -39,51 +38,30 @@ export const FormMenu = ({
   initialValues,
   typeForm
 }: TypesFormProps): JSX.Element => {
-  const formRef = useRef<FormHandles>(null)
   const { addToast } = useToast()
   const history = useHistory()
   const { updateDataTable } = useUpdateDataTable()
+  const [defaultValues, setDefaultValues] = useState<MenuData>()
 
   const [id, setId] = useState<number>()
-  const [name, setName] = useState<string>()
-  const [controller, setController] = useState<string>()
-  const [method, setMethod] = useState<string>()
-  const [action, setAction] = useState<string>()
-  const [type, setType] = useState<'cake' | 'front'>('cake')
 
   useEffect(() => {
-    if (typeForm !== 'create' && initialValues) {
+    if (initialValues) {
       setId(initialValues.idUpdate)
-      setName(initialValues.name)
-      setController(initialValues.controller)
-      setMethod(initialValues.method)
-      setAction(initialValues.action)
-      initialValues.type && setType(initialValues.type)
+      setDefaultValues({
+        name: initialValues.name,
+        controller: initialValues.controller,
+        method: initialValues.method,
+        action: initialValues.action,
+        type: initialValues.type
+      })
     }
-  }, [isOpenInModal, typeForm, initialValues])
+  }, [initialValues])
 
   const { activeLoading, disableLoading } = useLoading()
 
-  const onSubmitForm = async () => {
-    const data = {
-      name,
-      type,
-      controller,
-      method,
-      action
-    }
-
+  const onSubmitForm = async (data: MenuData) => {
     try {
-      formRef.current?.setErrors({})
-
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Nome obrigatório')
-      })
-
-      await schema.validate(data, {
-        abortEarly: false
-      })
-
       if (typeForm === 'create') {
         if (isOpenInModal) {
           const { handleOnClose, idParent } = isOpenInModal
@@ -97,6 +75,11 @@ export const FormMenu = ({
             handleOnClose()
             disableLoading()
             updateDataTable()
+            addToast({
+              type: 'success',
+              title: 'Registro criado',
+              description: 'Registro criado com sucesso'
+            })
           } catch (error) {
             addToast({
               type: 'error',
@@ -116,6 +99,12 @@ export const FormMenu = ({
             activeLoading()
             await api.post(apiCreate(), dataCreate)
             disableLoading()
+            updateDataTable()
+            addToast({
+              type: 'success',
+              title: 'Registro criado',
+              description: 'Registro criado com sucesso'
+            })
             history.push(nameActions.read.to)
           } catch (error) {
             addToast({
@@ -185,12 +174,6 @@ export const FormMenu = ({
       }
       disableLoading()
     } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err)
-        formRef.current?.setErrors(errors)
-        return
-      }
-
       if (typeForm === 'create') {
         addToast({
           type: 'error',
@@ -204,54 +187,32 @@ export const FormMenu = ({
   }
 
   return (
-    <FormComponent formRef={formRef} onSubmitForm={onSubmitForm}>
+    <Form onSubmit={onSubmitForm} defaultValues={defaultValues}>
       <>
         <div className="row">
-          <div className="form-content col-md-3">
-            <Input name="id" value={id} style={{ display: 'none' }} />
+          <FormContent modal={!!isOpenInModal}>
             <Input
               name="name"
               className="form-control"
               label="Nome"
-              value={name}
-              onChange={e => setName(e.target.value)}
+              rules={{ required: true }}
             />
-            <CustomSelect>
-              <label htmlFor="">Type</label>
-              <NewSelect
-                value={type}
-                onChange={e => setType(e.target.value as 'cake' | 'front')}
-                name="type"
-                id="type"
-              >
-                <option selected value="cake">
-                  cake
-                </option>
-                <option value="front">front</option>
-              </NewSelect>
-            </CustomSelect>
+            <Select
+              name="type"
+              label="Type"
+              options={[
+                { value: 'cake', name: 'cake' },
+                { value: 'front', name: 'front' }
+              ]}
+            />
             <Input
               name="controller"
               className="form-control"
               label="Controller"
-              value={controller}
-              onChange={e => setController(e.target.value)}
             />
-            <Input
-              name="method"
-              className="form-control"
-              label="Method"
-              value={method}
-              onChange={e => setMethod(e.target.value)}
-            />
-            <Input
-              name="action"
-              className="form-control"
-              label="Action"
-              value={action}
-              onChange={e => setAction(e.target.value)}
-            />
-          </div>
+            <Input name="method" className="form-control" label="Method" />
+            <Input name="action" className="form-control" label="Action" />
+          </FormContent>
         </div>
         {isOpenInModal && typeForm === 'create' ? (
           <hr className="divider" />
@@ -273,6 +234,6 @@ export const FormMenu = ({
           </Button>
         </div>
       </>
-    </FormComponent>
+    </Form>
   )
 }
