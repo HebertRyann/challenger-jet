@@ -11,6 +11,8 @@ import { MenuRouter } from './config/MenuRouter'
 import { RolesRouter } from './config/RolesRouter'
 import { UsersRouter } from './config/UsersRouter'
 
+import { Form } from './form/FormRoute'
+
 const Routes = (): JSX.Element => (
   <Switch>
     <Route path="/" exact component={SignIn} />
@@ -18,6 +20,7 @@ const Routes = (): JSX.Element => (
     <Route path="/dashboard" component={Dashboard} isPrivate />
     <Route path="/profile" component={Profile} isPrivate />
     <React.Fragment>
+      <Form />
       <ProductAttributesRouter />
       <ProductCategoriesRouter />
       <ProductUnitMeasuredRouter />
