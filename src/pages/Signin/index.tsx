@@ -7,7 +7,7 @@ import { useToast } from '../../hooks/toast'
 import getValidationErros from '../../utlis/getValidationErros'
 import logoImg from '../../assets/logo-multfluxo.png'
 import { Contanier, Content } from './styles'
-import Form, { Input } from '../../components/Form'
+import Form, { Input } from '../../components/NewForm'
 import { ButtonPrimary } from '../../components/Button'
 
 interface SingInFormData {
