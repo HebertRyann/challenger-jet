@@ -1,11 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
-import * as Yup from 'yup'
+import React, { useEffect, useState } from 'react'
 import api from '../../../../services/api'
-import getValidationErrors from '../../../../utlis/getValidationErros'
-import FormComponent from '../../../../components/Form'
-import Input from '../../../../components/Input'
+import Form, { Input } from '../../../../components/Form'
 import Button from '../../../../components/Button'
-import { FormHandles } from '@unform/core'
 import { useToast } from '../../../../hooks/toast'
 import { useLoading } from '../../../../hooks/loading'
 import { apiUpdate } from '../../domain/api'
@@ -16,62 +12,36 @@ import {
 } from './styles'
 import { useAuth } from '../../../../hooks/auth'
 
+type ProfileData = {
+  name?: string
+  email?: string
+  username?: string
+}
 type TypesFormProps = {
-  initialValues?: {
-    name?: string
-    email?: string
-    username?: string
-  }
+  initialValues?: ProfileData
   typeForm: 'create' | 'update'
 }
 
-export const FormProfile = ({
-  initialValues,
-  typeForm
-}: TypesFormProps): JSX.Element => {
-  const [name, setName] = useState<string>()
-  const [email, setEmail] = useState<string>()
-  const [username, setUsername] = useState<string>()
-  const [password, setPassword] = useState<string>()
-  const [oldPassword, setOldPassword] = useState<string>()
+export const FormProfile = ({ initialValues }: TypesFormProps): JSX.Element => {
+  const [defaultValues, setDefaultValues] = useState<ProfileData>()
 
-  const formRef = useRef<FormHandles>(null)
   const { updateUser } = useAuth()
 
   const { addToast } = useToast()
   const { activeLoading, disableLoading } = useLoading()
 
   useEffect(() => {
-    if (typeForm !== 'create' && initialValues) {
-      setName(initialValues.name)
-      setEmail(initialValues.email)
-      setUsername(initialValues.username)
+    if (initialValues) {
+      setDefaultValues({
+        name: initialValues.name,
+        email: initialValues.email,
+        username: initialValues.username
+      })
     }
-  }, [typeForm, initialValues])
+  }, [initialValues])
 
-  const onSubmitForm = async () => {
-    const pass = password === '' ? undefined : password
-    const oldPass = oldPassword === '' ? undefined : oldPassword
-
-    const data = {
-      name,
-      email,
-      password: pass,
-      old_password: oldPass
-    }
-
+  const onSubmitForm = async (data: ProfileData) => {
     try {
-      formRef.current?.setErrors({})
-
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Nome obrigatório'),
-        email: Yup.string().required('Email obrigatório')
-      })
-
-      await schema.validate(data, {
-        abortEarly: false
-      })
-
       try {
         activeLoading()
         await api.put(apiUpdate(), data)
@@ -119,40 +89,31 @@ export const FormProfile = ({
         })
       }
       disableLoading()
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err)
-        formRef.current?.setErrors(errors)
-      }
-    }
+    } catch (err) {}
   }
 
   return (
     <FormProfileWrapper>
-      <FormComponent formRef={formRef} onSubmitForm={onSubmitForm}>
+      <Form onSubmit={onSubmitForm} defaultValues={defaultValues}>
         <>
           <FormProfileContainer className="form-content">
             <Input
               name="name"
               className="form-control"
               label="Nome"
-              value={name}
-              onChange={e => setName(e.target.value)}
+              rules={{ required: true }}
             />
             <Input
               name="email"
               className="form-control"
               label="Email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
+              rules={{ required: true }}
             />
             <Input
               name="username"
               className="form-control"
               label="Usuário"
-              value={username}
               disabled={true}
-              onChange={e => setUsername(e.target.value)}
             />
           </FormProfileContainer>
           <ChangePasswordContainer>
@@ -162,16 +123,12 @@ export const FormProfile = ({
               name="old_password"
               className="form-control"
               label="Senha Atual"
-              value={oldPassword}
-              onChange={e => setOldPassword(e.target.value)}
             />
             <Input
               type="password"
               name="password"
               className="form-control"
               label="Nova Senha"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
             />
           </ChangePasswordContainer>
           <div className="form-actions right" style={{ paddingBottom: '0px' }}>
@@ -180,7 +137,7 @@ export const FormProfile = ({
             </Button>
           </div>
         </>
-      </FormComponent>
+      </Form>
     </FormProfileWrapper>
   )
 }

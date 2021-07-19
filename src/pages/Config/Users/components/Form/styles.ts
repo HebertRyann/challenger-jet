@@ -9,10 +9,9 @@ export const FormContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
 
-  > div:first-child {
-    display: none;
+  input[name='email'] {
+    width: 400px;
   }
-
   > div {
     max-width: 400px;
     margin-left: 1rem;

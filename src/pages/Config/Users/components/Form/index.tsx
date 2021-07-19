@@ -1,40 +1,38 @@
-import React, { useEffect, useRef, useState } from 'react'
-import * as Yup from 'yup'
+import React, { useEffect, useState } from 'react'
 import api from '../../../../../services/api'
-import getValidationErrors from '../../../../../utlis/getValidationErros'
-import FormComponent from '../../../../../components/Form'
-import Input from '../../../../../components/Input'
+import Form, { Input, Select } from '../../../../../components/Form'
 import Button from '../../../../../components/Button'
-import { FormHandles } from '@unform/core'
 import { useHistory } from 'react-router-dom'
 import { useToast } from '../../../../../hooks/toast'
 import { useLoading } from '../../../../../hooks/loading'
 import { useUpdateDataTable } from '../../../../../hooks/dataTable'
 import { apiCreate, apiUpdate } from '../../domain/api'
 import { nameActions } from '../../domain/info'
-import { NewSelect } from '../../../../../components/NewSelect'
-import { CustomSelect, FormContainer } from './styles'
+import { FormContainer } from './styles'
 
 type IsOpenInModalProps = {
   idParent: number
   handleOnClose: () => void
 }
 
+type UserData = {
+  name?: string
+  role_id?: string
+  email?: string
+  username?: string
+  password?: string
+  active?: boolean
+}
+
 type TypesFormProps = {
   isOpenInModal?: false | IsOpenInModalProps
-  initialValues?: {
+  initialValues?: UserData & {
     idUpdate: number
-    name?: string
-    role_id?: string
-    email?: string
-    username?: string
-    password?: string
-    active?: boolean
   }
   typeForm: 'create' | 'update'
 }
 
-interface Role {
+type Role = {
   id: number
   name: string
 }
@@ -44,66 +42,54 @@ export const FormUser = ({
   initialValues,
   typeForm
 }: TypesFormProps): JSX.Element => {
-  const formRef = useRef<FormHandles>(null)
   const { addToast } = useToast()
   const history = useHistory()
   const { updateDataTable } = useUpdateDataTable()
 
-  const [id, setId] = useState<number>()
-  const [name, setName] = useState<string>()
-  const [roleId, setRoleId] = useState<string>()
-  const [email, setEmail] = useState<string>()
-  const [username, setUsername] = useState<string>()
-  const [password, setPassword] = useState<string>()
-  const [active, setActive] = useState<boolean | undefined>(true)
+  const [defaultValues, setDefaultValues] = useState<UserData>()
 
-  const [roles, setRoles] = useState<Role[]>([])
+  const [roles, setRoles] = useState<{ value: number; name: string }[]>([
+    { value: 0, name: '' }
+  ])
 
   useEffect(() => {
-    if (typeForm !== 'create' && initialValues) {
-      setId(initialValues.idUpdate)
-      setName(initialValues.name)
-      setRoleId(initialValues.role_id)
-      setEmail(initialValues.email)
-      setUsername(initialValues.username)
-      setPassword(initialValues.password)
-      setActive(initialValues.active)
+    if (initialValues) {
+      setDefaultValues({
+        name: initialValues.name,
+        email: initialValues.email,
+        username: initialValues.username,
+        role_id: initialValues.role_id,
+        active: initialValues.active
+      })
     }
-  }, [isOpenInModal, typeForm, initialValues])
+  }, [initialValues])
 
   const { activeLoading, disableLoading } = useLoading()
 
   async function getRoles() {
     const roles = (await api.get('/roles/')).data
-    setRoles(roles)
-    setRoleId(roles[0].id)
+    const rolesSelect = roles?.map((role: Role) => ({
+      value: role.id,
+      name: role.name
+    }))
+    setRoles(rolesSelect)
   }
 
   useEffect(() => {
     getRoles()
   }, [])
 
-  const onSubmitForm = async () => {
-    const data = {
-      name,
-      role_id: roleId,
-      email,
-      username,
-      password,
-      active
+  const onSubmitForm = async (data: UserData) => {
+    const id = initialValues?.idUpdate
+    if (data.active) {
+      data = {
+        ...data,
+        active: JSON.parse(String(data.active))
+      }
     }
+    console.log(data)
 
     try {
-      formRef.current?.setErrors({})
-
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Nome obrigatório')
-      })
-
-      await schema.validate(data, {
-        abortEarly: false
-      })
-
       if (typeForm === 'create') {
         if (isOpenInModal) {
           const { handleOnClose, idParent } = isOpenInModal
@@ -205,12 +191,6 @@ export const FormUser = ({
       }
       disableLoading()
     } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err)
-        formRef.current?.setErrors(errors)
-        return
-      }
-
       if (typeForm === 'create') {
         addToast({
           type: 'error',
@@ -224,68 +204,44 @@ export const FormUser = ({
   }
 
   return (
-    <FormComponent formRef={formRef} onSubmitForm={onSubmitForm}>
+    <Form onSubmit={onSubmitForm} defaultValues={defaultValues}>
       <>
         <div className="row">
           <FormContainer className="form-content">
-            <Input name="id" value={id} style={{ display: 'none' }} />
             <Input
               name="name"
               className="form-control"
               label="Nome"
-              value={name}
-              onChange={e => setName(e.target.value)}
+              rules={{ required: true }}
             />
             <Input
               name="email"
               className="form-control"
               label="Email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
+              rules={{ required: true }}
             />
-
-            <CustomSelect>
-              <label htmlFor="">Grupo</label>
-              <NewSelect
-                value={roleId}
-                onChange={e => setRoleId(e.target.value)}
-                name="role"
-                id="role"
-              >
-                {roles.map(role => (
-                  <option key={role.id} selected value={role.id}>
-                    {role.name}
-                  </option>
-                ))}
-              </NewSelect>
-            </CustomSelect>
+            <Select name="role_id" label="Role" options={roles} />
             <Input
               name="username"
               className="form-control"
               label="Username"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
+              rules={{ required: true }}
             />
             <Input
               type="password"
               name="password"
               className="form-control"
               label="Senha"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
+              rules={{ required: true }}
             />
-            <CustomSelect>
-              <label htmlFor="">Ativo</label>
-              <NewSelect
-                value={active ? 1 : 0}
-                onChange={e => setActive(Number(e.target.value) === 1)}
-                name="active"
-                id="active"
-              >
-                <option value={1}> Sim </option>
-                <option value={0}> Não </option>
-              </NewSelect>
-            </CustomSelect>
+            <Select
+              name="active"
+              label="Ativo"
+              options={[
+                { value: 'true', name: 'Sim' },
+                { value: 'false', name: 'Não' }
+              ]}
+            />
           </FormContainer>
         </div>
         {isOpenInModal && typeForm === 'create' ? (
@@ -308,6 +264,6 @@ export const FormUser = ({
           </Button>
         </div>
       </>
-    </FormComponent>
+    </Form>
   )
 }
