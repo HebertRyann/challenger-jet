@@ -110,7 +110,7 @@ type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
     name: string | number
   }>
   name: string
-  label: string
+  label?: string
 }
 
 export function Select({
