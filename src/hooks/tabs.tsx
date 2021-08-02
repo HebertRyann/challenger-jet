@@ -4,7 +4,7 @@ export type TypeTabs = {
   default?: boolean
   name: string
   label: string
-  Component: JSX.Element
+  Component?: JSX.Element
   isEnable: boolean
 }
 
@@ -37,8 +37,9 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
   const addTab = useCallback((newTab: TypeTabs) => {
     if (newTab.default) setCurrentTab({ key: newTab.name })
     setTabs(prevState => {
-      prevState.push(newTab)
-      return prevState
+      const tabsCopy = [...prevState]
+      tabsCopy.push(newTab)
+      return tabsCopy
     })
   }, [])
 
@@ -60,44 +61,41 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
 
   const loadTabs = (): TypeTabs[] => tabs
 
-  const activeTab = useCallback(
-    (keyTab: string) => {
-      try {
-        const result = tabs.filter(({ name }) => name === keyTab)
-        if (result) {
-          const indexTab = tabs.indexOf(result[0])
-          tabs[indexTab].isEnable = true
-          setTabs([...tabs])
-          return
-        }
-        throw new Error('No find tab with id')
-      } catch (error) {
-        console.error(error.message)
+  const activeTab = (keyTab: string) => {
+    try {
+      const result = tabs.filter(({ name }) => name === keyTab)
+      if (result.length > 0) {
+        setTabs(prevState => {
+          const tabsCopy = [...prevState]
+          const indexTab = tabsCopy.indexOf(result[0])
+          tabsCopy[indexTab].isEnable = true
+          return tabsCopy
+        })
+        return
       }
-    },
-    [tabs]
-  )
+      throw new Error('No find tab with id')
+    } catch (error) {
+      console.error(error.message)
+    }
+  }
 
-  const disableTab = useCallback(
-    (keyTab: string) => {
-      try {
-        const result = tabs.filter(({ name }) => name === keyTab)
-
-        if (result.length > 0) {
-          setTabs(prevSate => {
-            const indexTab = prevSate?.indexOf(result[0])
-            prevSate[indexTab].isEnable = false
-            return prevSate
-          })
-          return
-        }
-        throw new Error('No find tab with id')
-      } catch (error) {
-        console.error(error.message)
+  const disableTab = (keyTab: string) => {
+    try {
+      const result = tabs.filter(({ name }) => name === keyTab)
+      if (result.length > 0) {
+        setTabs(prevState => {
+          const tabsCopy = [...prevState]
+          const indexTab = tabsCopy.indexOf(result[0])
+          tabsCopy[indexTab].isEnable = false
+          return tabsCopy
+        })
+        return
       }
-    },
-    [tabs]
-  )
+      throw new Error('No find tab with id')
+    } catch (error) {
+      console.error(error.message)
+    }
+  }
 
   const changeCurrentTab = useCallback((keyTab: string) => {
     setCurrentTab({ key: keyTab })
