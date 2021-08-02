@@ -5,7 +5,7 @@ import React, {
   ReactElement
 } from 'react'
 import {
-  FieldError,
+  Controller,
   RegisterOptions,
   useForm,
   UseFormRegister
@@ -20,6 +20,7 @@ export default function Form({ defaultValues, children, onSubmit }: any) {
     handleSubmit,
     register,
     reset,
+    control,
     formState: { errors }
   } = useForm({ defaultValues })
 
@@ -28,11 +29,34 @@ export default function Form({ defaultValues, children, onSubmit }: any) {
   }, [defaultValues, reset])
 
   function registeredField(child: ReactElement) {
+    if (child.props.controlled) {
+      return (
+        <Controller
+          control={control}
+          name={child.props.name}
+          rules={child.props.rules}
+          render={({ field }) => {
+            return React.createElement(child.type, {
+              ...{
+                ...child.props,
+                ...field,
+                onChange: (e: any) => {
+                  field.onChange(e)
+                  child.props.onChange && child.props.onChange(e)
+                },
+                errors,
+                key: child.props.name
+              }
+            })
+          }}
+        />
+      )
+    }
     return React.createElement(child.type, {
       ...{
         ...child.props,
         register,
-        error: errors[child.props.name],
+        errors,
         key: child.props.name
       }
     })
@@ -64,8 +88,9 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   register?: UseFormRegister<any>
   name: string
   rules?: RegisterOptions
-  error?: FieldError
+  errors?: any
   label?: string
+  controlled?: boolean
   icon?: React.ComponentType<IconBaseProps>
 }
 
@@ -75,9 +100,12 @@ export function Input({
   label,
   icon: Icon,
   rules,
-  error,
+  errors,
   ...rest
 }: InputProps) {
+  const keys = name.split('.')
+  const error = keys.length > 1 ? errors?.[keys[0]]?.[keys[1]] : errors?.[name]
+
   return (
     <Contanier>
       {Icon && <Icon size={20} />}
@@ -111,24 +139,32 @@ type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
   }>
   name: string
   label?: string
+  rules?: RegisterOptions
+  errors?: any
+  controlled?: boolean
 }
 
 export function Select({
   register,
   options,
   name,
+  rules,
+  errors,
   label,
   ...rest
 }: SelectProps) {
+  const keys = name.split('.')
+  const error = keys.length > 1 ? errors?.[keys[0]]?.[keys[1]] : errors?.[name]
+
   return (
-    <SelectContanier>
+    <SelectContanier erro={error}>
       {label && (
         <label htmlFor={name} className="control-label">
           {label}
         </label>
       )}
       <div>
-        <select {...(register && register(name))} {...rest}>
+        <select {...(register && register(name, rules))} {...rest}>
           {options.map(option => (
             <option key={Math.random()} value={option.value}>
               {option.name}

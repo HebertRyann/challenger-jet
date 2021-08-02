@@ -53,7 +53,7 @@ export const Error = styled(Tooltip)`
   }
 `
 
-export const SelectContanier = styled.div`
+export const SelectContanier = styled.div<{ erro?: boolean }>`
   border-radius: 10px;
   margin-bottom: 1em;
 
@@ -64,5 +64,8 @@ export const SelectContanier = styled.div`
   select {
     width: 100%;
     padding: 5px;
+
+    border: ${props => props.erro && '1px solid red'};
+    color: ${props => (props.erro ? 'red' : '#000')};
   }
 `
