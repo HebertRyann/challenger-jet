@@ -142,15 +142,17 @@ type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
   rules?: RegisterOptions
   errors?: any
   controlled?: boolean
+  blank?: boolean
 }
 
 export function Select({
   register,
   options,
   name,
+  label,
   rules,
   errors,
-  label,
+  blank,
   ...rest
 }: SelectProps) {
   const keys = name.split('.')
@@ -165,6 +167,11 @@ export function Select({
       )}
       <div>
         <select {...(register && register(name, rules))} {...rest}>
+          {blank && (
+            <option key={Math.random()} value={''}>
+              selecione
+            </option>
+          )}
           {options.map(option => (
             <option key={Math.random()} value={option.value}>
               {option.name}
