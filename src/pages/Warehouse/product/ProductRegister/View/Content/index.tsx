@@ -14,7 +14,7 @@ export type TypeContentTabs = {
   name: string
   label: string
   isEnable: boolean
-  Component: JSX.Element
+  Component?: JSX.Element
 }
 
 export const Content = (): JSX.Element => {
@@ -36,7 +36,7 @@ export const Content = (): JSX.Element => {
       <Container>
         <ContentItem>
           <TabHeaderContainer>
-            {tabs.map(
+            {loadTabs().map(
               ({ label, name, isEnable }, index) =>
                 isEnable && (
                   <TabName
@@ -51,7 +51,7 @@ export const Content = (): JSX.Element => {
           </TabHeaderContainer>
           <TabPanelContainer>
             <>
-              {tabs.map(({ Component, name }) => (
+              {loadTabs().map(({ Component, name }) => (
                 <RenderComponent
                   key={name}
                   isActive={name === loadCurrentTab().key}

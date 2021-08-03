@@ -21,7 +21,7 @@ export type TypeContentTabsFiscal = {
   name: string
   label: string
   isEnable: boolean
-  Component: JSX.Element
+  Component?: JSX.Element
 }
 
 export const Fiscal = (): JSX.Element => {
@@ -100,7 +100,7 @@ export const Fiscal = (): JSX.Element => {
           </TabHeaderContainerFiscal>
           <TabPanelContainerFiscal>
             <hr />
-            {tabs.map(({ Component, name }) => (
+            {loadTabs().map(({ Component, name }) => (
               <RenderComponent isActive={name === loadCurrentTab().key}>
                 {Component}
               </RenderComponent>

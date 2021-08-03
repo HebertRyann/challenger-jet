@@ -25,7 +25,7 @@ export type TypeContentTabs = {
   name: string
   label: string
   isEnable: boolean
-  Component: JSX.Element
+  Component?: JSX.Element
 }
 
 type TypeContentProps = {
@@ -39,7 +39,6 @@ type Link = {
 
 export const Content = ({ tools }: TypeContentProps): JSX.Element => {
   const { activeLoading, disableLoading } = useLoading()
-  const [tabs, setTabs] = useState<TypeContentTabs[]>([])
   const { addToast } = useToast()
   const [links, setLinks] = useState<Link[]>([{ link: '', name: '' }])
   const [alert, setAlert] = useState<{
@@ -67,9 +66,8 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
     async function load() {
       activeLoading()
       const tabs = await makeTabs()
-      tabs.map(tab => addTab(tab))
+      tabs.forEach(tab => addTab(tab))
       changeCurrentTab(tabs[0].name)
-      setTabs(loadTabs())
       disableLoading()
     }
     load()
@@ -128,7 +126,7 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
       <Container>
         <ContentItem>
           <TabHeaderContainer>
-            {tabs.map(
+            {loadTabs().map(
               ({ label, name, isEnable }, index) =>
                 isEnable && (
                   <TabName
@@ -145,9 +143,10 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
             <ProductProvider>
               <>
                 <hr />
-                {tabs.map(({ Component, name }) => (
+                {loadTabs().map(({ Component, name }) => (
+                  // eslint-disable-next-line react/jsx-key
                   <RenderComponent isActive={name === loadCurrentTab().key}>
-                    {Component}
+                    {Component || <p></p>}
                   </RenderComponent>
                 ))}
               </>

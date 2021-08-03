@@ -24,7 +24,7 @@ export type TypeContentTabsFiscal = {
   name: string
   label: string
   isEnable: boolean
-  Component: JSX.Element
+  Component?: JSX.Element
 }
 
 type TypeFiscal = {
@@ -196,9 +196,10 @@ export const Fiscal = ({ ncmLoader, cfopLoader }: TypeFiscal): JSX.Element => {
           </TabHeaderContainerFiscal>
           <TabPanelContainerFiscal>
             <hr />
-            {tabs.map(({ Component, name }) => (
+            {loadTabs().map(({ Component, name }) => (
+              // eslint-disable-next-line react/jsx-key
               <RenderComponent isActive={name === loadCurrentTab().key}>
-                {Component}
+                {Component || <p></p>}
               </RenderComponent>
             ))}
             <hr />
