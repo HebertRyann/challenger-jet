@@ -168,7 +168,7 @@ export function Select({
       <div>
         <select {...(register && register(name, rules))} {...rest}>
           {blank && (
-            <option key={Math.random()} value={''}>
+            <option key={Math.random()} disabled selected>
               selecione
             </option>
           )}

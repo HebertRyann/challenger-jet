@@ -67,5 +67,9 @@ export const SelectContanier = styled.div<{ erro?: boolean }>`
 
     border: ${props => props.erro && '1px solid red'};
     color: ${props => (props.erro ? 'red' : '#000')};
+
+    option:disabled {
+      display: none;
+    }
   }
 `
