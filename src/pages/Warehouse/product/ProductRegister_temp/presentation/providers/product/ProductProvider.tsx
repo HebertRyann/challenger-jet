@@ -1,91 +1,61 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useLoading } from '../../../../../../../hooks/loading'
-import { TypeProductModel } from '../../../domain/models/typeProduct'
-import { GroupProductModel } from '../../../domain/models/groupProduct'
-import { CategoryCostModel } from '../../../domain/models/categoryCost'
-import { UnitMensuredProductModel } from '../../../domain/models/unitMensuredProduct'
-import { LoadTypeProduct } from '../../../domain/useCases/product/load/LoadTypeProduct'
-import { LoadGroupProduct } from '../../../domain/useCases/product/load/LoadGroupProduct'
-import { LoadCategoryCost } from '../../../domain/useCases/product/load/LoadCategoryCostProduct'
-import { LoadUnitMensuredProduct } from '../../../domain/useCases/product/load/LoadUnitMensuredProduct'
+
+import {
+  FinancialCategory,
+  ProductCategory,
+  ProductType,
+  UnitMensured,
+  loadFinancialCategories,
+  loadProductCategories,
+  loadProductTypes,
+  loadUnitMensured
+} from '../../../services/api'
 
 type ProductContextType = {
-  loadTypeProducts: () => TypeProductModel[]
-  loadGroupProduct: () => GroupProductModel[]
-  loadCategoriesCost: () => CategoryCostModel[]
-  loadUnitMensured: () => UnitMensuredProductModel[]
-  loadSubCategoryCost: () => Promise<void>
+  typesProduct: ProductType[]
+  groupsProduct: ProductCategory[]
+  categoriesCost: FinancialCategory[]
+  unitMensured: UnitMensured[]
 }
 
 const ProductContext = createContext<ProductContextType>(
   {} as ProductContextType
 )
 
-type ProductProvider = {
+type ProductProviderParams = {
   children: JSX.Element
-  loadTypeProduct: LoadTypeProduct
-  loadGroupProducts: LoadGroupProduct
-  loadCategoryCost: LoadCategoryCost
-  loadUnitMensureds: LoadUnitMensuredProduct
 }
 
-export const ProductProvider = ({
-  children,
-  loadTypeProduct,
-  loadGroupProducts,
-  loadCategoryCost,
-  loadUnitMensureds
-}: ProductProvider): JSX.Element => {
-  const [productType, setProducTypes] = useState<TypeProductModel[]>([])
-  const [groupProduct, setGroupProduct] = useState<GroupProductModel[]>([])
-  const [categoriesCost, setCategoriesCost] = useState<CategoryCostModel[]>([])
-  const [unitMensured, setUnitMensured] = useState<UnitMensuredProductModel[]>(
-    []
-  )
+export const ProductProvider = ({ children }: ProductProviderParams) => {
+  const [typesProduct, setTypesProduct] = useState<ProductType[]>([])
+  const [groupsProduct, setGroupsProduct] = useState<ProductCategory[]>([])
+  const [categoriesCost, setCategoriesCost] = useState<FinancialCategory[]>([])
+  const [unitMensured, setUnitMensured] = useState<UnitMensured[]>([])
   const { activeLoading, disableLoading } = useLoading()
 
   useEffect(() => {
     ;(async () => {
       activeLoading()
-      const productTypes = await loadTypeProduct.loadTypeProduct()
-      setProducTypes(productTypes)
-      const groupProduct = await loadGroupProducts.loadGroupProduct()
-      setGroupProduct(groupProduct)
-      const categoriesCost = await loadCategoryCost.loadTypeCategoryCost()
+      const productsType = await loadProductTypes()
+      setTypesProduct(productsType)
+      const groupsProduct = await loadProductCategories()
+      setGroupsProduct(groupsProduct)
+      const categoriesCost = await loadFinancialCategories()
       setCategoriesCost(categoriesCost)
-      const mensureds = await loadUnitMensureds.loadUnitMensuredProduct()
+      const mensureds = await loadUnitMensured()
       setUnitMensured(mensureds)
       disableLoading()
     })()
-  }, [
-    activeLoading,
-    disableLoading,
-    loadCategoryCost,
-    loadGroupProducts,
-    loadTypeProduct,
-    loadUnitMensureds
-  ])
-
-  const loadTypeProducts = () => productType
-
-  const loadGroupProduct = () => groupProduct
-
-  const loadCategoriesCost = () => categoriesCost
-
-  const loadSubCategoryCost = (): Promise<void> => {
-    return Promise.resolve()
-  }
-
-  const loadUnitMensured = () => unitMensured
+  }, [activeLoading, disableLoading])
 
   return (
     <ProductContext.Provider
       value={{
-        loadCategoriesCost,
-        loadGroupProduct,
-        loadSubCategoryCost,
-        loadTypeProducts,
-        loadUnitMensured
+        typesProduct,
+        groupsProduct,
+        categoriesCost,
+        unitMensured
       }}
     >
       {children}
