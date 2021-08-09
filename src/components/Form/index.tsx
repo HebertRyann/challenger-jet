@@ -1,6 +1,7 @@
 import React, {
   InputHTMLAttributes,
   SelectHTMLAttributes,
+  TextareaHTMLAttributes,
   useEffect,
   ReactElement
 } from 'react'
@@ -180,5 +181,48 @@ export function Select({
         </select>
       </div>
     </SelectContanier>
+  )
+}
+
+type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
+  register?: UseFormRegister<any>
+  name: string
+  rules?: RegisterOptions
+  errors?: any
+  label?: string
+}
+
+export function Textarea({
+  register,
+  name,
+  label,
+  rules,
+  errors,
+  ...rest
+}: TextareaProps) {
+  const keys = name.split('.')
+  const error = keys.length > 1 ? errors?.[keys[0]]?.[keys[1]] : errors?.[name]
+
+  return (
+    <Contanier>
+      {label && (
+        <label htmlFor={name} className="control-label">
+          {label}
+        </label>
+      )}
+      <div>
+        <textarea {...(register && register(name, rules))} {...rest} />
+        {error?.message && (
+          <Error title={error.message}>
+            <FiAlertCircle color="#c53030" size={20} />
+          </Error>
+        )}
+        {error?.type === 'required' && (
+          <Error title={`O campo ${label} é obrigatório`}>
+            <FiAlertCircle color="#c53030" size={20} />
+          </Error>
+        )}
+      </div>
+    </Contanier>
   )
 }
