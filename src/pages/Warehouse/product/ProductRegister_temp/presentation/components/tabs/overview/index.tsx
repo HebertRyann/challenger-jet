@@ -10,7 +10,8 @@ import { Container } from './styles'
 
 export const OverviewTab = () => {
   const { activeTab, disableTab } = useTabs()
-  const { typesProduct, categoriesCost, groupsProduct } = useProduct()
+  const { typesProduct, categoriesCost, groupsProduct, setProductType } =
+    useProduct()
 
   const [financialSubCategories, setFinancialSubCategories] = useState<
     FinancialCategory[]
@@ -20,8 +21,10 @@ export const OverviewTab = () => {
   useEffect(() => {
     if (hasVariation === 'YES') {
       activeTab('hasVariation')
+      disableTab('stock')
     } else {
       disableTab('hasVariation')
+      activeTab('stock')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasVariation])
@@ -53,6 +56,7 @@ export const OverviewTab = () => {
               value: name,
               name
             }))}
+            onChange={({ target }) => setProductType(target.value)}
             blank
             controlled
           />
@@ -130,7 +134,7 @@ export const OverviewTab = () => {
             name="hasVariation"
             className="form-control"
             options={[
-              { name: 'SIM', value: 'SIM' },
+              { name: 'SIM', value: 'YES' },
               { name: 'NÃO', value: 'NO' }
             ]}
             onChange={({ target }) => setHasVariation(target.value)}

@@ -14,6 +14,8 @@ import {
 
 type ProductContextType = {
   typesProduct: ProductType[]
+  productType: string
+  setProductType: React.Dispatch<React.SetStateAction<string>>
   groupsProduct: ProductCategory[]
   categoriesCost: FinancialCategory[]
   unitMensured: UnitMensured[]
@@ -29,6 +31,7 @@ type ProductProviderParams = {
 
 export const ProductProvider = ({ children }: ProductProviderParams) => {
   const [typesProduct, setTypesProduct] = useState<ProductType[]>([])
+  const [productType, setProductType] = useState('')
   const [groupsProduct, setGroupsProduct] = useState<ProductCategory[]>([])
   const [categoriesCost, setCategoriesCost] = useState<FinancialCategory[]>([])
   const [unitMensured, setUnitMensured] = useState<UnitMensured[]>([])
@@ -53,6 +56,8 @@ export const ProductProvider = ({ children }: ProductProviderParams) => {
     <ProductContext.Provider
       value={{
         typesProduct,
+        productType,
+        setProductType,
         groupsProduct,
         categoriesCost,
         unitMensured
