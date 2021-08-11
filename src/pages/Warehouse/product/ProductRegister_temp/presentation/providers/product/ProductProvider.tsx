@@ -6,10 +6,12 @@ import {
   ProductCategory,
   ProductType,
   UnitMensured,
+  Attributes,
   loadFinancialCategories,
   loadProductCategories,
   loadProductTypes,
-  loadUnitMensured
+  loadUnitMensured,
+  loadAtributes
 } from '../../../services/api'
 
 type ProductContextType = {
@@ -19,6 +21,7 @@ type ProductContextType = {
   groupsProduct: ProductCategory[]
   categoriesCost: FinancialCategory[]
   unitMensured: UnitMensured[]
+  attributes: Attributes[]
 }
 
 const ProductContext = createContext<ProductContextType>(
@@ -35,6 +38,7 @@ export const ProductProvider = ({ children }: ProductProviderParams) => {
   const [groupsProduct, setGroupsProduct] = useState<ProductCategory[]>([])
   const [categoriesCost, setCategoriesCost] = useState<FinancialCategory[]>([])
   const [unitMensured, setUnitMensured] = useState<UnitMensured[]>([])
+  const [attributes, setAttributes] = useState<Attributes[]>([])
   const { activeLoading, disableLoading } = useLoading()
 
   useEffect(() => {
@@ -48,6 +52,8 @@ export const ProductProvider = ({ children }: ProductProviderParams) => {
       setCategoriesCost(categoriesCost)
       const mensureds = await loadUnitMensured()
       setUnitMensured(mensureds)
+      const attributes = await loadAtributes()
+      setAttributes(attributes)
       disableLoading()
     })()
   }, [activeLoading, disableLoading])
@@ -60,7 +66,8 @@ export const ProductProvider = ({ children }: ProductProviderParams) => {
         setProductType,
         groupsProduct,
         categoriesCost,
-        unitMensured
+        unitMensured,
+        attributes
       }}
     >
       {children}
