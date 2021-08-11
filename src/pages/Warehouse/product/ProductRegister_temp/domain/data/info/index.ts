@@ -11,12 +11,12 @@ type PortletTitleCrudType = {
   delete: TypeActionNameWithTo
 }
 
-const nameEntity = 'ProductRegister'
+const nameEntity = 'Product'
 const nameSource = 'products'
 const namePageTitle = 'Produtos'
 
 const nameActionPageMain: TypeActionNameWithTo = {
-  name: 'Produtos',
+  name: 'Cadastro',
   to: '/products',
   icon: ''
 }
@@ -24,17 +24,17 @@ const nameActionPageMain: TypeActionNameWithTo = {
 const nameActions: PortletTitleCrudType = {
   create: {
     name: 'Adicionar',
-    to: '/products/create/',
+    to: '/form/create/',
     icon: 'fa fa-plus'
   },
   read: {
     name: 'Visualizar',
-    to: '/products/',
+    to: '/form/',
     icon: 'fa fa-list'
   },
   update: {
-    name: 'Editar',
-    to: '/products/update/',
+    name: 'Atualizar',
+    to: '/form/update/',
     icon: 'fa fa-edit'
   },
   delete: {
