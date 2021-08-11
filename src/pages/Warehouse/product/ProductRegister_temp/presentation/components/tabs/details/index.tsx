@@ -3,7 +3,7 @@ import { TooltipComponent } from '../../../../../../../../components/TooltipComp
 import {
   typeUnitMensuredWeight,
   typeUnitMensuredDetails
-} from '../../../../domain/data/product/unitMensured'
+} from '../../../../domain/data/products/unitMensured'
 import { Container } from './styles'
 import { getError } from '../../../utils/getErrors'
 import { useFormApplication } from '../../../providers/form/FormProvider'
