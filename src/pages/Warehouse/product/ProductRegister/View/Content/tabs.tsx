@@ -22,12 +22,6 @@ import {
 export const makeTabs = async (): Promise<TypeContentTabs[]> => {
   return [
     {
-      label: labelDetails,
-      name: nameDetails,
-      isEnable: true,
-      Component: <Details />
-    },
-    {
       label: labelStock,
       name: nameStock,
       isEnable: true,
