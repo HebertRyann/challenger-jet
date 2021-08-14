@@ -12,7 +12,7 @@ import {
 
 const gettypeUnitMensuredDetails = (isEqual: string): string => {
   const match = typeUnitMensuredDetails.filter(
-    ({ value }) => value === isEqual.toLowerCase()
+    ({ value }) => value === isEqual?.toLowerCase()
   )
   if (match && match[0]) return match[0].label
   return 'Selecione'
@@ -20,7 +20,7 @@ const gettypeUnitMensuredDetails = (isEqual: string): string => {
 
 const getTypeUnitMensuredWeight = (isEqual: string): string => {
   const match = typeUnitMensuredWeight.filter(
-    ({ value }) => value === isEqual.toLowerCase()
+    ({ value }) => value === isEqual?.toLowerCase()
   )
   if (match && match[0]) return match[0].label
   return 'Selecione'

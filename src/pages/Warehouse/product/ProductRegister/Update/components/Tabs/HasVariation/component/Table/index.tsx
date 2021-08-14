@@ -53,7 +53,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
 
   const gettypeUnitMensuredDetails = (isEqual: string): string => {
     const match = typeUnitMensuredDetails.filter(
-      ({ value }) => value === isEqual.toLowerCase()
+      ({ value }) => value === isEqual?.toLowerCase()
     )
     if (match && match[0]) return match[0].label
     return 'Selecione'
@@ -61,7 +61,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
 
   const getTypeUnitMensuredWeight = (isEqual: string): string => {
     const match = typeUnitMensuredWeight.filter(
-      ({ value }) => value === isEqual.toLowerCase()
+      ({ value }) => value === isEqual?.toLowerCase()
     )
     if (match && match[0]) return match[0].label
     return 'Selecione'
