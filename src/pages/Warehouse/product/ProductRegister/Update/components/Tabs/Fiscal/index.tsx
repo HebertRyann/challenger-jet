@@ -26,7 +26,7 @@ export type TypeContentTabsFiscal = {
 
 export const Fiscal = (): JSX.Element => {
   const {
-    loadTabs,
+    tabs,
     addTab,
     loadCurrentTab,
     changeCurrentTab,
@@ -36,19 +36,17 @@ export const Fiscal = (): JSX.Element => {
   const { fiscal } = useTabCreate()
   const { ncm, cfop } = fiscal.getData()
   const { changeNCM, changeCFOP } = fiscal.setData
-  const [tabs, setTabs] = useState<TypeContentTabsFiscal[]>([])
 
   useEffect(() => {
     function load() {
       const tabs = makeTabsFiscal()
       tabs.map(tab => addTab(tab))
       changeCurrentTab(tabs[0].name)
-      setTabs(loadTabs())
     }
     load()
   }, [])
 
-  const allTabsData = loadTabs()
+  const allTabsData = tabs
   return (
     <>
       <Container className="row">
@@ -100,7 +98,7 @@ export const Fiscal = (): JSX.Element => {
           </TabHeaderContainerFiscal>
           <TabPanelContainerFiscal>
             <hr />
-            {loadTabs().map(({ Component, name }) => (
+            {tabs.map(({ Component, name }) => (
               <RenderComponent isActive={name === loadCurrentTab().key}>
                 {Component}
               </RenderComponent>

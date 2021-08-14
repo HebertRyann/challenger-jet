@@ -51,7 +51,7 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
   })
 
   const {
-    loadTabs,
+    tabs,
     addTab,
     loadCurrentTab,
     changeCurrentTabForNext,
@@ -126,7 +126,7 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
       <Container>
         <ContentItem>
           <TabHeaderContainer>
-            {loadTabs().map(
+            {tabs.map(
               ({ label, name, isEnable }, index) =>
                 isEnable && (
                   <TabName
@@ -143,7 +143,7 @@ export const Content = ({ tools }: TypeContentProps): JSX.Element => {
             <ProductProvider>
               <>
                 <hr />
-                {loadTabs().map(({ Component, name }) => (
+                {tabs.map(({ Component, name }) => (
                   // eslint-disable-next-line react/jsx-key
                   <RenderComponent isActive={name === loadCurrentTab().key}>
                     {Component || <p></p>}

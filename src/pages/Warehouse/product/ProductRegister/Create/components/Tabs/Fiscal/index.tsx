@@ -33,11 +33,10 @@ type TypeFiscal = {
 }
 
 export const Fiscal = ({ ncmLoader, cfopLoader }: TypeFiscal): JSX.Element => {
-  const { loadTabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs()
+  const { tabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs()
   const { fiscal } = useTabCreate()
   const { ncm, cfop } = fiscal.getData()
   const { changeNCM, changeCFOP } = fiscal.setData
-  const [tabs, setTabs] = useState<TypeContentTabsFiscal[]>([])
   const [loadingNcm, setLoadingNcm] = useState(false)
   const [loadingCfop, setLoadingCfop] = useState(false)
   const [dataNcmList, setDataNcmList] = useState<LoadAllNCM.NCMResponse[]>([])
@@ -58,12 +57,11 @@ export const Fiscal = ({ ncmLoader, cfopLoader }: TypeFiscal): JSX.Element => {
       const tabs = makeTabsFiscal()
       tabs.map(tab => addTab(tab))
       changeCurrentTab(tabs[0].name)
-      setTabs(loadTabs())
     }
     load()
   }, [])
 
-  const allTabsData = loadTabs()
+  const allTabsData = tabs
 
   const handlerChangeInputNCM = async (value: string) => {
     changeNCM(value)
@@ -196,7 +194,7 @@ export const Fiscal = ({ ncmLoader, cfopLoader }: TypeFiscal): JSX.Element => {
           </TabHeaderContainerFiscal>
           <TabPanelContainerFiscal>
             <hr />
-            {loadTabs().map(({ Component, name }) => (
+            {tabs.map(({ Component, name }) => (
               // eslint-disable-next-line react/jsx-key
               <RenderComponent isActive={name === loadCurrentTab().key}>
                 {Component || <p></p>}

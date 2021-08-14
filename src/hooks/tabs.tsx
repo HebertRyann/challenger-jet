@@ -15,7 +15,7 @@ type TypeCurrentTab = {
 type TypeTabsContext = {
   addTab: (newTab: TypeTabs) => void
   removeTab: (keyTab: string) => void
-  loadTabs: () => TypeTabs[]
+  tabs: TypeTabs[]
   activeTab: (keyTab: string) => void
   disableTab: (keyTab: string) => void
   changeCurrentTab: (keyTab: string) => void
@@ -34,14 +34,13 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
   const [tabs, setTabs] = useState<TypeTabs[]>([])
   const [currentTab, setCurrentTab] = useState<TypeCurrentTab>({ key: '' })
 
-  const addTab = useCallback((newTab: TypeTabs) => {
+  const addTab = (newTab: TypeTabs) => {
     if (newTab.default) setCurrentTab({ key: newTab.name })
     setTabs(prevState => {
-      const tabsCopy = [...prevState]
-      tabsCopy.push(newTab)
-      return tabsCopy
+      prevState.push(newTab)
+      return prevState
     })
-  }, [])
+  }
 
   const removeTab = (keyTab: string): void => {
     try {
@@ -58,8 +57,6 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
       console.error(error.message)
     }
   }
-
-  const loadTabs = (): TypeTabs[] => tabs
 
   const activeTab = (keyTab: string) => {
     try {
@@ -140,7 +137,7 @@ const TabsProvider = ({ children }: TypeTabsProvider): JSX.Element => {
       value={{
         addTab,
         removeTab,
-        loadTabs,
+        tabs,
         activeTab,
         disableTab,
         changeCurrentTab,

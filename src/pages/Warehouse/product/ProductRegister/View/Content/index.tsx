@@ -18,15 +18,12 @@ export type TypeContentTabs = {
 }
 
 export const Content = (): JSX.Element => {
-  const [tabs, setTabs] = useState<TypeContentTabs[]>([])
-  const { loadTabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs()
+  const { tabs, addTab, loadCurrentTab, changeCurrentTab } = useTabs()
 
   useEffect(() => {
     async function load() {
       const tabs = await makeTabs()
       tabs.map(tab => addTab(tab))
-      changeCurrentTab(tabs[0].name)
-      setTabs(loadTabs())
     }
     load()
   }, [])
@@ -36,7 +33,7 @@ export const Content = (): JSX.Element => {
       <Container>
         <ContentItem>
           <TabHeaderContainer>
-            {loadTabs().map(
+            {tabs.map(
               ({ label, name, isEnable }, index) =>
                 isEnable && (
                   <TabName
@@ -51,7 +48,7 @@ export const Content = (): JSX.Element => {
           </TabHeaderContainer>
           <TabPanelContainer>
             <>
-              {loadTabs().map(({ Component, name }) => (
+              {tabs.map(({ Component, name, isEnable }) => (
                 <RenderComponent
                   key={name}
                   isActive={name === loadCurrentTab().key}
