@@ -7,7 +7,7 @@ export const tabsList: TabsModel[] = [
     isEnable: true,
     isDefault: true
   },
-  {
+  /* {
     name: 'details',
     label: 'Detalhe e Medida',
     isEnable: true
@@ -16,7 +16,7 @@ export const tabsList: TabsModel[] = [
     name: 'priceComposition',
     label: 'Formação de preço',
     isEnable: true
-  },
+  }, */
   {
     name: 'stock',
     label: 'Estoque',
@@ -26,8 +26,8 @@ export const tabsList: TabsModel[] = [
     name: 'hasVariation',
     label: 'Variação/Estoque',
     isEnable: false
-  },
-  {
+  }
+  /*   {
     name: 'fiscal',
     label: 'Fiscal',
     isEnable: true
@@ -36,5 +36,5 @@ export const tabsList: TabsModel[] = [
     name: 'hasComposition',
     label: 'Composição',
     isEnable: true
-  }
+  } */
 ]

@@ -159,7 +159,7 @@ export const Table = ({ attributesList }: TableProps): JSX.Element => {
                 </td>
               </tr>
               <tr style={{ borderTop: '3px solid white' }}>
-                <td colSpan={3}>
+                <td colSpan={100}>
                   <p>Detalhes e Medida</p>
                   {datailsFields}
                 </td>

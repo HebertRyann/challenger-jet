@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useLoading } from '../../../../../../../hooks/loading'
+import { TypeProductStock } from '../../../domain/models/typeProduct'
 
 import {
   FinancialCategory,
@@ -18,6 +19,8 @@ type ProductContextType = {
   typesProduct: ProductType[]
   productType: string
   setProductType: React.Dispatch<React.SetStateAction<string>>
+  hasVariation: boolean
+  setHasVariation: React.Dispatch<React.SetStateAction<boolean>>
   groupsProduct: ProductCategory[]
   categoriesCost: FinancialCategory[]
   unitMensured: UnitMensured[]
@@ -39,6 +42,8 @@ export const ProductProvider = ({ children }: ProductProviderParams) => {
   const [categoriesCost, setCategoriesCost] = useState<FinancialCategory[]>([])
   const [unitMensured, setUnitMensured] = useState<UnitMensured[]>([])
   const [attributes, setAttributes] = useState<Attributes[]>([])
+  const [hasVariation, setHasVariation] = useState<boolean>(false)
+  const [stock, setStock] = useState<TypeProductStock[]>([])
   const { activeLoading, disableLoading } = useLoading()
 
   useEffect(() => {
@@ -64,6 +69,8 @@ export const ProductProvider = ({ children }: ProductProviderParams) => {
         typesProduct,
         productType,
         setProductType,
+        hasVariation,
+        setHasVariation,
         groupsProduct,
         categoriesCost,
         unitMensured,

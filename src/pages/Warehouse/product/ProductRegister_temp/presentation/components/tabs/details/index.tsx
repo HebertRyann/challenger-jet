@@ -25,9 +25,10 @@ export const DetailsTab = (): JSX.Element => {
             message="Selecione a unidade de medida"
           />
           <Select
-            name="details.measureWeight"
+            name="details_overview.details.measure_weight"
+            className="form-control"
             options={typeUnitMensuredWeight.map(({ label, value }) => ({
-              value,
+              value: value,
               name: label
             }))}
             controlled
@@ -36,7 +37,7 @@ export const DetailsTab = (): JSX.Element => {
         </div>
         <div className="form-content col-md-3">
           <TooltipComponent label="Peso" message="Informe o peso" />
-          <Input className="form-control" name="details.weight" />
+          <Input className="form-control" name="details_overview.details.weight" />
         </div>
         <div className="form-content col-md-3">
           <TooltipComponent
@@ -44,9 +45,10 @@ export const DetailsTab = (): JSX.Element => {
             message="Selecione a unidade de medida"
           />
           <Select
-            name="details.unitMensured"
+            name="details_overview.details.measure"
+            className="form-control"
             options={typeUnitMensuredDetails.map(({ label, value }) => ({
-              value,
+              value: value,
               name: label
             }))}
             controlled
@@ -55,24 +57,24 @@ export const DetailsTab = (): JSX.Element => {
         </div>
         <div className="form-content col-md-3">
           <TooltipComponent label="Largura" message="Informe a largura" />
-          <Input className="form-control" name="details.width" />
+          <Input className="form-control" name="details_overview.details.width" />
         </div>
       </Container>
       <Container className="row">
         <div className="form-content col-md-3">
           <TooltipComponent label="Altura" message="Informe a altura" />
-          <Input className="form-control" name="details.height" />
+          <Input className="form-control" name="details_overview.details.height" />
         </div>
         <div className="form-content col-md-3">
           <TooltipComponent
             label="Comprimento"
             message="Informe o comprimento"
           />
-          <Input className="form-control" name="details.length" />
+          <Input className="form-control" name="details_overview.details.length" />
         </div>
         <div className="form-content col-md-3">
           <TooltipComponent label="Espessura" message="Informe a espessura" />
-          <Input className="form-control" name="details.thickness" />
+          <Input className="form-control" name="details_overview.details.thickness" />
         </div>
       </Container>
       <Container className="row">
@@ -82,8 +84,8 @@ export const DetailsTab = (): JSX.Element => {
             message="Informe a descrição e detalhes"
           />
           <Textarea
-            name="details.descriptionAndDetails"
-            className={`${getError(errors?.details?.descriptionAndDetails)}`}
+            name="details_overview.details.description_details"
+            className="form-control"
           />
         </div>
       </Container>
@@ -94,8 +96,8 @@ export const DetailsTab = (): JSX.Element => {
             message="Informe a especificação Técnica"
           />
           <Textarea
-            name="details.technicalSpecification"
-            className={`${getError(errors?.details?.technicalSpecification)}`}
+            name="details_overview.details.technical_specification"
+            className="form-control"
           />
         </div>
       </Container>
@@ -105,10 +107,7 @@ export const DetailsTab = (): JSX.Element => {
             label="Forma de utilização"
             message="Informe a forma de utilização"
           />
-          <Textarea
-            name="details.wayOfUse"
-            className={`${getError(errors?.details?.wayOfUse)}`}
-          />
+          <Textarea name="details_overview.details.way_use" className="form-control" />
         </div>
       </Container>
     </>

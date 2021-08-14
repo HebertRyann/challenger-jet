@@ -10,8 +10,13 @@ import { Container } from './styles'
 
 export const OverviewTab = () => {
   const { activeTab, disableTab } = useTabs()
-  const { typesProduct, categoriesCost, groupsProduct, setProductType } =
-    useProduct()
+  const {
+    typesProduct,
+    categoriesCost,
+    groupsProduct,
+    setProductType,
+    setHasVariation: setVariation
+  } = useProduct()
 
   const [financialSubCategories, setFinancialSubCategories] = useState<
     FinancialCategory[]
@@ -22,10 +27,13 @@ export const OverviewTab = () => {
     if (hasVariation === 'YES') {
       activeTab('hasVariation')
       disableTab('stock')
+      setVariation(true)
     } else {
       disableTab('hasVariation')
       activeTab('stock')
+      setVariation(false)
     }
+    setVariation(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasVariation])
 
@@ -51,7 +59,7 @@ export const OverviewTab = () => {
           />
           <Select
             className="form-control"
-            name="overview.typeProduct"
+            name="details_overview.type"
             options={typesProduct.map(({ name }) => ({
               value: name,
               name
@@ -68,7 +76,7 @@ export const OverviewTab = () => {
           />
           <Select
             className="form-control"
-            name="overview.groupProduct"
+            name="details_overview.product_category_id"
             options={groupsProduct.map(({ id, name }) => ({
               value: id,
               name
@@ -84,7 +92,7 @@ export const OverviewTab = () => {
           />
           <Input
             className="form-control"
-            name="overview.nameProduct"
+            name="details_overview.name"
             rules={{ required: true }}
           />
         </div>
@@ -96,8 +104,8 @@ export const OverviewTab = () => {
             message="Selecione a categoria de custo"
           />
           <Select
-            name="overview.categoryCost"
             className="form-control"
+            name="details_overview.category_cost_id"
             options={categoriesCost
               .filter(fc => fc.parent_id === null)
               .map(({ id, name }) => ({
@@ -115,7 +123,7 @@ export const OverviewTab = () => {
             message="selecione o subcategoria de custo"
           />
           <Select
-            name="overview.subcategoryCost"
+            name="details_overview.subcategory_cost_id"
             className="form-control"
             options={financialSubCategories.map(({ id, name }) => ({
               value: id,
@@ -131,7 +139,7 @@ export const OverviewTab = () => {
             message="selecione se existe variação"
           />
           <Select
-            name="hasVariation"
+            name="details_overview.has_variation"
             className="form-control"
             options={[
               { name: 'SIM', value: 'YES' },

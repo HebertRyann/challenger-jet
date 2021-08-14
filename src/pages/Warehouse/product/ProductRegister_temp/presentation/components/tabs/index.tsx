@@ -3,7 +3,6 @@ import Button from '../../../../../../../components/Button'
 import Form from '../../../../../../../components/Form'
 import { useTabs } from '../../../../../../../hooks/tabs'
 import { TabsModel } from '../../../domain/models/tabs'
-import { DetailsTab } from './details'
 import { OverviewTab } from './overview'
 import { HasVariationTab } from './HasVariation'
 import { StockTab } from './stock'
@@ -19,6 +18,7 @@ import {
 import api from '../../../../../../../services/api'
 import { listById } from '../../../domain/data/api'
 import { ProductResponse } from '../../../../ProductRegister/Update/domain/productResponse'
+import { useProduct } from '../../providers/product/ProductProvider'
 
 type TypeContentProps = {
   tabList: TabsModel[]
@@ -26,12 +26,14 @@ type TypeContentProps = {
 }
 
 export const Tab = ({ tabList, id }: TypeContentProps): JSX.Element => {
-  const { addTab, changeCurrentTab, loadCurrentTab, loadTabs } = useTabs()
+  const { addTab, changeCurrentTab, loadCurrentTab, tabs } = useTabs()
   const overviewFields = OverviewTab()
-  const detailsFields = DetailsTab()
   const hasVariationFields = HasVariationTab()
   const stockFields = StockTab()
   const priceCompositionFields = PriceCompositionTab()
+  const [values, setValues] = useState<any>()
+
+  const { hasVariation } = useProduct()
 
   useEffect(() => {
     tabList.forEach(({ name, isDefault, label, isEnable }) => {
@@ -41,13 +43,25 @@ export const Tab = ({ tabList, id }: TypeContentProps): JSX.Element => {
 
   async function getProduct(id: string) {
     const { data } = await api.get<ProductResponse>(listById(id))
-    console.log('product', data)
+    const details = JSON.parse(data.details.toLowerCase())
+    const value = {
+      details_overview: {
+        type: data.type,
+        product_category_id: data.product_category_id,
+        name: data.name,
+        category_cost_id: data.financial_category.id,
+        subcategory_cost_id: data.subfinancial_category.id,
+        details
+      }
+    }
+    setValues(value)
+    console.log('product', value)
     return data
   }
 
   useEffect(() => {
     if (id) {
-      const data = getProduct(id)
+      getProduct(id)
     }
   }, [id])
 
@@ -57,16 +71,11 @@ export const Tab = ({ tabList, id }: TypeContentProps): JSX.Element => {
     console.log('data', data)
   }
 
-  const [values, setValues] = useState({
-    overview: { typeProduct: 'venda' },
-    hasVariation: 'NO'
-  })
-
   return (
     <Container>
       <ContentItem>
         <TabHeaderContainer>
-          {loadTabs().map(
+          {tabs.map(
             ({ label, isEnable, name }, index) =>
               isEnable && (
                 <TabName
@@ -85,11 +94,6 @@ export const Tab = ({ tabList, id }: TypeContentProps): JSX.Element => {
               className={`${loadCurrentTab().key !== 'overview' && 'hidden'}`}
             >
               {overviewFields}
-            </div>
-            <div
-              className={`${loadCurrentTab().key !== 'details' && 'hidden'}`}
-            >
-              {detailsFields}
             </div>
             <div
               className={`${

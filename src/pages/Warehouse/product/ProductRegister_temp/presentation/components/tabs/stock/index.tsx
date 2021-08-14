@@ -3,16 +3,15 @@ import { TooltipComponent } from '../../../../../../../../components/TooltipComp
 import { Container, Th } from './styles'
 import { useProduct } from '../../../providers/product/ProductProvider'
 import { Input, Select } from '../../../../../../../../components/Form'
+import { DetailsTab } from '../details'
 
 export const StockTab = (): JSX.Element => {
-  // const typeProduct = getValues('overview.typeProduct')
-  const { unitMensured } = useProduct()
+  const { unitMensured, productType } = useProduct()
 
-  const isSaleOrResale = (): boolean => {
-    // const productType = typeProduct?.split('+')[1]
-    // return productType === 'venda' || productType === 'revenda'
-    return true
-  }
+  const detailsFields = DetailsTab()
+
+  const isSaleOrResale = (): boolean =>
+    productType === 'venda' || productType === 'revenda'
 
   return (
     <Container className="table-responsive">
@@ -67,18 +66,10 @@ export const StockTab = (): JSX.Element => {
               />
             </td>
             <td>
-              <Input
-                className="form-control"
-                name={'stock.currentStock'}
-                required
-              />
+              <Input className="form-control" name={'stock.currentStock'} />
             </td>
             <td>
-              <Input
-                className="form-control"
-                name={'stock.repositionPoint'}
-                required
-              />
+              <Input className="form-control" name={'stock.repositionPoint'} />
             </td>
             {isSaleOrResale() && (
               <td style={{ width: '150px' }}>
@@ -94,6 +85,9 @@ export const StockTab = (): JSX.Element => {
                 />
               </td>
             )}
+          </tr>
+          <tr style={{ borderTop: '3px solid white' }}>
+            <td colSpan={70}>{detailsFields}</td>
           </tr>
         </tbody>
       </table>
