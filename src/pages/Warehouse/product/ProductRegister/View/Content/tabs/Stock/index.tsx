@@ -7,6 +7,7 @@ import {
 } from '../../../../domain/products'
 import { PriceResponse } from '../../../domain/response/productResponse'
 import { useProduct } from '../../../provider/productProvider'
+import { Details, DetailsType } from '../Details'
 import { Container } from './style'
 
 export const Stock = (): JSX.Element => {
@@ -24,14 +25,37 @@ export const Stock = (): JSX.Element => {
   }
 
   if (stocks) {
-    const { current_stock, replacement_point, details, prices } = stocks[0]
+    const {
+      current_stock,
+      replacement_point,
+      details,
+      prices,
+      product_units_measured
+    } = stocks[0]
 
     let unitMensured: { unit_mensured: { name: string } } = {
       unit_mensured: { name: '' }
     }
 
+    let stockDetails: DetailsType = {
+      width: '',
+      height: '',
+      length: '',
+      weight: '',
+      thickness: '',
+      measure: '',
+      way_use: '',
+      measure_weight: '',
+      description_details: '',
+      technical_specification: ''
+    }
+
     if (details) {
-      unitMensured = JSON.parse(details)
+      stockDetails = JSON.parse(details)
+    }
+
+    if (product_units_measured) {
+      unitMensured = { unit_mensured: product_units_measured }
     }
 
     if (isSaleOrResaleType() && prices) {
@@ -104,7 +128,7 @@ export const Stock = (): JSX.Element => {
         </thead>
         <tbody>
           <tr className="items">
-            <td>{unitMensured.unit_mensured.name}</td>
+            <td>{unitMensured?.unit_mensured?.name}</td>
             <td>{current_stock}</td>
             <td>{replacement_point}</td>
             {isSaleOrResaleType() && (
@@ -113,6 +137,11 @@ export const Stock = (): JSX.Element => {
                 <td>{pricesStock.price_sale}</td>
               </>
             )}
+          </tr>
+          <tr>
+            <td colSpan={100} style={{ textAlign: 'left' }}>
+              <Details detail={stockDetails} />
+            </td>
           </tr>
         </tbody>
       </Container>

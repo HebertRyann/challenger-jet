@@ -63,6 +63,10 @@ export type ProductResponse = {
       prices: string | null
       atributes: string | null
       details: string | null
+      product_units_measured: {
+        id: number
+        name: string
+      } | null
     }
   ]
   prices: string

@@ -7,7 +7,7 @@ import {
 import { useProduct } from '../../../provider/productProvider'
 import { Container } from './style'
 
-type Details = {
+export type DetailsType = {
   width: string
   height: string
   length: string
@@ -20,13 +20,13 @@ type Details = {
   technical_specification: string
 }
 
-export const Details = (): JSX.Element => {
+type DetailsProps = {
+  detail: DetailsType
+}
+
+export const Details = ({ detail }: DetailsProps): JSX.Element => {
   const { getProduct } = useProduct()
-  const { details } = getProduct()
-  let detail: Details = {} as Details
-  if (details) {
-    detail = JSON.parse(details.toLowerCase())
-  }
+
   const [isEmpty, setEmpty] = useState(true)
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export const Details = (): JSX.Element => {
 
   const gettypeUnitMensuredDetails = (isEqual: string): string => {
     const match = typeUnitMensuredDetails.filter(
-      ({ value }) => value === isEqual
+      ({ value }) => value === isEqual.toLowerCase()
     )
     if (match && match[0]) return match[0].label
     return isEqual
@@ -52,7 +52,7 @@ export const Details = (): JSX.Element => {
 
   const getTypeUnitMensuredWeight = (isEqual: string): string => {
     const match = typeUnitMensuredWeight.filter(
-      ({ value }) => value === isEqual
+      ({ value }) => value === isEqual.toLowerCase()
     )
     if (match && match[0]) return match[0].label
     return isEqual
@@ -106,7 +106,6 @@ export const Details = (): JSX.Element => {
           </div>
         )}
       </div>
-      <hr />
       <div className="section">
         <div className="text-area row">
           <div className="form-content col-md-12 item">

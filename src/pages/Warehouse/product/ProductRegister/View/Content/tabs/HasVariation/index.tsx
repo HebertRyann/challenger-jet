@@ -13,24 +13,24 @@ import {
   SALE
 } from '../../../../domain/products'
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent'
+import { Details, DetailsType } from '../Details'
 
 export const labelHasVariation = 'Estoque/Variação'
 export const nameHasVariation = '@@tabs-view-has-variations'
 
 export const HasVariation = (): JSX.Element => {
-  const { disableTab, activeTab } = useTabs()
+  const { disableTab, activeTab, changeCurrentTab } = useTabs()
   const { getProduct } = useProduct()
   const { stocks } = getProduct()
 
   useEffect(() => {
     if (stocks) {
-      if (stocks.length > 1) {
+      if (stocks.length > 1 || stocks[0].atributes) {
         disableTab(nameStock)
         activeTab(nameHasVariation)
-      }
-      if (stocks[0].atributes) {
-        disableTab(nameStock)
-        activeTab(nameHasVariation)
+        changeCurrentTab(nameHasVariation)
+      } else {
+        changeCurrentTab(nameStock)
       }
     }
   }, [getProduct()])
@@ -73,7 +73,7 @@ export const HasVariation = (): JSX.Element => {
     ))
   }
 
-  if (getProduct().stocks) {
+  if (stocks) {
     return (
       <Container className="table table-bordered margin-bottom-0">
         <thead>
@@ -140,22 +140,42 @@ export const HasVariation = (): JSX.Element => {
         </thead>
         <tbody>
           {stocks.map(
-            ({
-              current_stock,
-              replacement_point,
-              details,
-              atributes,
-              prices
-            }) => {
+            (
+              {
+                current_stock,
+                replacement_point,
+                details,
+                atributes,
+                prices,
+                product_units_measured
+              },
+              index
+            ) => {
               let pricesStocks = {} as PriceResponse
-              let unitmensured: { unit_mensured: { name: string } } = {
+              let unitmensured = {
                 unit_mensured: { name: '' }
               }
 
               let atributesList: Atributes[] = []
+              let stockDetails: DetailsType = {
+                width: '',
+                height: '',
+                length: '',
+                weight: '',
+                thickness: '',
+                measure: '',
+                way_use: '',
+                measure_weight: '',
+                description_details: '',
+                technical_specification: ''
+              }
 
               if (details) {
-                unitmensured = JSON.parse(details)
+                stockDetails = JSON.parse(details)
+              }
+
+              if (product_units_measured) {
+                unitmensured = { unit_mensured: product_units_measured }
               }
 
               if (atributes) {
@@ -167,20 +187,28 @@ export const HasVariation = (): JSX.Element => {
               }
 
               return (
-                <tr key={Math.random()} className="items">
-                  <td>{unitmensured.unit_mensured.name}</td>
-                  {atributesList.map(({ value }) => (
-                    <td key={Math.random()}>{value}</td>
-                  ))}
-                  <td>{current_stock}</td>
-                  <td>{replacement_point}</td>
-                  {isSaleOrResaleType() && (
-                    <>
-                      <td>{pricesStocks.price_cost}</td>
-                      <td>{pricesStocks.price_sale}</td>
-                    </>
-                  )}
-                </tr>
+                <React.Fragment key={index}>
+                  <tr key={Math.random()} className="items">
+                    <td>{unitmensured.unit_mensured.name}</td>
+                    {atributesList.map(({ value }) => (
+                      <td key={Math.random()}>{value}</td>
+                    ))}
+                    <td>{current_stock}</td>
+                    <td>{replacement_point}</td>
+                    {isSaleOrResaleType() && (
+                      <>
+                        <td>{pricesStocks.price_cost}</td>
+                        <td>{pricesStocks.price_sale}</td>
+                      </>
+                    )}
+                  </tr>
+                  <tr>
+                    <td colSpan={100} style={{ textAlign: 'left' }}>
+                      <Details detail={stockDetails} />
+                    </td>
+                  </tr>
+                  <div style={{ height: '20px' }}></div>
+                </React.Fragment>
               )
             }
           )}
