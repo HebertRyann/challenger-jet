@@ -57,7 +57,8 @@ export const initialStateStock: TypeStockProps = {
   replacementPoint: { value: '', error },
   unitMensured: { value: { id: '', name: '' }, error },
   priceCost: { value: '', error },
-  priceSale: { value: '', error }
+  priceSale: { value: '', error },
+  details: { value: initialStateDetails, error }
 }
 
 export const initialStateComposition: TypeProduct[] = [
@@ -94,6 +95,7 @@ export const intialStateHasVariation: TypeHasVariation[] = [
       error,
       value: ''
     },
+    details: { value: initialStateDetails, error },
     priceSale: { error, value: '' },
     atributes: [
       { error: { isError: false }, value: { id: '', name: '', keyParent: '' } }

@@ -583,6 +583,19 @@ const TabCreateProvider = ({
       setVariationState([...tempState])
     }
 
+    const changeDetails = (newDetails: TypeDetailsProps, index: number) => {
+      const tempState: TypeHasVariation[] = JSON.parse(
+        JSON.stringify(variationState)
+      )
+      tempState.forEach(({ details }, key) => {
+        if (key === index) {
+          details.value = newDetails
+          details.error.isError = false
+        }
+      })
+      setVariationState([...tempState])
+    }
+
     const changePriceSale = (newReplacement: string, index: number) => {
       const tempState: TypeHasVariation[] = JSON.parse(
         JSON.stringify(variationState)
@@ -666,7 +679,8 @@ const TabCreateProvider = ({
       changeCurrentStock,
       changePriceCost,
       changePriceSale,
-      changeUnitMensured
+      changeUnitMensured,
+      changeDetails
     }
   }
 
@@ -912,9 +926,6 @@ const TabCreateProvider = ({
             linkName: nameDataOverview
           })
         }
-        if (details.validate()) {
-          resultList.push({ labelName: labelDetails, linkName: nameDetails })
-        }
         validateHasVariationOrStock()
       }
 
@@ -1007,8 +1018,22 @@ const TabCreateProvider = ({
       priceSale,
       stockCurrent,
       unitMensured,
-      replacementPoint
+      replacementPoint,
+      details
     } = stocks
+
+    const detailsValues = {
+      description_details: details.value.descriptionAndDetails.value,
+      height: details.value.height.value,
+      length: details.value.length.value,
+      technical_specification: details.value.technicalSpecification.value,
+      way_use: details.value.wayOfUse.value,
+      weight: details.value.weight.value,
+      width: details.value.width.value,
+      measure: details.value.measure.value,
+      thickness: details.value.thickness.value,
+      measure_weight: details.value.measureWeight.value
+    }
     const variationList = variationState
 
     const createRequestWithOverViewDetailsStockOrVariation = (): {
@@ -1047,8 +1072,22 @@ const TabCreateProvider = ({
             priceSale,
             unitMensured,
             atributes,
-            replacementPoint
+            replacementPoint,
+            details
           }) => {
+            const detailsValues = {
+              description_details: details.value.descriptionAndDetails.value,
+              height: details.value.height.value,
+              length: details.value.length.value,
+              technical_specification:
+                details.value.technicalSpecification.value,
+              way_use: details.value.wayOfUse.value,
+              weight: details.value.weight.value,
+              width: details.value.width.value,
+              measure: details.value.measure.value,
+              thickness: details.value.thickness.value,
+              measure_weight: details.value.measureWeight.value
+            }
             const atributesList: TypeAtributes[] = []
             atributes
               .filter(({ value }) => value.id !== '')
@@ -1064,7 +1103,8 @@ const TabCreateProvider = ({
               price_cost: convertValueWithMaskInNumber(priceCost.value),
               price_sale: convertValueWithMaskInNumber(priceSale.value),
               unit_mensured_id: parseInt(unitMensured.value.id),
-              atributes: atributesList
+              atributes: atributesList,
+              details: detailsValues
             })
           }
         )
@@ -1075,7 +1115,8 @@ const TabCreateProvider = ({
           price_sale: convertValueWithMaskInNumber(priceSale.value),
           unit_mensured_id: parseInt(unitMensured.value.id),
           current_stock: parseInt(stockCurrent.value),
-          atributes: []
+          atributes: [],
+          details: detailsValues
         })
       }
       return {

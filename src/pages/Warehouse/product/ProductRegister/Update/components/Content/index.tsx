@@ -36,6 +36,8 @@ import { namePriceComposition } from '../Tabs/PriceComposition'
 import { nameFiscal } from '../Tabs/Fiscal'
 import { nameHasVariation } from '../../../Update/components/Tabs/HasVariation'
 import { nameStock } from '../Tabs/Stock'
+import { DetailsType } from '../../../View/Content/tabs/Details'
+import { TypeDetailsProps } from '../../providers/domain.types'
 
 export type TypeContentTabs = {
   name: string
@@ -62,7 +64,6 @@ type ContentState = {
 
 export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
   const { activeLoading, disableLoading } = useLoading()
-  const [tabs, setTabs] = useState<TypeContentTabs[]>([])
   const { addToast } = useToast()
   const [links, setLinks] = useState<Link[]>([{ link: '', name: '' }])
   const [alert, setAlert] = useState<ContentState>({
@@ -71,7 +72,7 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
   })
 
   const {
-    loadTabs,
+    tabs,
     addTab,
     loadCurrentTab,
     changeCurrentTabForNext,
@@ -100,7 +101,6 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
       const tabs = await makeTabs()
       tabs.map(tab => addTab(tab))
       changeCurrentTab(tabs[0].name)
-      setTabs(loadTabs())
 
       const { data } = await api.get<ProductResponse>(listById(id))
 
@@ -242,8 +242,52 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
             product_units_measured,
             replacement_point,
             atributes,
+            details,
             id
           }) => {
+            const detailsResponse: DetailsType = JSON.parse(String(details))
+            const stockDetails: TypeDetailsProps = {
+              descriptionAndDetails: {
+                value: detailsResponse?.description_details,
+                error: { isError: false }
+              },
+              measureWeight: {
+                value: detailsResponse?.measure_weight,
+                error: { isError: false }
+              },
+              thickness: {
+                value: detailsResponse?.thickness,
+                error: { isError: false }
+              },
+              measure: {
+                value: detailsResponse?.measure,
+                error: { isError: false }
+              },
+              weight: {
+                value: detailsResponse?.weight,
+                error: { isError: false }
+              },
+              width: {
+                value: detailsResponse?.width,
+                error: { isError: false }
+              },
+              height: {
+                value: detailsResponse?.height,
+                error: { isError: false }
+              },
+              length: {
+                value: detailsResponse?.length,
+                error: { isError: false }
+              },
+              technicalSpecification: {
+                value: detailsResponse?.technical_specification,
+                error: { isError: false }
+              },
+              wayOfUse: {
+                value: detailsResponse?.way_use,
+                error: { isError: false }
+              }
+            }
             let atributesResponse: AtributeResponseType[] = []
             if (atributes) {
               atributesResponse = JSON.parse(atributes)
@@ -279,11 +323,60 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
               priceSale: {
                 error: { isError: false },
                 value: ''
+              },
+              details: {
+                error: { isError: false },
+                value: stockDetails
               }
             })
           }
         )
       } else {
+        const detailsResponse: DetailsType = JSON.parse(
+          String(data.stocks[0].details)
+        )
+        const stockDetails: TypeDetailsProps = {
+          descriptionAndDetails: {
+            value: detailsResponse?.description_details,
+            error: { isError: false }
+          },
+          measureWeight: {
+            value: detailsResponse?.measure_weight,
+            error: { isError: false }
+          },
+          thickness: {
+            value: detailsResponse?.thickness,
+            error: { isError: false }
+          },
+          measure: {
+            value: detailsResponse?.measure,
+            error: { isError: false }
+          },
+          weight: {
+            value: detailsResponse?.weight,
+            error: { isError: false }
+          },
+          width: {
+            value: detailsResponse?.width,
+            error: { isError: false }
+          },
+          height: {
+            value: detailsResponse?.height,
+            error: { isError: false }
+          },
+          length: {
+            value: detailsResponse?.length,
+            error: { isError: false }
+          },
+          technicalSpecification: {
+            value: detailsResponse?.technical_specification,
+            error: { isError: false }
+          },
+          wayOfUse: {
+            value: detailsResponse?.way_use,
+            error: { isError: false }
+          }
+        }
         addStock({
           id: data.stocks[0]?.id.toString(),
           priceCost: {
@@ -304,10 +397,13 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
               id: data.stocks[0].product_units_measured.id.toString(),
               name: data.stocks[0].product_units_measured.name
             }
+          },
+          details: {
+            error: { isError: false },
+            value: stockDetails
           }
         })
       }
-
       addOverView({
         id: data.id.toString(),
         typeSelectProdut: {
@@ -457,7 +553,7 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
       <Container>
         <ContentItem>
           <TabHeaderContainer>
-            {loadTabs().map(
+            {tabs.map(
               ({ label, name, isEnable }, index) =>
                 isEnable && (
                   <TabName
@@ -474,7 +570,7 @@ export const Content = ({ tools, id }: TypeContentProps): JSX.Element => {
             <ProductProvider>
               <>
                 <hr />
-                {loadTabs().map(({ Component, name }) => (
+                {tabs.map(({ Component, name }) => (
                   <RenderComponent
                     key={name}
                     isActive={name === loadCurrentTab().key}

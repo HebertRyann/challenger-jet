@@ -11,19 +11,23 @@ import {
 } from '../../../../domain/details/measureds'
 
 const gettypeUnitMensuredDetails = (isEqual: string): string => {
-  const match = typeUnitMensuredDetails.filter(({ value }) => value === isEqual)
+  const match = typeUnitMensuredDetails.filter(
+    ({ value }) => value === isEqual.toLowerCase()
+  )
   if (match && match[0]) return match[0].label
   return 'Selecione'
 }
 
 const getTypeUnitMensuredWeight = (isEqual: string): string => {
-  const match = typeUnitMensuredWeight.filter(({ value }) => value === isEqual)
+  const match = typeUnitMensuredWeight.filter(
+    ({ value }) => value === isEqual.toLowerCase()
+  )
   if (match && match[0]) return match[0].label
   return 'Selecione'
 }
 
 export const Details = (): JSX.Element => {
-  const { details } = useTabCreate()
+  const { details, stock } = useTabCreate()
   const {
     weight,
     width,
@@ -35,7 +39,7 @@ export const Details = (): JSX.Element => {
     measure,
     measureWeight,
     thickness
-  } = details.getData()
+  } = stock.getData().details?.value
 
   return (
     <Container>
@@ -46,18 +50,31 @@ export const Details = (): JSX.Element => {
             message="Selecione a Medida de dimensão"
           />
           <NewSelect
-            isSelected={getTypeUnitMensuredWeight(measureWeight.value)}
+            isSelected={getTypeUnitMensuredWeight(measureWeight?.value)}
             error={{ isError: false }}
             onChange={event => {
-              const split = event.target.value.split('+')
-              details.setData({
-                ...details.getData(),
-                measureWeight: { error: { isError: false }, value: split[1] }
+              const split = event.target?.value.split('+')
+              stock.setData({
+                ...stock.getData(),
+                details: {
+                  error: { isError: false },
+                  value: {
+                    ...stock.getData().details?.value,
+                    measureWeight: {
+                      error: { isError: false },
+                      value: split[1]
+                    }
+                  }
+                }
               })
             }}
           >
             {typeUnitMensuredWeight.map(({ label, value }) => {
-              return <option value={`${label}+${value}`}>{label}</option>
+              return (
+                <option key={value} value={`${label}+${value}`}>
+                  {label}
+                </option>
+              )
             })}
           </NewSelect>
         </div>
@@ -65,14 +82,23 @@ export const Details = (): JSX.Element => {
           <TooltipComponent label="Peso" message="Infome o peso em kg" />
           <NewInput
             isNumber
-            value={genericMaskWithTwoZero(weight.value)}
-            onChange={e => {
-              details.setData({
-                ...details.getData(),
-                weight: { error: { isError: false }, value: e.target.value }
+            value={genericMaskWithTwoZero(weight?.value)}
+            onChange={e =>
+              stock.setData({
+                ...stock.getData(),
+                details: {
+                  error: { isError: false },
+                  value: {
+                    ...stock.getData().details?.value,
+                    weight: {
+                      error: { isError: false },
+                      value: e.target?.value
+                    }
+                  }
+                }
               })
-            }}
-            error={weight.error}
+            }
+            error={weight?.error}
             name="peso"
             className="form-control"
             type="text"
@@ -86,18 +112,31 @@ export const Details = (): JSX.Element => {
             message="Selecione a Medida de dimensão"
           />
           <NewSelect
-            isSelected={gettypeUnitMensuredDetails(measure.value)}
+            isSelected={gettypeUnitMensuredDetails(measure?.value)}
             error={{ isError: false }}
             onChange={event => {
-              const split = event.target.value.split('+')
-              details.setData({
-                ...details.getData(),
-                measure: { error: { isError: false }, value: split[1] }
+              const split = event.target?.value.split('+')
+              stock.setData({
+                ...stock.getData(),
+                details: {
+                  error: { isError: false },
+                  value: {
+                    ...stock.getData().details?.value,
+                    measure: {
+                      error: { isError: false },
+                      value: split[1]
+                    }
+                  }
+                }
               })
             }}
           >
             {typeUnitMensuredDetails.map(({ label, value }) => {
-              return <option value={`${label}+${value}`}>{label}</option>
+              return (
+                <option key={value} value={`${label}+${value}`}>
+                  {label}
+                </option>
+              )
             })}
           </NewSelect>
         </div>
@@ -109,14 +148,23 @@ export const Details = (): JSX.Element => {
           <NewInput
             isNumber
             maxLength={12}
-            value={genericMaskWithTwoZero(width.value)}
+            value={genericMaskWithTwoZero(width?.value)}
             onChange={e =>
-              details.setData({
-                ...details.getData(),
-                width: { error: { isError: false }, value: e.target.value }
+              stock.setData({
+                ...stock.getData(),
+                details: {
+                  error: { isError: false },
+                  value: {
+                    ...stock.getData().details?.value,
+                    width: {
+                      error: { isError: false },
+                      value: e.target?.value
+                    }
+                  }
+                }
               })
             }
-            error={width.error}
+            error={width?.error}
             name="largura"
             className="form-control"
             type="text"
@@ -133,14 +181,23 @@ export const Details = (): JSX.Element => {
           <NewInput
             isNumber
             maxLength={12}
-            value={genericMaskWithTwoZero(height.value)}
+            value={genericMaskWithTwoZero(height?.value)}
             onChange={e =>
-              details.setData({
-                ...details.getData(),
-                height: { error: { isError: false }, value: e.target.value }
+              stock.setData({
+                ...stock.getData(),
+                details: {
+                  error: { isError: false },
+                  value: {
+                    ...stock.getData().details?.value,
+                    height: {
+                      error: { isError: false },
+                      value: e.target?.value
+                    }
+                  }
+                }
               })
             }
-            error={height.error}
+            error={height?.error}
             name="altura"
             className="form-control"
             type="text"
@@ -155,14 +212,23 @@ export const Details = (): JSX.Element => {
           <NewInput
             isNumber
             maxLength={12}
-            value={genericMaskWithTwoZero(length.value)}
+            value={genericMaskWithTwoZero(length?.value)}
             onChange={e =>
-              details.setData({
-                ...details.getData(),
-                length: { error: { isError: false }, value: e.target.value }
+              stock.setData({
+                ...stock.getData(),
+                details: {
+                  error: { isError: false },
+                  value: {
+                    ...stock.getData().details?.value,
+                    length: {
+                      error: { isError: false },
+                      value: e.target?.value
+                    }
+                  }
+                }
               })
             }
-            error={length.error}
+            error={length?.error}
             name="comprimento"
             className="form-control"
             type="text"
@@ -173,14 +239,23 @@ export const Details = (): JSX.Element => {
           <TooltipComponent label="Espessura" message="Infome a esperssura" />
           <NewInput
             isNumber
-            value={genericMaskWithTwoZero(thickness.value)}
+            value={genericMaskWithTwoZero(thickness?.value)}
             onChange={e =>
-              details.setData({
-                ...details.getData(),
-                thickness: { error: { isError: false }, value: e.target.value }
+              stock.setData({
+                ...stock.getData(),
+                details: {
+                  error: { isError: false },
+                  value: {
+                    ...stock.getData().details?.value,
+                    thickness: {
+                      error: { isError: false },
+                      value: e.target?.value
+                    }
+                  }
+                }
               })
             }
-            error={weight.error}
+            error={weight?.error}
             name="peso"
             className="form-control"
             type="text"
@@ -194,17 +269,23 @@ export const Details = (): JSX.Element => {
           <div className="form-group">
             <label>Descrição e detalhes</label>
             <TextArea
-              isError={descriptionAndDetails.error.isError}
+              isError={descriptionAndDetails?.error.isError}
               onChange={e =>
-                details.setData({
-                  ...details.getData(),
-                  descriptionAndDetails: {
+                stock.setData({
+                  ...stock.getData(),
+                  details: {
                     error: { isError: false },
-                    value: e.target.value
+                    value: {
+                      ...stock.getData().details?.value,
+                      descriptionAndDetails: {
+                        error: { isError: false },
+                        value: e.target?.value
+                      }
+                    }
                   }
                 })
               }
-              value={details.getData().descriptionAndDetails.value}
+              value={descriptionAndDetails?.value}
               className="form-control"
             />
           </div>
@@ -215,18 +296,24 @@ export const Details = (): JSX.Element => {
           <div className="form-group">
             <label>Especificação Técnica</label>
             <TextArea
-              isError={technicalSpecification.error.isError}
+              isError={technicalSpecification?.error.isError}
               onChange={e =>
-                details.setData({
-                  ...details.getData(),
-                  technicalSpecification: {
+                stock.setData({
+                  ...stock.getData(),
+                  details: {
                     error: { isError: false },
-                    value: e.target.value
+                    value: {
+                      ...stock.getData().details?.value,
+                      technicalSpecification: {
+                        error: { isError: false },
+                        value: e.target?.value
+                      }
+                    }
                   }
                 })
               }
               className="form-control"
-              value={details.getData().technicalSpecification.value}
+              value={technicalSpecification?.value}
             />
           </div>
         </div>
@@ -236,18 +323,24 @@ export const Details = (): JSX.Element => {
           <div className="form-group">
             <label>Forma de utilização</label>
             <TextArea
-              isError={wayOfUse.error.isError}
+              isError={wayOfUse?.error.isError}
               onChange={e =>
-                details.setData({
-                  ...details.getData(),
-                  wayOfUse: {
+                stock.setData({
+                  ...stock.getData(),
+                  details: {
                     error: { isError: false },
-                    value: e.target.value
+                    value: {
+                      ...stock.getData().details?.value,
+                      wayOfUse: {
+                        error: { isError: false },
+                        value: e.target?.value
+                      }
+                    }
                   }
                 })
               }
               className="form-control"
-              value={details.getData().wayOfUse.value}
+              value={wayOfUse?.value}
             />
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { TooltipComponent } from '../../../../../../../../components/TooltipComponent'
 import { Container, TextArea } from './style'
 import { NewInput } from '../../../../../../../../components/NewInput'
@@ -11,7 +11,7 @@ import {
 } from '../../../../domain/details/measureds'
 
 export const Details = (): JSX.Element => {
-  const { details } = useTabCreate()
+  const { details, stock } = useTabCreate()
   const {
     weight,
     width,
@@ -35,17 +35,27 @@ export const Details = (): JSX.Element => {
             error={{ isError: false }}
             onChange={event => {
               const split = event.target.value.split('+')
-              details.setData({
-                ...details.getData(),
-                measureWeight: {
+              stock.setData({
+                ...stock.getData(),
+                details: {
                   error: { isError: false },
-                  value: split[1]
+                  value: {
+                    ...stock.getData().details.value,
+                    measureWeight: {
+                      error: { isError: false },
+                      value: split[1]
+                    }
+                  }
                 }
               })
             }}
           >
             {typeUnitMensuredWeight.map(({ label, value }) => {
-              return <option value={`${label}+${value}`}>{label}</option>
+              return (
+                <option key={value} value={`${label}+${value}`}>
+                  {label}
+                </option>
+              )
             })}
           </NewSelect>
         </div>
@@ -53,11 +63,22 @@ export const Details = (): JSX.Element => {
           <TooltipComponent label="Peso" message="Infome o peso em kg" />
           <NewInput
             isNumber
-            value={genericMaskWithTwoZero(weight.value)}
+            value={genericMaskWithTwoZero(
+              stock.getData().details.value.weight.value
+            )}
             onChange={e =>
-              details.setData({
-                ...details.getData(),
-                weight: { error: { isError: false }, value: e.target.value }
+              stock.setData({
+                ...stock.getData(),
+                details: {
+                  error: { isError: false },
+                  value: {
+                    ...stock.getData().details.value,
+                    weight: {
+                      error: { isError: false },
+                      value: e.target.value
+                    }
+                  }
+                }
               })
             }
             error={weight.error}
@@ -77,17 +98,27 @@ export const Details = (): JSX.Element => {
             error={{ isError: false }}
             onChange={event => {
               const split = event.target.value.split('+')
-              details.setData({
-                ...details.getData(),
-                measure: {
+              stock.setData({
+                ...stock.getData(),
+                details: {
                   error: { isError: false },
-                  value: split[1]
+                  value: {
+                    ...stock.getData().details.value,
+                    measure: {
+                      error: { isError: false },
+                      value: split[1]
+                    }
+                  }
                 }
               })
             }}
           >
             {typeUnitMensuredDetails.map(({ label, value }) => {
-              return <option value={`${label}+${value}`}>{label}</option>
+              return (
+                <option key={value} value={`${label}+${value}`}>
+                  {label}
+                </option>
+              )
             })}
           </NewSelect>
         </div>
@@ -101,9 +132,18 @@ export const Details = (): JSX.Element => {
             maxLength={12}
             value={genericMaskWithTwoZero(width.value)}
             onChange={e =>
-              details.setData({
-                ...details.getData(),
-                width: { error: { isError: false }, value: e.target.value }
+              stock.setData({
+                ...stock.getData(),
+                details: {
+                  error: { isError: false },
+                  value: {
+                    ...stock.getData().details.value,
+                    width: {
+                      error: { isError: false },
+                      value: e.target.value
+                    }
+                  }
+                }
               })
             }
             error={width.error}
@@ -125,9 +165,18 @@ export const Details = (): JSX.Element => {
             maxLength={12}
             value={genericMaskWithTwoZero(height.value)}
             onChange={e =>
-              details.setData({
-                ...details.getData(),
-                height: { error: { isError: false }, value: e.target.value }
+              stock.setData({
+                ...stock.getData(),
+                details: {
+                  error: { isError: false },
+                  value: {
+                    ...stock.getData().details.value,
+                    height: {
+                      error: { isError: false },
+                      value: e.target.value
+                    }
+                  }
+                }
               })
             }
             error={height.error}
@@ -147,9 +196,18 @@ export const Details = (): JSX.Element => {
             maxLength={12}
             value={genericMaskWithTwoZero(length.value)}
             onChange={e =>
-              details.setData({
-                ...details.getData(),
-                length: { error: { isError: false }, value: e.target.value }
+              stock.setData({
+                ...stock.getData(),
+                details: {
+                  error: { isError: false },
+                  value: {
+                    ...stock.getData().details.value,
+                    length: {
+                      error: { isError: false },
+                      value: e.target.value
+                    }
+                  }
+                }
               })
             }
             error={length.error}
@@ -165,9 +223,18 @@ export const Details = (): JSX.Element => {
             isNumber
             value={genericMaskWithTwoZero(thickness.value)}
             onChange={e =>
-              details.setData({
-                ...details.getData(),
-                thickness: { error: { isError: false }, value: e.target.value }
+              stock.setData({
+                ...stock.getData(),
+                details: {
+                  error: { isError: false },
+                  value: {
+                    ...stock.getData().details.value,
+                    thickness: {
+                      error: { isError: false },
+                      value: e.target.value
+                    }
+                  }
+                }
               })
             }
             error={weight.error}
@@ -186,11 +253,17 @@ export const Details = (): JSX.Element => {
             <TextArea
               isError={descriptionAndDetails.error.isError}
               onChange={e =>
-                details.setData({
-                  ...details.getData(),
-                  descriptionAndDetails: {
+                stock.setData({
+                  ...stock.getData(),
+                  details: {
                     error: { isError: false },
-                    value: e.target.value
+                    value: {
+                      ...stock.getData().details.value,
+                      descriptionAndDetails: {
+                        error: { isError: false },
+                        value: e.target.value
+                      }
+                    }
                   }
                 })
               }
@@ -206,11 +279,17 @@ export const Details = (): JSX.Element => {
             <TextArea
               isError={technicalSpecification.error.isError}
               onChange={e =>
-                details.setData({
-                  ...details.getData(),
-                  technicalSpecification: {
+                stock.setData({
+                  ...stock.getData(),
+                  details: {
                     error: { isError: false },
-                    value: e.target.value
+                    value: {
+                      ...stock.getData().details.value,
+                      technicalSpecification: {
+                        error: { isError: false },
+                        value: e.target.value
+                      }
+                    }
                   }
                 })
               }
@@ -226,11 +305,17 @@ export const Details = (): JSX.Element => {
             <TextArea
               isError={wayOfUse.error.isError}
               onChange={e =>
-                details.setData({
-                  ...details.getData(),
-                  wayOfUse: {
+                stock.setData({
+                  ...stock.getData(),
+                  details: {
                     error: { isError: false },
-                    value: e.target.value
+                    value: {
+                      ...stock.getData().details.value,
+                      wayOfUse: {
+                        error: { isError: false },
+                        value: e.target.value
+                      }
+                    }
                   }
                 })
               }

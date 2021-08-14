@@ -83,6 +83,7 @@ export type TypeStockProps = {
   replacementPoint: TypeValueAndError
   priceCost: TypeValueAndError
   priceSale: TypeValueAndError
+  details: { value: TypeDetailsProps; error: TypeErroProps }
 }
 
 export type TypePriceCompositionProps = {
@@ -108,6 +109,7 @@ export type TypeHasVariation = {
   priceCost: TypeValueAndError
   priceSale: TypeValueAndError
   atributes: TypeGenericValueWithError<AtributesList>[]
+  details: { value: TypeDetailsProps; error: TypeErroProps }
 }
 
 export type ResolverDataOverView = {
@@ -135,6 +137,7 @@ export type ResolverHasVariation = {
   changePriceSale: (priceSale: string, index: number) => void
   changePriceCost: (priceCost: string, index: number) => void
   changeAtributes: (variation: AtributesList, x: number, y: number) => void
+  changeDetails: (details: TypeDetailsProps, index: number) => void
   addAtributes: (atribute: AtributesList, x: number, y: number) => void
   removeAtributes: (keyParent: string) => void
   addVariation: () => void
@@ -259,6 +262,7 @@ export type TypeProductStock = {
   price_sale: string
   price_cost: string
   atributes: TypeAtributes[]
+  details: DetailsProduct
 }
 
 export type PriceCompositionAndFiscal = {

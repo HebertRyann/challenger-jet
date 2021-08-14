@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Container } from './style'
 import { NewInput } from '../../../../../../../../../../components/NewInput'
 import { NewSelect } from '../../../../../../../../../../components/NewSelect'
 import { useTabCreate } from '../../../../../providers/tabsProvider'
-import { useTabs } from '../../../../../../../../../../hooks/tabs'
 import { RE_SALE, SALE } from '../../../../../../domain/products'
 import { TooltipComponent } from '../../../../../../../../../../components/TooltipComponent'
+import { Details } from '../../../Details'
 
 type TypeUnitMensured = {
   id: string
@@ -111,7 +111,9 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
               >
                 {unitMensured.map(
                   ({ id, name }) => (
-                    <option value={`${id}+${name}`}>{name}</option>
+                    <option key={id} value={`${id}+${name}`}>
+                      {name}
+                    </option>
                   ),
                   []
                 )}
@@ -194,6 +196,11 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
                 </td>
               </>
             ) : null}
+          </tr>
+          <tr style={{ borderTop: '3px solid white' }}>
+            <td colSpan={100}>
+              <Details />
+            </td>
           </tr>
         </tbody>
       </table>
