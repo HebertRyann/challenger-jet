@@ -2,7 +2,7 @@
 
 
 <h3 align="center">
-    <a href="https://hebertryann.github.io/react-gh-pages/#/">Desafio Tecnico Jet (Frontend)</a>
+    Desafio Tecnico Jet (Frontend)
 </h3>
 
 
@@ -24,7 +24,7 @@ As seguintes ferramentas foram usadas na construção do projeto:
 Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
 [Git](https://git-scm.com), [Node.js](https://nodejs.org/en/), além disto é bom ter um editor para trabalhar com o código como [VSCode](https://code.visualstudio.com/)
 
-### 🎲 Rodando o Frontend (Pagina Web)
+### Rodando o Frontend (Pagina Web)
 
 ```bash
 # Clone este repositório
