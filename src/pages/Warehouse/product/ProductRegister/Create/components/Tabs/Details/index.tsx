@@ -21,7 +21,7 @@ export const Details = (): JSX.Element => {
     descriptionAndDetails,
     technicalSpecification,
     wayOfUse
-  } = details.getData()
+  } = stock.getData().details.value
 
   return (
     <Container>

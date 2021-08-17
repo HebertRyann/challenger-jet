@@ -268,6 +268,56 @@ const TabCreateProvider = ({
         }))
       }
     }
+    if (stocks.details.value.descriptionAndDetails.value === '') {
+      isError = true
+      setStocks(old => ({
+        ...old,
+        details: {
+          value: {
+            ...old?.details.value,
+            descriptionAndDetails: {
+              value: old.details.value.descriptionAndDetails.value,
+              error: { isError: true }
+            }
+          },
+          error: { isError: true }
+        }
+      }))
+    }
+
+    if (stocks.details.value.technicalSpecification.value === '') {
+      isError = true
+      setStocks(old => ({
+        ...old,
+        details: {
+          value: {
+            ...old?.details.value,
+            technicalSpecification: {
+              value: old.details.value.technicalSpecification.value,
+              error: { isError: true }
+            }
+          },
+          error: { isError: true }
+        }
+      }))
+    }
+
+    if (stocks.details.value.wayOfUse.value === '') {
+      isError = true
+      setStocks(old => ({
+        ...old,
+        details: {
+          value: {
+            ...old?.details.value,
+            wayOfUse: {
+              value: old.details.value.wayOfUse.value,
+              error: { isError: true }
+            }
+          },
+          error: { isError: true }
+        }
+      }))
+    }
 
     return isError
   }, [stocks, overView.typeSelectProdut])
@@ -697,6 +747,7 @@ const TabCreateProvider = ({
         priceCost,
         priceSale,
         atributes,
+        details,
         replacementPoint
       }) => {
         if (unitMensured.value.id === '') {
@@ -727,6 +778,18 @@ const TabCreateProvider = ({
         if (replacementPoint.value === '') {
           isError = true
           replacementPoint.error.isError = true
+        }
+        if (details.value.descriptionAndDetails.value === '') {
+          isError = true
+          details.value.descriptionAndDetails.error.isError = true
+        }
+        if (details.value.technicalSpecification.value === '') {
+          isError = true
+          details.value.technicalSpecification.error.isError = true
+        }
+        if (details.value.wayOfUse.value === '') {
+          isError = true
+          details.value.wayOfUse.error.isError = true
         }
       }
     )
