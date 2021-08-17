@@ -7,6 +7,21 @@ export const Container = styled.div`
   .actions {
     width: 60px;
   }
+  textarea {
+    height: 90px;
+  }
+  input {
+    -moz-placeholder {
+      text-align: right;
+    }
+    ::-webkit-input-placeholder {
+      text-align: right;
+    }
+    text-align: end;
+  }
+  .row {
+    margin-bottom: 20px !important;
+  }
 `
 
 export const IconRemove = styled(FaTrashAlt).attrs(() => ({

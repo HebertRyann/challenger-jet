@@ -71,44 +71,6 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
     <Container className="table-responsive">
       <table className="table table-bordered margin-bottom-0">
         <tbody>
-          <tr>
-            <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
-              Unidade de medidas
-            </Th>
-            {atributesList.map(
-              ({ name, parent_id, isChecked }) =>
-                parent_id === null && (
-                  <Th
-                    active={isChecked}
-                    isTypeSaleOrResale={isTypeSaleOrResale()}
-                  >
-                    {name}
-                  </Th>
-                )
-            )}
-            <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
-              <TooltipComponent
-                label="Reposição de estoque"
-                message="Reposição de estoque"
-                bold
-              />
-            </Th>
-
-            {isTypeSaleOrResale() ? (
-              <th align="center" style={{ textAlign: 'center' }} colSpan={2}>
-                Preço
-              </th>
-            ) : null}
-            <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
-              Ações
-            </Th>
-          </tr>
-          {isTypeSaleOrResale() && (
-            <tr>
-              <th>Custo</th>
-              <th>Venda</th>
-            </tr>
-          )}
           {variationList.map(
             (
               {
@@ -116,11 +78,54 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                 priceSale,
                 priceCost,
                 atributes,
-                replacementPoint
+                replacementPoint,
+                details
               },
               index
             ) => (
               <>
+                <tr>
+                  <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
+                    Unidade de medidas
+                  </Th>
+                  {atributesList.map(
+                    ({ name, parent_id, isChecked }) =>
+                      parent_id === null && (
+                        <Th
+                          active={isChecked}
+                          isTypeSaleOrResale={isTypeSaleOrResale()}
+                        >
+                          {name}
+                        </Th>
+                      )
+                  )}
+                  <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
+                    <TooltipComponent
+                      label="Reposição de estoque"
+                      message="Reposição de estoque"
+                      bold
+                    />
+                  </Th>
+
+                  {isTypeSaleOrResale() ? (
+                    <th
+                      align="center"
+                      style={{ textAlign: 'center' }}
+                      colSpan={2}
+                    >
+                      Preço
+                    </th>
+                  ) : null}
+                  <Th active isTypeSaleOrResale={isTypeSaleOrResale()}>
+                    Ações
+                  </Th>
+                </tr>
+                {isTypeSaleOrResale() && (
+                  <tr>
+                    <th>Custo</th>
+                    <th>Venda</th>
+                  </tr>
+                )}
                 <tr key={index}>
                   <td>
                     <NewSelect
@@ -164,6 +169,7 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                               }}
                               onChange={event => {
                                 const split = event.target.value.split('+')
+                                console.log(split)
                                 const x = Number(split[0])
                                 const y = Number(split[1])
                                 const id = split[2]
@@ -267,134 +273,322 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                 </tr>
                 <tr style={{ borderTop: '3px solid white' }}>
                   <td colSpan={100} style={{ textAlign: 'left' }}>
-                    <Container>
-                      <div className="row section">
-                        <div className="form-content col-md-3">
-                          <TooltipComponent
-                            label="Peso medida"
-                            message="Selecione a Medida de dimensão"
-                          />
-                          <NewSelect
-                            isSelected={getTypeUnitMensuredWeight(
-                              variationList[index]?.details?.value
-                                ?.measureWeight?.value
-                            )}
-                            error={{ isError: false }}
-                            onChange={event => {
-                              const split = event.target.value.split('+')
-                              const name = split[1]
-                              changeDetails(
-                                {
-                                  ...variation.getData()[index].details.value,
-                                  measureWeight: {
-                                    value: name,
-                                    error: { isError: false }
-                                  }
-                                },
-                                index
-                              )
-                            }}
-                          >
-                            {typeUnitMensuredWeight.map(
-                              ({ label, value }: any) => {
-                                return (
-                                  <option
-                                    key={value}
-                                    value={`${label}+${value}`}
-                                  >
-                                    {label}
-                                  </option>
-                                )
-                              }
-                            )}
-                          </NewSelect>
-                        </div>
-                        <div className="form-content col-md-3">
-                          <TooltipComponent
-                            label="Peso"
-                            message="Infome o peso em kg"
-                          />
-                          <NewInput
-                            isNumber
-                            value={genericMaskWithTwoZero(
-                              variation.getData()[index]?.details?.value?.weight
-                                ?.value
-                            )}
-                            onChange={e =>
-                              changeDetails(
-                                {
-                                  ...variation.getData()[index].details.value,
-                                  weight: {
-                                    value: e.target.value,
-                                    error: { isError: false }
-                                  }
-                                },
-                                index
-                              )
-                            }
-                            error={
-                              variation.getData()[index].details?.value?.weight
-                                ?.error
-                            }
-                            name="peso"
-                            className="form-control"
-                            type="text"
-                            maxLength={12}
-                            placeholder="0,00"
-                          />
-                        </div>
-                        <div className="form-content col-md-3">
-                          <TooltipComponent
-                            label="Dimensão medida"
-                            message="Selecione a Medida de dimensão"
-                          />
-                          <NewSelect
-                            error={{ isError: false }}
-                            isSelected={gettypeUnitMensuredDetails(
-                              variationList[index]?.details?.value?.measure
-                                ?.value
-                            )}
-                            onChange={event => {
-                              const split = event.target.value.split('+')
-                              const name = split[1]
-                              changeDetails(
-                                {
-                                  ...variation.getData()[index].details.value,
-                                  measure: {
-                                    value: name,
-                                    error: { isError: false }
-                                  }
-                                },
-                                index
-                              )
-                            }}
-                          >
-                            {typeUnitMensuredDetails.map(({ label, value }) => {
+                    <div className="row section">
+                      <div className="form-content col-md-3">
+                        <TooltipComponent
+                          label="Peso medida"
+                          message="Selecione a Medida de dimensão"
+                        />
+                        <NewSelect
+                          isSelected={getTypeUnitMensuredWeight(
+                            variationList[index]?.details?.value?.measureWeight
+                              ?.value
+                          )}
+                          error={{ isError: false }}
+                          onChange={event => {
+                            const split = event.target.value.split('+')
+                            const name = split[1]
+                            changeDetails(
+                              {
+                                ...variation.getData()[index].details.value,
+                                measureWeight: {
+                                  value: name,
+                                  error: { isError: false }
+                                }
+                              },
+                              index
+                            )
+                          }}
+                        >
+                          {typeUnitMensuredWeight.map(
+                            ({ label, value }: any) => {
                               return (
                                 <option key={value} value={`${label}+${value}`}>
                                   {label}
                                 </option>
                               )
-                            })}
-                          </NewSelect>
-                        </div>
-                        <div className="form-content col-md-3">
-                          <TooltipComponent
-                            label="Largura"
-                            message="Informe a largura em metros"
+                            }
+                          )}
+                        </NewSelect>
+                      </div>
+                      <div className="form-content col-md-3">
+                        <TooltipComponent
+                          label="Peso"
+                          message="Infome o peso em kg"
+                        />
+                        <NewInput
+                          isNumber
+                          value={genericMaskWithTwoZero(
+                            variation.getData()[index]?.details?.value?.weight
+                              ?.value
+                          )}
+                          onChange={e =>
+                            changeDetails(
+                              {
+                                ...variation.getData()[index].details.value,
+                                weight: {
+                                  value: e.target.value,
+                                  error: { isError: false }
+                                }
+                              },
+                              index
+                            )
+                          }
+                          error={
+                            variation.getData()[index].details?.value?.weight
+                              ?.error
+                          }
+                          name="peso"
+                          className="form-control"
+                          type="text"
+                          maxLength={12}
+                          placeholder="0,00"
+                        />
+                      </div>
+                      <div className="form-content col-md-3">
+                        <TooltipComponent
+                          label="Dimensão medida"
+                          message="Selecione a Medida de dimensão"
+                        />
+                        <NewSelect
+                          error={{ isError: false }}
+                          isSelected={gettypeUnitMensuredDetails(
+                            variationList[index]?.details?.value?.measure?.value
+                          )}
+                          onChange={event => {
+                            const split = event.target.value.split('+')
+                            const name = split[1]
+                            changeDetails(
+                              {
+                                ...variation.getData()[index].details.value,
+                                measure: {
+                                  value: name,
+                                  error: { isError: false }
+                                }
+                              },
+                              index
+                            )
+                          }}
+                        >
+                          {typeUnitMensuredDetails.map(({ label, value }) => {
+                            return (
+                              <option key={value} value={`${label}+${value}`}>
+                                {label}
+                              </option>
+                            )
+                          })}
+                        </NewSelect>
+                      </div>
+                      <div className="form-content col-md-3">
+                        <TooltipComponent
+                          label="Largura"
+                          message="Informe a largura em metros"
+                        />
+                        <NewInput
+                          isNumber
+                          maxLength={12}
+                          value={genericMaskWithTwoZero(
+                            variation.getData()[index].details?.value?.width
+                              ?.value
+                          )}
+                          onChange={e =>
+                            changeDetails(
+                              {
+                                ...variation.getData()[index].details.value,
+                                width: {
+                                  value: e.target.value,
+                                  error: { isError: false }
+                                }
+                              },
+                              index
+                            )
+                          }
+                          error={details?.value?.width?.error}
+                          name="largura"
+                          className="form-control"
+                          type="text"
+                          placeholder="0,00"
+                        />
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="form-content col-md-3">
+                        <TooltipComponent
+                          label="Altura"
+                          message="Informe a altura em metros"
+                        />
+                        <NewInput
+                          isNumber
+                          maxLength={12}
+                          value={genericMaskWithTwoZero(
+                            variation.getData()[index].details?.value?.height
+                              ?.value
+                          )}
+                          onChange={e =>
+                            changeDetails(
+                              {
+                                ...variation.getData()[index].details.value,
+                                height: {
+                                  value: e.target.value,
+                                  error: { isError: false }
+                                }
+                              },
+                              index
+                            )
+                          }
+                          error={
+                            variation.getData()[index].details?.value?.height
+                              ?.error
+                          }
+                          name="altura"
+                          className="form-control"
+                          type="text"
+                          placeholder="0,00"
+                        />
+                      </div>
+                      <div className="form-content col-md-3">
+                        <TooltipComponent
+                          label="Comprimento"
+                          message="Informe a comprimento em metros"
+                        />
+                        <NewInput
+                          isNumber
+                          maxLength={12}
+                          value={genericMaskWithTwoZero(
+                            variation.getData()[index].details?.value?.length
+                              ?.value
+                          )}
+                          onChange={e =>
+                            changeDetails(
+                              {
+                                ...variation.getData()[index].details.value,
+                                length: {
+                                  value: e.target.value,
+                                  error: { isError: false }
+                                }
+                              },
+                              index
+                            )
+                          }
+                          error={
+                            variation.getData()[index].details?.value?.length
+                              ?.error
+                          }
+                          name="comprimento"
+                          className="form-control"
+                          type="text"
+                          placeholder="0,00"
+                        />
+                      </div>
+                      <div className="form-content col-md-3">
+                        <TooltipComponent
+                          label="Espessura"
+                          message="Infome a esperssura"
+                        />
+                        <NewInput
+                          isNumber
+                          value={genericMaskWithTwoZero(
+                            variation.getData()[index].details?.value?.thickness
+                              ?.value
+                          )}
+                          onChange={e =>
+                            changeDetails(
+                              {
+                                ...variation.getData()[index].details.value,
+                                thickness: {
+                                  value: e.target.value,
+                                  error: { isError: false }
+                                }
+                              },
+                              index
+                            )
+                          }
+                          error={
+                            variation.getData()[index].details?.value?.thickness
+                              ?.error
+                          }
+                          name="peso"
+                          className="form-control"
+                          type="text"
+                          maxLength={12}
+                          placeholder="0,00"
+                        />
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="form-content col-md-12">
+                        <div className="form-group">
+                          <label>Descrição e detalhes</label>
+                          <TextArea
+                            value={
+                              variationList[index]?.details?.value
+                                ?.descriptionAndDetails?.value
+                            }
+                            onChange={e =>
+                              changeDetails(
+                                {
+                                  ...variation.getData()[index].details.value,
+                                  descriptionAndDetails: {
+                                    value: e.target.value,
+                                    error: { isError: false }
+                                  }
+                                },
+                                index
+                              )
+                            }
+                            isError={
+                              variation.getData()[index]?.details?.value
+                                ?.descriptionAndDetails?.error?.isError
+                            }
+                            className="form-control"
                           />
-                          <NewInput
-                            isNumber
-                            maxLength={12}
-                            value={genericMaskWithTwoZero(
-                              variation.getData()[index].details?.value?.width
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="form-content col-md-12">
+                        <div className="form-group">
+                          <label>Especificação Técnica</label>
+                          <TextArea
+                            value={
+                              variationList[index]?.details?.value
+                                ?.technicalSpecification?.value
+                            }
+                            onChange={e =>
+                              changeDetails(
+                                {
+                                  ...variation.getData()[index].details.value,
+                                  technicalSpecification: {
+                                    value: e.target.value,
+                                    error: { isError: false }
+                                  }
+                                },
+                                index
+                              )
+                            }
+                            isError={
+                              variation.getData()[index]?.details?.value
+                                ?.technicalSpecification?.error?.isError
+                            }
+                            className="form-control"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="form-content col-md-12">
+                        <div className="form-group">
+                          <label>Forma de utilização</label>
+                          <TextArea
+                            value={
+                              variationList[index]?.details?.value?.wayOfUse
                                 ?.value
-                            )}
+                            }
                             onChange={e =>
                               changeDetails(
                                 {
                                   ...variation.getData()[index].details.value,
-                                  width: {
+                                  wayOfUse: {
                                     value: e.target.value,
                                     error: { isError: false }
                                   }
@@ -402,212 +596,15 @@ export const Table = (tableProps: TypeTableProps): JSX.Element => {
                                 index
                               )
                             }
-                            error={
-                              variation.getData()[index].details?.value?.width
-                                ?.error
+                            isError={
+                              variation.getData()[index]?.details?.value
+                                ?.wayOfUse?.error?.isError
                             }
-                            name="largura"
                             className="form-control"
-                            type="text"
-                            placeholder="0,00"
                           />
                         </div>
                       </div>
-                      <div className="row">
-                        <div className="form-content col-md-3">
-                          <TooltipComponent
-                            label="Altura"
-                            message="Informe a altura em metros"
-                          />
-                          <NewInput
-                            isNumber
-                            maxLength={12}
-                            value={genericMaskWithTwoZero(
-                              variation.getData()[index].details?.value?.height
-                                ?.value
-                            )}
-                            onChange={e =>
-                              changeDetails(
-                                {
-                                  ...variation.getData()[index].details.value,
-                                  height: {
-                                    value: e.target.value,
-                                    error: { isError: false }
-                                  }
-                                },
-                                index
-                              )
-                            }
-                            error={
-                              variation.getData()[index].details?.value?.height
-                                ?.error
-                            }
-                            name="altura"
-                            className="form-control"
-                            type="text"
-                            placeholder="0,00"
-                          />
-                        </div>
-                        <div className="form-content col-md-3">
-                          <TooltipComponent
-                            label="Comprimento"
-                            message="Informe a comprimento em metros"
-                          />
-                          <NewInput
-                            isNumber
-                            maxLength={12}
-                            value={genericMaskWithTwoZero(
-                              variation.getData()[index].details?.value?.length
-                                ?.value
-                            )}
-                            onChange={e =>
-                              changeDetails(
-                                {
-                                  ...variation.getData()[index].details.value,
-                                  length: {
-                                    value: e.target.value,
-                                    error: { isError: false }
-                                  }
-                                },
-                                index
-                              )
-                            }
-                            error={
-                              variation.getData()[index].details?.value?.length
-                                ?.error
-                            }
-                            name="comprimento"
-                            className="form-control"
-                            type="text"
-                            placeholder="0,00"
-                          />
-                        </div>
-                        <div className="form-content col-md-3">
-                          <TooltipComponent
-                            label="Espessura"
-                            message="Infome a esperssura"
-                          />
-                          <NewInput
-                            isNumber
-                            value={genericMaskWithTwoZero(
-                              variation.getData()[index].details?.value
-                                ?.thickness?.value
-                            )}
-                            onChange={e =>
-                              changeDetails(
-                                {
-                                  ...variation.getData()[index].details.value,
-                                  thickness: {
-                                    value: e.target.value,
-                                    error: { isError: false }
-                                  }
-                                },
-                                index
-                              )
-                            }
-                            error={
-                              variation.getData()[index].details?.value
-                                ?.thickness?.error
-                            }
-                            name="peso"
-                            className="form-control"
-                            type="text"
-                            maxLength={12}
-                            placeholder="0,00"
-                          />
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="form-content col-md-12">
-                          <div className="form-group">
-                            <label>Descrição e detalhes</label>
-                            <TextArea
-                              value={
-                                variationList[index]?.details?.value
-                                  ?.descriptionAndDetails?.value
-                              }
-                              onChange={e =>
-                                changeDetails(
-                                  {
-                                    ...variation.getData()[index].details.value,
-                                    descriptionAndDetails: {
-                                      value: e.target.value,
-                                      error: { isError: false }
-                                    }
-                                  },
-                                  index
-                                )
-                              }
-                              isError={
-                                variation.getData()[index]?.details?.value
-                                  ?.descriptionAndDetails?.error?.isError
-                              }
-                              className="form-control"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="form-content col-md-12">
-                          <div className="form-group">
-                            <label>Especificação Técnica</label>
-                            <TextArea
-                              value={
-                                variationList[index]?.details?.value
-                                  ?.technicalSpecification?.value
-                              }
-                              onChange={e =>
-                                changeDetails(
-                                  {
-                                    ...variation.getData()[index].details.value,
-                                    technicalSpecification: {
-                                      value: e.target.value,
-                                      error: { isError: false }
-                                    }
-                                  },
-                                  index
-                                )
-                              }
-                              isError={
-                                variation.getData()[index]?.details?.value
-                                  ?.technicalSpecification?.error?.isError
-                              }
-                              className="form-control"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="form-content col-md-12">
-                          <div className="form-group">
-                            <label>Forma de utilização</label>
-                            <TextArea
-                              value={
-                                variationList[index]?.details?.value?.wayOfUse
-                                  ?.value
-                              }
-                              onChange={e =>
-                                changeDetails(
-                                  {
-                                    ...variation.getData()[index].details.value,
-                                    wayOfUse: {
-                                      value: e.target.value,
-                                      error: { isError: false }
-                                    }
-                                  },
-                                  index
-                                )
-                              }
-                              isError={
-                                variation.getData()[index]?.details?.value
-                                  ?.wayOfUse?.error?.isError
-                              }
-                              className="form-control"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </Container>
+                    </div>
                   </td>
                 </tr>
               </>

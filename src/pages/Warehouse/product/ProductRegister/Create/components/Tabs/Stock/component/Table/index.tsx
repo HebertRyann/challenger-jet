@@ -197,8 +197,8 @@ export const Table = ({ unitMensured }: TypeTableProps): JSX.Element => {
               </>
             ) : null}
           </tr>
-          <tr style={{ borderTop: '3px solid white' }}>
-            <td colSpan={100}>
+          <tr>
+            <td colSpan={100} style={{ textAlign: 'left' }}>
               <Details />
             </td>
           </tr>
